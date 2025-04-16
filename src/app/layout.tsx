@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Link from 'next/link';
 import '../globals.css';
 
 const geistSans = Geist({
@@ -31,7 +32,7 @@ export default function RootLayout({
           <header className="grid grid-flow-col text-center">
             <p>1</p>
             <p>2</p>
-            <p>3</p>
+            <Link href="">Sign Up</Link>
           </header>
           {children}
         </div>
