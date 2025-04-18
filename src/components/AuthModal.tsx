@@ -19,19 +19,31 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { signIn } from '@/lib/auth-client';
+import { signupSchema } from '@/lib/zod/signup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { FaGoogle } from 'react-icons/fa';
+import { z } from 'zod';
 
 export default function AuthModal() {
   const loginForm = useForm();
-  const signupForm = useForm();
+  const signupForm = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    mode: 'onTouched',
+  });
 
   function onLogin() {
     return;
   }
 
-  function onSignup() {
-    return;
+  function onSignup(values: z.infer<typeof signupSchema>) {
+    console.log(values);
   }
 
   async function handleGoogleLogin() {
@@ -132,9 +144,11 @@ export default function AuthModal() {
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Your name will be used for leaderboards.
-                      </FormDescription>
+                      {!signupForm.formState.errors?.name && (
+                        <FormDescription>
+                          Your name will be used for leaderboards.
+                        </FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -152,9 +166,11 @@ export default function AuthModal() {
                           type="email"
                         />
                       </FormControl>
-                      <FormDescription>
-                        Your will receive a verification email.
-                      </FormDescription>
+                      {!signupForm.formState.errors?.email && (
+                        <FormDescription>
+                          Your will receive a verification email.
+                        </FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
