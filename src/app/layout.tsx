@@ -24,15 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center min-h-screen p-2`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center min-h-screen`}
       >
         <div className="flex flex-col max-w-5xl w-full">
           <header className="grid grid-flow-col text-center">
             <p>1</p>
             <p>2</p>
-            <Link href="">Sign Up</Link>
+            <Link href="/login">Log In</Link>
           </header>
           {children}
         </div>
