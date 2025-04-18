@@ -20,13 +20,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Link from 'next/link';
+import { signIn, useSession } from '@/lib/auth-client';
 import { useForm } from 'react-hook-form';
 import { FaGoogle } from 'react-icons/fa';
 
 export default function Login() {
   const loginForm = useForm();
   const signupForm = useForm();
+  const { data } = useSession();
+  console.log({ data });
 
   function onLogin() {
     return;
@@ -34,6 +36,15 @@ export default function Login() {
 
   function onSignup() {
     return;
+  }
+
+  async function handleGoogleLogin() {
+    await signIn.social({
+      provider: 'google',
+      callbackURL: '/',
+      errorCallbackURL: '/',
+      newUserCallbackURL: '/',
+    });
   }
 
   return (
@@ -56,12 +67,10 @@ export default function Login() {
               </DialogTitle>
               <Button
                 variant="default"
-                asChild
                 className="cursor-pointer text-lg gap-2 py-6"
+                onClick={handleGoogleLogin}
               >
-                <Link href="/">
-                  Log In With <FaGoogle />
-                </Link>
+                Log In With <FaGoogle />
               </Button>
               <Separator className="my-3" />
               <Form {...loginForm}>
