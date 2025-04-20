@@ -1,11 +1,23 @@
+import sendEmail from '@/server/actions/sendEmail';
+import { db } from '@/server/db/index';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { db } from '@/server/db/index';
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg',
   }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      await sendEmail(user.email, user.name, url);
+    },
+    autoSignInAfterVerification: true,
+    expiresIn: 30 * 60,
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,

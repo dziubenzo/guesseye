@@ -20,6 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { signIn } from '@/lib/auth-client';
 import { signupSchema } from '@/lib/zod/signup';
+import { signUpWithEmail } from '@/server/actions/signUpWithEmail';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { FaGoogle } from 'react-icons/fa';
@@ -40,10 +41,6 @@ export default function AuthModal() {
 
   function onLogin() {
     return;
-  }
-
-  function onSignup(values: z.infer<typeof signupSchema>) {
-    console.log(values);
   }
 
   async function handleGoogleLogin() {
@@ -132,7 +129,7 @@ export default function AuthModal() {
             </DialogTitle>
             <Form {...signupForm}>
               <form
-                onSubmit={signupForm.handleSubmit(onSignup)}
+                onSubmit={signupForm.handleSubmit(signUpWithEmail)}
                 className="space-y-4"
               >
                 <FormField
