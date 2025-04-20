@@ -18,7 +18,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { loginSchema } from '@/lib/zod/login';
 import { signupSchema } from '@/lib/zod/signup';
+import { logInWithEmail } from '@/server/actions/log-in-with-email';
 import { logInWithGoogle } from '@/server/actions/log-in-with-google';
 import { signUpWithEmail } from '@/server/actions/sign-up-with-email';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -61,10 +63,26 @@ export default function AuthModal() {
 }
 
 function LoginTab() {
-  const loginForm = useForm();
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    mode: 'onSubmit',
+  });
 
-  function onLogin() {
-    return;
+  const [error, setError] = useState('');
+
+  const { execute, isPending } = useAction(logInWithEmail, {
+    onSuccess({ data }) {
+      if (data?.error) setError(data.error);
+    },
+  });
+
+  function onLogin(values: z.infer<typeof loginSchema>) {
+    setError('');
+    execute(values);
   }
 
   return (
@@ -106,12 +124,14 @@ function LoginTab() {
               </FormItem>
             )}
           />
+          {error && <ErrorMessage errorMessage={error} />}
           <Button
             type="submit"
             variant="secondary"
             className="cursor-pointer mt-3 text-lg w-full hover:bg-primary hover:text-secondary"
+            disabled={isPending}
           >
-            Log In
+            {isPending ? 'Logging In...' : 'Log In'}
           </Button>
         </form>
       </Form>

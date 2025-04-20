@@ -24,5 +24,8 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
   },
+  advanced: {
+    cookiePrefix: 'guesseye',
+  },
   trustedOrigins: ['http://192.168.0.13:3000'],
 });
