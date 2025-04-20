@@ -18,11 +18,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { signIn } from '@/lib/auth-client';
 import { signupSchema } from '@/lib/zod/signup';
+import { logInWithGoogle } from '@/server/actions/log-in-with-google';
 import { signUpWithEmail } from '@/server/actions/sign-up-with-email';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
@@ -62,18 +63,6 @@ export default function AuthModal() {
 function LoginTab() {
   const loginForm = useForm();
 
-  const [isRedirecting, setIsRedirecting] = useState(false);
-
-  async function handleGoogleLogin() {
-    setIsRedirecting(true);
-    await signIn.social({
-      provider: 'google',
-      callbackURL: '/',
-      errorCallbackURL: '/',
-      newUserCallbackURL: '/',
-    });
-  }
-
   function onLogin() {
     return;
   }
@@ -83,15 +72,7 @@ function LoginTab() {
       <DialogHeader>
         <DialogTitle className="text-xl mb-4">Log in to GuessEye</DialogTitle>
       </DialogHeader>
-      <Button
-        variant="default"
-        className="cursor-pointer text-lg gap-2 py-6 w-full"
-        disabled={isRedirecting}
-        onClick={handleGoogleLogin}
-      >
-        {isRedirecting ? 'Redirecting to Google...' : `Log In With Google`}
-        <FcGoogle />
-      </Button>
+      <GoogleLogin />
       <Separator className="my-3" />
       <Form {...loginForm}>
         <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
@@ -138,6 +119,44 @@ function LoginTab() {
   );
 }
 
+function GoogleLogin() {
+  const router = useRouter();
+
+  const [error, setError] = useState('');
+
+  const { execute, isPending } = useAction(logInWithGoogle, {
+    onSuccess({ data }) {
+      if (data?.error) {
+        setError(data.error);
+        return;
+      }
+      if (data?.success?.url) {
+        router.push(data.success.url);
+      }
+    },
+  });
+
+  function onGoogleLogin() {
+    setError('');
+    execute();
+  }
+
+  return (
+    <>
+      <Button
+        variant="default"
+        className={`cursor-pointer text-lg gap-2 py-6 w-full ${error ? 'mb-3' : undefined}`}
+        disabled={isPending}
+        onClick={onGoogleLogin}
+      >
+        {isPending ? 'Redirecting to Google...' : `Log In With Google`}
+        <FcGoogle />
+      </Button>
+      {error && <ErrorMessage errorMessage={error} />}
+    </>
+  );
+}
+
 type SignupTabProps = {
   setSignupSuccess: Dispatch<SetStateAction<string>>;
 };
@@ -160,9 +179,11 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
     onSuccess({ data, input }) {
       if (data?.error) {
         setError(data.error);
+        return;
       }
       if (data?.success) {
         setSignupSuccess(input.email);
+        return;
       }
     },
   });
