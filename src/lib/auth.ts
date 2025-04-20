@@ -1,4 +1,4 @@
-import sendEmail from '@/server/actions/sendEmail';
+import { sendEmail } from '@/server/actions/send-email';
 import { db } from '@/server/db/index';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';

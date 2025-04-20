@@ -7,8 +7,7 @@ export default function EmailTemplate({ name, url }: EmailTemplateProps) {
   return (
     <div>
       <h2>Welcome, {name}!</h2>
-      <hr />
-      <p>Thank you for creating an account on GuessEye.</p>
+      <p>Thank you for creating your GuessEye account.</p>
       <p>
         Click <a href={url}>here</a> to verify your account.
       </p>
