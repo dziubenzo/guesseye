@@ -11,7 +11,7 @@ export default function ConfirmationEmail({ name, url }: ConfirmationEmail) {
       <p>
         Click <a href={url}>here</a> to verify your account.
       </p>
-      <p>The confirmation link is valid for 30 minutes.</p>
+      <p>The confirmation link is valid for 1 hour.</p>
     </div>
   );
 }

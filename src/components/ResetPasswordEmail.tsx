@@ -10,7 +10,7 @@ export default function ResetPasswordEmail({ name, url }: ResetPasswordEmail) {
       <p>
         Click <a href={url}>here</a> to reset your password.
       </p>
-      <p>The reset password link is valid for 30 minutes.</p>
+      <p>The reset password link is valid for 15 minutes.</p>
       <p>If you did not request this email, please ignore it.</p>
     </div>
   );

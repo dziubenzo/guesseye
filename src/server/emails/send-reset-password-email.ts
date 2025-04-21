@@ -15,7 +15,7 @@ export const sendResetPasswordEmail = async (
     to: email,
     subject: 'GuessEye - Reset Password',
     react: ResetPasswordEmail({ name, url }),
-    text: `Hi, ${name}! Click the following link to reset your password: ${url}. The reset password link is valid for 30 minutes. If you did not request this email, please ignore it.`,
+    text: `Hi, ${name}! Click the following link to reset your password: ${url}. The reset password link is valid for 15 minutes. If you did not request this email, please ignore it.`,
   });
 
   if (error) {

@@ -27,13 +27,12 @@ import {
 import { resetPasswordAction } from '@/server/actions/reset-password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { notFound, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function ResetPassword() {
-  const { isPending: loadingSession, data } = useSession();
-  const router = useRouter();
+  const { data } = useSession();
   const searchParams = useSearchParams();
   const resetPasswordForm = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(resetPasswordSchema),
@@ -66,11 +65,11 @@ export default function ResetPassword() {
     execute(values);
   }
 
-  useEffect(() => {
-    if (data || searchParams.has('error')) return router.push('/');
-  }, [router, data, searchParams]);
+  if (data || (!data && !searchParams.has('token'))) {
+    return notFound();
+  }
 
-  if (!loadingSession && !data) {
+  if (!data && searchParams.has('token')) {
     return (
       <main className="min-h-svh flex flex-col justify-center items-center">
         <Card className="w-max lg:w-[50%]">
@@ -118,13 +117,15 @@ export default function ResetPassword() {
                 />
                 {error && <ErrorMessage errorMessage={error} />}
                 {success && <SuccessMessage successMessage={success} />}
-                <Button
-                  type="submit"
-                  className="cursor-pointer mt-3 text-lg w-full hover:bg-primary hover:text-secondary"
-                  disabled={isPending}
-                >
-                  {isPending ? 'Updating Password...' : 'Update Password'}
-                </Button>
+                {!success && !error && (
+                  <Button
+                    type="submit"
+                    className="cursor-pointer mt-3 text-lg w-full hover:bg-primary hover:text-secondary"
+                    disabled={isPending}
+                  >
+                    {isPending ? 'Updating Password...' : 'Update Password'}
+                  </Button>
+                )}
               </form>
             </Form>
           </CardContent>

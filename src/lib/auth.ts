@@ -14,14 +14,14 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url, token }, request) => {
       await sendResetPasswordEmail(user.email, user.name, url);
     },
-    resetPasswordTokenExpiresIn: 30 * 60,
+    resetPasswordTokenExpiresIn: 15 * 60,
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
       await sendConfirmationEmail(user.email, user.name, url);
     },
     autoSignInAfterVerification: true,
-    expiresIn: 30 * 60,
+    expiresIn: 60 * 60,
   },
   socialProviders: {
     google: {

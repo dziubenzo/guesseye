@@ -49,10 +49,10 @@ export default function ForgotPassword({
       if (data?.error) {
         setError(data.error);
         return;
-      } else {
-        setSuccess(
-          `An email with the reset password link has been sent to ${input.email}.`
-        );
+      }
+      if (data?.success) {
+        setSuccess(`A reset password link has been sent to ${input.email}.`);
+        return;
       }
     },
   });
@@ -96,16 +96,18 @@ export default function ForgotPassword({
           />
           {error && <ErrorMessage errorMessage={error} />}
           {success && <SuccessMessage successMessage={success} />}
-          <Button
-            type="submit"
-            className={`cursor-pointer w-full mb-3 text-lg ${error || success ? 'mt-3' : undefined}`}
-            disabled={isPending}
-          >
-            {isPending ? 'Sending Reset Email...' : 'Send Reset Email'}
-          </Button>
+          {!success && (
+            <Button
+              type="submit"
+              className={`cursor-pointer w-full mb-3 text-lg ${error || success ? 'mt-3' : undefined}`}
+              disabled={isPending}
+            >
+              {isPending ? 'Sending Reset Email...' : 'Send Reset Email'}
+            </Button>
+          )}
           <Button
             variant="ghost"
-            className="cursor-pointer w-full"
+            className="cursor-pointer w-full mt-3"
             onClick={() => setShowForgotPassword(false)}
           >
             <MoveLeft />

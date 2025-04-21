@@ -15,7 +15,7 @@ export const sendConfirmationEmail = async (
     to: email,
     subject: 'GuessEye - Confirmation Link',
     react: ConfirmationEmail({ name, url }),
-    text: `Welcome, ${name}! Thank you for creating a GuessEye account. Click the following link to verify your account: ${url}. The confirmation link is valid for 30 minutes.`,
+    text: `Welcome, ${name}! Thank you for creating a GuessEye account. Click the following link to verify your account: ${url}. The confirmation link is valid for 1 hour.`,
   });
 
   if (error) {
