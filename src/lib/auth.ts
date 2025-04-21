@@ -1,5 +1,6 @@
-import { sendEmail } from '@/server/actions/send-email';
 import { db } from '@/server/db/index';
+import { sendConfirmationEmail } from '@/server/emails/send-confirmation-email';
+import { sendResetPasswordEmail } from '@/server/emails/send-reset-password-email';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 
@@ -10,10 +11,14 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      await sendResetPasswordEmail(user.email, user.name, url);
+    },
+    resetPasswordTokenExpiresIn: 30 * 60,
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      await sendEmail(user.email, user.name, url);
+      await sendConfirmationEmail(user.email, user.name, url);
     },
     autoSignInAfterVerification: true,
     expiresIn: 30 * 60,

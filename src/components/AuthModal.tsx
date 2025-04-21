@@ -18,8 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { loginSchema } from '@/lib/zod/login';
-import { signupSchema } from '@/lib/zod/signup';
+import { loginSchema, LoginSchemaType } from '@/lib/zod/login';
+import { signupSchema, SignupSchemaType } from '@/lib/zod/signup';
 import { logInWithEmail } from '@/server/actions/log-in-with-email';
 import { logInWithGoogle } from '@/server/actions/log-in-with-google';
 import { signUpWithEmail } from '@/server/actions/sign-up-with-email';
@@ -29,12 +29,20 @@ import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
-import { z } from 'zod';
 import ErrorMessage from './ErrorMessage';
+import ForgotPassword from './ForgotPassword';
 import SignupSuccess from './SignupSuccess';
 
 export default function AuthModal() {
   const [signupSuccess, setSignupSuccess] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+  if (showForgotPassword)
+    return (
+      <DialogContent>
+        <ForgotPassword setShowForgotPassword={setShowForgotPassword} />
+      </DialogContent>
+    );
 
   if (signupSuccess) {
     return (
@@ -43,7 +51,7 @@ export default function AuthModal() {
       </DialogContent>
     );
   }
-  //
+
   return (
     <DialogContent>
       <Tabs defaultValue="login" className="gap-5 mt-5">
@@ -55,15 +63,19 @@ export default function AuthModal() {
             Sign Up
           </TabsTrigger>
         </TabsList>
-        <LoginTab />
+        <LoginTab setShowForgotPassword={setShowForgotPassword} />
         <SignupTab setSignupSuccess={setSignupSuccess} />
       </Tabs>
     </DialogContent>
   );
 }
 
-function LoginTab() {
-  const loginForm = useForm<z.infer<typeof loginSchema>>({
+type LoginTabProps = {
+  setShowForgotPassword: Dispatch<SetStateAction<boolean>>;
+};
+
+function LoginTab({ setShowForgotPassword }: LoginTabProps) {
+  const loginForm = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
@@ -80,7 +92,7 @@ function LoginTab() {
     },
   });
 
-  function onLogin(values: z.infer<typeof loginSchema>) {
+  function onLogin(values: LoginSchemaType) {
     setError('');
     execute(values);
   }
@@ -135,6 +147,13 @@ function LoginTab() {
           </Button>
         </form>
       </Form>
+      <Button
+        variant="link"
+        className="cursor-pointer flex justify-self-end p-0 mt-2"
+        onClick={() => setShowForgotPassword(true)}
+      >
+        Forgot your password?
+      </Button>
     </TabsContent>
   );
 }
@@ -182,7 +201,7 @@ type SignupTabProps = {
 };
 
 function SignupTab({ setSignupSuccess }: SignupTabProps) {
-  const signupForm = useForm<z.infer<typeof signupSchema>>({
+  const signupForm = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       name: '',
@@ -208,7 +227,7 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
     },
   });
 
-  function onSignup(values: z.infer<typeof signupSchema>) {
+  function onSignup(values: SignupSchemaType) {
     setSignupSuccess('');
     setError('');
     execute(values);

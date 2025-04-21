@@ -1,9 +1,9 @@
-type EmailTemplateProps = {
+type ConfirmationEmail = {
   name: string;
   url: string;
 };
 
-export default function EmailTemplate({ name, url }: EmailTemplateProps) {
+export default function ConfirmationEmail({ name, url }: ConfirmationEmail) {
   return (
     <div>
       <h2>Welcome, {name}!</h2>
