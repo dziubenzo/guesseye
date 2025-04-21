@@ -19,7 +19,7 @@ import {
 } from '@/lib/zod/send-reset-email';
 import { sendResetEmail } from '@/server/actions/send-reset-email';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MoveLeft } from 'lucide-react';
+import { Loader2, MoveLeft } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -51,7 +51,7 @@ export default function ForgotPassword({
         return;
       }
       if (data?.success) {
-        setSuccess(`A reset password link has been sent to ${input.email}.`);
+        setSuccess(`A reset password link has been sent to ${input.email}`);
         return;
       }
     },
@@ -102,6 +102,7 @@ export default function ForgotPassword({
               className={`cursor-pointer w-full mb-3 text-lg ${error || success ? 'mt-3' : undefined}`}
               disabled={isPending}
             >
+              {isPending && <Loader2 className="animate-spin" />}
               {isPending ? 'Sending Reset Email...' : 'Send Reset Email'}
             </Button>
           )}

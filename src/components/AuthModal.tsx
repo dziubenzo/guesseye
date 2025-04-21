@@ -24,6 +24,7 @@ import { logInWithEmail } from '@/server/actions/log-in-with-email';
 import { logInWithGoogle } from '@/server/actions/log-in-with-google';
 import { signUpWithEmail } from '@/server/actions/sign-up-with-email';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -143,6 +144,7 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
             className="cursor-pointer mt-3 text-lg w-full hover:bg-primary hover:text-secondary"
             disabled={isPending}
           >
+            {isPending && <Loader2 className="animate-spin" />}
             {isPending ? 'Logging In...' : 'Log In'}
           </Button>
         </form>
@@ -188,6 +190,7 @@ function GoogleLogin() {
         disabled={isPending}
         onClick={onGoogleLogin}
       >
+        {isPending && <Loader2 className="animate-spin" />}
         {isPending ? 'Redirecting to Google...' : `Log In With Google`}
         <FcGoogle />
       </Button>
@@ -319,6 +322,7 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
             className="cursor-pointer mt-3 text-lg w-full"
             disabled={isPending}
           >
+            {isPending && <Loader2 className="animate-spin" />}
             {isPending ? 'Signing Up...' : 'Sign Up'}
           </Button>
         </form>
