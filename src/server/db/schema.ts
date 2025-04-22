@@ -1,4 +1,16 @@
-import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  date,
+  integer,
+  pgEnum,
+  pgTable,
+  real,
+  serial,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
+
+// Authentication
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -48,4 +60,119 @@ export const verification = pgTable('verification', {
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at'),
   updatedAt: timestamp('updated_at'),
+});
+
+// Darts players
+
+export const genderEnum = pgEnum('gender', ['male', 'female']);
+export const dartsBrandEnum = pgEnum('darts_brand', [
+  'Target',
+  "Bull's",
+  'Harrows',
+  'Unicorn',
+  'Winmau',
+  'Red Dragon',
+  'Shot',
+  'Nodor',
+]);
+export const dartsWeightEnum = pgEnum('darts_weight', [
+  '10g',
+  '11g',
+  '12g',
+  '13g',
+  '14g',
+  '15g',
+  '16g',
+  '17g',
+  '18g',
+  '19g',
+  '20g',
+  '21g',
+  '22g',
+  '23g',
+  '24g',
+  '25g',
+  '26g',
+  '27g',
+  '28g',
+  '29g',
+  '30g',
+  '31g',
+  '32g',
+  '33g',
+  '34g',
+  '35g',
+  '36g',
+  '37g',
+  '38g',
+  '39g',
+  '40g',
+]);
+export const lateralityEnum = pgEnum('laterality', [
+  'right-handed',
+  'left-handed',
+]);
+export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
+
+export const bestResultPDCEnum = pgEnum('best_pdc_performance', [
+  'Preliminary Round',
+  'First Round',
+  'Second Round',
+  'Third Round',
+  'Fourth Round',
+  'Quarter-Finals',
+  'Semi-Finals',
+  'Runner-Up',
+  'Winner',
+  // For World Championships with the group stage (1994-1998)
+  'Third Place in Group',
+  'Second Place in Group',
+  'Fourth Place',
+  'Third Place',
+]);
+
+export const bestResultBDOEnum = pgEnum('best_bdo_performance', [
+  'Preliminary Round',
+  'First Round',
+  'Second Round',
+  'Third Round',
+  'Quarter-Finals',
+  'Semi-Finals',
+  'Fourth Place',
+  'Third Place',
+  'Runner-Up',
+  'Winner',
+]);
+
+export const difficultyEnum = pgEnum('difficulty', [
+  'easy',
+  'medium',
+  'hard',
+  'very hard',
+]);
+
+export const player = pgTable('player', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at').notNull(),
+  updatedAt: timestamp('updated_at').notNull(),
+  firstName: text('first_name').notNull(),
+  lastName: text('last_name').notNull(),
+  gender: genderEnum('gender').notNull(),
+  dateOfBirth: date('date_of_birth').notNull(),
+  country: text('country').notNull(),
+  playingSince: integer('playing_since'),
+  dartsBrand: dartsBrandEnum('darts_brand'),
+  dartsWeight: dartsWeightEnum('darts_weight'),
+  laterality: lateralityEnum('laterality').notNull(),
+  organisation: organisationEnum('organisation').notNull(),
+  tourCard: boolean('tour_card').notNull(),
+  rankingPDC: integer('ranking_pdc'),
+  rankingWDF: integer('ranking_wdf'),
+  prizeMoney: real('prize_money'),
+  bestResultPDC: bestResultPDCEnum('best_pdc_result'),
+  yearOfBestResultPDC: integer('year_of_best_pdc_result'),
+  bestResultBDO: bestResultBDOEnum('best_bdo_result'),
+  yearOfBestResultBDO: integer('year_of_best_bdo_result'),
+  active: boolean('active').notNull(),
+  difficulty: difficultyEnum('difficulty').notNull(),
 });
