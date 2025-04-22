@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   date,
   integer,
   pgEnum,
@@ -74,6 +76,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Red Dragon',
   'Shot',
   'Nodor',
+  'Cosmo',
 ]);
 export const dartsWeightEnum = pgEnum('darts_weight', [
   '10g',
@@ -114,7 +117,7 @@ export const lateralityEnum = pgEnum('laterality', [
 ]);
 export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
 
-export const bestResultPDCEnum = pgEnum('best_pdc_performance', [
+export const bestResultPDCEnum = pgEnum('best_pdc_result', [
   'Preliminary Round',
   'First Round',
   'Second Round',
@@ -131,7 +134,7 @@ export const bestResultPDCEnum = pgEnum('best_pdc_performance', [
   'Third Place',
 ]);
 
-export const bestResultBDOEnum = pgEnum('best_bdo_performance', [
+export const bestResultWDFEnum = pgEnum('best_wdf_result', [
   'Preliminary Round',
   'First Round',
   'Second Round',
@@ -151,28 +154,61 @@ export const difficultyEnum = pgEnum('difficulty', [
   'very hard',
 ]);
 
-export const player = pgTable('player', {
-  id: serial('id').primaryKey(),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-  firstName: text('first_name').notNull(),
-  lastName: text('last_name').notNull(),
-  gender: genderEnum('gender').notNull(),
-  dateOfBirth: date('date_of_birth').notNull(),
-  country: text('country').notNull(),
-  playingSince: integer('playing_since'),
-  dartsBrand: dartsBrandEnum('darts_brand'),
-  dartsWeight: dartsWeightEnum('darts_weight'),
-  laterality: lateralityEnum('laterality').notNull(),
-  organisation: organisationEnum('organisation').notNull(),
-  tourCard: boolean('tour_card').notNull(),
-  rankingPDC: integer('ranking_pdc'),
-  rankingWDF: integer('ranking_wdf'),
-  prizeMoney: real('prize_money'),
-  bestResultPDC: bestResultPDCEnum('best_pdc_result'),
-  yearOfBestResultPDC: integer('year_of_best_pdc_result'),
-  bestResultBDO: bestResultBDOEnum('best_bdo_result'),
-  yearOfBestResultBDO: integer('year_of_best_bdo_result'),
-  active: boolean('active').notNull(),
-  difficulty: difficultyEnum('difficulty').notNull(),
-});
+export const player = pgTable(
+  'player',
+  {
+    id: serial('id').primaryKey(),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+    firstName: text('first_name').notNull(),
+    lastName: text('last_name').notNull(),
+    gender: genderEnum('gender').notNull(),
+    dateOfBirth: date('date_of_birth').notNull(),
+    country: text('country').notNull(),
+    playingSince: integer('playing_since'),
+    dartsBrand: dartsBrandEnum('darts_brand'),
+    dartsWeight: dartsWeightEnum('darts_weight'),
+    laterality: lateralityEnum('laterality').notNull(),
+    organisation: organisationEnum('organisation').notNull(),
+    tourCard: boolean('tour_card').notNull(),
+    rankingPDC: integer('ranking_pdc'),
+    rankingWDF: integer('ranking_wdf'),
+    prizeMoney: real('prize_money'),
+    bestResultPDC: bestResultPDCEnum('best_pdc_result'),
+    yearOfBestResultPDC: integer('year_of_best_pdc_result'),
+    bestResultWDF: bestResultWDFEnum('best_wdf_result'),
+    yearOfBestResultWDF: integer('year_of_best_wdf_result'),
+    active: boolean('active').notNull(),
+    difficulty: difficultyEnum('difficulty').notNull(),
+  },
+  ({
+    playingSince,
+    yearOfBestResultPDC,
+    yearOfBestResultWDF,
+    rankingPDC,
+    rankingWDF,
+    prizeMoney,
+  }) => [
+    check(
+      'is_year_playing_since',
+      sql`${playingSince} >= 1900 AND ${playingSince} < 2100`
+    ),
+    check(
+      'is_year_best_pdc_result',
+      sql`${yearOfBestResultPDC} >= 1900 AND ${yearOfBestResultPDC} < 2100`
+    ),
+    check(
+      'is_year_best_wdf_result',
+      sql`${yearOfBestResultWDF} >= 1900 AND ${yearOfBestResultWDF} < 2100`
+    ),
+    check(
+      'is_proper_ranking_PDC',
+      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 250`
+    ),
+    check(
+      'is_proper_ranking_WDF',
+      sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2000`
+    ),
+    check('is_non_negative', sql`${prizeMoney} >= 0`),
+  ]
+);
