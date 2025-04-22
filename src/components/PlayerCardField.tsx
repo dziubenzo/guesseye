@@ -1,26 +1,28 @@
 import { ReactNode } from 'react';
 
-type FieldProps = { children: ReactNode };
+type FieldProps = { children: ReactNode; className?: string };
 
-export function Field({ children }: FieldProps) {
+export function Field({ children, className }: FieldProps) {
   return (
-    <div className="flex flex-col gap-2 items-center justify-center">
+    <div
+      className={`flex flex-col gap-2 items-center justify-center ${className}`}
+    >
       {children}
     </div>
   );
 }
 
-type FieldNameProps = FieldProps;
+type FieldNameProps = Pick<FieldProps, 'children'>;
 
 export function FieldName({ children }: FieldNameProps) {
-  return <p className="flex gap-2 items-center">{children}</p>;
+  return <p className="flex gap-2 items-center text-sm">{children}</p>;
 }
 
-type FieldValueProps = FieldProps;
+type FieldValueProps = Pick<FieldProps, 'children'>;
 
 export function FieldValue({ children }: FieldValueProps) {
   return (
-    <p className="text-lg bg-secondary p-2 rounded-md w-full text-center">
+    <p className="bg-secondary p-2 rounded-md w-full text-center min-h-[40px]">
       {children}
     </p>
   );
