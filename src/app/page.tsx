@@ -1,4 +1,5 @@
 import { Field, FieldName, FieldValue } from '@/components/PlayerCardField';
+import Tooltip from '@/components/Tooltip';
 import {
   Card,
   CardContent,
@@ -61,6 +62,11 @@ export default async function Home() {
               <FieldName>
                 <Map size={18} />
                 Country
+                <Tooltip>
+                  The country that a darts player represents. For example,
+                  Jeffrey de Graaf represents Sweden, but he was born in the
+                  Netherlands.
+                </Tooltip>
               </FieldName>
               <FieldValue>{player.country}</FieldValue>
             </Field>
@@ -139,6 +145,10 @@ export default async function Home() {
               <FieldName>
                 <Trophy size={18} />
                 Best PDC World Championship Result
+                <Tooltip>
+                  If a darts player achieved their best result more than once,
+                  the year is the latest one.
+                </Tooltip>
               </FieldName>
               <FieldValue>
                 {player.bestResultPDC + ` (${player.yearOfBestResultPDC})`}
@@ -158,6 +168,10 @@ export default async function Home() {
               <FieldName>
                 <Trophy size={18} />
                 Best BDO/WDF World Championship Result
+                <Tooltip>
+                  If a darts player achieved their best result more than once,
+                  the year is the latest one.
+                </Tooltip>
               </FieldName>
               <FieldValue>
                 {player.bestResultWDF + ` (${player.yearOfBestResultWDF})`}
