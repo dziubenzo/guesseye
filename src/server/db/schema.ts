@@ -178,6 +178,8 @@ export const player = pgTable(
     yearOfBestResultPDC: integer('year_of_best_pdc_result'),
     bestResultWDF: bestResultWDFEnum('best_wdf_result'),
     yearOfBestResultWDF: integer('year_of_best_wdf_result'),
+    playedInWCOD: boolean('played_in_wcod').notNull(),
+    playedInWDF: boolean('played_in_wdf').notNull(),
     active: boolean('active').notNull(),
     difficulty: difficultyEnum('difficulty').notNull(),
   },

@@ -15,8 +15,10 @@ import {
   Building,
   Cake,
   Calendar1,
+  Globe,
   Hand,
   History,
+  Layers2,
   Map,
   Power,
   PowerOff,
@@ -80,7 +82,7 @@ export default async function Home() {
             <Field className="col-span-2 lg:col-span-1">
               <FieldName>
                 <History size={18} />
-                Playing Darts Since
+                Playing Since
               </FieldName>
               <FieldValue>{player.playingSince}</FieldValue>
             </Field>
@@ -156,16 +158,36 @@ export default async function Home() {
             </Field>
           </div>
           <Separator />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-center justify-center text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
             <Field>
               <FieldName>
                 <Calendar1 size={18} />
                 WDF Ranking
               </FieldName>
-              <FieldValue>{player.rankingWDF}</FieldValue>
+              <FieldValue>
+                {player.rankingWDF ? player.rankingWDF : 'N/A'}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
+                <Globe size={18} />
+                Played in WCoD
+              </FieldName>
+              <FieldValue>{player.playedInWDF ? 'Yes' : 'No'}</FieldValue>
+            </Field>
+            <Field className="col-span-2 lg:col-span-1">
+              <FieldName>
+                <Layers2 size={18} />
+                Played in BDO/WDF
+                <Tooltip>
+                  If the value says &quot;No&quot;, it means that a darts player
+                  has <strong>never</strong> played in BDO/WDF events.
+                </Tooltip>
+              </FieldName>
+              <FieldValue>{player.playedInWDF ? 'Yes' : 'No'}</FieldValue>
+            </Field>
+            <Field className="col-span-2 lg:col-start-4">
+              <FieldName className="text-xs lg:text-sm">
                 <Trophy size={18} />
                 Best BDO/WDF World Championship Result
                 <Tooltip>
