@@ -41,6 +41,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* Mine */
+  --color-good-guess: var(--good-guess);
+  --color-good-guess-foreground: var(--good-guess-foreground);
+  --color-wrong-guess: var(--wrong-guess);
+  --color-wrong-guess-foreground: var(--wrong-guess-foreground);
 }
 
 /* Green with 0.5 radius */
@@ -78,6 +83,10 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.723 0.219 149.579);
+  --good-guess: oklch(0.723 0.219 149.579);
+  --good-guess-foreground: oklch(1 0 0);
+  --wrong-guess: oklch(0.577 0.245 27.325);
+  --wrong-guess-foreground: oklch(0.982 0.018 155.826);
 }
 
 .dark {
@@ -112,6 +121,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.527 0.154 150.069);
+  --good-guess: oklch(82% 0.1752 145.3);
+  --good-guess-foreground: oklch(0.141 0.005 285.823);
+  --wrong-guess: oklch(0.704 0.191 22.216);
+  --wrong-guess-foreground: oklch(0.141 0.005 285.823);
 }
 
 @layer base {

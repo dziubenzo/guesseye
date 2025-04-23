@@ -181,7 +181,8 @@ export default async function Home() {
                 Played in BDO/WDF
                 <Tooltip>
                   If the value says &quot;No&quot;, it means that a darts player
-                  has <strong>never</strong> played in BDO/WDF events.
+                  has <span className="font-bold">never</span> played in BDO/WDF
+                  events.
                 </Tooltip>
               </FieldName>
               <FieldValue>{player.playedInWDF ? 'Yes' : 'No'}</FieldValue>
