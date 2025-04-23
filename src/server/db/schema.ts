@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { InferSelectModel, sql } from 'drizzle-orm';
 import {
   boolean,
   check,
@@ -214,3 +214,5 @@ export const player = pgTable(
     check('is_non_negative', sql`${prizeMoney} >= 0`),
   ]
 );
+
+export type Player = InferSelectModel<typeof player>;

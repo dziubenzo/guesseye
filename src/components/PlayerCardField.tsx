@@ -28,7 +28,7 @@ type FieldValueProps = Pick<FieldProps, 'children'>;
 
 export function FieldValue({ children }: FieldValueProps) {
   return (
-    <p className="bg-wrong-guess text-wrong-guess-foreground p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1">
+    <p className="bg-good-guess text-good-guess-foreground p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1">
       {children}
     </p>
   );
