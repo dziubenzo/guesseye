@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { differenceInYears } from 'date-fns';
+import { getTableColumns } from 'drizzle-orm';
+import { Player, player } from '@/server/db/schema';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -34,3 +36,39 @@ export function formatPrizeMoney(prizeMoney: number) {
     trailingZeroDisplay: 'stripIfInteger',
   }).format(prizeMoney * 1000);
 }
+
+export function normaliseGuess(guess: string) {
+  return guess
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replaceAll('ł', 'l');
+}
+
+type BestResultColumnType =
+  | NonNullable<Player['bestResultPDC']>
+  | NonNullable<Player['bestResultWDF']>;
+
+export function buildBestResultMap(columnValues: BestResultColumnType[]) {
+  const reversedValues = columnValues.toReversed();
+  let weight = 1;
+
+  const map = reversedValues.reduce((map, result) => {
+    map.set(result, weight);
+    // Treat Fourth Place and Semi-Finals as equal result
+    if (result === 'Fourth Place') {
+      return map;
+    }
+    weight++;
+    return map;
+  }, new Map<BestResultColumnType, number>());
+
+  return map;
+}
+
+export const bestResultPDCMap = buildBestResultMap(
+  getTableColumns(player).bestResultPDC.enumValues
+);
+export const bestResultWDFMap = buildBestResultMap(
+  getTableColumns(player).bestResultWDF.enumValues
+);
