@@ -1,21 +1,36 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { guessSchema, GuessSchemaType } from '@/lib/zod/guess';
+import { checkGuess } from '@/server/actions/check-guess';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useAction } from 'next-safe-action/hooks';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import ErrorMessage from './ErrorMessage';
 
 export default function PlayerForm() {
-  const playerForm = useForm();
+  const playerForm = useForm({
+    resolver: zodResolver(guessSchema),
+    defaultValues: {
+      guess: '',
+    },
+    mode: 'onSubmit',
+  });
 
-  function onSubmit() {
-    return;
+  const [error, setError] = useState('');
+
+  const { execute, isPending } = useAction(checkGuess, {
+    onSuccess({ data }) {
+      if (data?.error) setError(data.error);
+    },
+  });
+
+  function onSubmit(values: GuessSchemaType) {
+    setError('');
+    execute(values);
   }
 
   return (
@@ -38,12 +53,13 @@ export default function PlayerForm() {
                   <Button
                     type="submit"
                     variant="default"
+                    disabled={isPending}
                     className="cursor-pointer text-lg px-8 py-4 h-full"
                   >
-                    Check
+                    {isPending ? 'Checking...' : 'Check'}
                   </Button>
                 </div>
-                <FormMessage />
+                {error && <ErrorMessage errorMessage={error} />}
               </FormItem>
             )}
           />
