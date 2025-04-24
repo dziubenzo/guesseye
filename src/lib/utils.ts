@@ -11,6 +11,19 @@ export function getAge(dateOfBirth: Date | string) {
 }
 
 export function capitalise(string: string) {
+  const splitString = string.split('-');
+
+  // Capitalise laterality
+  if (splitString.length === 2) {
+    return (
+      splitString[0][0].toUpperCase() +
+      splitString[0].slice(1) +
+      '-' +
+      splitString[1][0].toUpperCase() +
+      splitString[1].slice(1)
+    );
+  }
+
   return string[0].toUpperCase() + string.slice(1);
 }
 

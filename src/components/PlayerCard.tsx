@@ -1,11 +1,6 @@
 import { Field, FieldName, FieldValue } from '@/components/PlayerCardField';
 import Tooltip from '@/components/Tooltip';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { capitalise, formatPrizeMoney, getAge } from '@/lib/utils';
 import { Player } from '@/server/db/schema';
@@ -19,14 +14,14 @@ import {
   History,
   Layers2,
   Map,
-  Power,
-  PowerOff,
   ScrollText,
+  Star,
   Target,
   Trophy,
   VenusAndMars,
   Weight,
 } from 'lucide-react';
+import { PiNumberCircleNine } from 'react-icons/pi';
 
 type PlayerCardProps = {
   player: Player;
@@ -71,7 +66,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
             </Field>
             <Field>
               <FieldName>
-                {player.active ? <Power size={18} /> : <PowerOff size={18} />}
+                <Star size={18} />
                 Active
               </FieldName>
               <FieldValue>{player.active ? 'Yes' : 'No'}</FieldValue>
@@ -81,11 +76,13 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <History size={18} />
                 Playing Since
               </FieldName>
-              <FieldValue>{player.playingSince}</FieldValue>
+              <FieldValue>
+                {player.playingSince ? player.playingSince : 'N/A'}
+              </FieldValue>
             </Field>
           </div>
           <Separator />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 items-center justify-center text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
             <Field>
               <FieldName>
                 <Building size={18} />
@@ -105,14 +102,25 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Target size={18} />
                 Darts Brand
               </FieldName>
-              <FieldValue>{player.dartsBrand}</FieldValue>
+              <FieldValue>
+                {player.dartsBrand ? player.dartsBrand : 'N/A'}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
                 <Weight size={18} />
                 Darts Weight
               </FieldName>
-              <FieldValue>{player.dartsWeight}</FieldValue>
+              <FieldValue>
+                {player.dartsWeight ? player.dartsWeight : 'N/A'}
+              </FieldValue>
+            </Field>
+            <Field className="col-span-2 lg:col-span-1">
+              <FieldName>
+                <PiNumberCircleNine size={18} />
+                PDC Nine-Darters
+              </FieldName>
+              <FieldValue>{player.nineDartersPDC}</FieldValue>
             </Field>
           </div>
           <Separator />
@@ -122,7 +130,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Calendar1 size={18} />
                 PDC Ranking
               </FieldName>
-              <FieldValue>{player.rankingPDC}</FieldValue>
+              <FieldValue>
+                {player.rankingPDC ? player.rankingPDC : 'N/A'}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
@@ -137,7 +147,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 Prize Money
               </FieldName>
               <FieldValue>
-                {player.prizeMoney ? formatPrizeMoney(player.prizeMoney) : ''}
+                {player.prizeMoney
+                  ? formatPrizeMoney(player.prizeMoney)
+                  : 'N/A'}
               </FieldValue>
             </Field>
             <Field className="col-span-2 lg:col-span-2">
@@ -150,7 +162,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 </Tooltip>
               </FieldName>
               <FieldValue>
-                {player.bestResultPDC + ` (${player.yearOfBestResultPDC})`}
+                {player.bestResultPDC && player.yearOfBestResultPDC
+                  ? player.bestResultPDC + ` (${player.yearOfBestResultPDC})`
+                  : 'N/A'}
               </FieldValue>
             </Field>
           </div>
@@ -194,7 +208,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 </Tooltip>
               </FieldName>
               <FieldValue>
-                {player.bestResultWDF + ` (${player.yearOfBestResultWDF})`}
+                {player.bestResultWDF && player.yearOfBestResultWDF
+                  ? player.bestResultWDF + ` (${player.yearOfBestResultWDF})`
+                  : 'N/A'}
               </FieldValue>
             </Field>
           </div>
