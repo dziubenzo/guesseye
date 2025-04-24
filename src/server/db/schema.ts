@@ -118,27 +118,31 @@ export const lateralityEnum = pgEnum('laterality', [
 export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
 
 export const bestResultPDCEnum = pgEnum('best_pdc_result', [
-  'Preliminary Round',
-  'First Round',
-  'Second Round',
-  'Third Round',
-  'Fourth Round',
+  'Last 96',
+  'Last 72',
+  'Last 70', // 2009
+  'Last 68', // 2008
+  'Last 64',
+  'Last 48', // 2004-2005
+  'Last 40', // 2003
+  'Last 32',
+  'Last 24', // 1994-1998
+  'Last 16',
   'Quarter-Finals',
   'Semi-Finals',
-  'Runner-Up',
-  'Winner',
-  // For World Championships with the group stage (1994-1998)
-  'Third Place in Group',
-  'Second Place in Group',
   'Fourth Place',
   'Third Place',
+  'Runner-Up',
+  'Winner',
 ]);
 
 export const bestResultWDFEnum = pgEnum('best_wdf_result', [
-  'Preliminary Round',
-  'First Round',
-  'Second Round',
-  'Third Round',
+  'Last 48', // since 2022
+  'Last 40', // since 2015
+  'Last 33', // 1999, 1986, 1983, 1981
+  'Last 32',
+  'Last 24', // Women
+  'Last 16',
   'Quarter-Finals',
   'Semi-Finals',
   'Fourth Place',
@@ -174,6 +178,7 @@ export const player = pgTable(
     rankingPDC: integer('ranking_pdc'),
     rankingWDF: integer('ranking_wdf'),
     prizeMoney: real('prize_money'),
+    nineDartersPDC: integer('nine_darters_pdc').default(0).notNull(),
     bestResultPDC: bestResultPDCEnum('best_pdc_result'),
     yearOfBestResultPDC: integer('year_of_best_pdc_result'),
     bestResultWDF: bestResultWDFEnum('best_wdf_result'),
@@ -185,6 +190,7 @@ export const player = pgTable(
   },
   ({
     playingSince,
+    nineDartersPDC,
     yearOfBestResultPDC,
     yearOfBestResultWDF,
     rankingPDC,
@@ -195,6 +201,7 @@ export const player = pgTable(
       'is_year_playing_since',
       sql`${playingSince} >= 1900 AND ${playingSince} < 2100`
     ),
+    check('is_non_negative_nine_darters_pdc', sql`${nineDartersPDC} >= 0`),
     check(
       'is_year_best_pdc_result',
       sql`${yearOfBestResultPDC} >= 1900 AND ${yearOfBestResultPDC} < 2100`
@@ -211,7 +218,7 @@ export const player = pgTable(
       'is_proper_ranking_WDF',
       sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2000`
     ),
-    check('is_non_negative', sql`${prizeMoney} >= 0`),
+    check('is_non_negative_prize_money', sql`${prizeMoney} >= 0`),
   ]
 );
 
