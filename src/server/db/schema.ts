@@ -1,4 +1,4 @@
-import { InferSelectModel, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
@@ -167,7 +167,7 @@ export const player = pgTable(
     firstName: text('first_name').notNull(),
     lastName: text('last_name').notNull(),
     gender: genderEnum('gender').notNull(),
-    dateOfBirth: date('date_of_birth').notNull(),
+    dateOfBirth: date('date_of_birth'),
     country: text('country').notNull(),
     playingSince: integer('playing_since'),
     dartsBrand: dartsBrandEnum('darts_brand'),
@@ -221,5 +221,3 @@ export const player = pgTable(
     check('is_non_negative_prize_money', sql`${prizeMoney} >= 0`),
   ]
 );
-
-export type Player = InferSelectModel<typeof player>;

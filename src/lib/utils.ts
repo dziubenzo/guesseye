@@ -1,8 +1,9 @@
+import { BestResultColumnType, ComparisonResult, Player } from '@/lib/types';
+import { player } from '@/server/db/schema';
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { differenceInYears } from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
-import { Player, player } from '@/server/db/schema';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -45,9 +46,22 @@ export function normaliseGuess(guess: string) {
     .replaceAll('ł', 'l');
 }
 
-type BestResultColumnType =
-  | NonNullable<Player['bestResultPDC']>
-  | NonNullable<Player['bestResultWDF']>;
+export function checkIfGuessCorrect(
+  guessedPlayer: Player,
+  playerToFind: Player
+) {
+  let isGuessCorrect = true;
+  let key: keyof Player;
+
+  for (key in guessedPlayer) {
+    if (guessedPlayer[key] !== playerToFind[key]) {
+      isGuessCorrect = false;
+      break;
+    }
+  }
+
+  return isGuessCorrect;
+}
 
 export function buildBestResultMap(columnValues: BestResultColumnType[]) {
   const reversedValues = columnValues.toReversed();
@@ -72,3 +86,130 @@ export const bestResultPDCMap = buildBestResultMap(
 export const bestResultWDFMap = buildBestResultMap(
   getTableColumns(player).bestResultWDF.enumValues
 );
+
+export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
+  const comparisonResult = {} as ComparisonResult;
+  let key: keyof Player;
+
+  for (key in guessedPlayer) {
+    if (
+      key === 'id' ||
+      key === 'createdAt' ||
+      key === 'updatedAt' ||
+      key === 'difficulty'
+    ) {
+      continue;
+    }
+
+    if (
+      (!guessedPlayer[key] && !playerToFind[key]) ||
+      guessedPlayer[key] === playerToFind[key]
+    ) {
+      comparisonResult[key] = 'match';
+      continue;
+    }
+    if (!guessedPlayer[key] || !playerToFind[key]) {
+      comparisonResult[key] = 'noMatch';
+      continue;
+    }
+
+    if (
+      key === 'firstName' ||
+      key === 'lastName' ||
+      key === 'gender' ||
+      key === 'country' ||
+      key === 'dartsBrand' ||
+      key === 'laterality' ||
+      key === 'organisation' ||
+      key === 'tourCard' ||
+      key === 'playedInWCOD' ||
+      key === 'playedInWDF' ||
+      key === 'active'
+    ) {
+      if (guessedPlayer[key] !== playerToFind[key]) {
+        comparisonResult[key] = 'noMatch';
+      } else if (guessedPlayer[key] === playerToFind[key]) {
+        comparisonResult[key] = 'match';
+      }
+      continue;
+    }
+
+    // Revert higher/lower logic for ranking positions
+    if (key === 'rankingPDC' || key === 'rankingWDF') {
+      if (guessedPlayer[key]! < playerToFind[key]!) {
+        comparisonResult[key] = 'lower';
+      } else if (guessedPlayer[key]! > playerToFind[key]!) {
+        comparisonResult[key] = 'higher';
+      }
+      continue;
+    }
+
+    if (
+      key === 'nineDartersPDC' ||
+      key === 'playingSince' ||
+      key === 'prizeMoney' ||
+      key === 'yearOfBestResultPDC' ||
+      key === 'yearOfBestResultWDF'
+    ) {
+      if (guessedPlayer[key]! > playerToFind[key]!) {
+        comparisonResult[key] = 'lower';
+      } else if (guessedPlayer[key]! < playerToFind[key]!) {
+        comparisonResult[key] = 'higher';
+      }
+      continue;
+    }
+
+    switch (key) {
+      case 'dateOfBirth':
+        const guessedPlayerAge = getAge(guessedPlayer[key]!);
+        const playerToFindAge = getAge(playerToFind[key]!);
+        if (guessedPlayerAge > playerToFindAge) {
+          comparisonResult[key] = 'lower';
+        } else if (guessedPlayerAge < playerToFindAge) {
+          comparisonResult[key] = 'higher';
+        } else {
+          comparisonResult[key] = 'match';
+        }
+        continue;
+      case 'dartsWeight':
+        const guessedPlayerDartsWeight = parseInt(guessedPlayer[key]!);
+        const playerToFindDartsWeight = parseInt(playerToFind[key]!);
+        if (guessedPlayerDartsWeight > playerToFindDartsWeight) {
+          comparisonResult[key] = 'lower';
+        } else if (guessedPlayerDartsWeight < playerToFindDartsWeight) {
+          comparisonResult[key] = 'higher';
+        } else {
+          comparisonResult[key] = 'match';
+        }
+        continue;
+      case 'bestResultPDC':
+        const guessedPlayerResultPDC = bestResultPDCMap.get(
+          guessedPlayer[key]!
+        );
+        const playerToFindResultPDC = bestResultPDCMap.get(playerToFind[key]!);
+        if (guessedPlayerResultPDC! < playerToFindResultPDC!) {
+          comparisonResult[key] = 'lower';
+        } else if (guessedPlayerResultPDC! > playerToFindResultPDC!) {
+          comparisonResult[key] = 'higher';
+        } else {
+          comparisonResult[key] = 'match';
+        }
+        continue;
+      case 'bestResultWDF':
+        const guessedPlayerResultWDF = bestResultWDFMap.get(
+          guessedPlayer[key]!
+        );
+        const playerToFindResultWDF = bestResultWDFMap.get(playerToFind[key]!);
+        if (guessedPlayerResultWDF! < playerToFindResultWDF!) {
+          comparisonResult[key] = 'lower';
+        } else if (guessedPlayerResultWDF! > playerToFindResultWDF!) {
+          comparisonResult[key] = 'higher';
+        } else {
+          comparisonResult[key] = 'match';
+        }
+        continue;
+    }
+  }
+
+  return comparisonResult;
+}
