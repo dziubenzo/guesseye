@@ -34,7 +34,8 @@ export const checkGuess = actionClient
     } else if (searchResults.length > 1) {
       // Handle searchResult.length > 1 better, e.g. Smiths
       return {
-        error: 'More than one darts player found. Please add more detail to your guess.',
+        error:
+          'More than one darts player found. Please add more detail to your guess.',
       };
     } else {
       guessedPlayer = searchResults[0];
@@ -48,9 +49,11 @@ export const checkGuess = actionClient
     }
 
     // Incorrect guess
-    const comparisonResult = comparePlayers(guessedPlayer, playerToFind);
+    const { comparisonResult, playerToFindMatches } = comparePlayers(
+      guessedPlayer,
+      playerToFind
+    );
 
-    console.log(comparisonResult);
     return;
 
     const error = { message: normalisedGuess };

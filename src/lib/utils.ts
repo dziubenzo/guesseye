@@ -1,4 +1,9 @@
-import { BestResultColumnType, ComparisonResult, Player } from '@/lib/types';
+import {
+  BestResultColumnType,
+  ComparisonResult,
+  Player,
+  PlayerToFindMatches,
+} from '@/lib/types';
 import { player } from '@/server/db/schema';
 import { clsx, type ClassValue } from 'clsx';
 import { differenceInYears } from 'date-fns';
@@ -89,6 +94,7 @@ export const bestResultWDFMap = buildBestResultMap(
 
 export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
   const comparisonResult = {} as ComparisonResult;
+  const playerToFindMatches = {} as PlayerToFindMatches;
   let key: keyof Player;
 
   for (key in guessedPlayer) {
@@ -106,6 +112,8 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
       guessedPlayer[key] === playerToFind[key]
     ) {
       comparisonResult[key] = 'match';
+      // @ts-expect-error: key is the same, the never type should never happen
+      playerToFindMatches[key] = playerToFind[key];
       continue;
     }
     if (!guessedPlayer[key] || !playerToFind[key]) {
@@ -130,6 +138,8 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         comparisonResult[key] = 'noMatch';
       } else if (guessedPlayer[key] === playerToFind[key]) {
         comparisonResult[key] = 'match';
+        // @ts-expect-error: key is the same, the never type should never happen
+        playerToFindMatches[key] = playerToFind[key];
       }
       continue;
     }
@@ -169,6 +179,7 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
           comparisonResult[key] = 'higher';
         } else {
           comparisonResult[key] = 'match';
+          playerToFindMatches[key] = playerToFind[key];
         }
         continue;
       case 'dartsWeight':
@@ -180,6 +191,7 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
           comparisonResult[key] = 'higher';
         } else {
           comparisonResult[key] = 'match';
+          playerToFindMatches[key] = playerToFind[key];
         }
         continue;
       case 'bestResultPDC':
@@ -193,6 +205,7 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
           comparisonResult[key] = 'higher';
         } else {
           comparisonResult[key] = 'match';
+          playerToFindMatches[key] = playerToFind[key];
         }
         continue;
       case 'bestResultWDF':
@@ -206,10 +219,11 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
           comparisonResult[key] = 'higher';
         } else {
           comparisonResult[key] = 'match';
+          playerToFindMatches[key] = playerToFind[key];
         }
         continue;
     }
   }
 
-  return comparisonResult;
+  return { comparisonResult, playerToFindMatches };
 }

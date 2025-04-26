@@ -34,3 +34,5 @@ export type ComparisonResult = {
   playedInWDF: Match;
   active: Match;
 };
+
+export type PlayerToFindMatches = Partial<Player>;
