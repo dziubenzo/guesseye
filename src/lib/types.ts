@@ -36,3 +36,8 @@ export type ComparisonResult = {
 };
 
 export type PlayerToFindMatches = Partial<Player>;
+
+export type Guess = {
+  guessedPlayer: Player;
+  comparisonResult: ComparisonResult;
+};

@@ -25,6 +25,9 @@ export default function PlayerForm() {
   const { execute, isPending } = useAction(checkGuess, {
     onSuccess({ data }) {
       if (data?.error) setError(data.error);
+      if (data?.success) {
+        console.log(data.success);
+      }
     },
   });
 

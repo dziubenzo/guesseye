@@ -45,7 +45,7 @@ export const checkGuess = actionClient
     const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
 
     if (isGuessCorrect) {
-      return { success: playerToFind };
+      return { success: { playerToFind } };
     }
 
     // Incorrect guess
@@ -54,11 +54,10 @@ export const checkGuess = actionClient
       playerToFind
     );
 
-    return;
+    // Send difficulty to frontend
+    playerToFindMatches.difficulty = playerToFind.difficulty;
 
-    const error = { message: normalisedGuess };
-
-    if (error) return { error: error.message };
-
-    return { success: true };
+    return {
+      success: { guessedPlayer, comparisonResult, playerToFindMatches },
+    };
   });
