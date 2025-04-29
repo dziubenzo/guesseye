@@ -1,7 +1,7 @@
 'use server';
 
 import { actionClient } from '@/lib/safe-action-client';
-import { Player } from '@/lib/types';
+import { CheckGuessAction, Player } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
@@ -30,13 +30,13 @@ export const checkGuess = actionClient
     let guessedPlayer;
 
     if (searchResults.length === 0) {
-      return { error: 'No darts player found. Try again.' };
+      return { error: 'No darts player found. Try again.' } as CheckGuessAction;
     } else if (searchResults.length > 1) {
       // Handle searchResult.length > 1 better, e.g. Smiths
       return {
         error:
           'More than one darts player found. Please add more detail to your guess.',
-      };
+      } as CheckGuessAction;
     } else {
       guessedPlayer = searchResults[0];
     }
@@ -45,11 +45,13 @@ export const checkGuess = actionClient
     const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
 
     if (isGuessCorrect) {
-      return { success: { playerToFind } };
+      return {
+        success: { type: 'correctGuess', playerToFind },
+      } as CheckGuessAction;
     }
 
     // Incorrect guess
-    const { comparisonResult, playerToFindMatches } = comparePlayers(
+    const { comparisonResults, playerToFindMatches } = comparePlayers(
       guessedPlayer,
       playerToFind
     );
@@ -58,6 +60,11 @@ export const checkGuess = actionClient
     playerToFindMatches.difficulty = playerToFind.difficulty;
 
     return {
-      success: { guessedPlayer, comparisonResult, playerToFindMatches },
-    };
+      success: {
+        type: 'incorrectGuess',
+        guessedPlayer,
+        comparisonResults,
+        playerToFindMatches,
+      },
+    } as CheckGuessAction;
   });

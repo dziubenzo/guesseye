@@ -9,7 +9,7 @@ type GameStore = {
   finishGame: (playerToFind: Player) => void;
   updateGuesses: (
     guessedPlayer: Guess['guessedPlayer'],
-    comparisonResult: Guess['comparisonResult']
+    comparisonResults: Guess['comparisonResults']
   ) => void;
   updateMatches: (newMatches: PlayerToFindMatches) => void;
 };
@@ -24,9 +24,9 @@ export const useGameStore = create<GameStore>()((set) => ({
       playerToFind,
       gameOver: true,
     })),
-  updateGuesses: (guessedPlayer, comparisonResult) =>
+  updateGuesses: (guessedPlayer, comparisonResults) =>
     set((state) => ({
-      guesses: [...state.guesses, { guessedPlayer, comparisonResult }],
+      guesses: [...state.guesses, { guessedPlayer, comparisonResults }],
     })),
   updateMatches: (newMatches) =>
     set((state) => ({

@@ -1,4 +1,6 @@
+import { Match, MatchHigherLower, Player } from '@/lib/types';
 import { ReactNode } from 'react';
+import Arrow from './Arrow';
 
 type FieldProps = { children: ReactNode; className?: string };
 
@@ -24,12 +26,65 @@ export function FieldName({ children, className }: FieldNameProps) {
   );
 }
 
-type FieldValueProps = Pick<FieldProps, 'children'>;
+type FieldValueProps = Pick<FieldProps, 'children'> & {
+  comparisonResult: Match | MatchHigherLower;
+};
 
-export function FieldValue({ children }: FieldValueProps) {
+export function FieldValue({ children, comparisonResult }: FieldValueProps) {
   return (
-    <p className="bg-good-guess text-good-guess-foreground p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1">
+    <p
+      className={`${comparisonResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+    >
       {children}
+      {comparisonResult === 'higher' ? (
+        <Arrow type="higher">{children}</Arrow>
+      ) : null}
+      {comparisonResult === 'lower' ? (
+        <Arrow type="lower">{children}</Arrow>
+      ) : null}
+    </p>
+  );
+}
+
+type FieldValueBestResult = {
+  children?: ReactNode;
+  bestResult?: Player['bestResultPDC'] | Player['bestResultWDF'];
+  yearBestResult?:
+    | Player['yearOfBestResultPDC']
+    | Player['yearOfBestResultWDF'];
+  comparisonBestResult: MatchHigherLower;
+  comparisonYearBestResult: MatchHigherLower;
+};
+
+export function FieldValueBestResult({
+  children,
+  bestResult,
+  yearBestResult,
+  comparisonBestResult,
+  comparisonYearBestResult,
+}: FieldValueBestResult) {
+  return (
+    <p
+      className={`${comparisonBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+    >
+      {children ? children : null}
+      {bestResult}
+      {comparisonBestResult === 'higher' ? (
+        <Arrow type="higher">Best result should be better.</Arrow>
+      ) : comparisonBestResult === 'lower' ? (
+        <Arrow type="lower">Best result should be worse.</Arrow>
+      ) : undefined}
+      <span
+        className={`${comparisonYearBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonYearBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} text-center flex justify-center items-center gap-1 px-1 rounded-sm`}
+      >
+        ({yearBestResult}
+        {comparisonYearBestResult === 'higher' ? (
+          <Arrow type="higher">Year should be higher.</Arrow>
+        ) : comparisonYearBestResult === 'lower' ? (
+          <Arrow type="lower">Year should be lower.</Arrow>
+        ) : undefined}
+        )
+      </span>
     </p>
   );
 }

@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useGameStore } from '@/lib/game-store';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,13 +21,25 @@ export default function PlayerForm() {
     mode: 'onSubmit',
   });
 
+  const { finishGame, updateGuesses } = useGameStore();
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
     onSuccess({ data }) {
-      if (data?.error) setError(data.error);
-      if (data?.success) {
-        console.log(data.success);
+      if (data?.error) {
+        setError(data.error);
+        return;
+      }
+      if (data?.success?.type === 'correctGuess') {
+        finishGame(data.success.playerToFind);
+        return;
+      }
+      if (data?.success?.type === 'incorrectGuess') {
+        updateGuesses(
+          data.success.guessedPlayer,
+          data.success.comparisonResults
+        );
+        return;
       }
     },
   });

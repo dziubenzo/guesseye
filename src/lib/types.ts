@@ -7,10 +7,10 @@ export type BestResultColumnType =
   | NonNullable<Player['bestResultPDC']>
   | NonNullable<Player['bestResultWDF']>;
 
-type Match = 'match' | 'noMatch';
-type MatchHigherLower = Match | 'higher' | 'lower';
+export type Match = 'match' | 'noMatch';
+export type MatchHigherLower = Match | 'higher' | 'lower';
 
-export type ComparisonResult = {
+export type ComparisonResults = {
   firstName: Match;
   lastName: Match;
   gender: Match;
@@ -39,5 +39,24 @@ export type PlayerToFindMatches = Partial<Player>;
 
 export type Guess = {
   guessedPlayer: Player;
-  comparisonResult: ComparisonResult;
+  comparisonResults: ComparisonResults;
 };
+
+// TODO: This is atrocious, do something about it
+type CheckGuessActionError = { error: string; success: null };
+type CheckGuessActionSuccess = {
+  error: null;
+  success:
+    | {
+        type: 'correctGuess';
+        playerToFind: Player;
+      }
+    | {
+        type: 'incorrectGuess';
+        guessedPlayer: Player;
+        comparisonResults: ComparisonResults;
+        playerToFindMatches: PlayerToFindMatches;
+      };
+};
+
+export type CheckGuessAction = CheckGuessActionError | CheckGuessActionSuccess;

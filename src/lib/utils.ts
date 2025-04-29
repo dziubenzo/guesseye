@@ -1,6 +1,6 @@
 import {
   BestResultColumnType,
-  ComparisonResult,
+  ComparisonResults,
   Player,
   PlayerToFindMatches,
 } from '@/lib/types';
@@ -93,7 +93,7 @@ export const bestResultWDFMap = buildBestResultMap(
 );
 
 export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
-  const comparisonResult = {} as ComparisonResult;
+  const comparisonResults = {} as ComparisonResults;
   const playerToFindMatches = {} as PlayerToFindMatches;
   let key: keyof Player;
 
@@ -111,13 +111,13 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
       (!guessedPlayer[key] && !playerToFind[key]) ||
       guessedPlayer[key] === playerToFind[key]
     ) {
-      comparisonResult[key] = 'match';
+      comparisonResults[key] = 'match';
       // @ts-expect-error: key is the same, the never type should never happen
       playerToFindMatches[key] = playerToFind[key];
       continue;
     }
     if (!guessedPlayer[key] || !playerToFind[key]) {
-      comparisonResult[key] = 'noMatch';
+      comparisonResults[key] = 'noMatch';
       continue;
     }
 
@@ -135,9 +135,9 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
       key === 'active'
     ) {
       if (guessedPlayer[key] !== playerToFind[key]) {
-        comparisonResult[key] = 'noMatch';
+        comparisonResults[key] = 'noMatch';
       } else if (guessedPlayer[key] === playerToFind[key]) {
-        comparisonResult[key] = 'match';
+        comparisonResults[key] = 'match';
         // @ts-expect-error: key is the same, the never type should never happen
         playerToFindMatches[key] = playerToFind[key];
       }
@@ -147,9 +147,9 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
     // Revert higher/lower logic for ranking positions
     if (key === 'rankingPDC' || key === 'rankingWDF') {
       if (guessedPlayer[key]! < playerToFind[key]!) {
-        comparisonResult[key] = 'lower';
+        comparisonResults[key] = 'lower';
       } else if (guessedPlayer[key]! > playerToFind[key]!) {
-        comparisonResult[key] = 'higher';
+        comparisonResults[key] = 'higher';
       }
       continue;
     }
@@ -162,9 +162,9 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
       key === 'yearOfBestResultWDF'
     ) {
       if (guessedPlayer[key]! > playerToFind[key]!) {
-        comparisonResult[key] = 'lower';
+        comparisonResults[key] = 'lower';
       } else if (guessedPlayer[key]! < playerToFind[key]!) {
-        comparisonResult[key] = 'higher';
+        comparisonResults[key] = 'higher';
       }
       continue;
     }
@@ -174,11 +174,11 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         const guessedPlayerAge = getAge(guessedPlayer[key]!);
         const playerToFindAge = getAge(playerToFind[key]!);
         if (guessedPlayerAge > playerToFindAge) {
-          comparisonResult[key] = 'lower';
+          comparisonResults[key] = 'lower';
         } else if (guessedPlayerAge < playerToFindAge) {
-          comparisonResult[key] = 'higher';
+          comparisonResults[key] = 'higher';
         } else {
-          comparisonResult[key] = 'match';
+          comparisonResults[key] = 'match';
           playerToFindMatches[key] = playerToFind[key];
         }
         continue;
@@ -186,11 +186,11 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         const guessedPlayerDartsWeight = parseInt(guessedPlayer[key]!);
         const playerToFindDartsWeight = parseInt(playerToFind[key]!);
         if (guessedPlayerDartsWeight > playerToFindDartsWeight) {
-          comparisonResult[key] = 'lower';
+          comparisonResults[key] = 'lower';
         } else if (guessedPlayerDartsWeight < playerToFindDartsWeight) {
-          comparisonResult[key] = 'higher';
+          comparisonResults[key] = 'higher';
         } else {
-          comparisonResult[key] = 'match';
+          comparisonResults[key] = 'match';
           playerToFindMatches[key] = playerToFind[key];
         }
         continue;
@@ -200,11 +200,11 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         );
         const playerToFindResultPDC = bestResultPDCMap.get(playerToFind[key]!);
         if (guessedPlayerResultPDC! < playerToFindResultPDC!) {
-          comparisonResult[key] = 'lower';
+          comparisonResults[key] = 'lower';
         } else if (guessedPlayerResultPDC! > playerToFindResultPDC!) {
-          comparisonResult[key] = 'higher';
+          comparisonResults[key] = 'higher';
         } else {
-          comparisonResult[key] = 'match';
+          comparisonResults[key] = 'match';
           playerToFindMatches[key] = playerToFind[key];
         }
         continue;
@@ -214,16 +214,16 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         );
         const playerToFindResultWDF = bestResultWDFMap.get(playerToFind[key]!);
         if (guessedPlayerResultWDF! < playerToFindResultWDF!) {
-          comparisonResult[key] = 'lower';
+          comparisonResults[key] = 'lower';
         } else if (guessedPlayerResultWDF! > playerToFindResultWDF!) {
-          comparisonResult[key] = 'higher';
+          comparisonResults[key] = 'higher';
         } else {
-          comparisonResult[key] = 'match';
+          comparisonResults[key] = 'match';
           playerToFindMatches[key] = playerToFind[key];
         }
         continue;
     }
   }
 
-  return { comparisonResult, playerToFindMatches };
+  return { comparisonResults, playerToFindMatches };
 }

@@ -1,9 +1,14 @@
-import { Field, FieldName, FieldValue } from '@/components/PlayerCardField';
+import {
+  Field,
+  FieldName,
+  FieldValue,
+  FieldValueBestResult,
+} from '@/components/PlayerCardField';
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { ComparisonResults, Player } from '@/lib/types';
 import { capitalise, formatPrizeMoney, getAge } from '@/lib/utils';
-import { Player } from '@/server/db/schema';
 import {
   BadgePoundSterling,
   Building,
@@ -25,9 +30,13 @@ import { PiNumberCircleNine } from 'react-icons/pi';
 
 type PlayerCardProps = {
   player: Player;
+  comparisonResults: ComparisonResults;
 };
 
-export default function PlayerCard({ player }: PlayerCardProps) {
+export default function PlayerCard({
+  player,
+  comparisonResults,
+}: PlayerCardProps) {
   return (
     <Card className="bg-secondary">
       <CardHeader>
@@ -43,14 +52,18 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <VenusAndMars size={18} />
                 Gender
               </FieldName>
-              <FieldValue>{capitalise(player.gender)}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.gender}>
+                {capitalise(player.gender)}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
                 <Cake size={18} />
                 Age
               </FieldName>
-              <FieldValue>{getAge(player.dateOfBirth)}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.dateOfBirth}>
+                {player.dateOfBirth ? getAge(player.dateOfBirth) : 'N/A'}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
@@ -62,21 +75,25 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                   Netherlands.
                 </Tooltip>
               </FieldName>
-              <FieldValue>{player.country}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.country}>
+                {player.country}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
                 <Star size={18} />
                 Active
               </FieldName>
-              <FieldValue>{player.active ? 'Yes' : 'No'}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.active}>
+                {player.active ? 'Yes' : 'No'}
+              </FieldValue>
             </Field>
             <Field className="col-span-2 lg:col-span-1">
               <FieldName>
                 <History size={18} />
                 Playing Since
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.playingSince}>
                 {player.playingSince ? player.playingSince : 'N/A'}
               </FieldValue>
             </Field>
@@ -88,21 +105,25 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Building size={18} />
                 Organisation
               </FieldName>
-              <FieldValue>{player.organisation}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.organisation}>
+                {player.organisation}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
                 <Hand size={18} />
                 Laterality
               </FieldName>
-              <FieldValue>{capitalise(player.laterality)}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.laterality}>
+                {capitalise(player.laterality)}
+              </FieldValue>
             </Field>
             <Field>
               <FieldName>
                 <Target size={18} />
                 Darts Brand
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.dartsBrand}>
                 {player.dartsBrand ? player.dartsBrand : 'N/A'}
               </FieldValue>
             </Field>
@@ -111,7 +132,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Weight size={18} />
                 Darts Weight
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.dartsWeight}>
                 {player.dartsWeight ? player.dartsWeight : 'N/A'}
               </FieldValue>
             </Field>
@@ -120,7 +141,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <PiNumberCircleNine size={18} />
                 PDC Nine-Darters
               </FieldName>
-              <FieldValue>{player.nineDartersPDC}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.nineDartersPDC}>
+                {player.nineDartersPDC}
+              </FieldValue>
             </Field>
           </div>
           <Separator />
@@ -130,7 +153,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Calendar1 size={18} />
                 PDC Ranking
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.rankingPDC}>
                 {player.rankingPDC ? player.rankingPDC : 'N/A'}
               </FieldValue>
             </Field>
@@ -139,14 +162,16 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <ScrollText size={18} />
                 Tour Card
               </FieldName>
-              <FieldValue>{player.tourCard ? 'Yes' : 'No'}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.tourCard}>
+                {player.tourCard ? 'Yes' : 'No'}
+              </FieldValue>
             </Field>
             <Field className="col-span-2 lg:col-span-1">
               <FieldName>
                 <BadgePoundSterling size={18} />
                 Prize Money
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.prizeMoney}>
                 {player.prizeMoney
                   ? formatPrizeMoney(player.prizeMoney)
                   : 'N/A'}
@@ -161,11 +186,20 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                   the year is the latest one.
                 </Tooltip>
               </FieldName>
-              <FieldValue>
-                {player.bestResultPDC && player.yearOfBestResultPDC
-                  ? player.bestResultPDC + ` (${player.yearOfBestResultPDC})`
-                  : 'N/A'}
-              </FieldValue>
+              {player.bestResultPDC && player.yearOfBestResultPDC ? (
+                <FieldValueBestResult
+                  bestResult={player.bestResultPDC}
+                  yearBestResult={player.yearOfBestResultPDC}
+                  comparisonBestResult={comparisonResults.bestResultPDC}
+                  comparisonYearBestResult={
+                    comparisonResults.yearOfBestResultPDC
+                  }
+                />
+              ) : (
+                <FieldValue comparisonResult={comparisonResults.bestResultPDC}>
+                  N/A
+                </FieldValue>
+              )}
             </Field>
           </div>
           <Separator />
@@ -175,7 +209,7 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Calendar1 size={18} />
                 WDF Ranking
               </FieldName>
-              <FieldValue>
+              <FieldValue comparisonResult={comparisonResults.rankingWDF}>
                 {player.rankingWDF ? player.rankingWDF : 'N/A'}
               </FieldValue>
             </Field>
@@ -184,7 +218,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                 <Globe size={18} />
                 Played in WCoD
               </FieldName>
-              <FieldValue>{player.playedInWDF ? 'Yes' : 'No'}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.playedInWCOD}>
+                {player.playedInWCOD ? 'Yes' : 'No'}
+              </FieldValue>
             </Field>
             <Field className="col-span-2 lg:col-span-1">
               <FieldName>
@@ -196,7 +232,9 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                   events.
                 </Tooltip>
               </FieldName>
-              <FieldValue>{player.playedInWDF ? 'Yes' : 'No'}</FieldValue>
+              <FieldValue comparisonResult={comparisonResults.playedInWDF}>
+                {player.playedInWDF ? 'Yes' : 'No'}
+              </FieldValue>
             </Field>
             <Field className="col-span-2 lg:col-start-4">
               <FieldName className="text-xs lg:text-sm">
@@ -207,11 +245,20 @@ export default function PlayerCard({ player }: PlayerCardProps) {
                   the year is the latest one.
                 </Tooltip>
               </FieldName>
-              <FieldValue>
-                {player.bestResultWDF && player.yearOfBestResultWDF
-                  ? player.bestResultWDF + ` (${player.yearOfBestResultWDF})`
-                  : 'N/A'}
-              </FieldValue>
+              {player.bestResultWDF && player.yearOfBestResultWDF ? (
+                <FieldValueBestResult
+                  bestResult={player.bestResultWDF}
+                  yearBestResult={player.yearOfBestResultWDF}
+                  comparisonBestResult={comparisonResults.bestResultWDF}
+                  comparisonYearBestResult={
+                    comparisonResults.yearOfBestResultWDF
+                  }
+                />
+              ) : (
+                <FieldValue comparisonResult={comparisonResults.bestResultWDF}>
+                  N/A
+                </FieldValue>
+              )}
             </Field>
           </div>
         </div>
