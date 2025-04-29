@@ -27,27 +27,33 @@ export function FieldName({ children, className }: FieldNameProps) {
 }
 
 type FieldValueProps = Pick<FieldProps, 'children'> & {
+  fieldName: string;
   comparisonResult: Match | MatchHigherLower;
 };
 
-export function FieldValue({ children, comparisonResult }: FieldValueProps) {
+export function FieldValue({
+  children,
+  fieldName,
+  comparisonResult,
+}: FieldValueProps) {
   return (
     <p
       className={`${comparisonResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
     >
       {children}
       {comparisonResult === 'higher' ? (
-        <Arrow type="higher">{children}</Arrow>
+        <Arrow type="higher">{fieldName}</Arrow>
       ) : null}
       {comparisonResult === 'lower' ? (
-        <Arrow type="lower">{children}</Arrow>
+        <Arrow type="lower">{fieldName}</Arrow>
       ) : null}
     </p>
   );
 }
 
 type FieldValueBestResult = {
-  children?: ReactNode;
+  fieldNameBestResult: string;
+  fieldNameYearBestResult: string;
   bestResult?: Player['bestResultPDC'] | Player['bestResultWDF'];
   yearBestResult?:
     | Player['yearOfBestResultPDC']
@@ -57,7 +63,8 @@ type FieldValueBestResult = {
 };
 
 export function FieldValueBestResult({
-  children,
+  fieldNameBestResult,
+  fieldNameYearBestResult,
   bestResult,
   yearBestResult,
   comparisonBestResult,
@@ -67,21 +74,20 @@ export function FieldValueBestResult({
     <p
       className={`${comparisonBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
     >
-      {children ? children : null}
       {bestResult}
       {comparisonBestResult === 'higher' ? (
-        <Arrow type="higher">Best result should be better.</Arrow>
+        <Arrow type="higher">{fieldNameBestResult}</Arrow>
       ) : comparisonBestResult === 'lower' ? (
-        <Arrow type="lower">Best result should be worse.</Arrow>
+        <Arrow type="lower">{fieldNameBestResult}</Arrow>
       ) : undefined}
       <span
-        className={`${comparisonYearBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonYearBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} text-center flex justify-center items-center gap-1 px-1 rounded-sm`}
+        className={`${comparisonYearBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonYearBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} text-center flex justify-center items-center gap-1 rounded-sm`}
       >
         ({yearBestResult}
         {comparisonYearBestResult === 'higher' ? (
-          <Arrow type="higher">Year should be higher.</Arrow>
+          <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
         ) : comparisonYearBestResult === 'lower' ? (
-          <Arrow type="lower">Year should be lower.</Arrow>
+          <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
         ) : undefined}
         )
       </span>

@@ -52,7 +52,10 @@ export default function PlayerCard({
                 <VenusAndMars size={18} />
                 Gender
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.gender}>
+              <FieldValue
+                fieldName={'Gender'}
+                comparisonResult={comparisonResults.gender}
+              >
                 {capitalise(player.gender)}
               </FieldValue>
             </Field>
@@ -61,7 +64,10 @@ export default function PlayerCard({
                 <Cake size={18} />
                 Age
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.dateOfBirth}>
+              <FieldValue
+                fieldName={'Age'}
+                comparisonResult={comparisonResults.dateOfBirth}
+              >
                 {player.dateOfBirth ? getAge(player.dateOfBirth) : 'N/A'}
               </FieldValue>
             </Field>
@@ -75,7 +81,10 @@ export default function PlayerCard({
                   Netherlands.
                 </Tooltip>
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.country}>
+              <FieldValue
+                fieldName={'Country'}
+                comparisonResult={comparisonResults.country}
+              >
                 {player.country}
               </FieldValue>
             </Field>
@@ -84,7 +93,10 @@ export default function PlayerCard({
                 <Star size={18} />
                 Active
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.active}>
+              <FieldValue
+                fieldName={'Active'}
+                comparisonResult={comparisonResults.active}
+              >
                 {player.active ? 'Yes' : 'No'}
               </FieldValue>
             </Field>
@@ -93,7 +105,10 @@ export default function PlayerCard({
                 <History size={18} />
                 Playing Since
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.playingSince}>
+              <FieldValue
+                fieldName={'Playing since'}
+                comparisonResult={comparisonResults.playingSince}
+              >
                 {player.playingSince ? player.playingSince : 'N/A'}
               </FieldValue>
             </Field>
@@ -105,7 +120,10 @@ export default function PlayerCard({
                 <Building size={18} />
                 Organisation
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.organisation}>
+              <FieldValue
+                fieldName={'Organisation'}
+                comparisonResult={comparisonResults.organisation}
+              >
                 {player.organisation}
               </FieldValue>
             </Field>
@@ -114,7 +132,10 @@ export default function PlayerCard({
                 <Hand size={18} />
                 Laterality
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.laterality}>
+              <FieldValue
+                fieldName={'Laterality'}
+                comparisonResult={comparisonResults.laterality}
+              >
                 {capitalise(player.laterality)}
               </FieldValue>
             </Field>
@@ -123,7 +144,10 @@ export default function PlayerCard({
                 <Target size={18} />
                 Darts Brand
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.dartsBrand}>
+              <FieldValue
+                fieldName={'Darts brand'}
+                comparisonResult={comparisonResults.dartsBrand}
+              >
                 {player.dartsBrand ? player.dartsBrand : 'N/A'}
               </FieldValue>
             </Field>
@@ -132,7 +156,10 @@ export default function PlayerCard({
                 <Weight size={18} />
                 Darts Weight
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.dartsWeight}>
+              <FieldValue
+                fieldName={'Darts weight'}
+                comparisonResult={comparisonResults.dartsWeight}
+              >
                 {player.dartsWeight ? player.dartsWeight : 'N/A'}
               </FieldValue>
             </Field>
@@ -141,7 +168,10 @@ export default function PlayerCard({
                 <PiNumberCircleNine size={18} />
                 PDC Nine-Darters
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.nineDartersPDC}>
+              <FieldValue
+                fieldName={'Nine-darters'}
+                comparisonResult={comparisonResults.nineDartersPDC}
+              >
                 {player.nineDartersPDC}
               </FieldValue>
             </Field>
@@ -153,7 +183,10 @@ export default function PlayerCard({
                 <Calendar1 size={18} />
                 PDC Ranking
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.rankingPDC}>
+              <FieldValue
+                fieldName={'PDC ranking'}
+                comparisonResult={comparisonResults.rankingPDC}
+              >
                 {player.rankingPDC ? player.rankingPDC : 'N/A'}
               </FieldValue>
             </Field>
@@ -162,7 +195,10 @@ export default function PlayerCard({
                 <ScrollText size={18} />
                 Tour Card
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.tourCard}>
+              <FieldValue
+                fieldName={'Tour card'}
+                comparisonResult={comparisonResults.tourCard}
+              >
                 {player.tourCard ? 'Yes' : 'No'}
               </FieldValue>
             </Field>
@@ -171,7 +207,10 @@ export default function PlayerCard({
                 <BadgePoundSterling size={18} />
                 Prize Money
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.prizeMoney}>
+              <FieldValue
+                fieldName={'Prize money'}
+                comparisonResult={comparisonResults.prizeMoney}
+              >
                 {player.prizeMoney
                   ? formatPrizeMoney(player.prizeMoney)
                   : 'N/A'}
@@ -188,6 +227,10 @@ export default function PlayerCard({
               </FieldName>
               {player.bestResultPDC && player.yearOfBestResultPDC ? (
                 <FieldValueBestResult
+                  fieldNameBestResult={'Best PDC World Championship result'}
+                  fieldNameYearBestResult={
+                    'Year of best PDC World Championship result'
+                  }
                   bestResult={player.bestResultPDC}
                   yearBestResult={player.yearOfBestResultPDC}
                   comparisonBestResult={comparisonResults.bestResultPDC}
@@ -196,7 +239,10 @@ export default function PlayerCard({
                   }
                 />
               ) : (
-                <FieldValue comparisonResult={comparisonResults.bestResultPDC}>
+                <FieldValue
+                  fieldName={'Best PDC World Championship result'}
+                  comparisonResult={comparisonResults.bestResultPDC}
+                >
                   N/A
                 </FieldValue>
               )}
@@ -209,7 +255,10 @@ export default function PlayerCard({
                 <Calendar1 size={18} />
                 WDF Ranking
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.rankingWDF}>
+              <FieldValue
+                fieldName={'WDF ranking'}
+                comparisonResult={comparisonResults.rankingWDF}
+              >
                 {player.rankingWDF ? player.rankingWDF : 'N/A'}
               </FieldValue>
             </Field>
@@ -218,7 +267,10 @@ export default function PlayerCard({
                 <Globe size={18} />
                 Played in WCoD
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.playedInWCOD}>
+              <FieldValue
+                fieldName={'Played in WCoD'}
+                comparisonResult={comparisonResults.playedInWCOD}
+              >
                 {player.playedInWCOD ? 'Yes' : 'No'}
               </FieldValue>
             </Field>
@@ -232,7 +284,10 @@ export default function PlayerCard({
                   events.
                 </Tooltip>
               </FieldName>
-              <FieldValue comparisonResult={comparisonResults.playedInWDF}>
+              <FieldValue
+                fieldName={'Played in BDO/WDF'}
+                comparisonResult={comparisonResults.playedInWDF}
+              >
                 {player.playedInWDF ? 'Yes' : 'No'}
               </FieldValue>
             </Field>
@@ -247,6 +302,10 @@ export default function PlayerCard({
               </FieldName>
               {player.bestResultWDF && player.yearOfBestResultWDF ? (
                 <FieldValueBestResult
+                  fieldNameBestResult={'Best BDO/WDF World Championship result'}
+                  fieldNameYearBestResult={
+                    'Year of best BDO/WDF World Championship result'
+                  }
                   bestResult={player.bestResultWDF}
                   yearBestResult={player.yearOfBestResultWDF}
                   comparisonBestResult={comparisonResults.bestResultWDF}
@@ -255,7 +314,10 @@ export default function PlayerCard({
                   }
                 />
               ) : (
-                <FieldValue comparisonResult={comparisonResults.bestResultWDF}>
+                <FieldValue
+                  fieldName={'Best BDO/WDF World Championship result'}
+                  comparisonResult={comparisonResults.bestResultWDF}
+                >
                   N/A
                 </FieldValue>
               )}
