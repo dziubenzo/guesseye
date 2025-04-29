@@ -21,7 +21,7 @@ export default function PlayerForm() {
     mode: 'onSubmit',
   });
 
-  const { finishGame, updateGuesses } = useGameStore();
+  const { finishGame, updateGuesses, updateMatches } = useGameStore();
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
@@ -39,6 +39,7 @@ export default function PlayerForm() {
           data.success.guessedPlayer,
           data.success.comparisonResults
         );
+        updateMatches(data.success.playerToFindMatches);
         return;
       }
     },

@@ -9,6 +9,7 @@ export default function Guesses() {
   return guesses.map((guess) => (
     <PlayerCard
       key={guess.guessedPlayer.id}
+      type={'guess'}
       player={guess.guessedPlayer}
       comparisonResults={guess.comparisonResults}
     />
