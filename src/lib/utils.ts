@@ -1,6 +1,7 @@
 import {
   BestResultColumnType,
   ComparisonResults,
+  Guess,
   Player,
   PlayerToFindMatches,
 } from '@/lib/types';
@@ -9,6 +10,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { differenceInYears } from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
 import { twMerge } from 'tailwind-merge';
+import { GuessSchemaType } from './zod/guess';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -48,7 +50,8 @@ export function normaliseGuess(guess: string) {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replaceAll('ł', 'l');
+    .replaceAll('ł', 'l')
+    .split(' ');
 }
 
 export function checkIfGuessCorrect(
@@ -226,4 +229,25 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
   }
 
   return { comparisonResults, playerToFindMatches };
+}
+
+export function checkForDuplicateGuess(
+  guess: GuessSchemaType['guess'],
+  prevGuesses: Guess[]
+) {
+  const isDuplicateGuess = prevGuesses.some((prevGuess) => {
+    const splitGuess = guess.toLowerCase().split(' ');
+    const firstName = prevGuess.guessedPlayer.firstName.toLowerCase();
+    const lastName = prevGuess.guessedPlayer.lastName.toLowerCase();
+    if (splitGuess.length === 1) {
+      return (
+        firstName.includes(splitGuess[0]) || lastName.includes(splitGuess[0])
+      );
+    }
+    return (
+      firstName.includes(splitGuess[0]) && lastName.includes(splitGuess[1])
+    );
+  });
+
+  return isDuplicateGuess;
 }

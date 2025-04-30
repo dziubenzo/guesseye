@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
+import { checkForDuplicateGuess } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,7 +22,7 @@ export default function PlayerForm() {
     mode: 'onSubmit',
   });
 
-  const { finishGame, updateGuesses, updateMatches } = useGameStore();
+  const { finishGame, updateGuesses, updateMatches, guesses } = useGameStore();
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
@@ -47,6 +48,11 @@ export default function PlayerForm() {
 
   function onSubmit(values: GuessSchemaType) {
     setError('');
+    const isDuplicateGuess = checkForDuplicateGuess(values.guess, guesses);
+    if (isDuplicateGuess) {
+      setError('You have already guessed this player.');
+      return;
+    }
     execute(values);
   }
 

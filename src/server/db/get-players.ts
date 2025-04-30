@@ -5,4 +5,4 @@ import { unstable_cache } from 'next/cache';
 
 export const getPlayers = unstable_cache(async () => {
   return await db.query.player.findMany();
-});
+}, ['players']);
