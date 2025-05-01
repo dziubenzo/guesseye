@@ -332,7 +332,7 @@ export default function PlayerCard(props: PlayerCardProps) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <VenusAndMars size={18} />
@@ -405,7 +405,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <Building size={18} />
@@ -473,7 +473,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <Calendar1 size={18} />
@@ -550,7 +550,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <Calendar1 size={18} />
@@ -578,7 +578,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldValue>
               </Field>
               <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
+                <FieldName className="text-xs xl:text-sm">
                   <Layers2 size={18} />
                   Played in BDO/WDF
                   <Tooltip>

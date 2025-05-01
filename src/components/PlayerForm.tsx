@@ -57,7 +57,7 @@ export default function PlayerForm() {
   }
 
   return (
-    <div className="flex w-full justify-center bg-background sticky top-0 p-4">
+    <div className="flex w-full justify-center bg-background sticky top-0 p-4 z-10">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField

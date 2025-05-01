@@ -53,7 +53,7 @@ export function FieldValue(props: FieldValueProps) {
 
     return (
       <p
-        className={`${comparisonResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={`${comparisonResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess opacity-80 dark:opacity-100'} ${comparisonResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
       >
         {children}
         {comparisonResult === 'higher' ? (
@@ -121,7 +121,7 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
 
     return (
       <p
-        className={`${comparisonBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={`${comparisonBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess opacity-80 dark:opacity-100'} ${comparisonBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
       >
         {bestResult}
         {comparisonBestResult === 'higher' ? (
