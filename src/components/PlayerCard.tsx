@@ -29,7 +29,12 @@ import {
 import { PiNumberCircleNine } from 'react-icons/pi';
 
 type PlayerCardProps =
-  | { type: 'guess'; player: Player; comparisonResults: ComparisonResults }
+  | {
+      type: 'guess';
+      player: Player;
+      comparisonResults: ComparisonResults;
+      guessNumber: number;
+    }
   | { type: 'playerToFind'; player: Partial<Player> };
 
 export default function PlayerCard(props: PlayerCardProps) {
@@ -321,13 +326,16 @@ export default function PlayerCard(props: PlayerCardProps) {
   }
 
   if (type === 'guess') {
-    const { comparisonResults } = props;
+    const { comparisonResults, guessNumber } = props;
 
     return (
       <Card className="bg-secondary">
         <CardHeader>
-          <CardTitle className="text-xl">
-            {player.firstName + ' ' + player.lastName}
+          <CardTitle className="text-xl flex">
+            <span>{player.firstName + ' ' + player.lastName}</span>
+            <span className="ml-auto bg-secondary-foreground text-secondary px-3 rounded-md">
+              #{guessNumber}
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>

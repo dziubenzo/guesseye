@@ -36,6 +36,7 @@ export default function Guesses() {
                 type={'guess'}
                 player={guess.guessedPlayer}
                 comparisonResults={guess.comparisonResults}
+                guessNumber={guesses.indexOf(guess) + 1}
               />
             </CarouselItem>
           ))}
