@@ -53,12 +53,12 @@ export default function PlayerCard(props: PlayerCardProps) {
           <CardTitle className="flex flex-col justify-center md:justify-start items-center gap-4 md:flex-row">
             <div className="flex items-center gap-3 w-[250px] md:w-[300px]">
               <p
-                className={`${player.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[40px] w-full`}
+                className={`${player.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
               >
                 {player.firstName ? player.firstName : ''}
               </p>
               <p
-                className={`${player.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[40px] w-full`}
+                className={`${player.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
               >
                 {player.lastName ? player.lastName : ''}
               </p>

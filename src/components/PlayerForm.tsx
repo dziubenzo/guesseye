@@ -22,7 +22,8 @@ export default function PlayerForm() {
     mode: 'onSubmit',
   });
 
-  const { finishGame, updateGuesses, updateMatches, guesses } = useGameStore();
+  const { finishGame, updateGuesses, updateMatches, guesses, gameOver } =
+    useGameStore();
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
@@ -57,7 +58,7 @@ export default function PlayerForm() {
   }
 
   return (
-    <div className="flex w-full justify-center bg-background sticky top-0 p-4 z-10">
+    <div className="flex w-full justify-center bg-background sticky top-0 p-4 z-1">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField
@@ -76,7 +77,7 @@ export default function PlayerForm() {
                   <Button
                     type="submit"
                     variant="default"
-                    disabled={isPending}
+                    disabled={isPending || gameOver}
                     className="cursor-pointer text-lg px-8 py-4 h-full"
                   >
                     {isPending ? 'Checking...' : 'Check'}
