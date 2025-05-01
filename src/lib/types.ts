@@ -35,7 +35,10 @@ export type ComparisonResults = {
   active: Match;
 };
 
-export type PlayerToFindMatches = Partial<Player>;
+export type PlayerToFindMatches = Omit<
+  Partial<Player>,
+  'id' | 'createdAt' | 'updatedAt'
+>;
 
 export type Guess = {
   guessedPlayer: Player;
