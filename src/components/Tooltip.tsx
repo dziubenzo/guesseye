@@ -14,9 +14,7 @@ export default function Tooltip({ children }: TooltipProps) {
       <PopoverTrigger>
         <CircleHelp size={12} className="cursor-pointer" />
       </PopoverTrigger>
-      <PopoverContent className="text-xs p-3">
-        {children}
-      </PopoverContent>
+      <PopoverContent className="text-xs p-3">{children}</PopoverContent>
     </Popover>
   );
 }

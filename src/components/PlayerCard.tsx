@@ -8,12 +8,18 @@ import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ComparisonResults, Player } from '@/lib/types';
-import { capitalise, formatPrizeMoney, getAge } from '@/lib/utils';
+import {
+  capitalise,
+  formatPrizeMoney,
+  getAge,
+  getDifficultyColour,
+} from '@/lib/utils';
 import {
   BadgePoundSterling,
   Building,
   Cake,
   Calendar1,
+  Gauge,
   Globe,
   Hand,
   History,
@@ -44,10 +50,31 @@ export default function PlayerCard(props: PlayerCardProps) {
     return (
       <Card className="bg-secondary">
         <CardHeader>
-          <CardTitle className="text-xl flex">
-            {player.firstName ? player.firstName : '??????'}{' '}
-            {player.lastName ? player.lastName : '??????'}
-            <span className="ml-auto">{player.difficulty?.toUpperCase()}</span>
+          <CardTitle className="flex flex-col justify-center md:justify-start items-center gap-4 md:flex-row">
+            <div className="flex items-center gap-3 w-[250px] md:w-[300px]">
+              <p
+                className={`${player.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[40px] w-full`}
+              >
+                {player.firstName ? player.firstName : ''}
+              </p>
+              <p
+                className={`${player.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[40px] w-full`}
+              >
+                {player.lastName ? player.lastName : ''}
+              </p>
+            </div>
+            {player.difficulty && (
+              <div
+                className={`md:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(player.difficulty)} dark:text-secondary`}
+              >
+                <Gauge size={24} />
+                <span>{player.difficulty.toUpperCase()}</span>
+                <Tooltip>
+                  How difficult the darts player is to find in the
+                  developer&apos;s opinion.
+                </Tooltip>
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>

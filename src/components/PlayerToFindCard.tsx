@@ -7,9 +7,12 @@ export default function PlayerToFindCard() {
   const { playerToFind, playerToFindMatches } = useGameStore();
 
   return (
-    <PlayerCard
-      type={'playerToFind'}
-      player={playerToFind ? playerToFind : playerToFindMatches}
-    />
+    <>
+      <h1 className="text-2xl opacity-50">Player To Find</h1>
+      <PlayerCard
+        type={'playerToFind'}
+        player={playerToFind ? playerToFind : playerToFindMatches}
+      />
+    </>
   );
 }

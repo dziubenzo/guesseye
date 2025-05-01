@@ -251,3 +251,14 @@ export function checkForDuplicateGuess(
 
   return isDuplicateGuess;
 }
+
+export function getDifficultyColour(difficulty: Player['difficulty']) {
+  switch (difficulty) {
+    case 'easy':
+      return 'text-good-guess';
+    case 'medium':
+      return 'text-medium-difficulty';
+    default:
+      return 'text-wrong-guess';
+  }
+}
