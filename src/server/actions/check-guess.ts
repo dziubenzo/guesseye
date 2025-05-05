@@ -1,7 +1,7 @@
 'use server';
 
 import { actionClient } from '@/lib/safe-action-client';
-import { CheckGuessAction, Player } from '@/lib/types';
+import { CheckGuessAction } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
@@ -9,17 +9,23 @@ import {
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
 import { getPlayers } from '@/server/db/get-players';
+import { getScheduledPlayer } from '../db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
   .action(async ({ parsedInput: { guess } }) => {
     const normalisedGuess = normaliseGuess(guess);
 
-    // Handle case where current guess is one of the previous guesses
     const players = await getPlayers();
-    const [playerToFind]: Player[] = players.filter(
-      (player) => player.lastName === 'Ratajski'
-    );
+    const scheduledPlayer = await getScheduledPlayer();
+
+    if (!scheduledPlayer) {
+      return {
+        error: 'There was an error. Please try again.',
+      } as CheckGuessAction;
+    }
+
+    const { startDate, endDate, playerToFind } = scheduledPlayer;
 
     const searchResults = players.filter((player) => {
       const firstName = player.firstName.toLowerCase();
