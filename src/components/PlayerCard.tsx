@@ -267,7 +267,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       ? ''
                       : player.yearOfBestResultPDC
                         ? player.yearOfBestResultPDC
-                        : 'N/A'
+                        : ''
                   }
                 />
               </Field>
@@ -341,7 +341,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       ? ''
                       : player.yearOfBestResultWDF
                         ? player.yearOfBestResultWDF
-                        : 'N/A'
+                        : ''
                   }
                 />
               </Field>

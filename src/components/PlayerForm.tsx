@@ -8,8 +8,9 @@ import { checkForDuplicateGuess } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ErrorMessage from './ErrorMessage';
 
@@ -42,6 +43,7 @@ export default function PlayerForm() {
           data.success.comparisonResults
         );
         updateMatches(data.success.playerToFindMatches);
+        playerForm.resetField('guess');
         return;
       }
     },
@@ -57,6 +59,10 @@ export default function PlayerForm() {
     execute(values);
   }
 
+  useEffect(() => {
+    if (!isPending || !gameOver) playerForm.setFocus('guess');
+  }, [playerForm, isPending, gameOver]);
+
   return (
     <div className="flex w-full justify-center bg-background sticky top-0 p-4 z-1">
       <Form {...playerForm}>
@@ -70,6 +76,7 @@ export default function PlayerForm() {
                   <FormControl>
                     <Input
                       className="text-md lg:text-lg h-auto p-3 text-center placeholder:text-center"
+                      disabled={isPending || gameOver}
                       autoFocus
                       {...field}
                     />
@@ -78,9 +85,13 @@ export default function PlayerForm() {
                     type="submit"
                     variant="default"
                     disabled={isPending || gameOver}
-                    className="cursor-pointer text-lg px-8 py-4 h-full"
+                    className={`cursor-pointer text-lg px-8 py-4 h-full min-w-30`}
                   >
-                    {isPending ? 'Checking...' : 'Check'}
+                    {isPending ? (
+                      <Loader2 className="animate-spin size-7 h-full" />
+                    ) : (
+                      'Check'
+                    )}
                   </Button>
                 </div>
                 {error && <ErrorMessage errorMessage={error} />}
