@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, SQL, sql } from 'drizzle-orm';
 import {
   boolean,
   check,
@@ -9,7 +9,7 @@ import {
   real,
   serial,
   text,
-  timestamp,
+  timestamp
 } from 'drizzle-orm/pg-core';
 
 // Authentication
@@ -162,8 +162,10 @@ export const player = pgTable(
   'player',
   {
     id: serial('id').primaryKey(),
-    createdAt: timestamp('created_at').notNull(),
-    updatedAt: timestamp('updated_at').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    updatedAt: timestamp('updated_at')
+      .notNull()
+      .$onUpdate(() => new Date()),
     firstName: text('first_name').notNull(),
     lastName: text('last_name').notNull(),
     gender: genderEnum('gender').notNull(),
@@ -221,3 +223,31 @@ export const player = pgTable(
     check('is_non_negative_prize_money', sql`${prizeMoney} >= 0`),
   ]
 );
+
+export const schedule = pgTable('schedule', {
+  id: serial('id').primaryKey(),
+  playerToFindId: integer('player_to_find_id')
+    .notNull()
+    .references(() => player.id),
+  startDate: timestamp('start_date', {
+    precision: 0,
+  }).notNull(),
+  endDate: timestamp('end_date', {
+    precision: 0,
+  })
+    .notNull()
+    .generatedAlwaysAs(
+      (): SQL => sql`${schedule.startDate} + interval '12' hour`
+    ),
+});
+
+export const playerRelations = relations(player, ({ one }) => ({
+  scheduledDate: one(schedule),
+}));
+
+export const scheduleRelations = relations(schedule, ({ one }) => ({
+  playerToFind: one(player, {
+    fields: [schedule.playerToFindId],
+    references: [player.id],
+  }),
+}));
