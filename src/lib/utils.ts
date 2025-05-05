@@ -6,6 +6,7 @@ import {
   PlayerToFindMatches,
 } from '@/lib/types';
 import { player } from '@/server/db/schema';
+import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import { differenceInYears } from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
@@ -59,12 +60,17 @@ export function checkIfGuessCorrect(
   playerToFind: Player
 ) {
   let isGuessCorrect = true;
-  let key: keyof Player;
 
-  for (key in guessedPlayer) {
-    if (guessedPlayer[key] !== playerToFind[key]) {
+  // Convert Date objects cached as strings back to Date objects
+  // Otherwise the check below fails, but it should not
+  guessedPlayer.createdAt = new Date(guessedPlayer.createdAt);
+  guessedPlayer.updatedAt = new Date(guessedPlayer.updatedAt);
+
+  try {
+    assert.deepStrictEqual(guessedPlayer, playerToFind);
+  } catch (error) {
+    if (error instanceof AssertionError) {
       isGuessCorrect = false;
-      break;
     }
   }
 

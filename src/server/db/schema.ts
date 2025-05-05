@@ -9,7 +9,7 @@ import {
   real,
   serial,
   text,
-  timestamp
+  timestamp,
 } from 'drizzle-orm/pg-core';
 
 // Authentication
@@ -162,8 +162,8 @@ export const player = pgTable(
   'player',
   {
     id: serial('id').primaryKey(),
-    createdAt: timestamp('created_at').notNull().defaultNow(),
-    updatedAt: timestamp('updated_at')
+    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
       .notNull()
       .$onUpdate(() => new Date()),
     firstName: text('first_name').notNull(),
@@ -242,7 +242,7 @@ export const schedule = pgTable('schedule', {
 });
 
 export const playerRelations = relations(player, ({ one }) => ({
-  scheduledDate: one(schedule),
+  scheduledOn: one(schedule),
 }));
 
 export const scheduleRelations = relations(schedule, ({ one }) => ({
