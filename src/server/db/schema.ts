@@ -67,6 +67,7 @@ export const verification = pgTable('verification', {
 // Darts players
 
 export const genderEnum = pgEnum('gender', ['male', 'female']);
+
 export const dartsBrandEnum = pgEnum('darts_brand', [
   'Target',
   "Bull's",
@@ -78,6 +79,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Nodor',
   'Cosmo',
 ]);
+
 export const dartsWeightEnum = pgEnum('darts_weight', [
   '10g',
   '11g',
@@ -111,10 +113,12 @@ export const dartsWeightEnum = pgEnum('darts_weight', [
   '39g',
   '40g',
 ]);
+
 export const lateralityEnum = pgEnum('laterality', [
   'right-handed',
   'left-handed',
 ]);
+
 export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
 
 export const bestResultPDCEnum = pgEnum('best_pdc_result', [
@@ -165,6 +169,7 @@ export const player = pgTable(
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { mode: 'date' })
       .notNull()
+      .defaultNow()
       .$onUpdate(() => new Date()),
     firstName: text('first_name').notNull(),
     lastName: text('last_name').notNull(),
@@ -241,13 +246,80 @@ export const schedule = pgTable('schedule', {
     ),
 });
 
-export const playerRelations = relations(player, ({ one }) => ({
-  scheduledOn: one(schedule),
-}));
-
 export const scheduleRelations = relations(schedule, ({ one }) => ({
   playerToFind: one(player, {
+    relationName: 'player_to_find',
     fields: [schedule.playerToFindId],
+    references: [player.id],
+  }),
+}));
+
+export const gameModeEnum = pgEnum('game_mode', ['official', 'random']);
+
+export const game = pgTable(
+  'game',
+  {
+    id: serial('id').primaryKey(),
+    userId: text('user_id').references(() => user.id),
+    guestIp: text('guest_ip'),
+    guestUserAgent: text('guest_user_agent'),
+    guestName: text('guest_name'),
+    scheduledPlayerId: integer('scheduled_player_id')
+      .notNull()
+      .references(() => schedule.id),
+    startDate: timestamp('start_date', {
+      precision: 0,
+    })
+      .notNull()
+      .defaultNow(),
+    endDate: timestamp('end_date', {
+      precision: 0,
+    }).notNull(),
+    hasWon: boolean('has_won').default(false).notNull(),
+    hasGivenUp: boolean('has_given_up').default(false).notNull(),
+    gameMode: gameModeEnum('game_mode').notNull(),
+  },
+  ({ userId, guestIp }) => [
+    check(
+      'is_either_guest_or_user',
+      sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`
+    ),
+  ]
+);
+
+export const gameRelations = relations(game, ({ one, many }) => ({
+  user: one(user, {
+    relationName: 'user',
+    fields: [game.userId],
+    references: [user.id],
+  }),
+  scheduledPlayer: one(schedule, {
+    relationName: 'scheduled_player',
+    fields: [game.scheduledPlayerId],
+    references: [schedule.id],
+  }),
+  guesses: many(guess),
+}));
+
+export const guess = pgTable('guess', {
+  id: serial('id').primaryKey(),
+  gameId: integer('game_id')
+    .notNull()
+    .references(() => game.id),
+  playerId: integer('player_id')
+    .notNull()
+    .references(() => player.id),
+});
+
+export const guessRelations = relations(guess, ({ one }) => ({
+  game: one(game, {
+    relationName: 'game',
+    fields: [guess.gameId],
+    references: [game.id],
+  }),
+  player: one(player, {
+    relationName: 'player',
+    fields: [guess.playerId],
     references: [player.id],
   }),
 }));
