@@ -37,7 +37,7 @@ export type ComparisonResults = {
 
 export type PlayerToFindMatches = Omit<
   Partial<Player>,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'createdAt' | 'updatedAt' | 'difficulty'
 >;
 
 export type Guess = {

@@ -41,12 +41,18 @@ type PlayerCardProps =
       comparisonResults: ComparisonResults;
       guessNumber: number;
     }
-  | { type: 'playerToFind'; player: Partial<Player> };
+  | {
+      type: 'playerToFind';
+      player: Partial<Player>;
+      difficulty: Player['difficulty'];
+    };
 
 export default function PlayerCard(props: PlayerCardProps) {
   const { type, player } = props;
 
   if (type === 'playerToFind') {
+    const { difficulty } = props;
+
     return (
       <Card className="bg-secondary">
         <CardHeader>
@@ -63,12 +69,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 {player.lastName ? player.lastName : ''}
               </p>
             </div>
-            {player.difficulty && (
+            {difficulty && (
               <div
-                className={`md:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(player.difficulty)} dark:text-secondary`}
+                className={`md:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(difficulty)} dark:text-secondary`}
               >
                 <Gauge size={24} />
-                <span>{player.difficulty.toUpperCase()}</span>
+                <span>{difficulty.toUpperCase()}</span>
                 <Tooltip>
                   How difficult the darts player is to find in the
                   developer&apos;s opinion.

@@ -1,7 +1,7 @@
 'use server';
 
 import { actionClient } from '@/lib/safe-action-client';
-import { CheckGuessAction } from '@/lib/types';
+import type { CheckGuessAction } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
@@ -78,9 +78,6 @@ export const checkGuess = actionClient
       guessedPlayer,
       playerToFind
     );
-
-    // Send difficulty to frontend
-    playerToFindMatches.difficulty = playerToFind.difficulty;
 
     return {
       success: {

@@ -10,6 +10,7 @@ import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import { differenceInYears } from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
+import { headers } from 'next/headers';
 import { twMerge } from 'tailwind-merge';
 import { GuessSchemaType } from './zod/guess';
 

@@ -14,8 +14,7 @@ export const useUpdateProgressBar = () => {
       return;
     }
     const currentFields = Object.keys(playerToFindMatches).length;
-    // Subtract one to account for difficulty in playerToFindMatches as it is not a comparable property
-    setFieldsFound(currentFields === 0 ? 0 : currentFields - 1);
+    setFieldsFound(currentFields);
   }, [playerToFindMatches, gameOver]);
 
   return [fieldsFound];
