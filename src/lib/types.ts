@@ -8,28 +8,28 @@ export type BestResultColumnType =
   | NonNullable<Player['bestResultWDF']>;
 
 export type Match = 'match' | 'noMatch';
-export type MatchHigherLower = Match | 'higher' | 'lower';
+export type RangedMatch = Match | 'higher' | 'lower';
 
 export type ComparisonResults = {
   firstName: Match;
   lastName: Match;
   gender: Match;
-  dateOfBirth: MatchHigherLower;
+  dateOfBirth: RangedMatch;
   country: Match;
-  playingSince: MatchHigherLower;
+  playingSince: RangedMatch;
   dartsBrand: Match;
-  dartsWeight: MatchHigherLower;
+  dartsWeight: RangedMatch;
   laterality: Match;
   organisation: Match;
   tourCard: Match;
-  rankingPDC: MatchHigherLower;
-  rankingWDF: MatchHigherLower;
-  prizeMoney: MatchHigherLower;
-  nineDartersPDC: MatchHigherLower;
-  bestResultPDC: MatchHigherLower;
-  yearOfBestResultPDC: MatchHigherLower;
-  bestResultWDF: MatchHigherLower;
-  yearOfBestResultWDF: MatchHigherLower;
+  rankingPDC: RangedMatch;
+  rankingWDF: RangedMatch;
+  prizeMoney: RangedMatch;
+  nineDartersPDC: RangedMatch;
+  bestResultPDC: RangedMatch;
+  yearOfBestResultPDC: RangedMatch;
+  bestResultWDF: RangedMatch;
+  yearOfBestResultWDF: RangedMatch;
   playedInWCOD: Match;
   playedInWDF: Match;
   active: Match;

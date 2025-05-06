@@ -309,6 +309,9 @@ export const guess = pgTable('guess', {
   playerId: integer('player_id')
     .notNull()
     .references(() => player.id),
+  comparisonId: integer('comparison_id')
+    .notNull()
+    .references(() => comparison.id),
 });
 
 export const guessRelations = relations(guess, ({ one }) => ({
@@ -322,4 +325,44 @@ export const guessRelations = relations(guess, ({ one }) => ({
     fields: [guess.playerId],
     references: [player.id],
   }),
+  comparison: one(comparison, {
+    relationName: 'comparison',
+    fields: [guess.comparisonId],
+    references: [comparison.id],
+  }),
 }));
+
+export const matchEnum = pgEnum('match', ['match', 'noMatch']);
+
+export const rangedMatchEnum = pgEnum('ranged_match', [
+  'match',
+  'noMatch',
+  'higher',
+  'lower',
+]);
+
+export const comparison = pgTable('comparison', {
+  id: serial('id').primaryKey(),
+  firstName: matchEnum('first_name').notNull(),
+  lastName: matchEnum('last_name').notNull(),
+  gender: matchEnum('gender').notNull(),
+  dateOfBirth: rangedMatchEnum('date_of_birth').notNull(),
+  country: matchEnum('country').notNull(),
+  playingSince: rangedMatchEnum('playing_since').notNull(),
+  dartsBrand: matchEnum('darts_brand').notNull(),
+  dartsWeight: rangedMatchEnum('darts_weight').notNull(),
+  laterality: matchEnum('laterality').notNull(),
+  organisation: matchEnum('organisation').notNull(),
+  tourCard: matchEnum('tour_card').notNull(),
+  rankingPDC: rangedMatchEnum('ranking_pdc').notNull(),
+  rankingWDF: rangedMatchEnum('ranking_wdf').notNull(),
+  prizeMoney: rangedMatchEnum('prize_money').notNull(),
+  nineDartersPDC: rangedMatchEnum('nine_darters_pdc').notNull(),
+  bestResultPDC: rangedMatchEnum('best_pdc_result').notNull(),
+  yearOfBestResultPDC: rangedMatchEnum('year_of_best_pdc_result').notNull(),
+  bestResultWDF: rangedMatchEnum('best_wdf_result').notNull(),
+  yearOfBestResultWDF: rangedMatchEnum('year_of_best_wdf_result').notNull(),
+  playedInWCOD: matchEnum('played_in_wcod').notNull(),
+  playedInWDF: matchEnum('played_in_wdf').notNull(),
+  active: matchEnum('active').notNull(),
+});

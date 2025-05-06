@@ -1,4 +1,4 @@
-import { Match, MatchHigherLower, Player } from '@/lib/types';
+import type { Match, Player, RangedMatch } from '@/lib/types';
 import { ReactNode } from 'react';
 import Arrow from './Arrow';
 
@@ -31,7 +31,7 @@ type FieldValueProps =
       type: 'guess';
       children: ReactNode;
       fieldName: string;
-      comparisonResult: Match | MatchHigherLower;
+      comparisonResult: Match | RangedMatch;
     }
   | { type: 'playerToFind'; children?: ReactNode };
 
@@ -76,8 +76,8 @@ type FieldValueBestResult =
       yearBestResult:
         | Player['yearOfBestResultPDC']
         | Player['yearOfBestResultWDF'];
-      comparisonBestResult: MatchHigherLower;
-      comparisonYearBestResult: MatchHigherLower;
+      comparisonBestResult: RangedMatch;
+      comparisonYearBestResult: RangedMatch;
     }
   | {
       type: 'playerToFind';
