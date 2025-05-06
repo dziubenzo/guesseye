@@ -5,14 +5,13 @@ import {
   Player,
   PlayerToFindMatches,
 } from '@/lib/types';
+import { GuessSchemaType } from '@/lib/zod/guess';
 import { player } from '@/server/db/schema';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import { differenceInYears } from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
-import { headers } from 'next/headers';
 import { twMerge } from 'tailwind-merge';
-import { GuessSchemaType } from './zod/guess';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

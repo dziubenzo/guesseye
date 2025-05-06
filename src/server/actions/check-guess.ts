@@ -1,5 +1,6 @@
 'use server';
 
+import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
 import type { CheckGuessAction } from '@/lib/types';
 import {
@@ -9,7 +10,7 @@ import {
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
 import { getPlayers } from '@/server/db/get-players';
-import { getScheduledPlayer } from '../db/get-scheduled-player';
+import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -69,7 +70,11 @@ export const checkGuess = actionClient
 
     if (isGuessCorrect) {
       return {
-        success: { type: 'correctGuess', playerToFind },
+        success: {
+          type: 'correctGuess',
+          playerToFind,
+          comparisonResults: matchingComparisonResults,
+        },
       } as CheckGuessAction;
     }
 

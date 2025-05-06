@@ -34,6 +34,10 @@ export default function PlayerForm() {
         return;
       }
       if (data?.success?.type === 'correctGuess') {
+        updateGuesses(
+          data.success.playerToFind,
+          data.success.comparisonResults
+        );
         finishGame(data.success.playerToFind);
         return;
       }
