@@ -7,10 +7,6 @@ import { revalidateTag } from 'next/cache';
 
 export const getScheduledPlayer = async () => {
   const scheduledPlayer = await db.query.schedule.findFirst({
-    columns: {
-      startDate: true,
-      endDate: true,
-    },
     where: and(
       lt(schedule.startDate, new Date()),
       gte(schedule.endDate, new Date())
@@ -46,10 +42,6 @@ const scheduleRandomPlayer = async () => {
   revalidateTag('players');
 
   const newlyScheduledPlayer = await db.query.schedule.findFirst({
-    columns: {
-      startDate: true,
-      endDate: true,
-    },
     where: and(
       lt(schedule.startDate, new Date()),
       gte(schedule.endDate, new Date())
