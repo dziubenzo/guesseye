@@ -7,6 +7,10 @@ import { getOfficialGame } from '@/server/db/get-official-game';
 export default async function OfficialGame() {
   const existingGame = await getOfficialGame();
 
+  if (existingGame && 'error' in existingGame) {
+    return <h1>{existingGame.error}</h1>;
+  }
+
   if (existingGame) {
     return (
       <>

@@ -9,8 +9,8 @@ import {
   normaliseGuess,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
+import { getGameAndPlayer } from '@/server/db/get-game-and-player';
 import { getPlayers } from '@/server/db/get-players';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -18,11 +18,11 @@ export const checkGuess = actionClient
     const normalisedGuess = normaliseGuess(guess);
 
     const players = await getPlayers();
-    const scheduledPlayer = await getScheduledPlayer();
+    const { existingGame, scheduledPlayer } = await getGameAndPlayer();
 
     if (!scheduledPlayer) {
       return {
-        error: 'There was an error. Please try again.',
+        error: 'There was an error retrieving scheduled player.',
       } as CheckGuessAction;
     }
 

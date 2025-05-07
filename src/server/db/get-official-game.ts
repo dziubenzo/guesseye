@@ -1,54 +1,17 @@
 'use server';
 
-import { auth } from '@/lib/auth';
 import type { ExistingGame, GuessWithPlayer } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
-import { db } from '@/server/db/index';
-import { game } from '@/server/db/schema';
-import { and, eq } from 'drizzle-orm';
-import { headers } from 'next/headers';
-import { getIPAndUserAgent } from '@/server/utils';
+import { getGameAndPlayer } from '@/server/db/get-game-and-player';
 
 export const getOfficialGame = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  // Get scheduled player and existing game
+  const { existingGame, scheduledPlayer } = await getGameAndPlayer();
 
-  const scheduledPlayer = await getScheduledPlayer();
+  // Return error if no darts player is scheduled
+  if (!scheduledPlayer) return { error: 'No scheduled player.' };
 
-  // TODO: Handle no player scheduled
-  if (!scheduledPlayer) return null;
-
-  let clientIP = '';
-  let userAgent = '';
-
-  if (!session) {
-    const values = await getIPAndUserAgent();
-    clientIP = values.clientIP;
-    userAgent = values.userAgent;
-  }
-
-  // Check if game exist
-  const existingGame = await db.query.game.findFirst({
-    where: session
-      ? and(
-          eq(game.userId, session.user.id),
-          eq(game.scheduledPlayerId, scheduledPlayer.id)
-        )
-      : and(
-          eq(game.guestIp, clientIP),
-          eq(game.guestUserAgent, userAgent),
-          eq(game.scheduledPlayerId, scheduledPlayer.id)
-        ),
-    with: {
-      guesses: {
-        with: { player: true },
-      },
-    },
-  });
-
-  // Return scheduled player difficulty only
+  // Return scheduled player difficulty only if there is no game in progress
   if (!existingGame) {
     return { playerDifficulty: scheduledPlayer.playerToFind.difficulty };
   }
