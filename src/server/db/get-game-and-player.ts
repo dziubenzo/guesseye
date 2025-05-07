@@ -13,7 +13,7 @@ export const getGameAndPlayer = async () => {
 
   if (!scheduledPlayer) return { scheduledPlayer: undefined };
 
-  // Check if game exist
+  // Check if game exists
   const existingGame = await db.query.game.findFirst({
     where: session
       ? and(
