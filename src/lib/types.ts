@@ -48,7 +48,7 @@ export type PlayerToFindMatches = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'difficulty'
 >;
 
-export type GameDetails = {
+export type ExistingGame = {
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];

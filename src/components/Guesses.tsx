@@ -10,9 +10,19 @@ import {
 import { useGameStore } from '@/lib/game-store';
 import { useMemo } from 'react';
 import PlayerCard from './PlayerCard';
+import type { ExistingGame } from '@/lib/types';
 
-export default function Guesses() {
-  const { guesses } = useGameStore();
+type GuessesProps = {
+  existingGame?: ExistingGame;
+};
+
+export default function Guesses({ existingGame }: GuessesProps) {
+  const { guesses, setInitialGuesses, updateMatches } = useGameStore();
+
+  if (existingGame) {
+    setInitialGuesses(existingGame.guesses);
+    updateMatches(existingGame.playerToFindMatches);
+  }
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 

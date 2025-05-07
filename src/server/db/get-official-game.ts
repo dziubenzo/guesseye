@@ -1,14 +1,14 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import type { GameDetails, GuessWithPlayer } from '@/lib/types';
+import type { ExistingGame, GuessWithPlayer } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 import { db } from '@/server/db/index';
 import { game } from '@/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
-import { getIPAndUserAgent } from '../utils';
+import { getIPAndUserAgent } from '@/server/utils';
 
 export const getOfficialGame = async () => {
   const session = await auth.api.getSession({
@@ -48,8 +48,10 @@ export const getOfficialGame = async () => {
     },
   });
 
-  // TODO: Handle game not existing
-  if (!existingGame) return null;
+  // Return scheduled player difficulty only
+  if (!existingGame) {
+    return { playerDifficulty: scheduledPlayer.playerToFind.difficulty };
+  }
 
   // TODO: Handle game being over
   if (existingGame.hasWon) return null;
@@ -58,7 +60,7 @@ export const getOfficialGame = async () => {
   if (existingGame.hasGivenUp) return null;
 
   // Build comparison object for each guessed player
-  const gameDetails: GameDetails = {
+  const gameDetails: ExistingGame = {
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,
