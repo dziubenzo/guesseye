@@ -11,6 +11,10 @@ export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
 };
 
+export type GameWithGuesses = Game & {
+  guesses: GuessWithPlayer[];
+};
+
 export type BestResultColumnType =
   | NonNullable<Player['bestResultPDC']>
   | NonNullable<Player['bestResultWDF']>;

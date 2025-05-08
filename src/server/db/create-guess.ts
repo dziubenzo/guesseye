@@ -22,5 +22,5 @@ export const createGuess = async (
     playerId,
   });
 
-  return;
+  return null;
 };

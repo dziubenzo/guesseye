@@ -305,7 +305,7 @@ export const guess = pgTable('guess', {
   id: serial('id').primaryKey(),
   gameId: integer('game_id')
     .notNull()
-    .references(() => game.id),
+    .references(() => game.id, { onDelete: 'cascade' }),
   playerId: integer('player_id')
     .notNull()
     .references(() => player.id),

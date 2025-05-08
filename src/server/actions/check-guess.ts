@@ -2,15 +2,18 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type { CheckGuessAction } from '@/lib/types';
+import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
   normaliseGuess,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
+import { createGame } from '@/server/db/create-game';
 import { getGameAndPlayer } from '@/server/db/get-game-and-player';
 import { getPlayers } from '@/server/db/get-players';
+import { createGuess } from '@/server/db/create-guess';
+import { endGame } from '@/server/db/end-game';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -18,6 +21,7 @@ export const checkGuess = actionClient
     const normalisedGuess = normaliseGuess(guess);
 
     const players = await getPlayers();
+
     const { existingGame, scheduledPlayer } = await getGameAndPlayer();
 
     if (!scheduledPlayer) {
@@ -26,7 +30,11 @@ export const checkGuess = actionClient
       } as CheckGuessAction;
     }
 
-    const { startDate, endDate, playerToFind } = scheduledPlayer;
+    const game: Game | GameWithGuesses = existingGame
+      ? existingGame
+      : await createGame(scheduledPlayer);
+
+    const { playerToFind } = scheduledPlayer;
 
     const searchResults = players.filter((player) => {
       const firstName = player.firstName.toLowerCase();
@@ -65,10 +73,19 @@ export const checkGuess = actionClient
       guessedPlayer = searchResults[0];
     }
 
+    // Add guess to DB
+    const error = await createGuess(game.id, guessedPlayer.id);
+
+    if (error) {
+      return error as CheckGuessAction;
+    }
+
     // Correct guess
     const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
 
     if (isGuessCorrect) {
+      await endGame('win', game);
+
       return {
         success: {
           type: 'correctGuess',

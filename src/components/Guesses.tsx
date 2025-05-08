@@ -1,5 +1,6 @@
 'use client';
 
+import PlayerCard from '@/components/PlayerCard';
 import {
   Carousel,
   CarouselContent,
@@ -8,9 +9,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useGameStore } from '@/lib/game-store';
-import { useMemo } from 'react';
-import PlayerCard from './PlayerCard';
 import type { ExistingGame } from '@/lib/types';
+import { useEffect, useMemo } from 'react';
 
 type GuessesProps = {
   existingGame?: ExistingGame;
@@ -19,10 +19,12 @@ type GuessesProps = {
 export default function Guesses({ existingGame }: GuessesProps) {
   const { guesses, setInitialGuesses, updateMatches } = useGameStore();
 
-  if (existingGame) {
-    setInitialGuesses(existingGame.guesses);
-    updateMatches(existingGame.playerToFindMatches);
-  }
+  useEffect(() => {
+    if (existingGame) {
+      setInitialGuesses(existingGame.guesses);
+      updateMatches(existingGame.playerToFindMatches);
+    }
+  }, [existingGame]);
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 
