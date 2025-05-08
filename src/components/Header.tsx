@@ -1,19 +1,22 @@
 'use client';
 
+import AuthModal from '@/components/AuthModal';
+import { Button } from '@/components/ui/button';
 import { signOut, useSession } from '@/lib/auth-client';
+import { useGameStore } from '@/lib/game-store';
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
 import { useRouter } from 'next/navigation';
-import AuthModal from './AuthModal';
-import { Button } from './ui/button';
 
 export default function Header() {
   const { data } = useSession();
   const router = useRouter();
+  const { resetState } = useGameStore();
 
   async function logOut() {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
+          resetState();
           router.push('/');
         },
       },

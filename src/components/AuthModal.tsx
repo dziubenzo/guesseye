@@ -1,5 +1,8 @@
 'use client';
 
+import ErrorMessage from '@/components/ErrorMessage';
+import ForgotPassword from '@/components/ForgotPassword';
+import SignupSuccess from '@/components/SignupSuccess';
 import { Button } from '@/components/ui/button';
 import {
   DialogContent,
@@ -18,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGameStore } from '@/lib/game-store';
 import { loginSchema, LoginSchemaType } from '@/lib/zod/login';
 import { signupSchema, SignupSchemaType } from '@/lib/zod/signup';
 import { logInWithEmail } from '@/server/actions/log-in-with-email';
@@ -30,9 +34,6 @@ import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
-import ErrorMessage from './ErrorMessage';
-import ForgotPassword from './ForgotPassword';
-import SignupSuccess from './SignupSuccess';
 
 export default function AuthModal() {
   const [signupSuccess, setSignupSuccess] = useState('');
@@ -84,12 +85,14 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
     },
     mode: 'onSubmit',
   });
+  const { resetState } = useGameStore();
 
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(logInWithEmail, {
     onSuccess({ data }) {
       if (data?.error) setError(data.error);
+      resetState();
     },
   });
 

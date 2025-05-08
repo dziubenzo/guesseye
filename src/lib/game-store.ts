@@ -13,6 +13,19 @@ type GameStore = {
     comparisonResults: Guess['comparisonResults']
   ) => void;
   updateMatches: (newMatches: PlayerToFindMatches) => void;
+  resetState: () => void;
+};
+
+type InitialState = Pick<
+  GameStore,
+  'playerToFind' | 'guesses' | 'playerToFindMatches' | 'gameOver'
+>;
+
+const initialState: InitialState = {
+  playerToFind: null,
+  guesses: [],
+  playerToFindMatches: {},
+  gameOver: false,
 };
 
 export const useGameStore = create<GameStore>()((set) => ({
@@ -37,4 +50,7 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => ({
       playerToFindMatches: { ...state.playerToFindMatches, ...newMatches },
     })),
+  resetState: () => {
+    set(initialState);
+  },
 }));
