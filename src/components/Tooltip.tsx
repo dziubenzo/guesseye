@@ -1,20 +1,25 @@
-import { ReactNode } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CircleHelp } from 'lucide-react';
+import { ReactNode } from 'react';
 
-type TooltipProps = { children: ReactNode };
+type TooltipProps = {
+  children: ReactNode;
+  className?: string;
+};
 
-export default function Tooltip({ children }: TooltipProps) {
+export default function Tooltip({ children, className }: TooltipProps) {
   return (
     <Popover>
       <PopoverTrigger>
         <CircleHelp size={12} className="cursor-pointer" />
       </PopoverTrigger>
-      <PopoverContent className="text-xs p-3">{children}</PopoverContent>
+      <PopoverContent className={`text-xs p-3 ${className ? className : ''}`}>
+        {children}
+      </PopoverContent>
     </Popover>
   );
 }
