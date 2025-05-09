@@ -71,7 +71,7 @@ export default function ResetPassword() {
 
   if (!data && searchParams.has('token')) {
     return (
-      <main className="min-h-svh flex flex-col justify-center items-center">
+      <div className="flex flex-col grow-1 justify-center items-center">
         <Card className="w-max lg:w-[50%]">
           <CardHeader>
             <CardTitle className="text-xl">Reset Password</CardTitle>
@@ -130,7 +130,7 @@ export default function ResetPassword() {
             </Form>
           </CardContent>
         </Card>
-      </main>
+      </div>
     );
   }
 }

@@ -18,8 +18,8 @@ export default function PlayerToFindCard({
   const [fieldsFound] = useUpdateProgressBar();
 
   return (
-    <>
-      <h1 className="text-2xl opacity-50">Player To Find</h1>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl opacity-50 text-center">Player To Find</h1>
       <div className="flex justify-center items-center gap-2">
         <span>{fieldsFound}</span>
         <Progress
@@ -33,6 +33,6 @@ export default function PlayerToFindCard({
         player={playerToFind ? playerToFind : playerToFindMatches}
         difficulty={difficulty}
       />
-    </>
+    </div>
   );
 }

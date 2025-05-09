@@ -1,4 +1,5 @@
 import GameOverConfetti from '@/components/GameOverConfetti';
+import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
@@ -12,7 +13,7 @@ export default async function OfficialGame() {
   }
 
   if ('hasWon' in game) {
-    return <h1>Hi from Game Won</h1>;
+    return <GameWon previousGame={game} />;
   }
 
   if ('hasGivenUp' in game) {
@@ -21,7 +22,7 @@ export default async function OfficialGame() {
 
   if (game) {
     return (
-      <>
+      <div className="flex flex-col gap-4">
         <PlayerForm />
         <PlayerToFindCard difficulty={game.playerDifficulty} />
         {'gameInProgress' in game ? (
@@ -30,7 +31,7 @@ export default async function OfficialGame() {
           <Guesses />
         )}
         <GameOverConfetti />
-      </>
+      </div>
     );
   }
 

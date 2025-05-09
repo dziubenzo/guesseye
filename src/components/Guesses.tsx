@@ -29,8 +29,8 @@ export default function Guesses({ existingGame }: GuessesProps) {
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 
   return (
-    <>
-      <h1 className="text-2xl opacity-50">
+    <div className="flex flex-col items-center gap-4">
+      <h1 className="text-2xl opacity-50 text-center">
         Previous Guesses{' '}
         {guesses.length > 0 &&
           (guesses.length === 1
@@ -60,6 +60,6 @@ export default function Guesses({ existingGame }: GuessesProps) {
           </>
         )}
       </Carousel>
-    </>
+    </div>
   );
 }

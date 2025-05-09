@@ -24,20 +24,20 @@ export default function Header() {
   }
 
   return (
-    <header className="grid grid-flow-col text-center">
+    <header className="grid grid-flow-col lg:grid-cols-5 text-center items-center">
       <p>1</p>
       <p>2</p>
       <p>3</p>
       <p>4</p>
       {data && (
-        <Button className="cursor-pointer" onClick={logOut}>
+        <Button className="cursor-pointer w-full" onClick={logOut}>
           Log Out
         </Button>
       )}
       {!data && (
         <Dialog>
-          <DialogTrigger className="cursor-pointer">
-            Log In/Sign Up
+          <DialogTrigger asChild>
+            <Button className="cursor-pointer w-full">Log In/Sign Up</Button>
           </DialogTrigger>
           <AuthModal />
         </Dialog>
