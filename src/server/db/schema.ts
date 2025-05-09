@@ -233,14 +233,18 @@ export const schedule = pgTable('schedule', {
   id: serial('id').primaryKey(),
   playerToFindId: integer('player_to_find_id')
     .notNull()
+    .unique()
     .references(() => player.id),
   startDate: timestamp('start_date', {
     precision: 0,
-  }).notNull(),
+  })
+    .notNull()
+    .unique(),
   endDate: timestamp('end_date', {
     precision: 0,
   })
     .notNull()
+    .unique()
     .generatedAlwaysAs(
       (): SQL => sql`${schedule.startDate} + interval '12' hour`
     ),

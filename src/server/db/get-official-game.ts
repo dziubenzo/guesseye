@@ -1,29 +1,48 @@
 'use server';
 
-import type { ExistingGame, GuessWithPlayer } from '@/lib/types';
+import type {
+  ErrorObject,
+  ExistingGame,
+  GameGivenUp,
+  GuessWithPlayer,
+  NoGame,
+} from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
 import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { handleGameWon } from '@/server/db/handle-game-won';
 
 export const getOfficialGame = async () => {
   // Get scheduled player and existing game
   const { existingGame, scheduledPlayer } = await getGameAndPlayer();
 
   // Return error if no darts player is scheduled
-  if (!scheduledPlayer) return { error: 'No scheduled player.' };
-
-  // Return scheduled player difficulty only if there is no game in progress
-  if (!existingGame) {
-    return { playerDifficulty: scheduledPlayer.playerToFind.difficulty };
+  if (!scheduledPlayer) {
+    const error: ErrorObject = { error: 'No scheduled darts player.' };
+    return error;
   }
 
-  // TODO: Handle game being over
-  if (existingGame.hasWon) return null;
+  // Return only scheduled player difficulty if there is no game in progress
+  if (!existingGame) {
+    const playerDifficulty: NoGame = {
+      noGame: true,
+      playerDifficulty: scheduledPlayer.playerToFind.difficulty,
+    };
+    return playerDifficulty;
+  }
+
+  if (existingGame.hasWon) {
+    const data = await handleGameWon(scheduledPlayer, existingGame);
+    return data;
+  }
 
   // TODO: Handle game given up
-  if (existingGame.hasGivenUp) return null;
+  if (existingGame.hasGivenUp) {
+    const data: GameGivenUp = { hasGivenUp: true };
+    return data;
+  }
 
-  // Build comparison object for each guessed player
   const gameDetails: ExistingGame = {
+    gameInProgress: true,
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,

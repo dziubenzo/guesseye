@@ -5,19 +5,27 @@ import PlayerToFindCard from '@/components/PlayerToFindCard';
 import { getOfficialGame } from '@/server/db/get-official-game';
 
 export default async function OfficialGame() {
-  const existingGame = await getOfficialGame();
+  const game = await getOfficialGame();
 
-  if (existingGame && 'error' in existingGame) {
-    return <h1>{existingGame.error}</h1>;
+  if ('error' in game) {
+    return <h1>{game.error}</h1>;
   }
 
-  if (existingGame) {
+  if ('hasWon' in game) {
+    return <h1>Hi from Game Won</h1>;
+  }
+
+  if ('hasGivenUp' in game) {
+    return <h1>Hi From Game Given Up</h1>;
+  }
+
+  if (game) {
     return (
       <>
         <PlayerForm />
-        <PlayerToFindCard difficulty={existingGame.playerDifficulty} />
-        {existingGame && 'guesses' in existingGame ? (
-          <Guesses existingGame={existingGame} />
+        <PlayerToFindCard difficulty={game.playerDifficulty} />
+        {'gameInProgress' in game ? (
+          <Guesses existingGame={game} />
         ) : (
           <Guesses />
         )}

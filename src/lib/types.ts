@@ -5,6 +5,8 @@ export type Player = InferSelectModel<typeof player>;
 
 export type Schedule = InferSelectModel<typeof schedule>;
 
+export type ScheduleWithPlayer = Schedule & { playerToFind: Player };
+
 export type Game = InferSelectModel<typeof game>;
 
 export type GuessWithPlayer = InferSelectModel<typeof guess> & {
@@ -53,6 +55,7 @@ export type PlayerToFindMatches = Omit<
 >;
 
 export type ExistingGame = {
+  gameInProgress: true;
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
@@ -82,3 +85,27 @@ type CheckGuessActionSuccess = {
 };
 
 export type CheckGuessAction = CheckGuessActionError | CheckGuessActionSuccess;
+
+export type ErrorObject = { error: string };
+
+export type NextScheduledPlayer = {
+  startDate: Schedule['startDate'];
+  playerToFind: { difficulty: Player['difficulty'] };
+};
+
+export type NoGame = {
+  noGame: true;
+  playerDifficulty: Player['difficulty'];
+};
+
+export type GameWon = {
+  hasWon: true;
+  nextPlayerStartDate: Schedule['startDate'];
+  nextPlayerDifficulty: Player['difficulty'];
+  attempts: number;
+  fullName: string;
+};
+
+export type GameGivenUp = {
+  hasGivenUp: true;
+};
