@@ -192,8 +192,8 @@ export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
         }
         continue;
       case 'dartsWeight':
-        const guessedPlayerDartsWeight = parseInt(guessedPlayer[key]!);
-        const playerToFindDartsWeight = parseInt(playerToFind[key]!);
+        const guessedPlayerDartsWeight = parseFloat(guessedPlayer[key]!);
+        const playerToFindDartsWeight = parseFloat(playerToFind[key]!);
         if (guessedPlayerDartsWeight > playerToFindDartsWeight) {
           comparisonResults[key] = 'lower';
         } else if (guessedPlayerDartsWeight < playerToFindDartsWeight) {
