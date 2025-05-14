@@ -13,7 +13,9 @@ import { Form } from '@/components/ui/form';
 import { giveUpSchema } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
+import { useRouter } from 'next/navigation';
 import { type Dispatch, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -28,15 +30,26 @@ export default function GiveUpForm({ setGiveUpError }: GiveUpFormProps) {
       hasGivenUp: false,
     },
   });
+  const router = useRouter();
 
   const { execute, isPending } = useAction(giveUp, {
-    onSuccess({ data }) {},
+    onSuccess({ data }) {
+      if (data?.success) {
+        router.refresh();
+        return;
+      }
+      if (data?.error) {
+        setGiveUpError(data.error);
+        return;
+      }
+    },
   });
 
   function onSubmit() {
     setGiveUpError('');
     execute({ hasGivenUp: true });
   }
+
   return (
     <>
       <div className="md:absolute md:top-2 md:right-2">
@@ -52,16 +65,17 @@ export default function GiveUpForm({ setGiveUpError }: GiveUpFormProps) {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you 100% sure?</AlertDialogTitle>
-              <AlertDialogDescription className="text-balance">
-                This cannot be undone. You will learn the current darts player
-                to find, but you will have to wait for the next scheduled darts
-                player to play again.
+              <AlertDialogDescription>
+                This cannot be undone. If you give up, you will learn the
+                current darts player, but you will also have to wait for the
+                next scheduled darts player to play again.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel
                 className="cursor-pointer"
                 onClick={() => setGiveUpError('')}
+                disabled={isPending}
               >
                 Cancel
               </AlertDialogCancel>
@@ -69,11 +83,15 @@ export default function GiveUpForm({ setGiveUpError }: GiveUpFormProps) {
                 <form onSubmit={giveUpForm.handleSubmit(onSubmit)}>
                   <Button
                     type="submit"
-                    className="cursor-pointer w-full"
+                    className="cursor-pointer min-w-21 w-full"
                     variant="destructive"
                     disabled={isPending}
                   >
-                    Give Up
+                    {isPending ? (
+                      <Loader2 className="animate-spin size-7 h-full" />
+                    ) : (
+                      'Give Up'
+                    )}
                   </Button>
                 </form>
               </Form>

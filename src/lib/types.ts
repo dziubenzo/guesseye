@@ -86,6 +86,11 @@ type CheckGuessActionSuccess = {
 
 export type CheckGuessAction = CheckGuessActionError | CheckGuessActionSuccess;
 
+type GiveUpError = { error: string; success: false };
+type GiveUpSuccess = { error: null; success: true };
+
+export type GiveUpAction = GiveUpError | GiveUpSuccess;
+
 export type ErrorObject = { error: string };
 
 export type NextScheduledPlayer = {

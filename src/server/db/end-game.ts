@@ -7,8 +7,12 @@ import { eq } from 'drizzle-orm';
 import { getUserOrGuest } from '@/server/utils';
 
 export const endGame = async (type: 'win' | 'giveUp', game: Game) => {
-  if (type === 'win' && game.hasGivenUp) return;
-  if (type === 'giveUp' && game.hasWon) return;
+  if (
+    (type === 'win' && game.hasGivenUp) ||
+    (type === 'giveUp' && game.hasWon)
+  ) {
+    return { error: 'An unexpected error occurred.' };
+  }
 
   const { session } = await getUserOrGuest();
 

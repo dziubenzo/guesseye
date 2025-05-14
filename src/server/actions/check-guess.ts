@@ -84,7 +84,11 @@ export const checkGuess = actionClient
     const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
 
     if (isGuessCorrect) {
-      await endGame('win', game);
+      const error = await endGame('win', game);
+
+      if (error) {
+        return error as CheckGuessAction;
+      }
 
       return {
         success: {
