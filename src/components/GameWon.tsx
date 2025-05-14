@@ -19,7 +19,7 @@ export default function GameWon({ previousGame }: GameWonProps) {
   return (
     <div className="flex flex-col grow-1 justify-center text-center items-center gap-4">
       <Trophy size={128} className="opacity-80 hover:animate-pulse" />
-      <p>You have already found</p>
+      <p>You found</p>
       <p className="text-xl lg:text-2xl bg-foreground text-background px-8 py-2 rounded-md">
         {fullName}
       </p>

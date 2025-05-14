@@ -1,5 +1,6 @@
 import ErrorPage from '@/components/ErrorPage';
 import GameOverConfetti from '@/components/GameOverConfetti';
+import GameOverModal from '@/components/GameOverModal';
 import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
 import PlayerForm from '@/components/PlayerForm';
@@ -32,6 +33,7 @@ export default async function OfficialGame() {
           <Guesses />
         )}
         <GameOverConfetti />
+        <GameOverModal />
       </div>
     );
   }
