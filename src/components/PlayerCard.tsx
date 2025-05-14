@@ -54,7 +54,7 @@ export default function PlayerCard(props: PlayerCardProps) {
     const { difficulty } = props;
 
     return (
-      <Card className="bg-secondary">
+      <Card className="bg-secondary w-full">
         <CardHeader>
           <CardTitle className="flex flex-col justify-center md:justify-start items-center gap-4 md:flex-row">
             <div className="flex items-center gap-3 w-[250px] md:w-[300px]">
@@ -362,7 +362,7 @@ export default function PlayerCard(props: PlayerCardProps) {
     const { comparisonResults, guessNumber } = props;
 
     return (
-      <Card className="bg-secondary">
+      <Card className="bg-secondary w-full">
         <CardHeader>
           <CardTitle className="text-xl flex">
             <span>{player.firstName + ' ' + player.lastName}</span>
@@ -619,7 +619,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldValue>
               </Field>
               <Field className="col-span-2 lg:col-span-1">
-                <FieldName className="text-xs xl:text-sm">
+                <FieldName className="lg:text-xs xl:text-sm">
                   <Layers2 size={18} />
                   Played in BDO/WDF
                   <Tooltip>

@@ -1,5 +1,7 @@
 'use client';
 
+import ErrorMessage from '@/components/ErrorMessage';
+import GiveUpForm from '@/components/GiveUpForm';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -12,7 +14,6 @@ import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import ErrorMessage from './ErrorMessage';
 
 export default function PlayerForm() {
   const playerForm = useForm({
@@ -68,28 +69,31 @@ export default function PlayerForm() {
   }, [playerForm, isPending, gameOver]);
 
   return (
-    <div className="flex w-full justify-center bg-background sticky top-0 p-4 z-1">
+    <div className="md:flex md:justify-center bg-background sticky top-0 p-4 z-1">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField
             control={playerForm.control}
             name="guess"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-2">
-                <div className="flex justify-stretch gap-4">
-                  <FormControl>
-                    <Input
-                      className="text-md lg:text-lg h-auto p-3 text-center placeholder:text-center"
-                      disabled={isPending || gameOver}
-                      autoFocus
-                      {...field}
-                    />
-                  </FormControl>
+              <FormItem>
+                <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input
+                        className="text-md lg:text-lg h-auto p-3 text-center placeholder:text-center"
+                        disabled={isPending || gameOver}
+                        autoFocus
+                        {...field}
+                      />
+                    </FormControl>
+                    <GiveUpForm setGiveUpError={setError} />
+                  </div>
                   <Button
                     type="submit"
                     variant="default"
                     disabled={isPending || gameOver}
-                    className={`cursor-pointer text-lg px-8 py-4 h-full min-w-30`}
+                    className={`cursor-pointer text-lg px-4 py-4 md:h-full md:w-24`}
                   >
                     {isPending ? (
                       <Loader2 className="animate-spin size-7 h-full" />
