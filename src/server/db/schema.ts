@@ -78,6 +78,8 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Shot',
   'Nodor',
   'Cosmo',
+  'Dpuls',
+  'Mission',
 ]);
 
 export const dartsWeightEnum = pgEnum('darts_weight', [

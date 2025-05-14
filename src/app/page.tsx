@@ -1,3 +1,4 @@
+import ErrorPage from '@/components/ErrorPage';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
@@ -9,7 +10,7 @@ export default async function OfficialGame() {
   const game = await getOfficialGame();
 
   if ('error' in game) {
-    return <h1>{game.error}</h1>;
+    return <ErrorPage errorMessage={game.error} />;
   }
 
   if ('hasWon' in game) {
