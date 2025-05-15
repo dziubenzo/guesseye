@@ -41,12 +41,12 @@ export const useUpdateTimeLeft = (
   }
 
   useEffect(() => {
-    // Refresh the page if the next player is available to play
-    if (new Date() > nextPlayerStartDate) {
-      router.refresh();
-      return;
-    }
     const interval = setInterval(() => {
+      // Refresh the page if the next player is available to play
+      if (new Date().getTime() > nextPlayerStartDate.getTime()) {
+        router.refresh();
+        return;
+      }
       setTimeLeft(calculateTimeLeft());
       setTimeInSeconds(calculateTimeInSeconds());
     }, 1000);

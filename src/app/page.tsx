@@ -1,4 +1,5 @@
 import ErrorPage from '@/components/ErrorPage';
+import GameGivenUp from '@/components/GameGivenUp';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
 import GameWon from '@/components/GameWon';
@@ -19,7 +20,7 @@ export default async function OfficialGame() {
   }
 
   if ('hasGivenUp' in game) {
-    return <h1>Hi From Game Given Up</h1>;
+    return <GameGivenUp previousGame={game} />;
   }
 
   if (game) {
