@@ -8,6 +8,8 @@ import type {
 } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
 import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
+import { getWinnersCount } from '@/server/db/get-winners-count';
 import { handleGameGivenUp } from '@/server/db/handle-game-given-up';
 import { handleGameWon } from '@/server/db/handle-game-won';
 
@@ -21,11 +23,23 @@ export const getOfficialGame = async () => {
     return error;
   }
 
-  // Return only scheduled player difficulty if there is no game in progress
+  // Get number of users who have found the scheduled player and the next scheduled player
+  const [winnersCount, nextScheduledPlayer] = await Promise.all([
+    getWinnersCount(scheduledPlayer),
+    getNextScheduledPlayer(scheduledPlayer.endDate),
+  ]);
+
+  if ('error' in nextScheduledPlayer) {
+    const error: ErrorObject = { error: nextScheduledPlayer.error };
+    return error;
+  }
+
   if (!existingGame) {
     const playerDifficulty: NoGame = {
       noGame: true,
       playerDifficulty: scheduledPlayer.playerToFind.difficulty,
+      winnersCount,
+      nextPlayerStartDate: nextScheduledPlayer.startDate,
     };
     return playerDifficulty;
   }
@@ -45,6 +59,8 @@ export const getOfficialGame = async () => {
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,
+    winnersCount,
+    nextPlayerStartDate: nextScheduledPlayer.startDate,
   };
 
   existingGame.guesses.forEach((guess: GuessWithPlayer) => {

@@ -1,10 +1,9 @@
 'use client';
 
 import PlayerCard from '@/components/PlayerCard';
-import Tooltip from '@/components/Tooltip';
+import TimeLeftTooltip from '@/components/TimeLeftTooltip';
 import { useUpdateTimeLeft } from '@/lib/hooks';
 import type { GameGivenUp as GameGivenUpType } from '@/lib/types';
-import { format } from 'date-fns';
 
 type GameGivenUpProps = {
   previousGame: GameGivenUpType;
@@ -41,7 +40,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
           {previousPlayer.gender === 'male' ? 'him' : 'her'}...
         </p>
       )}
-      <div className="p-8 flex flex-col justify-center items-center gap-4 w-full bg-primary-foreground rounded-3xl">
+      <div className="p-8 flex flex-col justify-center items-center gap-4 w-full dark:bg-primary-foreground rounded-3xl">
         <p className="text-sm">
           The next darts player (
           <span className="font-bold">{nextPlayerDifficulty}</span> difficulty)
@@ -52,14 +51,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
             {timeLeft} ({timeInSeconds}{' '}
             {timeInSeconds === 1 ? 'second' : 'seconds'})
           </p>
-          <div className="absolute -top-1 -right-4">
-            <Tooltip className="w-fit">
-              {format(nextPlayerStartDate, 'dd MMMM y')}, at{' '}
-              <span className="font-bold">
-                {format(nextPlayerStartDate, 'hh:mm a')}
-              </span>
-            </Tooltip>
-          </div>
+          <TimeLeftTooltip nextPlayerStartDate={nextPlayerStartDate} top={1} />
         </div>
       </div>
     </div>

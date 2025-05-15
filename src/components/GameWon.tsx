@@ -1,10 +1,9 @@
 'use client';
 
-import Tooltip from '@/components/Tooltip';
+import TimeLeftTooltip from '@/components/TimeLeftTooltip';
 import { Separator } from '@/components/ui/separator';
 import { useUpdateTimeLeft } from '@/lib/hooks';
 import type { GameWon as GameWonType } from '@/lib/types';
-import { format } from 'date-fns';
 import { Trophy } from 'lucide-react';
 
 type GameWonProps = {
@@ -35,16 +34,9 @@ export default function GameWon({ previousGame }: GameWonProps) {
           className="text-xl lg:text-2xl bg-foreground text-background px-6 py-2 rounded-md"
           suppressHydrationWarning
         >
-          {timeLeft}{' '}
+          {timeLeft}
         </p>
-        <div className="absolute -top-2 -right-4">
-          <Tooltip className="w-fit">
-            {format(nextPlayerStartDate, 'dd MMMM y')}, at{' '}
-            <span className="font-bold">
-              {format(nextPlayerStartDate, 'hh:mm a')}
-            </span>
-          </Tooltip>
-        </div>
+        <TimeLeftTooltip nextPlayerStartDate={nextPlayerStartDate} />
       </div>
       <p>or</p>
       <p

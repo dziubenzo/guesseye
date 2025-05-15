@@ -59,6 +59,8 @@ export type ExistingGame = {
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
+  winnersCount: number;
+  nextPlayerStartDate: Schedule['startDate'];
 };
 
 export type Guess = {
@@ -101,6 +103,8 @@ export type NextScheduledPlayer = {
 export type NoGame = {
   noGame: true;
   playerDifficulty: Player['difficulty'];
+  winnersCount: number;
+  nextPlayerStartDate: Schedule['startDate'];
 };
 
 export type GameWon = {

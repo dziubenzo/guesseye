@@ -69,7 +69,7 @@ export default function PlayerForm() {
   }, [playerForm, isPending, gameOver]);
 
   return (
-    <div className="md:flex md:justify-center bg-background sticky top-0 p-4 z-1">
+    <div className="md:flex md:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField

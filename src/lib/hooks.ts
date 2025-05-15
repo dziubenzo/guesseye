@@ -20,7 +20,7 @@ export const useUpdateProgressBar = () => {
     setFieldsFound(currentFields);
   }, [playerToFindMatches, gameOver]);
 
-  return [fieldsFound];
+  return fieldsFound;
 };
 
 export const useUpdateTimeLeft = (

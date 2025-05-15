@@ -6,6 +6,7 @@ import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
+import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { getOfficialGame } from '@/server/db/get-official-game';
 
 export default async function OfficialGame() {
@@ -24,10 +25,16 @@ export default async function OfficialGame() {
   }
 
   if (game) {
+    const { playerDifficulty, winnersCount, nextPlayerStartDate } = game;
+
     return (
       <div className="flex flex-col gap-4">
         <PlayerForm />
-        <PlayerToFindCard difficulty={game.playerDifficulty} />
+        <PlayerToFindInfo
+          winnersCount={winnersCount}
+          nextPlayerStartDate={nextPlayerStartDate}
+        />
+        <PlayerToFindCard difficulty={playerDifficulty} />
         {'gameInProgress' in game ? (
           <Guesses existingGame={game} />
         ) : (
