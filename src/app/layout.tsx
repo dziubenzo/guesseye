@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import '@/globals.css';
 import type { Metadata } from 'next';
@@ -31,6 +32,7 @@ export default function RootLayout({
         <div className="flex flex-col min-h-lvh w-full max-w-lvw lg:max-w-5xl gap-4 p-2">
           <Header />
           <main className="flex flex-col grow-1">{children}</main>
+          <Footer />
         </div>
       </body>
     </html>
