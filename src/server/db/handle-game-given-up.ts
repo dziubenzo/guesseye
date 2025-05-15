@@ -2,13 +2,13 @@
 
 import type {
   ErrorObject,
+  GameGivenUp,
   GameWithGuesses,
-  GameWon,
   ScheduleWithPlayer,
 } from '@/lib/types';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 
-export const handleGameWon = async (
+export const handleGameGivenUp = async (
   scheduledPlayer: ScheduleWithPlayer,
   previousGame: GameWithGuesses
 ) => {
@@ -23,17 +23,14 @@ export const handleGameWon = async (
 
   const { guesses } = previousGame;
   const attempts = guesses.length;
-  const firstName = scheduledPlayer.playerToFind.firstName;
-  const lastName = scheduledPlayer.playerToFind.lastName;
-  const fullName = firstName + ' ' + lastName;
 
-  const gameWon: GameWon = {
-    hasWon: true,
+  const gameGivenUp: GameGivenUp = {
+    hasGivenUp: true,
+    previousPlayer: scheduledPlayer.playerToFind,
+    attempts,
     nextPlayerStartDate: nextScheduledPlayer.startDate,
     nextPlayerDifficulty: nextScheduledPlayer.playerToFind.difficulty,
-    attempts,
-    fullName,
   };
 
-  return gameWon;
+  return gameGivenUp;
 };

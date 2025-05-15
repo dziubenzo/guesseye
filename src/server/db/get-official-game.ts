@@ -3,12 +3,12 @@
 import type {
   ErrorObject,
   ExistingGame,
-  GameGivenUp,
   GuessWithPlayer,
   NoGame,
 } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
 import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { handleGameGivenUp } from '@/server/db/handle-game-given-up';
 import { handleGameWon } from '@/server/db/handle-game-won';
 
 export const getOfficialGame = async () => {
@@ -35,9 +35,8 @@ export const getOfficialGame = async () => {
     return data;
   }
 
-  // TODO: Handle game given up
   if (existingGame.hasGivenUp) {
-    const data: GameGivenUp = { hasGivenUp: true };
+    const data = await handleGameGivenUp(scheduledPlayer, existingGame);
     return data;
   }
 

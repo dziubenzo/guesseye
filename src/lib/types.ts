@@ -113,4 +113,8 @@ export type GameWon = {
 
 export type GameGivenUp = {
   hasGivenUp: true;
+  previousPlayer: Player;
+  nextPlayerStartDate: Schedule['startDate'];
+  nextPlayerDifficulty: Player['difficulty'];
+  attempts: number;
 };
