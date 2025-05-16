@@ -1,0 +1,40 @@
+import { columns } from '@/app/official/columns';
+import { DataTable } from '@/app/official/data-table';
+import ErrorPage from '@/components/ErrorPage';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { getOfficialGames } from '@/server/db/get-official-games';
+
+export default async function OfficialGames() {
+  const officialGames = await getOfficialGames();
+
+  if ('error' in officialGames) {
+    // TODO: Build and return not-found page here
+    return <ErrorPage errorMessage={officialGames.error} />;
+  }
+
+  return (
+    <div className="flex flex-col grow-1 justify-center">
+      <Card>
+        <CardHeader>
+          <CardTitle>All Official Games</CardTitle>
+          <CardDescription>
+            Here you can find all official games.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <DataTable columns={columns} data={officialGames} />
+        </CardContent>
+        <CardFooter>
+          <p>Card Footer</p>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

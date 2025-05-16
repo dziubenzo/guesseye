@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Header() {
@@ -28,7 +29,11 @@ export default function Header() {
       <p>1</p>
       <p>2</p>
       <p>3</p>
-      <p>4</p>
+      <p>
+        <Button className="cursor-pointer" variant="link" asChild>
+          <Link href="/official">Official Games</Link>
+        </Button>
+      </p>
       {data && (
         <Button className="cursor-pointer w-full" onClick={logOut}>
           Log Out
