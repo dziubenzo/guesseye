@@ -122,3 +122,18 @@ export type GameGivenUp = {
   nextPlayerDifficulty: Player['difficulty'];
   attempts: number;
 };
+
+export type OfficialGames = {
+  scheduleId: Schedule['id'];
+  startDate: Schedule['startDate'];
+  endDate: Schedule['endDate'];
+  playerDifficulty: Player['difficulty'];
+  gameExists: boolean;
+  gameInfo?: GameInfo;
+};
+
+export type GameInfo = {
+  fullName?: string;
+  gameStatus: 'won' | 'givenUp' | 'inProgress';
+  guessesCount: number;
+};
