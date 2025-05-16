@@ -99,7 +99,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
       ) {
         return (
           <Button
-            className="cursor-pointer w-full"
+            className="cursor-pointer w-full h-full"
             variant={!row.original.gameExists ? 'default' : 'secondary'}
             onClick={() => {
               console.log(row.original.scheduleId);
