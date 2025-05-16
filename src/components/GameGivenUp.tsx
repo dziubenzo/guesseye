@@ -20,7 +20,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
 
   return (
     <div className="flex flex-col grow-1 text-center justify-center items-center gap-4">
-      <h2 className="text-2xl md:self-start">You missed out on...</h2>
+      <h2 className="text-2xl">You missed out on...</h2>
       <PlayerCard
         type="playerToFind"
         player={previousPlayer}
@@ -28,14 +28,14 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
       />
       {attempts > 0 ? (
         <>
-          <p className="md:self-start">
+          <p>
             You gave {previousPlayer.gender === 'male' ? 'him' : 'her'} at least{' '}
             <span className="font-bold">{attempts}</span>{' '}
             {attempts === 1 ? 'try' : 'tries'}. Good job!
           </p>
         </>
       ) : (
-        <p className="md:self-start">
+        <p>
           And you did not even try to guess{' '}
           {previousPlayer.gender === 'male' ? 'him' : 'her'}...
         </p>
@@ -51,7 +51,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
             {timeLeft} ({timeInSeconds}{' '}
             {timeInSeconds === 1 ? 'second' : 'seconds'})
           </p>
-          <TimeLeftTooltip nextPlayerStartDate={nextPlayerStartDate} top={1} />
+          <TimeLeftTooltip nextPlayerStartDate={nextPlayerStartDate} />
         </div>
       </div>
     </div>

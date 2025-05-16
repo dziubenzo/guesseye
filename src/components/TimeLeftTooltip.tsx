@@ -4,20 +4,13 @@ import { format } from 'date-fns';
 
 type TimeLeftTooltipProps = {
   nextPlayerStartDate: Schedule['startDate'];
-  top?: number;
-  right?: number;
 };
 
 export default function TimeLeftTooltip({
   nextPlayerStartDate,
-  top = 2,
-  right = 4,
 }: TimeLeftTooltipProps) {
-  const topClass = `-top-${top}`;
-  const rightClass = `-right-${right}`;
-
   return (
-    <div className={`absolute ${topClass} ${rightClass}`}>
+    <div className={`absolute -top-2 -right-4`}>
       <Tooltip className="w-fit">
         {format(nextPlayerStartDate, 'dd MMMM y')}, at{' '}
         <span className="font-bold">

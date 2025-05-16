@@ -17,13 +17,13 @@ export default function PlayerToFindInfo({
 
   return (
     <div className="flex justify-between p-2">
-      <div className="flex flex-col items-center gap-1 p-2 dark:bg-primary-foreground rounded-md shadow-sm">
+      <div className="flex flex-col items-center p-2 dark:bg-primary-foreground rounded-md">
         <p>Guessed by</p>
         <p className="font-bold">
           {winnersCount} {winnersCount === 1 ? 'user' : 'users'}
         </p>
       </div>
-      <div className="flex flex-col items-center gap-1 p-2 dark:bg-primary-foreground rounded-md shadow-sm">
+      <div className="flex flex-col items-center p-2 dark:bg-primary-foreground rounded-md">
         <p>Next player in</p>
         <div className="relative">
           <p className="font-bold">{timeLeft}</p>
