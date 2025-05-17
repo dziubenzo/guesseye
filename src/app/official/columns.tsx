@@ -5,11 +5,36 @@ import { Button } from '@/components/ui/button';
 import type { GameInfo, OfficialGames } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
+import { ArrowUpDown } from 'lucide-react';
 
 export const columns: ColumnDef<OfficialGames>[] = [
   {
-    accessorKey: '',
-    header: '#',
+    accessorKey: 'id',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="cursor-pointer p-0 has-[>svg]:px-0 has-[>svg]:pr-0"
+        >
+          #
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      );
+    },
+    // Sort id column by index
+    sortingFn: (rowA, rowB) => {
+      const rowAValue = rowA.index;
+      const rowBValue = rowB.index;
+
+      if (rowAValue < rowBValue) {
+        return -1;
+      } else if (rowAValue > rowBValue) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
     cell: ({ row }) => {
       return <div className="font-medium">{row.index + 1}</div>;
     },
@@ -44,7 +69,37 @@ export const columns: ColumnDef<OfficialGames>[] = [
   },
   {
     accessorKey: 'playerDifficulty',
-    header: 'Difficulty',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="cursor-pointer p-0 has-[>svg]:px-0 has-[>svg]:pr-0"
+        >
+          Difficulty
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      );
+    },
+    // Sort difficulty column by actual difficulty instead of alphabetically
+    sortingFn: (rowA, rowB) => {
+      const sortingMap = new Map<OfficialGames['playerDifficulty'], number>();
+      sortingMap.set('easy', 1);
+      sortingMap.set('medium', 2);
+      sortingMap.set('hard', 3);
+      sortingMap.set('very hard', 4);
+
+      const rowAValue = sortingMap.get(rowA.original.playerDifficulty)!;
+      const rowBValue = sortingMap.get(rowB.original.playerDifficulty)!;
+
+      if (rowAValue < rowBValue) {
+        return -1;
+      } else if (rowAValue > rowBValue) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
   },
   {
     accessorKey: 'gameInfo.gameStatus',
@@ -82,7 +137,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
     },
   },
   {
-    accessorKey: '',
+    accessorKey: 'action',
     header: 'Action',
     cell: ({ row }) => {
       if (
@@ -92,7 +147,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
         if (row.original.gameExists) {
           return (
             <Button
-              className="cursor-pointer w-full h-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
+              className="cursor-pointer w-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
               variant={!row.original.gameExists ? 'secondary' : undefined}
               onClick={() => {
                 console.log(row.original.scheduleId);
@@ -104,7 +159,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
         } else if (!row.original.gameExists) {
           return (
             <Button
-              className="cursor-pointer w-full h-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
+              className="cursor-pointer w-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
               variant={'secondary'}
               onClick={() => {
                 console.log(row.original.scheduleId);
