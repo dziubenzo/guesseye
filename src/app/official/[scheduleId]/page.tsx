@@ -1,39 +1,44 @@
 import ErrorPage from '@/components/ErrorPage';
-import GameGivenUp from '@/components/GameGivenUp';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
-import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { getOfficialGame } from '@/server/db/get-official-game';
 
-export default async function CurrentOfficialGame() {
-  const game = await getOfficialGame();
+type PreviousOfficialGameProps = {
+  params: Promise<{ scheduleId: string }>;
+};
 
+export default async function PreviousOfficialGame({
+  params,
+}: PreviousOfficialGameProps) {
+  const { scheduleId } = await params;
+  const game = await getOfficialGame(scheduleId);
+
+  // TODO: Handle these three states better
   if ('error' in game) {
     return <ErrorPage errorMessage={game.error} />;
   }
 
   if ('hasWon' in game) {
-    return <GameWon previousGame={game} />;
+    return <ErrorPage errorMessage={'You have already won this game, GG!'} />;
   }
 
   if ('hasGivenUp' in game) {
-    return <GameGivenUp previousGame={game} />;
+    return (
+      <ErrorPage errorMessage={'You have already given up on this game...'} />
+    );
   }
 
   if (game) {
-    const { playerDifficulty, winnersCount, nextPlayerStartDate } = game;
+    const { playerDifficulty, winnersCount } = game;
 
     return (
       <div className="flex flex-col gap-4">
         <PlayerForm />
-        <PlayerToFindInfo
-          winnersCount={winnersCount}
-          nextPlayerStartDate={nextPlayerStartDate}
-        />
+        <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard difficulty={playerDifficulty} />
         {'gameInProgress' in game ? (
           <Guesses existingGame={game} />

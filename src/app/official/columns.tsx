@@ -6,6 +6,7 @@ import type { GameInfo, OfficialGames } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
+import Link from 'next/link';
 
 export const columns: ColumnDef<OfficialGames>[] = [
   {
@@ -149,11 +150,9 @@ export const columns: ColumnDef<OfficialGames>[] = [
             <Button
               className="cursor-pointer w-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
               variant={!row.original.gameExists ? 'secondary' : undefined}
-              onClick={() => {
-                console.log(row.original.scheduleId);
-              }}
+              asChild
             >
-              Resume
+              <Link href={`/official/${row.original.scheduleId}`}>Resume</Link>
             </Button>
           );
         } else if (!row.original.gameExists) {
@@ -161,11 +160,9 @@ export const columns: ColumnDef<OfficialGames>[] = [
             <Button
               className="cursor-pointer w-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
               variant={'secondary'}
-              onClick={() => {
-                console.log(row.original.scheduleId);
-              }}
+              asChild
             >
-              Play
+              <Link href={`/official/${row.original.scheduleId}`}>Play</Link>
             </Button>
           );
         } else {

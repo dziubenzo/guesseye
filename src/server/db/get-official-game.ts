@@ -7,21 +7,37 @@ import type {
   NoGame,
 } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
-import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { getGame } from '@/server/db/get-game';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
+import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 import { getWinnersCount } from '@/server/db/get-winners-count';
 import { handleGameGivenUp } from '@/server/db/handle-game-given-up';
 import { handleGameWon } from '@/server/db/handle-game-won';
 
-export const getOfficialGame = async () => {
-  // Get scheduled player and existing game
-  const { existingGame, scheduledPlayer } = await getGameAndPlayer();
+export const getOfficialGame = async (scheduleId?: string) => {
+  if (scheduleId) {
+    const isPositiveInteger =
+      Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
+    if (!isPositiveInteger) {
+      const error: ErrorObject = { error: 'Invalid game.' };
+      return error;
+    }
+  }
 
-  // Return error if no darts player is scheduled
-  if (!scheduledPlayer) {
-    const error: ErrorObject = { error: 'No scheduled darts player.' };
+  const validScheduleId = Number(scheduleId);
+
+  // Get scheduled player
+  const scheduledPlayer = await getScheduledPlayer(
+    validScheduleId ? validScheduleId : undefined
+  );
+
+  if ('error' in scheduledPlayer) {
+    const error: ErrorObject = { error: scheduledPlayer.error };
     return error;
   }
+
+  // Get game if it exists
+  const existingGame = await getGame(scheduledPlayer);
 
   // Get number of users who have found the scheduled player and the next scheduled player
   const [winnersCount, nextScheduledPlayer] = await Promise.all([

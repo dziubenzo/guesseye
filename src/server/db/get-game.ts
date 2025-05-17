@@ -1,22 +1,17 @@
 'use server';
 
-import type { GameWithGuesses } from '@/lib/types';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
+import type {
+  GameWithGuesses,
+  ScheduleWithPlayer
+} from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
 import { and, eq } from 'drizzle-orm';
 
-export const getGameAndPlayer = async () => {
+export const getGame = async (scheduledPlayer: ScheduleWithPlayer) => {
   const { session, clientIP, clientUserAgent } = await getUserOrGuest();
 
-  const scheduledPlayer = await getScheduledPlayer();
-
-  if (!scheduledPlayer) {
-    return { existingGame: undefined, scheduledPlayer: undefined };
-  }
-
-  // Check if game exists
   const existingGame: GameWithGuesses | undefined =
     await db.query.game.findFirst({
       where: session
@@ -36,7 +31,5 @@ export const getGameAndPlayer = async () => {
       },
     });
 
-  const data = { existingGame, scheduledPlayer };
-
-  return data;
+  return existingGame;
 };

@@ -16,7 +16,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
     nextPlayerDifficulty,
     attempts,
   } = previousGame;
-  const { timeLeft, timeInSeconds } = useUpdateTimeLeft(nextPlayerStartDate);
+  const { timeLeft } = useUpdateTimeLeft(nextPlayerStartDate);
 
   return (
     <div className="flex flex-col grow-1 text-center justify-center items-center gap-4">
@@ -48,8 +48,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
         </p>
         <div className="relative">
           <p className="text-2xl" suppressHydrationWarning>
-            {timeLeft} ({timeInSeconds}{' '}
-            {timeInSeconds === 1 ? 'second' : 'seconds'})
+            {timeLeft}
           </p>
           <TimeLeftTooltip nextPlayerStartDate={nextPlayerStartDate} />
         </div>
