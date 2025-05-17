@@ -54,7 +54,6 @@ export const getOfficialGames = async () => {
           ' ' +
           scheduledPlayer.playerToFind.lastName;
         let gameStatus: GameInfo['gameStatus'];
-        const guessesCount = game.guesses.length;
 
         if (game.hasWon) {
           gameStatus = 'won';
@@ -68,7 +67,6 @@ export const getOfficialGames = async () => {
         result.gameInfo = {
           fullName,
           gameStatus,
-          guessesCount,
         };
         break;
       }

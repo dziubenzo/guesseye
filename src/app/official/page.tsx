@@ -1,5 +1,5 @@
 import { columns } from '@/app/official/columns';
-import { DataTable } from '@/app/official/data-table';
+import DataTable from '@/app/official/data-table';
 import ErrorPage from '@/components/ErrorPage';
 import {
   Card,

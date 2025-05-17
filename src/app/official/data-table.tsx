@@ -1,5 +1,6 @@
 'use client';
 
+import { DataTablePagination } from '@/app/official/data-table-pagination';
 import {
   Table,
   TableBody,
@@ -15,14 +16,13 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { DataTablePagination } from './data-table-pagination';
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 };
 
-export function DataTable<TData, TValue>({
+export default function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

@@ -54,7 +54,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
 
       if (!gameStatus) {
         return (
-          <Badge className="w-[80px]" variant={'outline'}>
+          <Badge className="w-[80px] bg-indigo-300 text-secondary-foreground dark:text-secondary">
             Not Played
           </Badge>
         );
@@ -74,19 +74,11 @@ export const columns: ColumnDef<OfficialGames>[] = [
         );
       } else if (gameStatus === 'inProgress') {
         return (
-          <Badge className="w-[80px]" variant={'secondary'}>
+          <Badge className="w-[80px] bg-amber-400 text-secondary-foreground dark:text-secondary">
             In Progress
           </Badge>
         );
       }
-    },
-  },
-  {
-    accessorKey: 'gameInfo.guessesCount',
-    header: 'Guesses',
-    cell: ({ cell }) => {
-      const guessesCount = cell.getValue<GameInfo['guessesCount']>();
-      return <div>{guessesCount ? guessesCount : 0}</div>;
     },
   },
   {
@@ -97,19 +89,33 @@ export const columns: ColumnDef<OfficialGames>[] = [
         !row.original.gameExists ||
         row.original.gameInfo?.gameStatus === 'inProgress'
       ) {
-        return (
-          <Button
-            className="cursor-pointer w-full h-full"
-            variant={!row.original.gameExists ? 'default' : 'secondary'}
-            onClick={() => {
-              console.log(row.original.scheduleId);
-            }}
-          >
-            {!row.original.gameExists ? 'Play' : 'Resume'}
-          </Button>
-        );
-      } else {
-        return;
+        if (row.original.gameExists) {
+          return (
+            <Button
+              className="cursor-pointer w-full h-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
+              variant={!row.original.gameExists ? 'secondary' : undefined}
+              onClick={() => {
+                console.log(row.original.scheduleId);
+              }}
+            >
+              Resume
+            </Button>
+          );
+        } else if (!row.original.gameExists) {
+          return (
+            <Button
+              className="cursor-pointer w-full h-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
+              variant={'secondary'}
+              onClick={() => {
+                console.log(row.original.scheduleId);
+              }}
+            >
+              Play
+            </Button>
+          );
+        } else {
+          return;
+        }
       }
     },
   },

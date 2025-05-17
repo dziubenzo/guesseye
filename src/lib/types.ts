@@ -135,5 +135,4 @@ export type OfficialGames = {
 export type GameInfo = {
   fullName?: string;
   gameStatus?: 'won' | 'givenUp' | 'inProgress';
-  guessesCount?: number;
 };
