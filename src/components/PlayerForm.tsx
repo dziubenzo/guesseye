@@ -92,7 +92,10 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                         {...field}
                       />
                     </FormControl>
-                    <GiveUpForm setGiveUpError={setError} />
+                    <GiveUpForm
+                      setGiveUpError={setError}
+                      scheduleId={scheduleId}
+                    />
                   </div>
                   <Button
                     type="submit"

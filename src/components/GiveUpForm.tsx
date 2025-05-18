@@ -10,24 +10,28 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { giveUpSchema } from '@/lib/zod/give-up';
+import { giveUpSchema, type GiveUpSchemaType } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useRouter } from 'next/navigation';
-import { type Dispatch, type SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
 type GiveUpFormProps = {
   setGiveUpError: Dispatch<SetStateAction<string>>;
+  scheduleId?: string;
 };
 
-export default function GiveUpForm({ setGiveUpError }: GiveUpFormProps) {
+export default function GiveUpForm({
+  setGiveUpError,
+  scheduleId,
+}: GiveUpFormProps) {
   const giveUpForm = useForm({
     resolver: zodResolver(giveUpSchema),
     defaultValues: {
-      hasGivenUp: false,
+      scheduleId,
     },
   });
   const router = useRouter();
@@ -45,9 +49,9 @@ export default function GiveUpForm({ setGiveUpError }: GiveUpFormProps) {
     },
   });
 
-  function onSubmit() {
+  function onSubmit(values: GiveUpSchemaType) {
     setGiveUpError('');
-    execute({ hasGivenUp: true });
+    execute(values);
   }
 
   return (

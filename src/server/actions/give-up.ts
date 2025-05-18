@@ -2,29 +2,43 @@
 
 import { actionClient } from '@/lib/safe-action-client';
 import type { Game, GameWithGuesses, GiveUpAction } from '@/lib/types';
+import { isScheduleIdValid } from '@/lib/utils';
 import { giveUpSchema } from '@/lib/zod/give-up';
 import { createGame } from '@/server/db/create-game';
 import { endGame } from '@/server/db/end-game';
-import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { getGame } from '@/server/db/get-game';
+import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const giveUp = actionClient
   .schema(giveUpSchema)
-  .action(async ({ parsedInput: { hasGivenUp } }) => {
-    if (!hasGivenUp) {
-      return {
-        error: 'An unexpected error occurred.',
-        success: false,
-      } as GiveUpAction;
+  .action(async ({ parsedInput: { scheduleId } }) => {
+    if (scheduleId) {
+      // Make sure scheduleId is a positive integer
+      const isValid = isScheduleIdValid(scheduleId);
+
+      if (!isValid) {
+        const error: GiveUpAction = { error: 'Invalid game.', success: false };
+        return error;
+      }
     }
 
-    const { existingGame, scheduledPlayer } = await getGameAndPlayer();
+    const validScheduleId = Number(scheduleId);
 
-    if (!scheduledPlayer) {
-      return {
-        error: 'There was an error retrieving scheduled player.',
+    // Get scheduled player
+    const scheduledPlayer = await getScheduledPlayer(
+      validScheduleId ? validScheduleId : undefined
+    );
+
+    if ('error' in scheduledPlayer) {
+      const error: GiveUpAction = {
+        error: scheduledPlayer.error,
         success: false,
-      } as GiveUpAction;
+      };
+      return error;
     }
+
+    // Get game if it exists
+    const existingGame = await getGame(scheduledPlayer);
 
     const game: Game | GameWithGuesses = existingGame
       ? existingGame

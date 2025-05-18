@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const giveUpSchema = z.object({
-  hasGivenUp: z.boolean(),
+  scheduleId: z.string().optional(),
 });
 
 export type GiveUpSchemaType = z.infer<typeof giveUpSchema>;
