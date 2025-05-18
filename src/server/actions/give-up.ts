@@ -17,7 +17,7 @@ export const giveUp = actionClient
       const isValid = isScheduleIdValid(scheduleId);
 
       if (!isValid) {
-        const error: GiveUpAction = { error: 'Invalid game.', success: false };
+        const error: GiveUpAction = { type: 'error', error: 'Invalid game.' };
         return error;
       }
     }
@@ -31,8 +31,8 @@ export const giveUp = actionClient
 
     if ('error' in scheduledPlayer) {
       const error: GiveUpAction = {
+        type: 'error',
         error: scheduledPlayer.error,
-        success: false,
       };
       return error;
     }
@@ -44,11 +44,16 @@ export const giveUp = actionClient
       ? existingGame
       : await createGame(scheduledPlayer);
 
-    const error = await endGame('giveUp', game);
+    const errorObject = await endGame('giveUp', game);
 
-    if (error) {
-      return { ...error, success: false } as GiveUpAction;
+    if (errorObject) {
+      const error: GiveUpAction = {
+        type: 'error',
+        error: errorObject.error,
+      };
+      return error;
     }
 
-    return { success: true } as GiveUpAction;
+    const success: GiveUpAction = { type: 'success' };
+    return success;
   });

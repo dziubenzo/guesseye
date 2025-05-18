@@ -38,12 +38,12 @@ export default function GiveUpForm({
 
   const { execute, isPending } = useAction(giveUp, {
     onSuccess({ data }) {
-      if (data?.success) {
-        router.refresh();
+      if (data?.type === 'error') {
+        setGiveUpError(data.error);
         return;
       }
-      if (data?.error) {
-        setGiveUpError(data.error);
+      if (data?.type === 'success') {
+        router.refresh();
         return;
       }
     },

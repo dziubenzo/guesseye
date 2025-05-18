@@ -2,11 +2,7 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type {
-  CheckGuessAction,
-  Game,
-  GameWithGuesses
-} from '@/lib/types';
+import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
@@ -31,8 +27,11 @@ export const checkGuess = actionClient
       const isValid = isScheduleIdValid(scheduleId);
 
       if (!isValid) {
-        const error = { error: 'Invalid game.' };
-        return error as CheckGuessAction;
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: 'Invalid game.',
+        };
+        return error;
       }
     }
 
@@ -46,13 +45,16 @@ export const checkGuess = actionClient
     );
 
     if ('error' in scheduledPlayer) {
-      const error = { error: scheduledPlayer.error };
-      return error as CheckGuessAction;
+      const error: CheckGuessAction = {
+        type: 'error',
+        error: scheduledPlayer.error,
+      };
+      return error;
     }
 
     // Get game if it exists
     const existingGame = await getGame(scheduledPlayer);
-    
+
     const game: Game | GameWithGuesses = existingGame
       ? existingGame
       : await createGame(scheduledPlayer);
@@ -77,49 +79,68 @@ export const checkGuess = actionClient
     let guessedPlayer;
 
     if (searchResults.length === 0) {
-      return { error: 'No darts player found. Try again.' } as CheckGuessAction;
+      const error: CheckGuessAction = {
+        type: 'error',
+        error: 'No darts player found. Try again.',
+      };
+      return error;
     } else if (searchResults.length === 2) {
       const playerNames = searchResults
         .map((player) => {
           return player.firstName + ' ' + player.lastName;
         })
         .join(' and ');
-      return {
+      const error: CheckGuessAction = {
+        type: 'error',
         error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
-      } as CheckGuessAction;
+      };
+      return error;
     } else if (searchResults.length > 2) {
-      return {
+      const error: CheckGuessAction = {
+        type: 'error',
         error:
           'Found more than two darts players. Please add more detail to your guess.',
-      } as CheckGuessAction;
+      };
+      return error;
     } else {
       guessedPlayer = searchResults[0];
     }
 
     // Add guess to DB
-    const error = await createGuess(game.id, guessedPlayer.id);
+    const errorObject = await createGuess(game.id, guessedPlayer.id);
 
-    if (error) {
-      return error as CheckGuessAction;
+    if (errorObject) {
+      const error: CheckGuessAction = {
+        type: 'error',
+        error: errorObject.error,
+      };
+      return error;
     }
 
     // Correct guess
     const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
 
     if (isGuessCorrect) {
-      const error = await endGame('win', game);
+      const errorObject = await endGame('win', game);
 
-      if (error) {
-        return error as CheckGuessAction;
+      if (errorObject) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: errorObject.error,
+        };
+        return error;
       }
 
-      return {
+      const data: CheckGuessAction = {
+        type: 'success',
         success: {
           type: 'correctGuess',
           playerToFind,
           comparisonResults: matchingComparisonResults,
         },
-      } as CheckGuessAction;
+      };
+
+      return data;
     }
 
     // Incorrect guess
@@ -128,12 +149,15 @@ export const checkGuess = actionClient
       playerToFind
     );
 
-    return {
+    const data: CheckGuessAction = {
+      type: 'success',
       success: {
         type: 'incorrectGuess',
         guessedPlayer,
         comparisonResults,
         playerToFindMatches,
       },
-    } as CheckGuessAction;
+    };
+
+    return data;
   });

@@ -35,26 +35,28 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
 
   const { execute, isPending } = useAction(checkGuess, {
     onSuccess({ data }) {
-      if (data?.error) {
+      if (data?.type === 'error') {
         setError(data.error);
         return;
       }
-      if (data?.success?.type === 'correctGuess') {
-        updateGuesses(
-          data.success.playerToFind,
-          data.success.comparisonResults
-        );
-        finishGame(data.success.playerToFind);
-        return;
-      }
-      if (data?.success?.type === 'incorrectGuess') {
-        updateGuesses(
-          data.success.guessedPlayer,
-          data.success.comparisonResults
-        );
-        updateMatches(data.success.playerToFindMatches);
-        playerForm.resetField('guess');
-        return;
+      if (data?.type === 'success') {
+        if (data.success.type === 'correctGuess') {
+          updateGuesses(
+            data.success.playerToFind,
+            data.success.comparisonResults
+          );
+          finishGame(data.success.playerToFind);
+          return;
+        }
+        if (data.success.type === 'incorrectGuess') {
+          updateGuesses(
+            data.success.guessedPlayer,
+            data.success.comparisonResults
+          );
+          updateMatches(data.success.playerToFindMatches);
+          playerForm.resetField('guess');
+          return;
+        }
       }
     },
   });

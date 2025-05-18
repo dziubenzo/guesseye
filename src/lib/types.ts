@@ -68,10 +68,9 @@ export type Guess = {
   comparisonResults: ComparisonResults;
 };
 
-// TODO: This is atrocious, do something about it
-type CheckGuessActionError = { error: string; success: null };
-type CheckGuessActionSuccess = {
-  error: null;
+type CheckGuessError = { type: 'error'; error: string };
+type CheckGuessSuccess = {
+  type: 'success';
   success:
     | {
         type: 'correctGuess';
@@ -86,10 +85,10 @@ type CheckGuessActionSuccess = {
       };
 };
 
-export type CheckGuessAction = CheckGuessActionError | CheckGuessActionSuccess;
+export type CheckGuessAction = CheckGuessError | CheckGuessSuccess;
 
-type GiveUpError = { error: string; success: false };
-type GiveUpSuccess = { error: null; success: true };
+type GiveUpError = { type: 'error'; error: string };
+type GiveUpSuccess = { type: 'success' };
 
 export type GiveUpAction = GiveUpError | GiveUpSuccess;
 
