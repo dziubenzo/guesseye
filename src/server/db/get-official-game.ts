@@ -6,7 +6,7 @@ import type {
   GuessWithPlayer,
   NoGame,
 } from '@/lib/types';
-import { comparePlayers } from '@/lib/utils';
+import { comparePlayers, isScheduleIdValid } from '@/lib/utils';
 import { getGame } from '@/server/db/get-game';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
@@ -16,9 +16,10 @@ import { handleGameWon } from '@/server/db/handle-game-won';
 
 export const getOfficialGame = async (scheduleId?: string) => {
   if (scheduleId) {
-    const isPositiveInteger =
-      Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
-    if (!isPositiveInteger) {
+    // Make sure scheduleId is a positive integer
+    const isValid = isScheduleIdValid(scheduleId);
+
+    if (!isValid) {
       const error: ErrorObject = { error: 'Invalid game.' };
       return error;
     }

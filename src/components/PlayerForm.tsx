@@ -15,11 +15,16 @@ import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function PlayerForm() {
+type PlayerFormProps = {
+  scheduleId?: string;
+};
+
+export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   const playerForm = useForm({
     resolver: zodResolver(guessSchema),
     defaultValues: {
       guess: '',
+      scheduleId,
     },
     mode: 'onSubmit',
   });

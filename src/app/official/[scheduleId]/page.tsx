@@ -37,7 +37,7 @@ export default async function PreviousOfficialGame({
 
     return (
       <div className="flex flex-col gap-4">
-        <PlayerForm />
+        <PlayerForm scheduleId={scheduleId} />
         <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard difficulty={playerDifficulty} />
         {'gameInProgress' in game ? (

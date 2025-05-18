@@ -268,3 +268,10 @@ export function getDifficultyColour(difficulty: Player['difficulty']) {
       return 'text-wrong-guess';
   }
 }
+
+export function isScheduleIdValid(scheduleId?: string) {
+  const isPositiveInteger =
+    Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
+
+  return !isPositiveInteger ? false : true;
+}

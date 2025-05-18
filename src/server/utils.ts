@@ -4,7 +4,6 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
 export async function getIPAndUserAgent() {
-  'use server';
   const headersList = await headers();
   const clientUserAgent = headersList.get('User-Agent') || '';
   const clientIP = (headersList.get('X-Forwarded-For') || '')

@@ -2,34 +2,57 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
+import type {
+  CheckGuessAction,
+  Game,
+  GameWithGuesses
+} from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
+  isScheduleIdValid,
   normaliseGuess,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
 import { createGame } from '@/server/db/create-game';
 import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
-import { getGameAndPlayer } from '@/server/db/get-game-and-player';
+import { getGame } from '@/server/db/get-game';
 import { getPlayers } from '@/server/db/get-players';
+import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
-  .action(async ({ parsedInput: { guess } }) => {
+  .action(async ({ parsedInput: { guess, scheduleId } }) => {
     const normalisedGuess = normaliseGuess(guess);
+
+    if (scheduleId) {
+      // Make sure scheduleId is a positive integer
+      const isValid = isScheduleIdValid(scheduleId);
+
+      if (!isValid) {
+        const error = { error: 'Invalid game.' };
+        return error as CheckGuessAction;
+      }
+    }
+
+    const validScheduleId = Number(scheduleId);
 
     const players = await getPlayers();
 
-    const { existingGame, scheduledPlayer } = await getGameAndPlayer();
+    // Get scheduled player
+    const scheduledPlayer = await getScheduledPlayer(
+      validScheduleId ? validScheduleId : undefined
+    );
 
-    if (!scheduledPlayer) {
-      return {
-        error: 'There was an error retrieving scheduled player.',
-      } as CheckGuessAction;
+    if ('error' in scheduledPlayer) {
+      const error = { error: scheduledPlayer.error };
+      return error as CheckGuessAction;
     }
 
+    // Get game if it exists
+    const existingGame = await getGame(scheduledPlayer);
+    
     const game: Game | GameWithGuesses = existingGame
       ? existingGame
       : await createGame(scheduledPlayer);
