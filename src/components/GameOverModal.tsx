@@ -9,15 +9,24 @@ import {
 import { useGameStore } from '@/lib/game-store';
 import { Award } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function GameOverModal() {
   const { gameOver, guesses, playerToFind } = useGameStore();
   const router = useRouter();
+  const pathname = usePathname();
+
+  function navigateAfterGameOver() {
+    if (pathname.includes('official')) {
+      router.push('/official');
+    } else {
+      router.refresh();
+    }
+  }
 
   if (gameOver && playerToFind) {
     return (
-      <Dialog defaultOpen onOpenChange={() => router.refresh()}>
+      <Dialog defaultOpen onOpenChange={navigateAfterGameOver}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-2xl text-center flex justify-center items-center gap-1">

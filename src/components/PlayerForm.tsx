@@ -29,8 +29,14 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     mode: 'onSubmit',
   });
 
-  const { finishGame, updateGuesses, updateMatches, guesses, gameOver } =
-    useGameStore();
+  const {
+    finishGame,
+    updateGuesses,
+    updateMatches,
+    guesses,
+    gameOver,
+    resetState,
+  } = useGameStore();
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
@@ -74,6 +80,11 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   useEffect(() => {
     if (!isPending || !gameOver) playerForm.setFocus('guess');
   }, [playerForm, isPending, gameOver]);
+
+  // Make sure state is reset on scheduleId change
+  useEffect(() => {
+    resetState();
+  }, [scheduleId]);
 
   return (
     <div className="md:flex md:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">

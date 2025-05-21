@@ -15,7 +15,7 @@ import { giveUp } from '@/server/actions/give-up';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -35,6 +35,7 @@ export default function GiveUpForm({
     },
   });
   const router = useRouter();
+  const pathname = usePathname();
 
   const { execute, isPending } = useAction(giveUp, {
     onSuccess({ data }) {
@@ -43,7 +44,11 @@ export default function GiveUpForm({
         return;
       }
       if (data?.type === 'success') {
-        router.refresh();
+        if (pathname.includes('official')) {
+          router.push('/official');
+        } else {
+          router.refresh();
+        }
         return;
       }
     },
