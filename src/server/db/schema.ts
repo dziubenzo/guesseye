@@ -84,6 +84,18 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Trinidad',
   'KOTO',
   'Cuesoul',
+  'Designa',
+  'Caliburn',
+  'Dynasty',
+  'Galaxy',
+  'Legend Darts',
+  'Loxley',
+  'McCoy',
+  'McKicks',
+  'One80',
+  'Performance Darts',
+  'Ruthless',
+  'Viper',
 ]);
 
 export const dartsWeightEnum = pgEnum('darts_weight', [
