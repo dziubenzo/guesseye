@@ -6,6 +6,7 @@ import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { getOfficialGame } from '@/server/db/get-official-game';
+import { notFound } from 'next/navigation';
 
 type PreviousOfficialGameProps = {
   params: Promise<{ scheduleId: string }>;
@@ -17,19 +18,12 @@ export default async function PreviousOfficialGame({
   const { scheduleId } = await params;
   const game = await getOfficialGame(scheduleId);
 
-  // TODO: Handle these three states better
   if ('error' in game) {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  if ('hasWon' in game) {
-    return <ErrorPage errorMessage={'You have already won this game, GG!'} />;
-  }
-
-  if ('hasGivenUp' in game) {
-    return (
-      <ErrorPage errorMessage={'You have already given up on this game...'} />
-    );
+  if ('hasWon' in game || 'hasGivenUp' in game) {
+    return notFound();
   }
 
   if (game) {

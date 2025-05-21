@@ -1,6 +1,5 @@
 import { columns } from '@/app/official/columns';
 import DataTable from '@/app/official/data-table';
-import ErrorPage from '@/components/ErrorPage';
 import {
   Card,
   CardContent,
@@ -9,13 +8,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getOfficialGames } from '@/server/db/get-official-games';
+import { notFound } from 'next/navigation';
 
 export default async function OfficialGames() {
   const officialGames = await getOfficialGames();
 
   if ('error' in officialGames) {
-    // TODO: Build and return not-found page here
-    return <ErrorPage errorMessage={officialGames.error} />;
+    return notFound();
   }
 
   return (
