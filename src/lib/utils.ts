@@ -1,11 +1,14 @@
-import {
+import type {
   BestResultColumnType,
   ComparisonResults,
   Guess,
+  MatchKeys,
   Player,
   PlayerToFindMatches,
+  RangedMatchKeys,
+  SpecialRangedMatchKeys,
 } from '@/lib/types';
-import { GuessSchemaType } from '@/lib/zod/guess';
+import type { GuessSchemaType } from '@/lib/zod/guess';
 import { player } from '@/server/db/schema';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
@@ -77,6 +80,93 @@ export function checkIfGuessCorrect(
   return isGuessCorrect;
 }
 
+export function fillAllMatches(
+  playerToFind: Player,
+  currentMatches: PlayerToFindMatches
+) {
+  let key: keyof Player;
+
+  for (key in playerToFind) {
+    switch (key) {
+      // Cases to skip
+      case 'id':
+      case 'createdAt':
+      case 'updatedAt':
+      case 'difficulty':
+        break;
+      // Match cases
+      case 'firstName':
+      case 'lastName':
+      case 'country':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'tourCard':
+      case 'playedInWCOD':
+      case 'playedInWDF':
+      case 'active':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'dartsBrand':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'gender':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'laterality':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'organisation':
+        currentMatches[key] = playerToFind[key];
+        break;
+      // Ranged match cases
+      case 'nineDartersPDC':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      case 'playingSince':
+      case 'prizeMoney':
+      case 'rankingPDC':
+      case 'rankingWDF':
+      case 'yearOfBestResultPDC':
+      case 'yearOfBestResultWDF':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      // Special ranged match cases
+      case 'dateOfBirth':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      case 'bestResultPDC':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      case 'bestResultWDF':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      case 'dartsWeight':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+    }
+  }
+
+  return;
+}
+
 export function buildBestResultMap(columnValues: BestResultColumnType[]) {
   const reversedValues = columnValues.toReversed();
   let weight = 1;
@@ -101,140 +191,346 @@ export const bestResultWDFMap = buildBestResultMap(
   getTableColumns(player).bestResultWDF.enumValues
 );
 
-export function comparePlayers(guessedPlayer: Player, playerToFind: Player) {
+export function comparePlayers(
+  guessedPlayer: Player,
+  playerToFind: Player,
+  currentMatches: PlayerToFindMatches
+) {
   const comparisonResults = {} as ComparisonResults;
-  const playerToFindMatches = {} as PlayerToFindMatches;
   let key: keyof Player;
 
-  for (key in guessedPlayer) {
-    if (
-      key === 'id' ||
-      key === 'createdAt' ||
-      key === 'updatedAt' ||
-      key === 'difficulty'
-    ) {
-      continue;
+  function compareMatch(key: MatchKeys) {
+    if (guessedPlayer[key] !== playerToFind[key]) {
+      comparisonResults[key] = 'noMatch';
+    } else if (guessedPlayer[key] === playerToFind[key]) {
+      comparisonResults[key] = 'match';
+      // Is there a normal way to narrow possible values in TS so that I don't get the only common type: undefined?
+      switch (key) {
+        case 'firstName':
+        case 'lastName':
+        case 'country':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'tourCard':
+        case 'playedInWCOD':
+        case 'playedInWDF':
+        case 'active':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'dartsBrand':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'gender':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'laterality':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'organisation':
+          currentMatches[key] = playerToFind[key];
+          break;
+      }
     }
+  }
 
+  function compareRangedMatch(key: RangedMatchKeys) {
     if (
       (!guessedPlayer[key] && !playerToFind[key]) ||
       guessedPlayer[key] === playerToFind[key]
     ) {
       comparisonResults[key] = 'match';
-      // @ts-expect-error: key is the same, the never type should never happen
-      playerToFindMatches[key] = playerToFind[key];
-      continue;
-    }
-    if (!guessedPlayer[key] || !playerToFind[key]) {
+      switch (key) {
+        case 'nineDartersPDC':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'playingSince':
+        case 'prizeMoney':
+        case 'rankingPDC':
+        case 'rankingWDF':
+        case 'yearOfBestResultPDC':
+        case 'yearOfBestResultWDF':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+      }
+    } else if (!guessedPlayer[key] || !playerToFind[key]) {
       comparisonResults[key] = 'noMatch';
-      continue;
-    }
-
-    if (
-      key === 'firstName' ||
-      key === 'lastName' ||
-      key === 'gender' ||
-      key === 'country' ||
-      key === 'dartsBrand' ||
-      key === 'laterality' ||
-      key === 'organisation' ||
-      key === 'tourCard' ||
-      key === 'playedInWCOD' ||
-      key === 'playedInWDF' ||
-      key === 'active'
-    ) {
-      if (guessedPlayer[key] !== playerToFind[key]) {
-        comparisonResults[key] = 'noMatch';
-      } else if (guessedPlayer[key] === playerToFind[key]) {
-        comparisonResults[key] = 'match';
-        // @ts-expect-error: key is the same, the never type should never happen
-        playerToFindMatches[key] = playerToFind[key];
-      }
-      continue;
-    }
-
-    // Revert higher/lower logic for ranking positions
-    if (key === 'rankingPDC' || key === 'rankingWDF') {
-      if (guessedPlayer[key]! < playerToFind[key]!) {
-        comparisonResults[key] = 'lower';
-      } else if (guessedPlayer[key]! > playerToFind[key]!) {
-        comparisonResults[key] = 'higher';
-      }
-      continue;
-    }
-
-    if (
-      key === 'nineDartersPDC' ||
-      key === 'playingSince' ||
-      key === 'prizeMoney' ||
-      key === 'yearOfBestResultPDC' ||
-      key === 'yearOfBestResultWDF'
-    ) {
-      if (guessedPlayer[key]! > playerToFind[key]!) {
-        comparisonResults[key] = 'lower';
-      } else if (guessedPlayer[key]! < playerToFind[key]!) {
-        comparisonResults[key] = 'higher';
-      }
-      continue;
-    }
-
-    switch (key) {
-      case 'dateOfBirth':
-        const guessedPlayerAge = getAge(guessedPlayer[key]!);
-        const playerToFindAge = getAge(playerToFind[key]!);
-        if (guessedPlayerAge > playerToFindAge) {
-          comparisonResults[key] = 'lower';
-        } else if (guessedPlayerAge < playerToFindAge) {
-          comparisonResults[key] = 'higher';
-        } else {
-          comparisonResults[key] = 'match';
-          playerToFindMatches[key] = playerToFind[key];
-        }
-        continue;
-      case 'dartsWeight':
-        const guessedPlayerDartsWeight = parseFloat(guessedPlayer[key]!);
-        const playerToFindDartsWeight = parseFloat(playerToFind[key]!);
-        if (guessedPlayerDartsWeight > playerToFindDartsWeight) {
-          comparisonResults[key] = 'lower';
-        } else if (guessedPlayerDartsWeight < playerToFindDartsWeight) {
-          comparisonResults[key] = 'higher';
-        } else {
-          comparisonResults[key] = 'match';
-          playerToFindMatches[key] = playerToFind[key];
-        }
-        continue;
-      case 'bestResultPDC':
-        const guessedPlayerResultPDC = bestResultPDCMap.get(
-          guessedPlayer[key]!
-        );
-        const playerToFindResultPDC = bestResultPDCMap.get(playerToFind[key]!);
-        if (guessedPlayerResultPDC! < playerToFindResultPDC!) {
-          comparisonResults[key] = 'lower';
-        } else if (guessedPlayerResultPDC! > playerToFindResultPDC!) {
-          comparisonResults[key] = 'higher';
-        } else {
-          comparisonResults[key] = 'match';
-          playerToFindMatches[key] = playerToFind[key];
-        }
-        continue;
-      case 'bestResultWDF':
-        const guessedPlayerResultWDF = bestResultWDFMap.get(
-          guessedPlayer[key]!
-        );
-        const playerToFindResultWDF = bestResultWDFMap.get(playerToFind[key]!);
-        if (guessedPlayerResultWDF! < playerToFindResultWDF!) {
-          comparisonResults[key] = 'lower';
-        } else if (guessedPlayerResultWDF! > playerToFindResultWDF!) {
-          comparisonResults[key] = 'higher';
-        } else {
-          comparisonResults[key] = 'match';
-          playerToFindMatches[key] = playerToFind[key];
-        }
-        continue;
+    } else if (guessedPlayer[key] > playerToFind[key]) {
+      comparisonResults[key] = 'lower';
+      updateRangedMatch(key, 'lower');
+    } else if (guessedPlayer[key] < playerToFind[key]) {
+      comparisonResults[key] = 'higher';
+      updateRangedMatch(key, 'higher');
     }
   }
 
-  return { comparisonResults, playerToFindMatches };
+  function updateRangedMatch(
+    key: RangedMatchKeys,
+    newType: 'higher' | 'lower'
+  ) {
+    if (!guessedPlayer[key] || !playerToFind[key]) return;
+
+    if (currentMatches[key]?.type !== 'match') {
+      const newClosest = findClosest(
+        guessedPlayer[key],
+        playerToFind[key],
+        currentMatches[key]?.value
+      );
+      const currentType = currentMatches[key]?.type;
+      currentMatches[key] = {
+        type: newClosest.type === 'current' ? currentType! : newType,
+        value: newClosest.value,
+      };
+    }
+  }
+
+  function compareSpecialRangedMatch(key: SpecialRangedMatchKeys) {
+    if (
+      (!guessedPlayer[key] && !playerToFind[key]) ||
+      guessedPlayer[key] === playerToFind[key]
+    ) {
+      comparisonResults[key] = 'match';
+      switch (key) {
+        case 'dateOfBirth':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'bestResultPDC':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'bestResultWDF':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'dartsWeight':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+      }
+    } else if (!guessedPlayer[key] || !playerToFind[key]) {
+      comparisonResults[key] = 'noMatch';
+    }
+
+    let guessedValue: number;
+    let playerToFindValue: number;
+    let currentMatchValue: number | undefined;
+
+    switch (key) {
+      case 'dateOfBirth':
+        guessedValue = getAge(guessedPlayer[key]!);
+        playerToFindValue = getAge(playerToFind[key]!);
+        currentMatchValue = currentMatches[key]?.value
+          ? getAge(currentMatches[key]!.value)
+          : undefined;
+        break;
+      case 'dartsWeight':
+        guessedValue = parseFloat(guessedPlayer[key]!);
+        playerToFindValue = parseFloat(playerToFind[key]!);
+        currentMatchValue = currentMatches[key]?.value
+          ? parseFloat(currentMatches[key]!.value)
+          : undefined;
+        break;
+      case 'bestResultPDC':
+        guessedValue = bestResultPDCMap.get(guessedPlayer[key]!)!;
+        playerToFindValue = bestResultPDCMap.get(playerToFind[key]!)!;
+        currentMatchValue = currentMatches[key]?.value
+          ? bestResultPDCMap.get(currentMatches[key]?.value)
+          : undefined;
+        break;
+      case 'bestResultWDF':
+        guessedValue = bestResultWDFMap.get(guessedPlayer[key]!)!;
+        playerToFindValue = bestResultWDFMap.get(playerToFind[key]!)!;
+        currentMatchValue = currentMatches[key]?.value
+          ? bestResultWDFMap.get(currentMatches[key]?.value)
+          : undefined;
+        break;
+    }
+
+    if (guessedValue > playerToFindValue) {
+      comparisonResults[key] =
+        key === 'dartsWeight' || key === 'dateOfBirth' ? 'lower' : 'higher';
+      updateSpecialRangedMatch(
+        key,
+        key === 'dartsWeight' || key === 'dateOfBirth' ? 'lower' : 'higher',
+        guessedValue,
+        playerToFindValue,
+        currentMatchValue
+      );
+    } else if (guessedValue < playerToFindValue) {
+      comparisonResults[key] =
+        key === 'dartsWeight' || key === 'dateOfBirth' ? 'higher' : 'lower';
+      updateSpecialRangedMatch(
+        key,
+        key === 'dartsWeight' || key === 'dateOfBirth' ? 'higher' : 'lower',
+        guessedValue,
+        playerToFindValue,
+        currentMatchValue
+      );
+    } else if (guessedValue === playerToFindValue) {
+      comparisonResults[key] = 'match';
+      switch (key) {
+        case 'dateOfBirth':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'bestResultPDC':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'bestResultWDF':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'dartsWeight':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+      }
+    }
+  }
+
+  function updateSpecialRangedMatch(
+    key: SpecialRangedMatchKeys,
+    newType: 'higher' | 'lower',
+    guessedValue: number,
+    playerToFindValue: number,
+    currentMatchValue: number | undefined
+  ) {
+    if (currentMatches[key]?.type !== 'match') {
+      const newClosest = findClosest(
+        guessedValue,
+        playerToFindValue,
+        currentMatchValue
+      );
+      const currentType = currentMatches[key]?.type;
+      switch (key) {
+        case 'dateOfBirth':
+          currentMatches[key] = {
+            type: newClosest.type === 'current' ? currentType! : newType,
+            value:
+              newClosest.type === 'current'
+                ? currentMatches[key]!.value
+                : guessedPlayer[key],
+          };
+          break;
+        case 'bestResultPDC':
+          currentMatches[key] = {
+            type: newClosest.type === 'current' ? currentType! : newType,
+            value:
+              newClosest.type === 'current'
+                ? currentMatches[key]!.value
+                : guessedPlayer[key],
+          };
+          break;
+        case 'bestResultWDF':
+          currentMatches[key] = {
+            type: newClosest.type === 'current' ? currentType! : newType,
+            value:
+              newClosest.type === 'current'
+                ? currentMatches[key]!.value
+                : guessedPlayer[key],
+          };
+          break;
+        case 'dartsWeight':
+          currentMatches[key] = {
+            type: newClosest.type === 'current' ? currentType! : newType,
+            value:
+              newClosest.type === 'current'
+                ? currentMatches[key]!.value
+                : guessedPlayer[key],
+          };
+          break;
+      }
+    }
+  }
+
+  for (key in guessedPlayer) {
+    switch (key) {
+      // Cases to skip
+      case 'id':
+      case 'createdAt':
+      case 'updatedAt':
+      case 'difficulty':
+        break;
+      // Match cases
+      case 'firstName':
+      case 'lastName':
+      case 'gender':
+      case 'country':
+      case 'dartsBrand':
+      case 'laterality':
+      case 'organisation':
+      case 'tourCard':
+      case 'playedInWCOD':
+      case 'playedInWDF':
+      case 'active':
+        compareMatch(key);
+        break;
+      // Ranged match cases
+      case 'playingSince':
+      case 'rankingPDC':
+      case 'rankingWDF':
+      case 'prizeMoney':
+      case 'nineDartersPDC':
+      case 'yearOfBestResultPDC':
+      case 'yearOfBestResultWDF':
+        compareRangedMatch(key);
+        break;
+      // Special ranged match cases
+      case 'dateOfBirth':
+      case 'dartsWeight':
+      case 'bestResultPDC':
+      case 'bestResultWDF':
+        compareSpecialRangedMatch(key);
+        break;
+    }
+  }
+
+  return { comparisonResults };
+}
+
+type FindClosestType = {
+  type: 'current' | 'guess';
+  value: number;
+};
+
+export function findClosest(
+  guess: number,
+  playerToFind: number,
+  currentMatch: number | undefined | null
+): FindClosestType {
+  if (!currentMatch) {
+    return { type: 'guess', value: guess };
+  }
+
+  const currentDifference = Math.abs(playerToFind - currentMatch);
+  const newDifference = Math.abs(playerToFind - guess);
+
+  return currentDifference < newDifference
+    ? { type: 'current', value: currentMatch }
+    : { type: 'guess', value: guess };
 }
 
 export function checkForDuplicateGuess(

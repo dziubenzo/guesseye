@@ -1,6 +1,6 @@
 import type { ComparisonResults } from '@/lib/types';
 
-// Corresponds to the number of properties in the ComparisonResults type
+// Corresponds to the number of properties in the ComparisonResults and the PlayerToFindMatches type
 export const ALL_MATCHES = 22;
 
 export const matchingComparisonResults: ComparisonResults = {
