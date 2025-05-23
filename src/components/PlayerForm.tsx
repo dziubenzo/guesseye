@@ -20,15 +20,6 @@ type PlayerFormProps = {
 };
 
 export default function PlayerForm({ scheduleId }: PlayerFormProps) {
-  const playerForm = useForm({
-    resolver: zodResolver(guessSchema),
-    defaultValues: {
-      guess: '',
-      scheduleId,
-    },
-    mode: 'onSubmit',
-  });
-
   const {
     finishGame,
     updateGuesses,
@@ -36,7 +27,18 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     guesses,
     gameOver,
     resetState,
+    playerToFindMatches,
   } = useGameStore();
+  const playerForm = useForm({
+    resolver: zodResolver(guessSchema),
+    defaultValues: {
+      guess: '',
+      scheduleId,
+      playerToFindMatches,
+    },
+    mode: 'onSubmit',
+  });
+
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(checkGuess, {
@@ -51,6 +53,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.playerToFind,
             data.success.comparisonResults
           );
+          updateMatches(data.success.playerToFindMatches);
           finishGame(data.success.playerToFind);
           return;
         }
@@ -74,7 +77,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       setError('You have already guessed this player.');
       return;
     }
-    execute(values);
+    execute({ ...values, playerToFindMatches });
   }
 
   useEffect(() => {

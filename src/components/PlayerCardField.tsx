@@ -1,6 +1,6 @@
+import Arrow from '@/components/Arrow';
 import type { Match, Player, RangedMatch } from '@/lib/types';
 import { ReactNode } from 'react';
-import Arrow from './Arrow';
 
 type FieldProps = { children: ReactNode; className?: string };
 
@@ -31,7 +31,7 @@ type FieldValueProps =
       type: 'guess';
       children: ReactNode;
       fieldName: string;
-      comparisonResult: Match | RangedMatch;
+      comparisonResult?: Match | RangedMatch;
     }
   | { type: 'playerToFind'; children?: ReactNode };
 
@@ -51,9 +51,19 @@ export function FieldValue(props: FieldValueProps) {
   if (type === 'guess') {
     const { fieldName, comparisonResult } = props;
 
+    function getRightFieldColour() {
+      if (comparisonResult === undefined) {
+        return 'bg-muted-foreground text-muted';
+      } else if (comparisonResult === 'match') {
+        return 'bg-good-guess text-good-guess-foreground';
+      } else {
+        return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
+      }
+    }
+
     return (
       <p
-        className={`${comparisonResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess opacity-80 dark:opacity-100'} ${comparisonResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={`${getRightFieldColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
       >
         {children}
         {comparisonResult === 'higher' ? (
@@ -72,12 +82,18 @@ type FieldValueBestResult =
       type: 'guess';
       fieldNameBestResult: string;
       fieldNameYearBestResult: string;
-      bestResult: Player['bestResultPDC'] | Player['bestResultWDF'];
+      bestResult:
+        | Player['bestResultPDC']
+        | Player['bestResultWDF']
+        | 'N/A'
+        | '';
       yearBestResult:
         | Player['yearOfBestResultPDC']
-        | Player['yearOfBestResultWDF'];
-      comparisonBestResult: RangedMatch;
-      comparisonYearBestResult: RangedMatch;
+        | Player['yearOfBestResultWDF']
+        | 'N/A'
+        | '';
+      comparisonBestResult?: RangedMatch;
+      comparisonYearBestResult?: RangedMatch;
     }
   | {
       type: 'playerToFind';
@@ -102,11 +118,13 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
         className={`${bestResult ? 'bg-good-guess' : 'bg-muted-foreground'} ${bestResult ? 'text-good-guess-foreground' : 'text-muted'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
       >
         {bestResult}
-        <span
-          className={`${yearBestResult ? 'bg-good-guess' : 'bg-muted-foreground'} ${yearBestResult ? 'text-good-guess-foreground' : 'text-muted'} text-center flex justify-center items-center gap-1 rounded-sm`}
-        >
-          {yearBestResult ? `(${yearBestResult})` : null}
-        </span>
+        {yearBestResult && (
+          <span
+            className={`${yearBestResult ? 'bg-good-guess' : 'bg-muted-foreground'} ${yearBestResult ? 'text-good-guess-foreground' : 'text-muted'} text-center flex justify-center items-center gap-1 rounded-sm`}
+          >
+            {yearBestResult}
+          </span>
+        )}
       </p>
     );
   }
@@ -119,9 +137,29 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
       comparisonYearBestResult,
     } = props;
 
+    function getRightResultColour() {
+      if (comparisonBestResult === undefined) {
+        return 'bg-muted-foreground text-muted';
+      } else if (comparisonBestResult === 'match') {
+        return 'bg-good-guess text-good-guess-foreground';
+      } else {
+        return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
+      }
+    }
+
+    function getRightYearColour() {
+      if (comparisonYearBestResult === undefined) {
+        return 'bg-muted-foreground text-muted';
+      } else if (comparisonYearBestResult === 'match') {
+        return 'bg-good-guess text-good-guess-foreground';
+      } else {
+        return 'bg-wrong-guess text-wrong-guess-foreground';
+      }
+    }
+
     return (
       <p
-        className={`${comparisonBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess opacity-80 dark:opacity-100'} ${comparisonBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={`${getRightResultColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
       >
         {bestResult}
         {comparisonBestResult === 'higher' ? (
@@ -129,17 +167,19 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
         ) : comparisonBestResult === 'lower' ? (
           <Arrow type="lower">{fieldNameBestResult}</Arrow>
         ) : undefined}
-        <span
-          className={`${comparisonYearBestResult === 'match' ? 'bg-good-guess' : 'bg-wrong-guess'} ${comparisonYearBestResult === 'match' ? 'text-good-guess-foreground' : 'text-wrong-guess-foreground'} text-center flex justify-center items-center gap-1 rounded-sm`}
-        >
-          ({yearBestResult}
-          {comparisonYearBestResult === 'higher' ? (
-            <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
-          ) : comparisonYearBestResult === 'lower' ? (
-            <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
-          ) : undefined}
-          )
-        </span>
+        {yearBestResult && yearBestResult !== 'N/A' && (
+          <span
+            className={`${getRightYearColour()} text-center flex justify-center items-center gap-1 rounded-sm`}
+          >
+            ({yearBestResult}
+            {comparisonYearBestResult === 'higher' ? (
+              <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
+            ) : comparisonYearBestResult === 'lower' ? (
+              <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
+            ) : undefined}
+            )
+          </span>
+        )}
       </p>
     );
   }

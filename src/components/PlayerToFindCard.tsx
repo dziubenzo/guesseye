@@ -14,7 +14,7 @@ type PlayerToFindCardProps = {
 export default function PlayerToFindCard({
   difficulty,
 }: PlayerToFindCardProps) {
-  const { playerToFind, playerToFindMatches } = useGameStore();
+  const { playerToFindMatches } = useGameStore();
   const fieldsFound = useUpdateProgressBar();
 
   return (
@@ -30,7 +30,7 @@ export default function PlayerToFindCard({
       </div>
       <PlayerCard
         type={'playerToFind'}
-        player={playerToFind ? playerToFind : playerToFindMatches}
+        player={playerToFindMatches}
         difficulty={difficulty}
       />
     </div>

@@ -12,11 +12,31 @@ export const useUpdateProgressBar = () => {
   );
 
   useEffect(() => {
+    function calculateFieldsFound() {
+      let count = 0;
+
+      const array = Object.entries(playerToFindMatches);
+
+      for (const pair of array) {
+        const value = pair[1];
+        
+        if (
+          (typeof value !== 'object' && value) ||
+          (typeof value === 'object' && value?.type === 'match')
+        ) {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
     if (gameOver) {
       setFieldsFound(ALL_MATCHES);
       return;
     }
-    const currentFields = Object.keys(playerToFindMatches).length;
+
+    const currentFields = calculateFieldsFound();
     setFieldsFound(currentFields);
   }, [playerToFindMatches, gameOver]);
 
