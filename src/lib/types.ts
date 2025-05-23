@@ -1,3 +1,4 @@
+import type { GuessSchemaType } from '@/lib/zod/guess';
 import { game, guess, player, schedule } from '@/server/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 
@@ -49,10 +50,43 @@ export type ComparisonResults = {
   active: Match;
 };
 
-export type PlayerToFindMatches = Omit<
-  Partial<Player>,
-  'id' | 'createdAt' | 'updatedAt' | 'difficulty'
+export type PlayerToFindMatches = GuessSchemaType['playerToFindMatches'];
+
+export type MatchKeys = keyof Pick<
+  Player,
+  | 'firstName'
+  | 'lastName'
+  | 'gender'
+  | 'country'
+  | 'dartsBrand'
+  | 'laterality'
+  | 'organisation'
+  | 'tourCard'
+  | 'playedInWCOD'
+  | 'playedInWDF'
+  | 'active'
 >;
+
+export type RangedMatchKeys = keyof Pick<
+  Player,
+  | 'nineDartersPDC'
+  | 'playingSince'
+  | 'prizeMoney'
+  | 'rankingPDC'
+  | 'rankingWDF'
+  | 'yearOfBestResultPDC'
+  | 'yearOfBestResultWDF'
+>;
+
+export type SpecialRangedMatchKeys = keyof Pick<
+  Player,
+  'bestResultPDC' | 'bestResultWDF' | 'dateOfBirth' | 'dartsWeight'
+>;
+
+export type PlayerToFindRangedMatch<T> = {
+  type: 'higher' | 'lower' | 'match';
+  value: T;
+};
 
 export type ExistingGame = {
   gameInProgress: true;
@@ -76,6 +110,7 @@ type CheckGuessSuccess = {
         type: 'correctGuess';
         playerToFind: Player;
         comparisonResults: ComparisonResults;
+        playerToFindMatches: PlayerToFindMatches;
       }
     | {
         type: 'incorrectGuess';

@@ -67,6 +67,7 @@ export const verification = pgTable('verification', {
 // Darts players
 
 export const genderEnum = pgEnum('gender', ['male', 'female']);
+export const genderEnumValues = genderEnum.enumValues;
 
 export const dartsBrandEnum = pgEnum('darts_brand', [
   'Target',
@@ -96,7 +97,9 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Performance Darts',
   'Ruthless',
   'Viper',
+  'Darts Unique',
 ]);
+export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
 export const dartsWeightEnum = pgEnum('darts_weight', [
   '10g',
@@ -146,13 +149,16 @@ export const dartsWeightEnum = pgEnum('darts_weight', [
   '39g',
   '40g',
 ]);
+export const dartsWeightEnumValues = dartsWeightEnum.enumValues;
 
 export const lateralityEnum = pgEnum('laterality', [
   'right-handed',
   'left-handed',
 ]);
+export const lateralityEnumValues = lateralityEnum.enumValues;
 
 export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
+export const organisationEnumValues = organisationEnum.enumValues;
 
 export const bestResultPDCEnum = pgEnum('best_pdc_result', [
   'Last 96',
@@ -172,6 +178,7 @@ export const bestResultPDCEnum = pgEnum('best_pdc_result', [
   'Runner-Up',
   'Winner',
 ]);
+export const bestResultPDCEnumValues = bestResultPDCEnum.enumValues;
 
 export const bestResultWDFEnum = pgEnum('best_wdf_result', [
   'Last 48', // since 2022
@@ -187,6 +194,7 @@ export const bestResultWDFEnum = pgEnum('best_wdf_result', [
   'Runner-Up',
   'Winner',
 ]);
+export const bestResultWDFEnumValues = bestResultWDFEnum.enumValues;
 
 export const difficultyEnum = pgEnum('difficulty', [
   'easy',
@@ -194,6 +202,7 @@ export const difficultyEnum = pgEnum('difficulty', [
   'hard',
   'very hard',
 ]);
+export const difficultyEnumValues = difficultyEnum.enumValues;
 
 export const player = pgTable(
   'player',
