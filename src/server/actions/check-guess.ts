@@ -6,6 +6,7 @@ import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   comparePlayers,
+  fillAllMatches,
   isScheduleIdValid,
   normaliseGuess,
 } from '@/lib/utils';
@@ -19,109 +20,96 @@ import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
-  .action(async ({ parsedInput: { guess, scheduleId } }) => {
-    const normalisedGuess = normaliseGuess(guess);
+  .action(
+    async ({ parsedInput: { guess, scheduleId, playerToFindMatches } }) => {
+      const normalisedGuess = normaliseGuess(guess);
 
-    if (scheduleId) {
-      // Make sure scheduleId is a positive integer
-      const isValid = isScheduleIdValid(scheduleId);
+      if (scheduleId) {
+        // Make sure scheduleId is a positive integer
+        const isValid = isScheduleIdValid(scheduleId);
 
-      if (!isValid) {
+        if (!isValid) {
+          const error: CheckGuessAction = {
+            type: 'error',
+            error: 'Invalid game.',
+          };
+          return error;
+        }
+      }
+
+      const validScheduleId = Number(scheduleId);
+
+      const players = await getPlayers();
+
+      // Get scheduled player
+      const scheduledPlayer = await getScheduledPlayer(
+        validScheduleId ? validScheduleId : undefined
+      );
+
+      if ('error' in scheduledPlayer) {
         const error: CheckGuessAction = {
           type: 'error',
-          error: 'Invalid game.',
+          error: scheduledPlayer.error,
         };
         return error;
       }
-    }
 
-    const validScheduleId = Number(scheduleId);
+      // Get game if it exists
+      const existingGame = await getGame(scheduledPlayer);
 
-    const players = await getPlayers();
+      const game: Game | GameWithGuesses = existingGame
+        ? existingGame
+        : await createGame(scheduledPlayer);
 
-    // Get scheduled player
-    const scheduledPlayer = await getScheduledPlayer(
-      validScheduleId ? validScheduleId : undefined
-    );
+      const { playerToFind } = scheduledPlayer;
 
-    if ('error' in scheduledPlayer) {
-      const error: CheckGuessAction = {
-        type: 'error',
-        error: scheduledPlayer.error,
-      };
-      return error;
-    }
-
-    // Get game if it exists
-    const existingGame = await getGame(scheduledPlayer);
-
-    const game: Game | GameWithGuesses = existingGame
-      ? existingGame
-      : await createGame(scheduledPlayer);
-
-    const { playerToFind } = scheduledPlayer;
-
-    const searchResults = players.filter((player) => {
-      const firstName = player.firstName.toLowerCase();
-      const lastName = player.lastName.toLowerCase();
-      if (normalisedGuess.length === 1) {
+      const searchResults = players.filter((player) => {
+        const firstName = player.firstName.toLowerCase();
+        const lastName = player.lastName.toLowerCase();
+        if (normalisedGuess.length === 1) {
+          return (
+            firstName.includes(normalisedGuess[0]) ||
+            lastName.includes(normalisedGuess[0])
+          );
+        }
         return (
-          firstName.includes(normalisedGuess[0]) ||
-          lastName.includes(normalisedGuess[0])
+          firstName.includes(normalisedGuess[0]) &&
+          lastName.includes(normalisedGuess[1])
         );
+      });
+
+      let guessedPlayer;
+
+      if (searchResults.length === 0) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: 'No darts player found. Try again.',
+        };
+        return error;
+      } else if (searchResults.length === 2) {
+        const playerNames = searchResults
+          .map((player) => {
+            return player.firstName + ' ' + player.lastName;
+          })
+          .join(' and ');
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
+        };
+        return error;
+      } else if (searchResults.length > 2) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error:
+            'Found more than two darts players. Please add more detail to your guess.',
+        };
+        return error;
+      } else {
+        guessedPlayer = searchResults[0];
       }
-      return (
-        firstName.includes(normalisedGuess[0]) &&
-        lastName.includes(normalisedGuess[1])
-      );
-    });
 
-    let guessedPlayer;
-
-    if (searchResults.length === 0) {
-      const error: CheckGuessAction = {
-        type: 'error',
-        error: 'No darts player found. Try again.',
-      };
-      return error;
-    } else if (searchResults.length === 2) {
-      const playerNames = searchResults
-        .map((player) => {
-          return player.firstName + ' ' + player.lastName;
-        })
-        .join(' and ');
-      const error: CheckGuessAction = {
-        type: 'error',
-        error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
-      };
-      return error;
-    } else if (searchResults.length > 2) {
-      const error: CheckGuessAction = {
-        type: 'error',
-        error:
-          'Found more than two darts players. Please add more detail to your guess.',
-      };
-      return error;
-    } else {
-      guessedPlayer = searchResults[0];
-    }
-
-    // Add guess to DB
-    const errorObject = await createGuess(game.id, guessedPlayer.id);
-
-    if (errorObject) {
-      const error: CheckGuessAction = {
-        type: 'error',
-        error: errorObject.error,
-      };
-      return error;
-    }
-
-    // Correct guess
-    const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
-
-    if (isGuessCorrect) {
-      const errorObject = await endGame('win', game);
+      // Add guess to DB
+      const errorObject = await createGuess(game.id, guessedPlayer.id);
 
       if (errorObject) {
         const error: CheckGuessAction = {
@@ -131,33 +119,52 @@ export const checkGuess = actionClient
         return error;
       }
 
+      // Correct guess
+      const isGuessCorrect = checkIfGuessCorrect(guessedPlayer, playerToFind);
+
+      if (isGuessCorrect) {
+        const errorObject = await endGame('win', game);
+
+        if (errorObject) {
+          const error: CheckGuessAction = {
+            type: 'error',
+            error: errorObject.error,
+          };
+          return error;
+        }
+
+        fillAllMatches(playerToFind, playerToFindMatches);
+
+        const data: CheckGuessAction = {
+          type: 'success',
+          success: {
+            type: 'correctGuess',
+            playerToFind,
+            comparisonResults: matchingComparisonResults,
+            playerToFindMatches,
+          },
+        };
+
+        return data;
+      }
+
+      // Incorrect guess
+      const { comparisonResults } = comparePlayers(
+        guessedPlayer,
+        playerToFind,
+        playerToFindMatches
+      );
+
       const data: CheckGuessAction = {
         type: 'success',
         success: {
-          type: 'correctGuess',
-          playerToFind,
-          comparisonResults: matchingComparisonResults,
+          type: 'incorrectGuess',
+          guessedPlayer,
+          comparisonResults,
+          playerToFindMatches,
         },
       };
 
       return data;
     }
-
-    // Incorrect guess
-    const { comparisonResults, playerToFindMatches } = comparePlayers(
-      guessedPlayer,
-      playerToFind
-    );
-
-    const data: CheckGuessAction = {
-      type: 'success',
-      success: {
-        type: 'incorrectGuess',
-        guessedPlayer,
-        comparisonResults,
-        playerToFindMatches,
-      },
-    };
-
-    return data;
-  });
+  );

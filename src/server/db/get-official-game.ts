@@ -81,15 +81,15 @@ export const getOfficialGame = async (scheduleId?: string) => {
   };
 
   existingGame.guesses.forEach((guess: GuessWithPlayer) => {
-    const { comparisonResults, playerToFindMatches } = comparePlayers(
+    const { comparisonResults } = comparePlayers(
       guess.player,
-      scheduledPlayer.playerToFind
+      scheduledPlayer.playerToFind,
+      gameDetails.playerToFindMatches
     );
     gameDetails.guesses.push({
       guessedPlayer: guess.player,
       comparisonResults,
     });
-    gameDetails.playerToFindMatches = playerToFindMatches;
   });
 
   return gameDetails;
