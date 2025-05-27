@@ -42,13 +42,13 @@ export const columns: ColumnDef<OfficialGames>[] = [
   },
   {
     accessorKey: 'gameInfo.fullName',
-    header: 'Player',
+    header: 'Darts Player',
     cell: ({ row, cell }) => {
       if (row.original.gameExists && row.original.gameInfo?.fullName) {
         const fullName = cell.getValue<GameInfo['fullName']>();
-        return <div>{fullName}</div>;
+        return fullName;
       } else {
-        return <div>???</div>;
+        return;
       }
     },
   },
@@ -57,7 +57,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
     header: 'Start',
     cell: ({ cell }) => {
       const startDate = cell.getValue<OfficialGames['startDate']>();
-      return <div>{format(startDate, 'dd/MM/y')}</div>;
+      return format(startDate, 'dd/MM/y');
     },
   },
   {
@@ -65,7 +65,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
     header: 'End',
     cell: ({ cell }) => {
       const endDate = cell.getValue<OfficialGames['endDate']>();
-      return <div>{format(endDate, 'dd/MM/y')}</div>;
+      return format(endDate, 'dd/MM/y');
     },
   },
   {

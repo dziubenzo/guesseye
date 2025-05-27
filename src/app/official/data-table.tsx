@@ -70,8 +70,17 @@ export default function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} className="h-14">
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                  {row.getVisibleCells().map((cell, index) => (
+                    <TableCell
+                      className={
+                        index === 1
+                          ? 'w-[200px]'
+                          : index === row.getVisibleCells().length - 1
+                            ? 'w-[100px]'
+                            : undefined
+                      }
+                      key={cell.id}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
