@@ -77,110 +77,66 @@ export function FieldValue(props: FieldValueProps) {
   }
 }
 
-type FieldValueBestResult =
-  | {
-      type: 'guess';
-      fieldNameBestResult: string;
-      fieldNameYearBestResult: string;
-      bestResult:
-        | Player['bestResultPDC']
-        | Player['bestResultWDF']
-        | 'N/A'
-        | '';
-      yearBestResult:
-        | Player['yearOfBestResultPDC']
-        | Player['yearOfBestResultWDF']
-        | 'N/A'
-        | '';
-      comparisonBestResult?: RangedMatch;
-      comparisonYearBestResult?: RangedMatch;
-    }
-  | {
-      type: 'playerToFind';
-      bestResult:
-        | Player['bestResultPDC']
-        | Player['bestResultWDF']
-        | 'N/A'
-        | '';
-      yearBestResult:
-        | Player['yearOfBestResultPDC']
-        | Player['yearOfBestResultWDF']
-        | 'N/A'
-        | '';
-    };
+type FieldValueBestResult = {
+  fieldNameBestResult: string;
+  fieldNameYearBestResult: string;
+  bestResult: Player['bestResultPDC'] | Player['bestResultWDF'];
+  yearBestResult: Player['yearOfBestResultPDC'] | Player['yearOfBestResultWDF'];
+  comparisonBestResult?: RangedMatch;
+  comparisonYearBestResult?: RangedMatch;
+};
 
 export function FieldValueBestResult(props: FieldValueBestResult) {
-  const { type, bestResult, yearBestResult } = props;
+  const {
+    bestResult,
+    yearBestResult,
+    fieldNameBestResult,
+    fieldNameYearBestResult,
+    comparisonBestResult,
+    comparisonYearBestResult,
+  } = props;
 
-  if (type === 'playerToFind') {
-    return (
-      <p
-        className={`${bestResult ? 'bg-good-guess' : 'bg-muted-foreground'} ${bestResult ? 'text-good-guess-foreground' : 'text-muted'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
-      >
-        {bestResult}
-        {yearBestResult && (
-          <span
-            className={`${yearBestResult ? 'bg-good-guess' : 'bg-muted-foreground'} ${yearBestResult ? 'text-good-guess-foreground' : 'text-muted'} text-center flex justify-center items-center gap-1 rounded-sm`}
-          >
-            {yearBestResult}
-          </span>
-        )}
-      </p>
-    );
+  function getRightResultColour() {
+    if (comparisonBestResult === undefined) {
+      return 'bg-muted-foreground text-muted';
+    } else if (comparisonBestResult === 'match') {
+      return 'bg-good-guess text-good-guess-foreground';
+    } else {
+      return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
+    }
   }
 
-  if (type === 'guess') {
-    const {
-      fieldNameBestResult,
-      fieldNameYearBestResult,
-      comparisonBestResult,
-      comparisonYearBestResult,
-    } = props;
-
-    function getRightResultColour() {
-      if (comparisonBestResult === undefined) {
-        return 'bg-muted-foreground text-muted';
-      } else if (comparisonBestResult === 'match') {
-        return 'bg-good-guess text-good-guess-foreground';
-      } else {
-        return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
-      }
+  function getRightYearColour() {
+    if (comparisonYearBestResult === undefined) {
+      return 'bg-muted-foreground text-muted';
+    } else if (comparisonYearBestResult === 'match') {
+      return 'bg-good-guess text-good-guess-foreground';
+    } else {
+      return 'bg-wrong-guess text-wrong-guess-foreground';
     }
+  }
 
-    function getRightYearColour() {
-      if (comparisonYearBestResult === undefined) {
-        return 'bg-muted-foreground text-muted';
-      } else if (comparisonYearBestResult === 'match') {
-        return 'bg-good-guess text-good-guess-foreground';
-      } else {
-        return 'bg-wrong-guess text-wrong-guess-foreground';
-      }
-    }
-
-    return (
-      <p
-        className={`${getRightResultColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+  return (
+    <p
+      className={`${getRightResultColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+    >
+      {bestResult}
+      {comparisonBestResult === 'higher' ? (
+        <Arrow type="higher">{fieldNameBestResult}</Arrow>
+      ) : comparisonBestResult === 'lower' ? (
+        <Arrow type="lower">{fieldNameBestResult}</Arrow>
+      ) : undefined}
+      <span
+        className={`${getRightYearColour()} text-center flex justify-center items-center gap-1 rounded-sm`}
       >
-        {bestResult}
-        {comparisonBestResult === 'higher' ? (
-          <Arrow type="higher">{fieldNameBestResult}</Arrow>
-        ) : comparisonBestResult === 'lower' ? (
-          <Arrow type="lower">{fieldNameBestResult}</Arrow>
+        ({yearBestResult}
+        {comparisonYearBestResult === 'higher' ? (
+          <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
+        ) : comparisonYearBestResult === 'lower' ? (
+          <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
         ) : undefined}
-        {yearBestResult && yearBestResult !== 'N/A' && (
-          <span
-            className={`${getRightYearColour()} text-center flex justify-center items-center gap-1 rounded-sm`}
-          >
-            ({yearBestResult}
-            {comparisonYearBestResult === 'higher' ? (
-              <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
-            ) : comparisonYearBestResult === 'lower' ? (
-              <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
-            ) : undefined}
-            )
-          </span>
-        )}
-      </p>
-    );
-  }
+        )
+      </span>
+    </p>
+  );
 }

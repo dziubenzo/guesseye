@@ -57,20 +57,21 @@ export default function PlayerCard(props: PlayerCardProps) {
 
   function formatPlayerToFindField<T>(
     field: PlayerToFindRangedMatch<T> | undefined,
-    type: 'normal' | 'age' | 'prizeMoney' = 'normal'
+    type?: 'age' | 'prizeMoney'
   ) {
     if (field === undefined) {
       return '';
+    }
+    if (field.value === null) {
+      return 'N/A';
     }
 
     if (type === 'age' && field.value) {
       return getAge(field.value as string);
     } else if (type === 'prizeMoney' && field.value) {
       return formatPrizeMoney(field.value as number);
-    } else if (type === 'normal' && field.value) {
-      return field.value as T;
     } else {
-      return 'N/A';
+      return field.value as T;
     }
   }
 
@@ -299,25 +300,35 @@ export default function PlayerCard(props: PlayerCardProps) {
                     the year is the latest one.
                   </Tooltip>
                 </FieldName>
-                <FieldValueBestResult
-                  type={'guess'}
-                  fieldNameBestResult={'Best PDC World Championship result'}
-                  fieldNameYearBestResult={
-                    'Year of best PDC World Championship result'
-                  }
-                  bestResult={
-                    formatPlayerToFindField<Player['bestResultPDC']>(
-                      player.bestResultPDC
-                    ) as 'N/A' | '' | Player['bestResultPDC']
-                  }
-                  yearBestResult={
-                    formatPlayerToFindField<Player['yearOfBestResultPDC']>(
-                      player.yearOfBestResultPDC
-                    ) as 'N/A' | '' | Player['yearOfBestResultPDC']
-                  }
-                  comparisonBestResult={player.bestResultPDC?.type}
-                  comparisonYearBestResult={player.yearOfBestResultPDC?.type}
-                />
+                {player.bestResultPDC?.value &&
+                player.yearOfBestResultPDC?.value ? (
+                  <FieldValueBestResult
+                    fieldNameBestResult={'Best PDC World Championship result'}
+                    fieldNameYearBestResult={
+                      'Year of best PDC World Championship result'
+                    }
+                    bestResult={player.bestResultPDC.value}
+                    yearBestResult={player.yearOfBestResultPDC.value}
+                    comparisonBestResult={player.bestResultPDC.type}
+                    comparisonYearBestResult={player.yearOfBestResultPDC.type}
+                  />
+                ) : player.bestResultPDC?.value === null ? (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best PDC World Championship result'}
+                    comparisonResult={player.bestResultPDC?.type}
+                  >
+                    N/A
+                  </FieldValue>
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best PDC World Championship result'}
+                    comparisonResult={player.bestResultPDC?.type}
+                  >
+                    {' '}
+                  </FieldValue>
+                )}
               </Field>
             </div>
             <Separator />
@@ -377,25 +388,35 @@ export default function PlayerCard(props: PlayerCardProps) {
                     the year is the latest one.
                   </Tooltip>
                 </FieldName>
-                <FieldValueBestResult
-                  type={'guess'}
-                  fieldNameBestResult={'Best BDO/WDF World Championship result'}
-                  fieldNameYearBestResult={
-                    'Year of best BDO/WDF World Championship result'
-                  }
-                  bestResult={
-                    formatPlayerToFindField<Player['bestResultWDF']>(
-                      player.bestResultWDF
-                    ) as 'N/A' | '' | Player['bestResultWDF']
-                  }
-                  yearBestResult={
-                    formatPlayerToFindField<Player['yearOfBestResultWDF']>(
-                      player.yearOfBestResultWDF
-                    ) as 'N/A' | '' | Player['yearOfBestResultWDF']
-                  }
-                  comparisonBestResult={player.bestResultWDF?.type}
-                  comparisonYearBestResult={player.yearOfBestResultWDF?.type}
-                />
+                {player.bestResultWDF?.value &&
+                player.yearOfBestResultWDF?.value ? (
+                  <FieldValueBestResult
+                    fieldNameBestResult={'Best PDC World Championship result'}
+                    fieldNameYearBestResult={
+                      'Year of best PDC World Championship result'
+                    }
+                    bestResult={player.bestResultWDF.value}
+                    yearBestResult={player.yearOfBestResultWDF.value}
+                    comparisonBestResult={player.bestResultWDF.type}
+                    comparisonYearBestResult={player.yearOfBestResultWDF.type}
+                  />
+                ) : player.bestResultWDF?.value === null ? (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best PDC World Championship result'}
+                    comparisonResult={player.bestResultWDF?.type}
+                  >
+                    N/A
+                  </FieldValue>
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best PDC World Championship result'}
+                    comparisonResult={player.bestResultWDF?.type}
+                  >
+                    {' '}
+                  </FieldValue>
+                )}
               </Field>
             </div>
           </div>
@@ -613,7 +634,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 {player.bestResultPDC && player.yearOfBestResultPDC ? (
                   <FieldValueBestResult
-                    type={'guess'}
                     fieldNameBestResult={'Best PDC World Championship result'}
                     fieldNameYearBestResult={
                       'Year of best PDC World Championship result'
@@ -693,7 +713,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 {player.bestResultWDF && player.yearOfBestResultWDF ? (
                   <FieldValueBestResult
-                    type={'guess'}
                     fieldNameBestResult={
                       'Best BDO/WDF World Championship result'
                     }
