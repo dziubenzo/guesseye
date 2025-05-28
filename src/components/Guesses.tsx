@@ -7,10 +7,11 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from '@/components/ui/carousel';
 import { useGameStore } from '@/lib/game-store';
 import type { ExistingGame } from '@/lib/types';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type GuessesProps = {
   existingGame?: ExistingGame;
@@ -18,6 +19,7 @@ type GuessesProps = {
 
 export default function Guesses({ existingGame }: GuessesProps) {
   const { guesses, setInitialGuesses, updateMatches } = useGameStore();
+  const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
     if (existingGame) {
@@ -28,6 +30,13 @@ export default function Guesses({ existingGame }: GuessesProps) {
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 
+  // Scroll to the latest guess when a guess has been made
+  useEffect(() => {
+    if (!api) return;
+
+    api.scrollTo(0);
+  }, [api, reversedGuesses]);
+
   return (
     <div className="flex flex-col items-center gap-4">
       <h1 className="text-2xl opacity-50 text-center">
@@ -37,7 +46,7 @@ export default function Guesses({ existingGame }: GuessesProps) {
             ? `(${guesses.length} player)`
             : `(${guesses.length} players)`)}
       </h1>
-      <Carousel className="max-w-4xl xl:max-w-5xl">
+      <Carousel className="max-w-4xl xl:max-w-5xl" setApi={setApi}>
         <CarouselContent>
           {reversedGuesses.map((guess) => (
             <CarouselItem
