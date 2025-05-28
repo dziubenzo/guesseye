@@ -21,9 +21,13 @@ export default async function OfficialGames() {
     <div className="flex flex-col grow-1 justify-center">
       <Card>
         <CardHeader>
-          <CardTitle>All Official Games</CardTitle>
+          <CardTitle className="text-2xl">Official Games</CardTitle>
           <CardDescription>
-            Here you can find all official games.
+            <p>Here you can find all official games.</p>{' '}
+            <p>
+              If you haven&apos;t played or finished some of the games, you can
+              either start playing or resume them.
+            </p>
           </CardDescription>
         </CardHeader>
         <CardContent>

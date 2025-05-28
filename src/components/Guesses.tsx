@@ -39,13 +39,14 @@ export default function Guesses({ existingGame }: GuessesProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h1 className="text-2xl opacity-50 text-center">
-        Previous Guesses{' '}
-        {guesses.length > 0 &&
-          (guesses.length === 1
+      {guesses.length > 0 && (
+        <h1 className="text-2xl opacity-50 text-center">
+          Previous Guesses{' '}
+          {guesses.length === 1
             ? `(${guesses.length} player)`
-            : `(${guesses.length} players)`)}
-      </h1>
+            : `(${guesses.length} players)`}
+        </h1>
+      )}
       <Carousel className="max-w-4xl xl:max-w-5xl" setApi={setApi}>
         <CarouselContent>
           {reversedGuesses.map((guess) => (

@@ -82,6 +82,36 @@ export const columns: ColumnDef<OfficialGames>[] = [
         </Button>
       );
     },
+    cell: ({ cell }) => {
+      const playerDifficulty =
+        cell.getValue<OfficialGames['playerDifficulty']>();
+
+      if (playerDifficulty === 'easy') {
+        return (
+          <Badge className="w-[80px] dark:text-black" variant={'default'}>
+            Easy
+          </Badge>
+        );
+      } else if (playerDifficulty === 'medium') {
+        return (
+          <Badge className="w-[80px] bg-amber-400 text-secondary-foreground dark:text-secondary">
+            Medium
+          </Badge>
+        );
+      } else if (playerDifficulty === 'hard') {
+        return (
+          <Badge className="w-[80px] bg-red-500 text-secondary dark:text-secondary">
+            Hard
+          </Badge>
+        );
+      } else {
+        return (
+          <Badge className="w-[80px] bg-gray-800 text-red-500 ">
+            Very Hard
+          </Badge>
+        );
+      }
+    },
     // Sort difficulty column by actual difficulty instead of alphabetically
     sortingFn: (rowA, rowB) => {
       const sortingMap = new Map<OfficialGames['playerDifficulty'], number>();
@@ -118,7 +148,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
 
       if (gameStatus === 'won') {
         return (
-          <Badge className="w-[80px]" variant={'default'}>
+          <Badge className="w-[80px] dark:text-black" variant={'default'}>
             Won
           </Badge>
         );

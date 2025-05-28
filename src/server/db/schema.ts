@@ -277,7 +277,6 @@ export const schedule = pgTable('schedule', {
   id: serial('id').primaryKey(),
   playerToFindId: integer('player_to_find_id')
     .notNull()
-    .unique()
     .references(() => player.id),
   startDate: timestamp('start_date', {
     precision: 0,
