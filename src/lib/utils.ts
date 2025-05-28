@@ -2,11 +2,14 @@ import type {
   BestResultColumnType,
   ComparisonResults,
   ErrorObject,
+  GameWithUserAndGuesses,
   Guess,
   MatchKeys,
+  OfficialGamesHistory,
   Player,
   PlayerToFindMatches,
   RangedMatchKeys,
+  Schedule,
   SpecialRangedMatchKeys,
 } from '@/lib/types';
 import type { GuessSchemaType } from '@/lib/zod/guess';
@@ -631,4 +634,103 @@ export function checkSearchResults(searchResults: Player[]) {
   }
 
   return searchResults[0];
+}
+
+export function findFirstWinner(
+  currentGame: GameWithUserAndGuesses,
+  scheduledPlayerHistory: OfficialGamesHistory,
+  scheduledPlayerStartDate: Schedule['startDate']
+) {
+  if (
+    !scheduledPlayerHistory.firstWinner &&
+    !scheduledPlayerHistory.firstWinnerTime
+  ) {
+    scheduledPlayerHistory.firstWinner = currentGame.user?.name
+      ? currentGame.user.name
+      : currentGame.guestName!;
+    scheduledPlayerHistory.firstWinnerTime = currentGame.endDate;
+    return;
+  }
+
+  const previousGameEndTime = scheduledPlayerHistory.firstWinnerTime!.getTime();
+  const currentGameEndTime = currentGame.endDate.getTime();
+  const scheduledPlayerStartTime = scheduledPlayerStartDate.getTime();
+
+  const previousDifference = Math.abs(
+    previousGameEndTime - scheduledPlayerStartTime
+  );
+  const currentDifference = Math.abs(
+    currentGameEndTime - scheduledPlayerStartTime
+  );
+
+  if (currentDifference > previousDifference) return;
+
+  scheduledPlayerHistory.firstWinner = currentGame.user?.name
+    ? currentGame.user.name
+    : currentGame.guestName!;
+  scheduledPlayerHistory.firstWinnerTime = currentGame.endDate;
+
+  return;
+}
+
+export function findFastestWinner(
+  currentGame: GameWithUserAndGuesses,
+  scheduledPlayerHistory: OfficialGamesHistory
+) {
+  const currentGameStartTime = currentGame.startDate.getTime();
+  const currentGameEndTime = currentGame.endDate.getTime();
+  const currentGameDuration = Math.abs(
+    currentGameEndTime - currentGameStartTime
+  );
+
+  if (
+    !scheduledPlayerHistory.fastestWinner &&
+    !scheduledPlayerHistory.fastestWinnerDuration
+  ) {
+    scheduledPlayerHistory.fastestWinner = currentGame.user?.name
+      ? currentGame.user.name
+      : currentGame.guestName!;
+    scheduledPlayerHistory.fastestWinnerDuration = currentGameDuration;
+    return;
+  }
+
+  const previousGameDuration = scheduledPlayerHistory.fastestWinnerDuration!;
+
+  if (currentGameDuration > previousGameDuration) return;
+
+  scheduledPlayerHistory.fastestWinner = currentGame.user?.name
+    ? currentGame.user.name
+    : currentGame.guestName!;
+  scheduledPlayerHistory.fastestWinnerDuration = currentGameDuration;
+
+  return;
+}
+
+export function findWinnerWithFewestGuesses(
+  currentGame: GameWithUserAndGuesses,
+  scheduledPlayerHistory: OfficialGamesHistory
+) {
+  const currentGameGuesses = currentGame.guesses.length;
+
+  if (
+    !scheduledPlayerHistory.winnerWithFewestGuesses &&
+    !scheduledPlayerHistory.winnerGuesses
+  ) {
+    scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name
+      ? currentGame.user.name
+      : currentGame.guestName!;
+    scheduledPlayerHistory.winnerGuesses = currentGameGuesses;
+    return;
+  }
+
+  const previousGameGuesses = scheduledPlayerHistory.winnerGuesses!;
+
+  if (currentGameGuesses > previousGameGuesses) return;
+
+  scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name
+    ? currentGame.user.name
+    : currentGame.guestName!;
+  scheduledPlayerHistory.winnerGuesses = currentGameGuesses;
+
+  return;
 }

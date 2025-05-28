@@ -293,12 +293,13 @@ export const schedule = pgTable('schedule', {
     ),
 });
 
-export const scheduleRelations = relations(schedule, ({ one }) => ({
+export const scheduleRelations = relations(schedule, ({ one, many }) => ({
   playerToFind: one(player, {
     relationName: 'player_to_find',
     fields: [schedule.playerToFindId],
     references: [player.id],
   }),
+  games: many(game),
 }));
 
 export const gameModeEnum = pgEnum('game_mode', ['official', 'random']);

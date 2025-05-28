@@ -1,5 +1,5 @@
 import type { GuessSchemaType } from '@/lib/zod/guess';
-import { game, guess, player, schedule } from '@/server/db/schema';
+import { game, guess, player, schedule, user } from '@/server/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 
 export type Player = InferSelectModel<typeof player>;
@@ -10,12 +10,19 @@ export type ScheduleWithPlayer = Schedule & { playerToFind: Player };
 
 export type Game = InferSelectModel<typeof game>;
 
+export type User = InferSelectModel<typeof user>;
+
 export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
 };
 
 export type GameWithGuesses = Game & {
   guesses: GuessWithPlayer[];
+};
+
+export type GameWithUserAndGuesses = Game & {
+  guesses: InferSelectModel<typeof guess>[];
+  user: User | null;
 };
 
 export type BestResultColumnType =
@@ -169,4 +176,17 @@ export type OfficialGames = {
 export type GameInfo = {
   fullName?: string;
   gameStatus?: 'won' | 'givenUp' | 'inProgress';
+};
+
+export type OfficialGamesHistory = Pick<
+  OfficialGames,
+  'scheduleId' | 'startDate' | 'endDate' | 'playerDifficulty'
+> & {
+  winners: number;
+  firstWinner?: string;
+  firstWinnerTime?: Game['endDate'];
+  fastestWinner?: string;
+  fastestWinnerDuration?: number;
+  winnerWithFewestGuesses?: string;
+  winnerGuesses?: number;
 };

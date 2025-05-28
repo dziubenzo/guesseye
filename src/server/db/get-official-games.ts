@@ -18,7 +18,7 @@ export const getOfficialGames = async () => {
   }
 
   // Get all previous scheduled players up to the current one
-  // Get all official games player by the user
+  // Get all official games played by the user
   const [scheduleRows, officialGames] = await Promise.all([
     db.query.schedule.findMany({
       where: lt(schedule.startDate, new Date()),
