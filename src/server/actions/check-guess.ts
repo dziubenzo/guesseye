@@ -5,8 +5,10 @@ import { actionClient } from '@/lib/safe-action-client';
 import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
 import {
   checkIfGuessCorrect,
+  checkSearchResults,
   comparePlayers,
   fillAllMatches,
+  filterPlayers,
   isScheduleIdValid,
   normaliseGuess,
 } from '@/lib/utils';
@@ -63,49 +65,16 @@ export const checkGuess = actionClient
 
       const { playerToFind } = scheduledPlayer;
 
-      const searchResults = players.filter((player) => {
-        const firstName = player.firstName.toLowerCase();
-        const lastName = player.lastName.toLowerCase();
-        if (normalisedGuess.length === 1) {
-          return (
-            firstName.includes(normalisedGuess[0]) ||
-            lastName.includes(normalisedGuess[0])
-          );
-        }
-        return (
-          firstName.includes(normalisedGuess[0]) &&
-          lastName.includes(normalisedGuess[1])
-        );
-      });
+      const searchResults = filterPlayers(players, normalisedGuess);
 
-      let guessedPlayer;
+      const guessedPlayer = checkSearchResults(searchResults);
 
-      if (searchResults.length === 0) {
+      if ('error' in guessedPlayer) {
         const error: CheckGuessAction = {
           type: 'error',
-          error: 'No darts player found. Try again.',
+          error: guessedPlayer.error,
         };
         return error;
-      } else if (searchResults.length === 2) {
-        const playerNames = searchResults
-          .map((player) => {
-            return player.firstName + ' ' + player.lastName;
-          })
-          .join(' and ');
-        const error: CheckGuessAction = {
-          type: 'error',
-          error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
-        };
-        return error;
-      } else if (searchResults.length > 2) {
-        const error: CheckGuessAction = {
-          type: 'error',
-          error:
-            'Found more than two darts players. Please add more detail to your guess.',
-        };
-        return error;
-      } else {
-        guessedPlayer = searchResults[0];
       }
 
       // Add guess to DB

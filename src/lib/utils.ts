@@ -1,6 +1,7 @@
 import type {
   BestResultColumnType,
   ComparisonResults,
+  ErrorObject,
   Guess,
   MatchKeys,
   Player,
@@ -541,13 +542,21 @@ export function checkForDuplicateGuess(
     const splitGuess = guess.toLowerCase().split(' ');
     const firstName = prevGuess.guessedPlayer.firstName.toLowerCase();
     const lastName = prevGuess.guessedPlayer.lastName.toLowerCase();
+    const lastWordIndex = splitGuess.length - 1;
+
     if (splitGuess.length === 1) {
       return (
         firstName.includes(splitGuess[0]) || lastName.includes(splitGuess[0])
       );
     }
+
     return (
-      firstName.includes(splitGuess[0]) && lastName.includes(splitGuess[1])
+      (firstName.includes(splitGuess[0]) &&
+        lastName.includes(splitGuess[lastWordIndex])) ||
+      (lastName.includes(splitGuess[0]) &&
+        firstName.includes(splitGuess[lastWordIndex])) ||
+      (lastName.includes(splitGuess[0]) &&
+        lastName.includes(splitGuess[lastWordIndex]))
     );
   });
 
@@ -570,4 +579,56 @@ export function isScheduleIdValid(scheduleId?: string) {
     Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
 
   return !isPositiveInteger ? false : true;
+}
+
+export function filterPlayers(players: Player[], guess: string[]): Player[] {
+  const searchResults = players.filter((player) => {
+    const firstName = player.firstName.toLowerCase();
+    const lastName = player.lastName.toLowerCase();
+    const lastWordIndex = guess.length - 1;
+
+    if (guess.length === 1) {
+      return firstName.includes(guess[0]) || lastName.includes(guess[0]);
+    }
+
+    // Also allow search by lastName followed by firstName as well as searches for players using only multi-word surname such as van Gerwen or Van den Bergh
+    return (
+      (firstName.includes(guess[0]) &&
+        lastName.includes(guess[lastWordIndex])) ||
+      (lastName.includes(guess[0]) &&
+        firstName.includes(guess[lastWordIndex])) ||
+      (lastName.includes(guess[0]) && lastName.includes(guess[lastWordIndex]))
+    );
+  });
+
+  return searchResults;
+}
+
+export function checkSearchResults(searchResults: Player[]) {
+  let error: ErrorObject;
+
+  if (searchResults.length === 0) {
+    error = {
+      error: 'No darts player found. Try again.',
+    };
+    return error;
+  } else if (searchResults.length === 2) {
+    const playerNames = searchResults
+      .map((player) => {
+        return player.firstName + ' ' + player.lastName;
+      })
+      .join(' and ');
+    error = {
+      error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
+    };
+    return error;
+  } else if (searchResults.length > 2) {
+    error = {
+      error:
+        'Found more than two darts players. Please add more detail to your guess.',
+    };
+    return error;
+  }
+
+  return searchResults[0];
 }
