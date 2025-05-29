@@ -180,7 +180,7 @@ export type GameInfo = {
 
 export type OfficialGamesHistory = Pick<
   OfficialGames,
-  'scheduleId' | 'startDate' | 'endDate' | 'playerDifficulty'
+  'startDate' | 'endDate' | 'playerDifficulty'
 > & {
   winners: number;
   firstWinner?: string;

@@ -53,22 +53,6 @@ export const columns: ColumnDef<OfficialGames>[] = [
     },
   },
   {
-    accessorKey: 'startDate',
-    header: 'Start',
-    cell: ({ cell }) => {
-      const startDate = cell.getValue<OfficialGames['startDate']>();
-      return format(startDate, 'dd/MM/y');
-    },
-  },
-  {
-    accessorKey: 'endDate',
-    header: 'End',
-    cell: ({ cell }) => {
-      const endDate = cell.getValue<OfficialGames['endDate']>();
-      return format(endDate, 'dd/MM/y');
-    },
-  },
-  {
     accessorKey: 'playerDifficulty',
     header: ({ column }) => {
       return (
@@ -130,6 +114,34 @@ export const columns: ColumnDef<OfficialGames>[] = [
       } else {
         return 0;
       }
+    },
+  },
+  {
+    accessorKey: 'startDate',
+    header: 'Start',
+    cell: ({ cell }) => {
+      const startDate = cell.getValue<OfficialGames['startDate']>();
+
+      return (
+        <div>
+          <p>{format(startDate, 'dd/MM/y')}</p>
+          <p className="text-xs">{format(startDate, 'HH:mm')}</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'endDate',
+    header: 'End',
+    cell: ({ cell }) => {
+      const endDate = cell.getValue<OfficialGames['endDate']>();
+
+      return (
+        <div>
+          <p>{format(endDate, 'dd/MM/y')}</p>
+          <p className="text-xs">{format(endDate, 'HH:mm')}</p>
+        </div>
+      );
     },
   },
   {

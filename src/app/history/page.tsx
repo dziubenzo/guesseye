@@ -1,4 +1,4 @@
-import { columns } from '@/app/official/columns';
+import { columns } from '@/app/history/columns';
 import DataTable from '@/app/official/data-table';
 import {
   Card,
@@ -7,13 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getOfficialGames } from '@/server/db/get-official-games';
+import { getOfficialGamesHistory } from '@/server/db/get-official-games-history';
 import { notFound } from 'next/navigation';
 
-export default async function OfficialGames() {
-  const officialGames = await getOfficialGames();
+export default async function History() {
+  const history = await getOfficialGamesHistory();
 
-  if ('error' in officialGames) {
+  if ('error' in history) {
     return notFound();
   }
 
@@ -21,20 +21,19 @@ export default async function OfficialGames() {
     <div className="flex flex-col grow-1 justify-center">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Official Games</CardTitle>
+          <CardTitle className="text-2xl">Official Games History</CardTitle>
           <CardDescription>
-            <p>Here you can find all official games.</p>
             <p>
-              If you haven&apos;t played or finished some of the games, you can
-              either start playing or resume them.
+              Here you can find winners of every official game by three
+              categories: first, fastest and fewest guesses.
             </p>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <DataTable
-            type="officialGames"
+            type={'officialGamesHistory'}
             columns={columns}
-            data={officialGames}
+            data={history}
           />
         </CardContent>
       </Card>

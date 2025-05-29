@@ -21,11 +21,13 @@ import {
 import { useState } from 'react';
 
 type DataTableProps<TData, TValue> = {
+  type: 'officialGames' | 'officialGamesHistory';
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 };
 
 export default function DataTable<TData, TValue>({
+  type,
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -70,23 +72,40 @@ export default function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} className="h-14">
-                  {row.getVisibleCells().map((cell, index) => (
-                    <TableCell
-                      className={
-                        index === 1
-                          ? 'w-[200px]'
-                          : index === row.getVisibleCells().length - 1
-                            ? 'w-[100px]'
-                            : undefined
-                      }
-                      key={cell.id}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell, index) => {
+                    if (type === 'officialGames') {
+                      return (
+                        <TableCell
+                          className={
+                            index === 1
+                              ? 'w-[200px]'
+                              : index === row.getVisibleCells().length - 1
+                                ? 'w-[100px]'
+                                : undefined
+                          }
+                          key={cell.id}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      );
+                    } else if (type === 'officialGamesHistory') {
+                      return (
+                        <TableCell
+                          // Winner columns
+                          className={index > 4 ? `w-[120px]` : undefined}
+                          key={cell.id}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      );
+                    }
+                  })}
                 </TableRow>
               ))
             ) : (
@@ -95,7 +114,7 @@ export default function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No previously scheduled darts players to display.
+                  No previous official games to display.
                 </TableCell>
               </TableRow>
             )}
