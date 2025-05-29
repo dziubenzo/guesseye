@@ -17,23 +17,20 @@ export const getOfficialGames = async () => {
     return error;
   }
 
-  // Get all previous scheduled players up to the current one
-  // Get all official games played by the user
-  const [scheduleRows, officialGames] = await Promise.all([
-    db.query.schedule.findMany({
-      where: lt(schedule.startDate, new Date()),
-      with: { playerToFind: true },
-      orderBy: desc(schedule.startDate),
-    }),
-    db.query.game.findMany({
-      where: and(
-        eq(game.userId, session?.user.id),
-        eq(game.gameMode, 'official')
-      ),
-      with: { scheduledPlayer: true, guesses: true },
-      orderBy: desc(schedule.id),
-    }),
-  ]);
+  // Get all previous scheduled players up to the current one together with all official games played by the user
+  const scheduleRows = await db.query.schedule.findMany({
+    where: lt(schedule.startDate, new Date()),
+    with: {
+      playerToFind: true,
+      games: {
+        where: and(
+          eq(game.userId, session.user.id),
+          eq(game.gameMode, 'official')
+        ),
+      },
+    },
+    orderBy: desc(schedule.startDate),
+  });
 
   // Return scheduled players enriched with game-specific information if there is a game associated with a scheduled player
   const data = scheduleRows.map((scheduledPlayer) => {
@@ -43,33 +40,35 @@ export const getOfficialGames = async () => {
       endDate: scheduledPlayer.endDate,
       playerDifficulty: scheduledPlayer.playerToFind.difficulty,
       gameExists: false,
+      gameInfo: {
+        fullName: undefined,
+        gameStatus: 'notPlayed',
+      },
     };
 
-    for (const game of officialGames) {
-      if (game.scheduledPlayerId === scheduledPlayer.id) {
-        result.gameExists = true;
+    if (scheduledPlayer.games.length === 1) {
+      const game = scheduledPlayer.games[0];
+      result.gameExists = true;
 
-        let fullName: string | undefined =
-          scheduledPlayer.playerToFind.firstName +
-          ' ' +
-          scheduledPlayer.playerToFind.lastName;
-        let gameStatus: GameInfo['gameStatus'];
+      let fullName: string | undefined =
+        scheduledPlayer.playerToFind.firstName +
+        ' ' +
+        scheduledPlayer.playerToFind.lastName;
+      let gameStatus: GameInfo['gameStatus'];
 
-        if (game.hasWon) {
-          gameStatus = 'won';
-        } else if (game.hasGivenUp) {
-          gameStatus = 'givenUp';
-        } else {
-          fullName = undefined;
-          gameStatus = 'inProgress';
-        }
-
-        result.gameInfo = {
-          fullName,
-          gameStatus,
-        };
-        break;
+      if (game.hasWon) {
+        gameStatus = 'won';
+      } else if (game.hasGivenUp) {
+        gameStatus = 'givenUp';
+      } else {
+        fullName = undefined;
+        gameStatus = 'inProgress';
       }
+
+      result.gameInfo = {
+        fullName,
+        gameStatus,
+      };
     }
 
     return result;

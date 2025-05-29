@@ -138,14 +138,6 @@ export const columns: ColumnDef<OfficialGames>[] = [
     cell: ({ cell }) => {
       const gameStatus = cell.getValue<GameInfo['gameStatus']>();
 
-      if (!gameStatus) {
-        return (
-          <Badge className="w-[80px] bg-indigo-300 text-secondary-foreground dark:text-secondary">
-            Not Played
-          </Badge>
-        );
-      }
-
       if (gameStatus === 'won') {
         return (
           <Badge className="w-[80px] dark:text-black" variant={'default'}>
@@ -162,6 +154,12 @@ export const columns: ColumnDef<OfficialGames>[] = [
         return (
           <Badge className="w-[80px] bg-amber-400 text-secondary-foreground dark:text-secondary">
             In Progress
+          </Badge>
+        );
+      } else {
+        return (
+          <Badge className="w-[80px] bg-indigo-300 text-secondary-foreground dark:text-secondary">
+            Not Played
           </Badge>
         );
       }

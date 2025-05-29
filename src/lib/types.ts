@@ -170,12 +170,12 @@ export type OfficialGames = {
   endDate: Schedule['endDate'];
   playerDifficulty: Player['difficulty'];
   gameExists: boolean;
-  gameInfo?: GameInfo;
+  gameInfo: GameInfo;
 };
 
 export type GameInfo = {
   fullName?: string;
-  gameStatus?: 'won' | 'givenUp' | 'inProgress';
+  gameStatus: 'won' | 'givenUp' | 'inProgress' | 'notPlayed';
 };
 
 export type OfficialGamesHistory = Pick<
