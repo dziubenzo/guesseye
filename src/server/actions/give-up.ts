@@ -1,7 +1,11 @@
 'use server';
 
 import { actionClient } from '@/lib/safe-action-client';
-import type { Game, GameWithGuesses, GiveUpAction } from '@/lib/types';
+import type {
+  Game,
+  GameWithGuessesWithPlayer,
+  GiveUpAction,
+} from '@/lib/types';
 import { isScheduleIdValid } from '@/lib/utils';
 import { giveUpSchema } from '@/lib/zod/give-up';
 import { createGame } from '@/server/db/create-game';
@@ -40,7 +44,7 @@ export const giveUp = actionClient
     // Get game if it exists
     const existingGame = await getGame(scheduledPlayer);
 
-    const game: Game | GameWithGuesses = existingGame
+    const game: Game | GameWithGuessesWithPlayer = existingGame
       ? existingGame
       : await createGame(scheduledPlayer);
 

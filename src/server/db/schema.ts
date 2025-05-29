@@ -24,6 +24,10 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at').notNull(),
 });
 
+export const userRelations = relations(user, ({ many }) => ({
+  games: many(game),
+}));
+
 export const session = pgTable('session', {
   id: text('id').primaryKey(),
   expiresAt: timestamp('expires_at').notNull(),

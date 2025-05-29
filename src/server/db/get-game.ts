@@ -1,8 +1,8 @@
 'use server';
 
 import type {
-  GameWithGuesses,
-  ScheduleWithPlayer
+  GameWithGuessesWithPlayer,
+  ScheduleWithPlayer,
 } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game } from '@/server/db/schema';
@@ -12,7 +12,7 @@ import { and, eq } from 'drizzle-orm';
 export const getGame = async (scheduledPlayer: ScheduleWithPlayer) => {
   const { session, clientIP, clientUserAgent } = await getUserOrGuest();
 
-  const existingGame: GameWithGuesses | undefined =
+  const existingGame: GameWithGuessesWithPlayer | undefined =
     await db.query.game.findFirst({
       where: session
         ? and(

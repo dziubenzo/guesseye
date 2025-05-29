@@ -2,8 +2,10 @@ import type {
   BestResultColumnType,
   ComparisonResults,
   ErrorObject,
-  GameWithUserAndGuesses,
+  GameWithGuesses,
+  GameWithGuessesAndUser,
   Guess,
+  Leaderboard,
   MatchKeys,
   OfficialGamesHistory,
   Player,
@@ -637,7 +639,7 @@ export function checkSearchResults(searchResults: Player[]) {
 }
 
 export function findFirstWinner(
-  currentGame: GameWithUserAndGuesses,
+  currentGame: GameWithGuessesAndUser,
   scheduledPlayerHistory: OfficialGamesHistory,
   scheduledPlayerStartDate: Schedule['startDate']
 ) {
@@ -674,7 +676,7 @@ export function findFirstWinner(
 }
 
 export function findFastestWinner(
-  currentGame: GameWithUserAndGuesses,
+  currentGame: GameWithGuessesAndUser,
   scheduledPlayerHistory: OfficialGamesHistory
 ) {
   const currentGameStartTime = currentGame.startDate.getTime();
@@ -707,7 +709,7 @@ export function findFastestWinner(
 }
 
 export function findWinnerWithFewestGuesses(
-  currentGame: GameWithUserAndGuesses,
+  currentGame: GameWithGuessesAndUser,
   scheduledPlayerHistory: OfficialGamesHistory
 ) {
   const currentGameGuesses = currentGame.guesses.length;
@@ -733,4 +735,88 @@ export function findWinnerWithFewestGuesses(
   scheduledPlayerHistory.winnerGuesses = currentGameGuesses;
 
   return;
+}
+
+export function countGames(
+  currentGame: GameWithGuesses,
+  currentUser: Leaderboard
+) {
+  if (!currentGame.hasWon && !currentGame.hasGivenUp) {
+    currentUser.gamesInProgress++;
+  } else if (currentGame.hasWon && currentGame.gameMode === 'official') {
+    currentUser.officialModeWins++;
+  } else if (currentGame.hasGivenUp && currentGame.gameMode === 'official') {
+    currentUser.officialModeGiveUps++;
+  } else if (currentGame.hasWon && currentGame.gameMode === 'random') {
+    currentUser.randomModeWins++;
+  } else if (currentGame.hasGivenUp && currentGame.gameMode === 'random') {
+    currentUser.randomModeGiveUps++;
+  }
+}
+
+export function findFastestWin(
+  currentGame: GameWithGuesses,
+  currentUser: Leaderboard
+) {
+  const currentGameStartTime = currentGame.startDate.getTime();
+  const currentGameEndTime = currentGame.endDate.getTime();
+  const currentGameDuration = Math.abs(
+    currentGameEndTime - currentGameStartTime
+  );
+
+  if (!currentUser.fastestWin) {
+    currentUser.fastestWin = currentGameDuration;
+    return;
+  }
+
+  const previousGameDuration = currentUser.fastestWin;
+
+  if (currentGameDuration > previousGameDuration) return;
+
+  currentUser.fastestWin = currentGameDuration;
+
+  return;
+}
+
+export function findWinWithFewestGuesses(
+  currentGame: GameWithGuesses,
+  currentUser: Leaderboard
+) {
+  const currentGameGuesses = currentGame.guesses.length;
+
+  if (!currentUser.fewestGuesses) {
+    currentUser.fewestGuesses = currentGameGuesses;
+    return;
+  }
+
+  const previousGameGuesses = currentUser.fewestGuesses;
+
+  if (currentGameGuesses > previousGameGuesses) return;
+
+  currentUser.fewestGuesses = currentGameGuesses;
+
+  return;
+}
+
+// Order the leaderboard by official game wins, random mode wins, official mode giveups and, finally, random mode giveups
+export function sortByWinsAndGiveUps(userA: Leaderboard, userB: Leaderboard) {
+  if (userA.officialModeWins > userB.officialModeWins) {
+    return -1;
+  } else if (userA.officialModeWins < userB.officialModeWins) {
+    return 1;
+  } else if (userA.randomModeWins > userB.randomModeWins) {
+    return -1;
+  } else if (userA.randomModeWins < userB.randomModeWins) {
+    return 1;
+  } else if (userA.officialModeGiveUps < userB.officialModeGiveUps) {
+    return -1;
+  } else if (userA.officialModeGiveUps > userB.officialModeGiveUps) {
+    return 1;
+  } else if (userA.randomModeGiveUps < userB.randomModeGiveUps) {
+    return -1;
+  } else if (userA.randomModeGiveUps > userB.randomModeGiveUps) {
+    return 1;
+  }
+
+  return 0;
 }

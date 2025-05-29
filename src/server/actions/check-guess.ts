@@ -2,7 +2,11 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type { CheckGuessAction, Game, GameWithGuesses } from '@/lib/types';
+import type {
+  CheckGuessAction,
+  Game,
+  GameWithGuessesWithPlayer,
+} from '@/lib/types';
 import {
   checkIfGuessCorrect,
   checkSearchResults,
@@ -59,7 +63,7 @@ export const checkGuess = actionClient
       // Get game if it exists
       const existingGame = await getGame(scheduledPlayer);
 
-      const game: Game | GameWithGuesses = existingGame
+      const game: Game | GameWithGuessesWithPlayer = existingGame
         ? existingGame
         : await createGame(scheduledPlayer);
 

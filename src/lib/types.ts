@@ -17,10 +17,14 @@ export type GuessWithPlayer = InferSelectModel<typeof guess> & {
 };
 
 export type GameWithGuesses = Game & {
+  guesses: InferSelectModel<typeof guess>[];
+};
+
+export type GameWithGuessesWithPlayer = Game & {
   guesses: GuessWithPlayer[];
 };
 
-export type GameWithUserAndGuesses = Game & {
+export type GameWithGuessesAndUser = Game & {
   guesses: InferSelectModel<typeof guess>[];
   user: User | null;
 };
@@ -189,4 +193,15 @@ export type OfficialGamesHistory = Pick<
   fastestWinnerDuration?: number;
   winnerWithFewestGuesses?: string;
   winnerGuesses?: number;
+};
+
+export type Leaderboard = {
+  username: string;
+  officialModeWins: number;
+  officialModeGiveUps: number;
+  randomModeWins: number;
+  randomModeGiveUps: number;
+  gamesInProgress: number;
+  fastestWin?: number;
+  fewestGuesses?: number;
 };
