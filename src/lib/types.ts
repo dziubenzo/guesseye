@@ -197,6 +197,7 @@ export type OfficialGamesHistory = Pick<
 
 export type Leaderboard = {
   username: string;
+  isCurrentUser: boolean;
   officialModeWins: number;
   officialModeGiveUps: number;
   randomModeWins: number;

@@ -179,7 +179,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       return (
         <div>
           <p>Winner</p>
-          <p>(First)</p>
+          <p className="text-xs">(First)</p>
         </div>
       );
     },
@@ -205,7 +205,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       return (
         <div>
           <p>Winner</p>
-          <p>(Fastest)</p>
+          <p className="text-xs">(Fastest)</p>
         </div>
       );
     },
@@ -217,7 +217,6 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       if (!fastestWinner || !fastestWinnerDuration) return;
 
       const minutes = millisecondsToMinutes(fastestWinnerDuration);
-
       const seconds = millisecondsToSeconds(fastestWinnerDuration) % 60;
 
       return (
@@ -240,7 +239,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       return (
         <div>
           <p>Winner</p>
-          <p>(Fewest Guesses)</p>
+          <p className="text-xs">(Fewest Guesses)</p>
         </div>
       );
     },

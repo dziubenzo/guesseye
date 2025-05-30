@@ -23,7 +23,7 @@ export const getLeaderboard = async () => {
 
   // Get all users with their games and guesses
   const users = await db.query.user.findMany({
-    columns: { name: true },
+    columns: { id: true, name: true },
     with: {
       games: {
         with: { guesses: true },
@@ -35,6 +35,7 @@ export const getLeaderboard = async () => {
     .map((user) => {
       const leaderboardUser: Leaderboard = {
         username: user.name,
+        isCurrentUser: user.id === session.user.id ? true : false,
         officialModeWins: 0,
         officialModeGiveUps: 0,
         randomModeWins: 0,

@@ -21,7 +21,7 @@ import {
 import { useState } from 'react';
 
 type DataTableProps<TData, TValue> = {
-  type: 'officialGames' | 'officialGamesHistory';
+  type: 'officialGames' | 'officialGamesHistory' | 'leaderboard';
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 };
@@ -95,9 +95,18 @@ export default function DataTable<TData, TValue>({
                       return (
                         <TableCell
                           // Winner columns
-                          className={index > 4 ? `w-[120px]` : undefined}
+                          className={index > 4 ? `w-[130px]` : undefined}
                           key={cell.id}
                         >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      );
+                    } else {
+                      return (
+                        <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext()
