@@ -19,9 +19,9 @@ export const useUpdateProgressBar = () => {
 
       for (const pair of array) {
         const value = pair[1];
-        
+
         if (
-          (typeof value !== 'object' && value) ||
+          (typeof value !== 'object' && value !== undefined) ||
           (typeof value === 'object' && value?.type === 'match')
         ) {
           count++;

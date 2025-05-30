@@ -241,7 +241,7 @@ export function comparePlayers(
 
   function compareRangedMatch(key: RangedMatchKeys) {
     if (
-      (!guessedPlayer[key] && !playerToFind[key]) ||
+      (guessedPlayer[key] === null && playerToFind[key] === null) ||
       guessedPlayer[key] === playerToFind[key]
     ) {
       comparisonResults[key] = 'match';
@@ -264,7 +264,7 @@ export function comparePlayers(
           };
           break;
       }
-    } else if (!guessedPlayer[key] || !playerToFind[key]) {
+    } else if (guessedPlayer[key] === null || playerToFind[key] === null) {
       comparisonResults[key] = 'noMatch';
     } else if (guessedPlayer[key] > playerToFind[key]) {
       comparisonResults[key] = 'lower';
@@ -279,7 +279,7 @@ export function comparePlayers(
     key: RangedMatchKeys,
     newType: 'higher' | 'lower'
   ) {
-    if (!guessedPlayer[key] || !playerToFind[key]) return;
+    if (guessedPlayer[key] === null || playerToFind[key] === null) return;
 
     if (currentMatches[key]?.type !== 'match') {
       const newClosest = findClosest(
@@ -297,7 +297,7 @@ export function comparePlayers(
 
   function compareSpecialRangedMatch(key: SpecialRangedMatchKeys) {
     if (
-      (!guessedPlayer[key] && !playerToFind[key]) ||
+      (guessedPlayer[key] === null && playerToFind[key] === null) ||
       guessedPlayer[key] === playerToFind[key]
     ) {
       comparisonResults[key] = 'match';
@@ -327,7 +327,7 @@ export function comparePlayers(
           };
           break;
       }
-    } else if (!guessedPlayer[key] || !playerToFind[key]) {
+    } else if (guessedPlayer[key] === null || playerToFind[key] === null) {
       comparisonResults[key] = 'noMatch';
     }
 
