@@ -16,12 +16,20 @@ export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
 };
 
+export type GuessWithPlayerName = InferSelectModel<typeof guess> & {
+  player: Pick<Player, 'firstName' | 'lastName'>;
+};
+
 export type GameWithGuesses = Game & {
   guesses: InferSelectModel<typeof guess>[];
 };
 
 export type GameWithGuessesWithPlayer = Game & {
   guesses: GuessWithPlayer[];
+};
+
+export type GameWithGuessesWithPlayerName = Game & {
+  guesses: GuessWithPlayerName[];
 };
 
 export type GameWithGuessesAndUser = Game & {
@@ -205,4 +213,46 @@ export type Leaderboard = {
   gamesInProgress: number;
   fastestWin?: number;
   fewestGuesses?: number;
+};
+
+export type UserStats = {
+  username: string;
+  guesses: {
+    fewestGuesses?: number;
+    mostGuesses?: number;
+    avgGuesses?: number;
+    avgGuessesToWin?: number;
+    avgGuessesToGiveUp?: number;
+    totalGuesses: number;
+  };
+  games: {
+    officialGamesPlayed: number;
+    officialGamesPlayedPercentage: number;
+    officialGamesCompleted: number;
+    officialGamesCompletedPercentage: number;
+    officialModeWins: number;
+    officialModeWinsPercentage: number;
+    officialModeGiveUps: number;
+    officialModeGiveUpsPercentage: number;
+    randomGamesPlayed: number;
+    randomModeWins: number;
+    randomModeWinsPercentage: number;
+    randomModeGiveUps: number;
+    randomModeGiveUpsPercentage: number;
+    duration: {
+      totalDuration?: number;
+      shortestGameDuration?: number;
+      avgGameDuration?: number;
+      longestGameDuration?: number;
+    };
+  };
+  players: {
+    firstOfficialGuess?: string;
+    latestOfficialGuess?: string;
+    firstOfficialWin?: string;
+    latestOfficialWin?: string;
+  };
+
+  guessFrequency: { fullName: string; count: number }[];
+  gamesByDay: { date: string; count: number }[];
 };

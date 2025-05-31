@@ -53,7 +53,10 @@ export const getLeaderboard = async () => {
             return;
           }
 
-          findFastestWin(game, leaderboardUser);
+          leaderboardUser.fastestWin = findFastestWin(
+            game,
+            leaderboardUser.fastestWin
+          );
           findWinWithFewestGuesses(game, leaderboardUser);
         });
       }
