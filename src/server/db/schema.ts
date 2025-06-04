@@ -105,6 +105,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Laserdarts',
   'Monster',
   'MasterDarts',
+  'Perfect Nine'
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
