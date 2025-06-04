@@ -6,6 +6,7 @@ import {
   countGamesByDay,
   countGamesForStats,
   countGuessedPlayers,
+  countGuessesByDay,
   findFastestWin,
   findFewestAndMostGuesses,
   findFirstAndLatestOfficialGuess,
@@ -14,6 +15,7 @@ import {
   findSlowestWin,
   roundToNthDecimalPlace,
   transformGamesByDay,
+  transformGuessesByDay,
   transformGuessFrequency,
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
@@ -106,12 +108,14 @@ export const getStats = async () => {
     },
     guessFrequency: [],
     gamesByDay: [],
+    guessesByDay: [],
   };
 
   if (userData.games.length === 0) return stats;
 
   const guessFrequency: Record<string, number> = {};
   const gamesByDay: Record<string, number> = {};
+  const guessesByDay: Record<string, number> = {};
 
   // Calculate stats based on every game and guess
   userData.games.forEach((game) => {
@@ -138,6 +142,7 @@ export const getStats = async () => {
       game.guesses.forEach((guess) => {
         findFirstAndLatestOfficialGuess(game, guess, stats);
         countGuessedPlayers(guess, guessFrequency);
+        countGuessesByDay(guess, guessesByDay);
       });
     }
   });
@@ -209,6 +214,7 @@ export const getStats = async () => {
 
   stats.guessFrequency = transformGuessFrequency(guessFrequency, 90);
   stats.gamesByDay = transformGamesByDay(gamesByDay, 90);
+  stats.guessesByDay = transformGuessesByDay(guessesByDay, 90);
 
   return stats;
 };

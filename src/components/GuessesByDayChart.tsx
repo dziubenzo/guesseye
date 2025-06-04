@@ -7,22 +7,21 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import type { UserStats } from '@/lib/types';
+import { format } from 'date-fns';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 const chartConfig = {
   count: {
     label: 'Guesses',
-    color: 'var(--chart-2)',
+    color: 'var(--chart-3)',
   },
 } satisfies ChartConfig;
 
-type GuessFrequencyChartProps = {
-  data: UserStats['guessFrequency'];
+type GuessesByDayChartProps = {
+  data: UserStats['guessesByDay'];
 };
 
-export default function GuessFrequencyChart({
-  data,
-}: GuessFrequencyChartProps) {
+export default function GuessesByDayChart({ data }: GuessesByDayChartProps) {
   if (data.length === 0) {
     return (
       <div className="text-center">
@@ -37,19 +36,27 @@ export default function GuessFrequencyChart({
       <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="fullName"
-          hide
+          dataKey="date"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
           minTickGap={32}
           tickFormatter={(value) => {
-            const array = value.split(' ');
-            const lastName = array[array.length - 1];
-            return lastName;
+            const date = new Date(value);
+            return date.toLocaleDateString('en-GB', {
+              month: 'short',
+              day: 'numeric',
+            });
           }}
         />
-        <ChartTooltip content={<ChartTooltipContent hideIndicator={true} />} />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              labelFormatter={(value) => format(value, 'dd MMMM y')}
+              hideIndicator={true}
+            />
+          }
+        />
         <Bar dataKey="count" fill="var(--color-count)" radius={4}>
           <LabelList
             position="top"

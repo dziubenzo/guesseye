@@ -970,6 +970,23 @@ export function countGuessedPlayers(
   return;
 }
 
+export function countGuessesByDay(
+  guess: GuessWithPlayerName,
+  guessesByDay: Record<string, number>
+) {
+  if (!guessesByDay) return;
+
+  const day = guess.date.toISOString().split('T')[0];
+
+  if (guessesByDay[day] === undefined) {
+    guessesByDay[day] = 1;
+  } else {
+    guessesByDay[day]++;
+  }
+
+  return;
+}
+
 export function countGamesByDay(
   game: GameWithGuessesWithPlayerName,
   gamesByDay: Record<string, number>
@@ -1012,6 +1029,21 @@ export function transformGamesByDay(
 
   for (const key in gamesByDay) {
     array.push({ date: key, count: gamesByDay[key] });
+  }
+
+  return array
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(-limit);
+}
+
+export function transformGuessesByDay(
+  guessesByDay: Record<string, number>,
+  limit: number
+): UserStats['guessesByDay'] {
+  const array: UserStats['guessesByDay'] = [];
+
+  for (const key in guessesByDay) {
+    array.push({ date: key, count: guessesByDay[key] });
   }
 
   return array

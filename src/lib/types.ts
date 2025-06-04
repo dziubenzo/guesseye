@@ -252,4 +252,5 @@ export type UserStats = {
   };
   guessFrequency: { fullName: string; count: number }[];
   gamesByDay: { date: string; count: number }[];
+  guessesByDay: { date: string; count: number }[];
 };

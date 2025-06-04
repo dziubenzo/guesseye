@@ -105,7 +105,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Laserdarts',
   'Monster',
   'MasterDarts',
-  'Perfect Nine'
+  'Perfect Nine',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -363,6 +363,7 @@ export const guess = pgTable('guess', {
   playerId: integer('player_id')
     .notNull()
     .references(() => player.id),
+  date: timestamp('date', { mode: 'date' }).notNull().defaultNow(),
 });
 
 export const guessRelations = relations(guess, ({ one }) => ({

@@ -1,11 +1,12 @@
 import GamesByDayChart from '@/components/GamesByDayChart';
+import GuessFrequencyChart from '@/components/GuessFrequencyChart';
+import GuessesByDayChart from '@/components/GuessesByDayChart';
 import Stat from '@/components/Stat';
 import Tooltip from '@/components/Tooltip';
 import { Separator } from '@/components/ui/separator';
 import { formatGameDuration } from '@/lib/utils';
 import { getStats } from '@/server/db/get-stats';
 import { notFound } from 'next/navigation';
-import GuessFrequencyChart from './GuessFrequencyChart';
 
 export default async function UserStats() {
   const stats = await getStats();
@@ -53,18 +54,6 @@ export default async function UserStats() {
       <div className="flex flex-col gap-4 md:gap-8">
         <div className="flex justify-center mt-4 md:mt-8">
           <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Games By Day
-          </h1>
-          <div>
-            <Tooltip>
-              Games won/given up by day in any mode (last 90 days).
-            </Tooltip>
-          </div>
-        </div>
-        <GamesByDayChart data={stats.gamesByDay} />
-        <Separator />
-        <div className="flex justify-center">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
             Most Frequent Guesses
           </h1>
           <div>
@@ -75,6 +64,18 @@ export default async function UserStats() {
           </div>
         </div>
         <GuessFrequencyChart data={stats.guessFrequency} />
+        <Separator />
+        <div className="flex justify-center">
+          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
+            Guesses By Day
+          </h1>
+          <div>
+            <Tooltip>
+              Your guesses in a game in any mode by day (last 90 days).
+            </Tooltip>
+          </div>
+        </div>
+        <GuessesByDayChart data={stats.guessesByDay} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Guesses
@@ -91,7 +92,7 @@ export default async function UserStats() {
           </Stat>
           <Stat title="Avg. Guesses" value={avgGuesses}>
             The average number of guesses you made in any game (won/given up/in
-            progress) and in any mode.
+            progress) in any mode.
           </Stat>
           <Stat title="Avg. Guesses To Win" value={avgGuessesToWin}>
             The average number of guesses it takes you to win a game in any
@@ -102,6 +103,18 @@ export default async function UserStats() {
             any mode.
           </Stat>
         </div>
+        <Separator />
+        <div className="flex justify-center">
+          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
+            Games By Day
+          </h1>
+          <div>
+            <Tooltip>
+              Games won/given up in any mode by day (last 90 days).
+            </Tooltip>
+          </div>
+        </div>
+        <GamesByDayChart data={stats.gamesByDay} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Games - Official Mode
