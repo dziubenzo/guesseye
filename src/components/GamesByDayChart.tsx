@@ -3,6 +3,8 @@
 import {
   type ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
@@ -14,6 +16,14 @@ const chartConfig = {
   count: {
     label: 'Games',
     color: 'var(--chart-1)',
+  },
+  won: {
+    label: 'Won',
+    color: 'var(--good-guess)',
+  },
+  givenUp: {
+    label: 'Given Up',
+    color: 'var(--wrong-guess)',
   },
 } satisfies ChartConfig;
 
@@ -53,12 +63,21 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
           content={
             <ChartTooltipContent
               labelFormatter={(value) => format(value, 'dd MMMM y')}
-              hideIndicator={true}
             />
           }
         />
-        <Bar dataKey="count" fill="var(--color-count)" radius={4}>
+        <ChartLegend content={<ChartLegendContent />} />
+        <Bar dataKey="givenUp" stackId="a" fill="var(--color-givenUp)">
           <LabelList
+            dataKey="count"
+            position="top"
+            offset={12}
+            className="fill-foreground text-xs md:text-lg"
+          />
+        </Bar>
+        <Bar dataKey="won" stackId="a" fill="var(--color-won)">
+          <LabelList
+            dataKey="count"
             position="top"
             offset={12}
             className="fill-foreground text-xs md:text-lg"

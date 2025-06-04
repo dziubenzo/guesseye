@@ -216,7 +216,6 @@ export type Leaderboard = {
 };
 
 export type UserStats = {
-  username: string;
   guesses: {
     fewestGuesses?: number;
     mostGuesses?: number;
@@ -251,6 +250,15 @@ export type UserStats = {
     latestOfficialWin?: string;
   };
   guessFrequency: { fullName: string; count: number }[];
-  gamesByDay: { date: string; count: number }[];
+  gamesByDay: { date: string; count: number; won: number; givenUp: number }[];
   guessesByDay: { date: string; count: number }[];
 };
+
+export type GamesByDayObject = Record<
+  string,
+  {
+    count: number;
+    won: number;
+    givenUp: number;
+  }
+>;

@@ -363,7 +363,7 @@ export const guess = pgTable('guess', {
   playerId: integer('player_id')
     .notNull()
     .references(() => player.id),
-  date: timestamp('date', { mode: 'date' }).notNull().defaultNow(),
+  time: timestamp('time', { mode: 'date' }).notNull().defaultNow(),
 });
 
 export const guessRelations = relations(guess, ({ one }) => ({

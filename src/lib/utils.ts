@@ -2,6 +2,7 @@ import type {
   BestResultColumnType,
   ComparisonResults,
   ErrorObject,
+  GamesByDayObject,
   GameWithGuesses,
   GameWithGuessesAndUser,
   GameWithGuessesWithPlayerName,
@@ -976,7 +977,7 @@ export function countGuessesByDay(
 ) {
   if (!guessesByDay) return;
 
-  const day = guess.date.toISOString().split('T')[0];
+  const day = guess.time.toISOString().split('T')[0];
 
   if (guessesByDay[day] === undefined) {
     guessesByDay[day] = 1;
@@ -989,16 +990,28 @@ export function countGuessesByDay(
 
 export function countGamesByDay(
   game: GameWithGuessesWithPlayerName,
-  gamesByDay: Record<string, number>
+  gamesByDay: GamesByDayObject
 ) {
   if (!gamesByDay) return;
 
   const day = game.endDate.toISOString().split('T')[0];
 
   if (gamesByDay[day] === undefined) {
-    gamesByDay[day] = 1;
+    gamesByDay[day] = {
+      count: 1,
+      won: 0,
+      givenUp: 0,
+    };
   } else {
-    gamesByDay[day]++;
+    gamesByDay[day].count++;
+  }
+
+  if (game.hasWon) {
+    gamesByDay[day].won++;
+  }
+
+  if (game.hasGivenUp) {
+    gamesByDay[day].givenUp++;
   }
 
   return;
@@ -1022,13 +1035,18 @@ export function transformGuessFrequency(
 }
 
 export function transformGamesByDay(
-  gamesByDay: Record<string, number>,
+  gamesByDay: GamesByDayObject,
   limit: number
 ): UserStats['gamesByDay'] {
   const array: UserStats['gamesByDay'] = [];
 
   for (const key in gamesByDay) {
-    array.push({ date: key, count: gamesByDay[key] });
+    array.push({
+      date: key,
+      count: gamesByDay[key].count,
+      won: gamesByDay[key].won,
+      givenUp: gamesByDay[key].givenUp,
+    });
   }
 
   return array

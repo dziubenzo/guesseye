@@ -22,7 +22,7 @@ export default async function Stats() {
           <Tabs defaultValue="user">
             <TabsList className="w-full">
               <TabsTrigger className="cursor-pointer" value="user">
-                User
+                You
               </TabsTrigger>
               <TabsTrigger className="cursor-pointer" value="global">
                 Global

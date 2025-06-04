@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import type { ErrorObject, UserStats } from '@/lib/types';
+import type { ErrorObject, GamesByDayObject, UserStats } from '@/lib/types';
 import {
   countGamesByDay,
   countGamesForStats,
@@ -23,7 +23,7 @@ import { game, guess, schedule, user } from '@/server/db/schema';
 import { asc, eq, lt } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
-export const getStats = async () => {
+export const getUserStats = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -72,7 +72,6 @@ export const getStats = async () => {
   }
 
   const stats: UserStats = {
-    username: userData.name,
     guesses: {
       fewestGuesses: undefined,
       mostGuesses: undefined,
@@ -114,7 +113,7 @@ export const getStats = async () => {
   if (userData.games.length === 0) return stats;
 
   const guessFrequency: Record<string, number> = {};
-  const gamesByDay: Record<string, number> = {};
+  const gamesByDay: GamesByDayObject = {};
   const guessesByDay: Record<string, number> = {};
 
   // Calculate stats based on every game and guess

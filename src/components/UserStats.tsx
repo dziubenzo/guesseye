@@ -5,11 +5,11 @@ import Stat from '@/components/Stat';
 import Tooltip from '@/components/Tooltip';
 import { Separator } from '@/components/ui/separator';
 import { formatGameDuration } from '@/lib/utils';
-import { getStats } from '@/server/db/get-stats';
+import { getUserStats } from '@/server/db/get-user-stats';
 import { notFound } from 'next/navigation';
 
 export default async function UserStats() {
-  const stats = await getStats();
+  const stats = await getUserStats();
 
   if ('error' in stats) {
     return notFound();
