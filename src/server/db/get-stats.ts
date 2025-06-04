@@ -12,7 +12,6 @@ import {
   findFirstAndLatestOfficialWin,
   findGuessesToWinAndGiveUp,
   findSlowestWin,
-  findTotalDuration,
   roundToNthDecimalPlace,
   transformGamesByDay,
   transformGuessFrequency,
@@ -95,10 +94,8 @@ export const getStats = async () => {
       randomModeGiveUps: 0,
       randomModeGiveUpsPercentage: 0, // divided by randomGamesPlayed
       duration: {
-        totalDuration: undefined,
-        shortestGameDuration: undefined,
-        avgGameDuration: undefined, // totalDuration divided by officialGamesCompleted + randomModeWins + randomModeGiveUps
-        longestGameDuration: undefined,
+        fastestWin: undefined,
+        slowestWin: undefined,
       },
     },
     players: {
@@ -124,15 +121,16 @@ export const getStats = async () => {
     findFewestAndMostGuesses(game, stats);
     findGuessesToWinAndGiveUp(game, stats);
     if (game.hasWon || game.hasGivenUp) {
-      stats.games.duration.shortestGameDuration = findFastestWin(
-        game,
-        stats.games.duration.shortestGameDuration
-      );
-      stats.games.duration.longestGameDuration = findSlowestWin(
-        game,
-        stats.games.duration.longestGameDuration
-      );
-      findTotalDuration(game, stats);
+      if (game.hasWon) {
+        stats.games.duration.fastestWin = findFastestWin(
+          game,
+          stats.games.duration.fastestWin
+        );
+        stats.games.duration.slowestWin = findSlowestWin(
+          game,
+          stats.games.duration.slowestWin
+        );
+      }
       countGamesByDay(game, gamesByDay);
     }
 
@@ -209,17 +207,8 @@ export const getStats = async () => {
     );
   }
 
-  if (stats.games.duration.totalDuration) {
-    const avgGameDuration =
-      stats.games.duration.totalDuration /
-      (stats.games.officialGamesCompleted +
-        stats.games.randomModeWins +
-        stats.games.randomModeGiveUps);
-    stats.games.duration.avgGameDuration = avgGameDuration;
-  }
-
-  stats.guessFrequency = transformGuessFrequency(guessFrequency);
-  stats.gamesByDay = transformGamesByDay(gamesByDay);
+  stats.guessFrequency = transformGuessFrequency(guessFrequency, 90);
+  stats.gamesByDay = transformGamesByDay(gamesByDay, 90);
 
   return stats;
 };

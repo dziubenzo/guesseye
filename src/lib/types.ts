@@ -240,10 +240,8 @@ export type UserStats = {
     randomModeGiveUps: number;
     randomModeGiveUpsPercentage: number;
     duration: {
-      totalDuration?: number;
-      shortestGameDuration?: number;
-      avgGameDuration?: number;
-      longestGameDuration?: number;
+      fastestWin?: number;
+      slowestWin?: number;
     };
   };
   players: {
@@ -252,7 +250,6 @@ export type UserStats = {
     firstOfficialWin?: string;
     latestOfficialWin?: string;
   };
-
   guessFrequency: { fullName: string; count: number }[];
   gamesByDay: { date: string; count: number }[];
 };

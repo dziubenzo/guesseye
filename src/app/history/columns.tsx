@@ -3,8 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { OfficialGamesHistory } from '@/lib/types';
+import { formatGameDuration } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
-import { format, millisecondsToMinutes, millisecondsToSeconds } from 'date-fns';
+import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 
 export const columns: ColumnDef<OfficialGamesHistory>[] = [
@@ -215,20 +216,11 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       const fastestWinnerDuration = row.original.fastestWinnerDuration;
 
       if (!fastestWinner || !fastestWinnerDuration) return;
-
-      const minutes = millisecondsToMinutes(fastestWinnerDuration);
-      const seconds = millisecondsToSeconds(fastestWinnerDuration) % 60;
-
+      
       return (
         <div>
           <p>{fastestWinner}</p>
-          <p className="text-xs">
-            {minutes > 59
-              ? '> 1 hour'
-              : fastestWinnerDuration <= 1000
-                ? 'First try!'
-                : `${minutes} min ${seconds} sec`}
-          </p>
+          <p className="text-xs">{formatGameDuration(fastestWinnerDuration)}</p>
         </div>
       );
     },

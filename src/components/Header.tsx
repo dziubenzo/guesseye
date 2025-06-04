@@ -26,7 +26,11 @@ export default function Header() {
 
   return (
     <header className="grid grid-flow-col lg:grid-cols-5 text-center items-center">
-      <p>1</p>
+      <p>
+        <Button className="cursor-pointer" variant="link" asChild>
+          <Link href="/stats">Stats</Link>
+        </Button>
+      </p>
       <p>
         <Button className="cursor-pointer" variant="link" asChild>
           <Link href="/leaderboard">Leaderboard</Link>

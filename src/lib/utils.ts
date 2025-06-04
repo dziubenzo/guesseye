@@ -21,7 +21,11 @@ import type { GuessSchemaType } from '@/lib/zod/guess';
 import { player } from '@/server/db/schema';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
-import { differenceInYears } from 'date-fns';
+import {
+  differenceInYears,
+  millisecondsToMinutes,
+  millisecondsToSeconds,
+} from 'date-fns';
 import { getTableColumns } from 'drizzle-orm';
 import { twMerge } from 'tailwind-merge';
 
@@ -936,37 +940,13 @@ export function findFirstAndLatestOfficialGuess(
   const firstName = guess.player.firstName;
   const lastName = guess.player.lastName;
 
-  if (
-    !stats.players.firstOfficialGuess &&
-    game.gameMode === 'official' &&
-    game.hasWon
-  ) {
+  if (!stats.players.firstOfficialGuess && game.gameMode === 'official') {
     stats.players.firstOfficialGuess = firstName + ' ' + lastName;
   }
 
-  if (game.gameMode === 'official' && game.hasWon) {
+  if (game.gameMode === 'official') {
     stats.players.latestOfficialGuess = firstName + ' ' + lastName;
   }
-
-  return;
-}
-
-export function findTotalDuration(
-  game: GameWithGuessesWithPlayerName,
-  stats: UserStats
-) {
-  const currentGameStartTime = game.startDate.getTime();
-  const currentGameEndTime = game.endDate.getTime();
-  const currentGameDuration = Math.abs(
-    currentGameEndTime - currentGameStartTime
-  );
-
-  if (!stats.games.duration.totalDuration) {
-    stats.games.duration.totalDuration = currentGameDuration;
-    return;
-  }
-
-  stats.games.duration.totalDuration += currentGameDuration;
 
   return;
 }
@@ -986,6 +966,8 @@ export function countGuessedPlayers(
   } else {
     mostFrequentGuesses[fullName]++;
   }
+
+  return;
 }
 
 export function countGamesByDay(
@@ -1001,6 +983,8 @@ export function countGamesByDay(
   } else {
     gamesByDay[day]++;
   }
+
+  return;
 }
 
 export function roundToNthDecimalPlace(number: number, decimalPlaces = 1) {
@@ -1008,7 +992,8 @@ export function roundToNthDecimalPlace(number: number, decimalPlaces = 1) {
 }
 
 export function transformGuessFrequency(
-  guessFrequency: Record<string, number>
+  guessFrequency: Record<string, number>,
+  limit: number
 ): UserStats['guessFrequency'] {
   const array: UserStats['guessFrequency'] = [];
 
@@ -1016,11 +1001,12 @@ export function transformGuessFrequency(
     array.push({ fullName: key, count: guessFrequency[key] });
   }
 
-  return array.sort((a, b) => b.count - a.count);
+  return array.sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
 export function transformGamesByDay(
-  gamesByDay: Record<string, number>
+  gamesByDay: Record<string, number>,
+  limit: number
 ): UserStats['gamesByDay'] {
   const array: UserStats['gamesByDay'] = [];
 
@@ -1028,7 +1014,18 @@ export function transformGamesByDay(
     array.push({ date: key, count: gamesByDay[key] });
   }
 
-  return array.sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  return array
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(-limit);
+}
+
+export function formatGameDuration(duration: number) {
+  const minutes = millisecondsToMinutes(duration);
+  const seconds = millisecondsToSeconds(duration) % 60;
+
+  if (minutes > 60) return '>1 hour';
+
+  if (duration <= 1000) return 'First try!';
+
+  return `${minutes} min ${seconds} sec`;
 }

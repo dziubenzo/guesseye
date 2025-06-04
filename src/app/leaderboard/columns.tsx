@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import type { Leaderboard } from '@/lib/types';
+import { formatGameDuration } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
-import { millisecondsToMinutes, millisecondsToSeconds } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 
 export const columns: ColumnDef<Leaderboard>[] = [
@@ -146,18 +146,9 @@ export const columns: ColumnDef<Leaderboard>[] = [
 
       if (!fastestWin) return;
 
-      const minutes = millisecondsToMinutes(fastestWin);
-      const seconds = millisecondsToSeconds(fastestWin) % 60;
-
       return (
         <div>
-          <p>
-            {minutes > 59
-              ? '> 1 hour'
-              : fastestWin <= 1000
-                ? 'First try!'
-                : `${minutes} min ${seconds} sec`}
-          </p>
+          <p>{formatGameDuration(fastestWin)}</p>
         </div>
       );
     },
