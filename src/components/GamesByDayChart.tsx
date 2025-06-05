@@ -72,7 +72,13 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
             dataKey="count"
             position="top"
             offset={12}
-            className="fill-foreground text-xs md:text-lg"
+            className="fill-foreground hidden sm:text-base sm:block"
+          />
+          <LabelList
+            dataKey="count"
+            position="top"
+            offset={3}
+            className="fill-foreground text-[0.5rem] sm:hidden"
           />
         </Bar>
         <Bar dataKey="won" stackId="a" fill="var(--color-won)">
@@ -80,7 +86,13 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
             dataKey="count"
             position="top"
             offset={12}
-            className="fill-foreground text-xs md:text-lg"
+            className="fill-foreground hidden sm:text-base sm:block"
+          />
+          <LabelList
+            dataKey="count"
+            position="top"
+            offset={3}
+            className="fill-foreground text-[0.5rem] sm:hidden"
           />
         </Bar>
       </BarChart>

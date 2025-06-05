@@ -52,9 +52,16 @@ export default function GuessFrequencyChart({
         <ChartTooltip content={<ChartTooltipContent hideIndicator={true} />} />
         <Bar dataKey="count" fill="var(--color-count)" radius={4}>
           <LabelList
+            dataKey="count"
             position="top"
             offset={12}
-            className="fill-foreground text-xs md:text-lg"
+            className="fill-foreground hidden sm:text-base sm:block"
+          />
+          <LabelList
+            dataKey="count"
+            position="top"
+            offset={3}
+            className="fill-foreground text-[0.5rem] sm:hidden"
           />
         </Bar>
       </BarChart>

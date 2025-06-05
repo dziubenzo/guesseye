@@ -102,7 +102,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                   <div className="flex gap-2">
                     <FormControl>
                       <Input
-                        className="text-md lg:text-lg h-auto p-3 text-center placeholder:text-center"
+                        className="lg:text-lg h-auto p-3 text-center placeholder:text-center"
                         disabled={isPending || gameOver}
                         autoFocus
                         {...field}
