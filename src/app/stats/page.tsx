@@ -1,3 +1,4 @@
+import GlobalStats from '@/components/GlobalStats';
 import UserStats from '@/components/UserStats';
 import {
   Card,
@@ -31,7 +32,9 @@ export default async function Stats() {
             <TabsContent value="user">
               <UserStats />
             </TabsContent>
-            <TabsContent value="global">Change your password here.</TabsContent>
+            <TabsContent value="global">
+              <GlobalStats />
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>

@@ -84,15 +84,21 @@ export default async function UserStats() {
           Guesses
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center p-2">
-          <Stat title="Total Guesses" value={totalGuesses}>
-            All guesses you have made in any mode.
-          </Stat>
-          <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
-            The minimum number of guesses you needed to win a game in any mode.
-          </Stat>
-          <Stat title="Most Guesses To Win" value={mostGuesses}>
-            The maximum number of guesses you needed to win a game in any mode.
-          </Stat>
+          <div className="grid grid-cols-1 md:grid-cols-1 md:col-span-3 gap-8">
+            <Stat title="Total Guesses" value={totalGuesses}>
+              All guesses you have made in any mode.
+            </Stat>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-8">
+            <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
+              The minimum number of guesses you needed to win a game in any
+              mode.
+            </Stat>
+            <Stat title="Most Guesses To Win" value={mostGuesses}>
+              The maximum number of guesses you needed to win a game in any
+              mode.
+            </Stat>
+          </div>
           <Stat title="Avg. Guesses" value={avgGuesses}>
             The average number of guesses you made in any game (won/given up/in
             progress) in any mode.
@@ -174,27 +180,27 @@ export default async function UserStats() {
             title="Random Games Played"
             value={randomGamesPlayed}
           >
-            The number of games won/given up/in progress in the random mode.
+            The number of games you won/given up/in progress in the random mode.
           </Stat>
           <Stat title="Random Mode Wins" value={randomModeWins}>
-            The number of games won in the random mode.
+            The number of games you won in the random mode.
           </Stat>
           <Stat
             title="Random Mode Wins %"
             value={`${randomModeWinsPercentage + '%'}`}
           >
-            The percentage of games won in the random mode compared to all
+            The percentage of games you won in the random mode compared to all
             random mode games.
           </Stat>
           <Stat title="Random Mode Give Ups" value={randomModeGiveUps}>
-            The number of games given up in the random mode.
+            The number of games you gave up on in the random mode.
           </Stat>
           <Stat
             title="Random Mode Give Ups %"
             value={`${randomModeGiveUpsPercentage + '%'}`}
           >
-            The percentage of games given up in the random mode compared to all
-            random mode games.
+            The percentage of games you gave up on in the random mode compared
+            to all random mode games.
           </Stat>
         </div>
         <Separator />

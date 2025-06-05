@@ -1,0 +1,303 @@
+import GamesByDayChart from '@/components/GamesByDayChart';
+import GuessFrequencyChart from '@/components/GuessFrequencyChart';
+import GuessesByDayChart from '@/components/GuessesByDayChart';
+import Stat from '@/components/Stat';
+import Tooltip from '@/components/Tooltip';
+import { Separator } from '@/components/ui/separator';
+import { getGlobalStats } from '@/server/db/get-global-stats';
+import { notFound } from 'next/navigation';
+
+export default async function GlobalStats() {
+  const stats = await getGlobalStats();
+
+  if ('error' in stats) {
+    return notFound();
+  }
+
+  const {
+    fewestGuesses,
+    mostGuesses,
+    avgGuesses,
+    avgGuessesUser,
+    avgGuessesGuest,
+    avgGuessesToWin,
+    avgGuessesToWinUser,
+    avgGuessesToWinGuest,
+    avgGuessesToGiveUp,
+    avgGuessesToGiveUpUser,
+    avgGuessesToGiveUpGuest,
+    totalGuesses,
+    totalGuessesUser,
+    totalGuessesGuest,
+  } = stats.guesses;
+
+  const {
+    latestOfficialGuess,
+    latestOfficialGuessName,
+    latestRandomGuess,
+    latestRandomGuessName,
+  } = stats.players;
+
+  const {
+    officialGamesPlayed,
+    officialGamesCompleted,
+    officialModeWins,
+    officialModeGiveUps,
+    officialGamesPlayedUser,
+    officialGamesCompletedUser,
+    officialModeWinsUser,
+    officialModeGiveUpsUser,
+    officialGamesPlayedGuest,
+    officialGamesCompletedGuest,
+    officialModeWinsGuest,
+    officialModeGiveUpsGuest,
+  } = stats.games.official;
+
+  const {
+    randomGamesPlayed,
+    randomGamesCompleted,
+    randomModeWins,
+    randomModeGiveUps,
+  } = stats.games.random;
+
+  return (
+    <div>
+      <div className="flex flex-col gap-4 md:gap-8">
+        <div className="flex justify-center mt-4 md:mt-8">
+          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
+            Most Frequent Guesses
+          </h1>
+          <div>
+            <Tooltip>
+              Most frequently guessed players by both users and guests in a game
+              in any mode (limited to 90 players).
+            </Tooltip>
+          </div>
+        </div>
+        <GuessFrequencyChart data={stats.guessFrequency} />
+        <Separator />
+        <div className="flex justify-center">
+          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
+            Guesses By Day
+          </h1>
+          <div>
+            <Tooltip>
+              Guesses by both users and guests in a game in any mode by day
+              (last 90 days).
+            </Tooltip>
+          </div>
+        </div>
+        <GuessesByDayChart data={stats.guessesByDay} />
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Guesses
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center p-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-8">
+            <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
+              The minimum number of guesses needed to win a game in any mode by
+              either a user or a guest.
+            </Stat>
+            <Stat title="Most Guesses To Win" value={mostGuesses}>
+              The maximum number of guesses needed to win a game in any mode by
+              either a user or a guest.
+            </Stat>
+          </div>
+          <Stat title="Total Guesses" value={totalGuesses}>
+            All guesses made by both users and guests in any mode.
+          </Stat>
+          <Stat title="Total Guesses (Users)" value={totalGuessesUser}>
+            All guesses made by users in any mode.
+          </Stat>
+          <Stat title="Total Guesses (Guests)" value={totalGuessesGuest}>
+            All guesses made by guests in any mode.
+          </Stat>
+          <Stat title="Avg. Guesses" value={avgGuesses}>
+            The average number of guesses made by both users and guests in any
+            game (won/given up/in progress) in any mode.
+          </Stat>
+          <Stat title="Avg. Guesses (Users)" value={avgGuessesUser}>
+            The average number of guesses made by users in any game (won/given
+            up/in progress) in any mode.
+          </Stat>
+          <Stat title="Avg. Guesses (Guests)" value={avgGuessesGuest}>
+            The average number of guesses made by guests in any game (won/given
+            up/in progress) in any mode.
+          </Stat>
+          <Stat title="Avg. Guesses To Win" value={avgGuessesToWin}>
+            The average number of guesses it takes both users and guests to win
+            a game in any mode.
+          </Stat>
+          <Stat title="Avg. Guesses To Win (Users)" value={avgGuessesToWinUser}>
+            The average number of guesses it takes users to win a game in any
+            mode.
+          </Stat>
+          <Stat
+            title="Avg. Guesses To Win (Guests)"
+            value={avgGuessesToWinGuest}
+          >
+            The average number of guesses it takes guests to win a game in any
+            mode.
+          </Stat>
+          <Stat title="Avg. Guesses To Give Up" value={avgGuessesToGiveUp}>
+            The average number of guesses made by both users and guests before
+            giving up on a game in any mode.
+          </Stat>
+          <Stat
+            title="Avg. Guesses To Give Up (Users)"
+            value={avgGuessesToGiveUpUser}
+          >
+            The average number of guesses made by users before giving up on a
+            game in any mode.
+          </Stat>
+          <Stat
+            title="Avg. Guesses To Give Up (Guests)"
+            value={avgGuessesToGiveUpGuest}
+          >
+            The average number of guesses made by guests before giving up on a
+            game in any mode.
+          </Stat>
+        </div>
+        <Separator />
+        <div className="flex justify-center">
+          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
+            Games By Day
+          </h1>
+          <div>
+            <Tooltip>
+              Games won/given up by both users and guests in any mode by day
+              (last 90 days).
+            </Tooltip>
+          </div>
+        </div>
+        <GamesByDayChart data={stats.gamesByDay} />
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Official Mode
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat title="Official Games Played" value={officialGamesPlayed}>
+            The number of games won/given up/in progress by both users and
+            guests in the official mode.
+          </Stat>
+          <Stat title="Official Games Completed" value={officialGamesCompleted}>
+            The number of games won and given up by both users and guests in the
+            official mode.
+          </Stat>
+          <Stat title="Official Mode Wins" value={officialModeWins}>
+            The number of games won by both users and guests in the official
+            mode.
+          </Stat>
+          <Stat title="Official Mode Give Ups" value={officialModeGiveUps}>
+            The number of games given up by both users and guests in the
+            official mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Official Mode (Users)
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat
+            title="Official Games Played (Users)"
+            value={officialGamesPlayedUser}
+          >
+            The number of games won/given up/in progress by users in the
+            official mode.
+          </Stat>
+          <Stat
+            title="Official Games Completed (Users)"
+            value={officialGamesCompletedUser}
+          >
+            The number of games won and given up by users in the official mode.
+          </Stat>
+          <Stat title="Official Mode Wins (Users)" value={officialModeWinsUser}>
+            The number of games won by users in the official mode.
+          </Stat>
+          <Stat
+            title="Official Mode Give Ups (Users)"
+            value={officialModeGiveUpsUser}
+          >
+            The number of games given up by users in the official mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Official Mode (Guests)
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat
+            title="Official Games Played (Guests)"
+            value={officialGamesPlayedGuest}
+          >
+            The number of games won/given up/in progress by guests in the
+            official mode.
+          </Stat>
+          <Stat
+            title="Official Games Completed (Guests)"
+            value={officialGamesCompletedGuest}
+          >
+            The number of games won and given up by guests in the official mode.
+          </Stat>
+          <Stat
+            title="Official Mode Wins (Guests)"
+            value={officialModeWinsGuest}
+          >
+            The number of games won by guests in the official mode.
+          </Stat>
+          <Stat
+            title="Official Mode Give Ups (Guests)"
+            value={officialModeGiveUpsGuest}
+          >
+            The number of games given up by guests in the official mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Random Mode
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat title="Random Games Played" value={randomGamesPlayed}>
+            The number of games won/given up/in progress in the random mode.
+          </Stat>
+          <Stat title="Random Games Completed" value={randomGamesCompleted}>
+            The number of games won and given up in the random mode.
+          </Stat>
+          <Stat title="Random Mode Wins" value={randomModeWins}>
+            The number of games won in the random mode.
+          </Stat>
+          <Stat title="Random Mode Give Ups" value={randomModeGiveUps}>
+            The number of games given up in the random mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Latest Guesses
+        </h1>
+        <div className="grid grid-cols-1 gap-8 text-center p-2">
+          <Stat
+            title="Latest Official Guess"
+            value={
+              latestOfficialGuess
+                ? `${latestOfficialGuess} by ${latestOfficialGuessName}`
+                : undefined
+            }
+          >
+            Latest guess made by both users and guests in a game in an official
+            mode.
+          </Stat>
+          <Stat
+            title="Latest Random Guess"
+            value={
+              latestRandomGuess
+                ? `${latestRandomGuess} by ${latestRandomGuessName}`
+                : undefined
+            }
+          >
+            Latest guess in a game in a random mode.
+          </Stat>
+        </div>
+      </div>
+    </div>
+  );
+}
