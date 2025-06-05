@@ -1,19 +1,16 @@
+import ChartHeading from '@/components/ChartHeading';
 import GamesByDayChart from '@/components/GamesByDayChart';
 import GuessFrequencyChart from '@/components/GuessFrequencyChart';
 import GuessesByDayChart from '@/components/GuessesByDayChart';
 import Stat from '@/components/Stat';
-import Tooltip from '@/components/Tooltip';
 import { Separator } from '@/components/ui/separator';
-import { getGlobalStats } from '@/server/db/get-global-stats';
-import { notFound } from 'next/navigation';
+import type { GlobalStats } from '@/lib/types';
 
-export default async function GlobalStats() {
-  const stats = await getGlobalStats();
+type GlobalStatsProps = {
+  stats: GlobalStats;
+};
 
-  if ('error' in stats) {
-    return notFound();
-  }
-
+export default async function GlobalStats({ stats }: GlobalStatsProps) {
   const {
     fewestGuesses,
     mostGuesses,
@@ -62,33 +59,7 @@ export default async function GlobalStats() {
 
   return (
     <div>
-      <div className="flex flex-col gap-4 md:gap-8">
-        <div className="flex justify-center mt-4 md:mt-8">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Most Frequent Guesses
-          </h1>
-          <div>
-            <Tooltip>
-              Most frequently guessed players by both users and guests in a game
-              in any mode (limited to 90 players).
-            </Tooltip>
-          </div>
-        </div>
-        <GuessFrequencyChart data={stats.guessFrequency} />
-        <Separator />
-        <div className="flex justify-center">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Guesses By Day
-          </h1>
-          <div>
-            <Tooltip>
-              Guesses by both users and guests in a game in any mode by day
-              (last 90 days).
-            </Tooltip>
-          </div>
-        </div>
-        <GuessesByDayChart data={stats.guessesByDay} />
-        <Separator />
+      <div className="flex flex-col gap-4 md:gap-8 mt-4 md:mt-8">
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Guesses
         </h1>
@@ -159,17 +130,22 @@ export default async function GlobalStats() {
           </Stat>
         </div>
         <Separator />
-        <div className="flex justify-center">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Games By Day
-          </h1>
-          <div>
-            <Tooltip>
-              Games won/given up by both users and guests in any mode by day
-              (last 90 days).
-            </Tooltip>
-          </div>
-        </div>
+        <ChartHeading title="Most Frequent Guesses">
+          Most frequently guessed players by both users and guests in a game in
+          any mode (limited to 30 players).
+        </ChartHeading>
+        <GuessFrequencyChart data={stats.guessFrequency} />
+        <Separator />
+        <ChartHeading title="Guesses By Day">
+          Guesses by both users and guests in a game in any mode by day (last 30
+          days).
+        </ChartHeading>
+        <GuessesByDayChart data={stats.guessesByDay} />
+        <Separator />
+        <ChartHeading title="Games By Day">
+          Games won/given up by both users and guests in any mode by day (last
+          30 days).
+        </ChartHeading>
         <GamesByDayChart data={stats.gamesByDay} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
@@ -283,8 +259,7 @@ export default async function GlobalStats() {
                 : undefined
             }
           >
-            Latest guess made by both users and guests in a game in an official
-            mode.
+            Latest guess in a game in an official mode.
           </Stat>
           <Stat
             title="Latest Random Guess"

@@ -1,20 +1,17 @@
+import ChartHeading from '@/components/ChartHeading';
 import GamesByDayChart from '@/components/GamesByDayChart';
 import GuessFrequencyChart from '@/components/GuessFrequencyChart';
 import GuessesByDayChart from '@/components/GuessesByDayChart';
 import Stat from '@/components/Stat';
-import Tooltip from '@/components/Tooltip';
 import { Separator } from '@/components/ui/separator';
+import type { UserStats } from '@/lib/types';
 import { formatGameDuration } from '@/lib/utils';
-import { getUserStats } from '@/server/db/get-user-stats';
-import { notFound } from 'next/navigation';
 
-export default async function UserStats() {
-  const stats = await getUserStats();
+type UserStatsProps = {
+  stats: UserStats;
+};
 
-  if ('error' in stats) {
-    return notFound();
-  }
-
+export default async function UserStats({ stats }: UserStatsProps) {
   const {
     fewestGuesses,
     mostGuesses,
@@ -54,39 +51,14 @@ export default async function UserStats() {
 
   return (
     <div>
-      <div className="flex flex-col gap-4 md:gap-8">
-        <div className="flex justify-center mt-4 md:mt-8">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Most Frequent Guesses
-          </h1>
-          <div>
-            <Tooltip>
-              Your most frequently guessed players in a game in any mode
-              (limited to 90 players).
-            </Tooltip>
-          </div>
-        </div>
-        <GuessFrequencyChart data={stats.guessFrequency} />
-        <Separator />
-        <div className="flex justify-center">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Guesses By Day
-          </h1>
-          <div>
-            <Tooltip>
-              Your guesses in a game in any mode by day (last 90 days).
-            </Tooltip>
-          </div>
-        </div>
-        <GuessesByDayChart data={stats.guessesByDay} />
-        <Separator />
+      <div className="flex flex-col gap-4 md:gap-8 mt-4 md:mt-8">
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Guesses
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center p-2">
           <div className="grid grid-cols-1 md:grid-cols-1 md:col-span-3 gap-8">
             <Stat title="Total Guesses" value={totalGuesses}>
-              All guesses you have made in any mode.
+              All guesses you made in any mode.
             </Stat>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-8">
@@ -100,7 +72,7 @@ export default async function UserStats() {
             </Stat>
           </div>
           <Stat title="Avg. Guesses" value={avgGuesses}>
-            The average number of guesses you made in any game (won/given up/in
+            The average number of guesses you make in any game (won/given up/in
             progress) in any mode.
           </Stat>
           <Stat title="Avg. Guesses To Win" value={avgGuessesToWin}>
@@ -108,21 +80,25 @@ export default async function UserStats() {
             mode.
           </Stat>
           <Stat title="Avg. Guesses To Give Up" value={avgGuessesToGiveUp}>
-            The average number of guesses you made before giving up on a game in
+            The average number of guesses you make before giving up on a game in
             any mode.
           </Stat>
         </div>
         <Separator />
-        <div className="flex justify-center">
-          <h1 className="text-xl md:text-4xl font-medium text-center px-0 py-2 relative">
-            Games By Day
-          </h1>
-          <div>
-            <Tooltip>
-              Games won/given up in any mode by day (last 90 days).
-            </Tooltip>
-          </div>
-        </div>
+        <ChartHeading title="Most Frequent Guesses">
+          Your most frequently guessed players in a game in any mode (limited to
+          30 players).
+        </ChartHeading>
+        <GuessFrequencyChart data={stats.guessFrequency} />
+        <Separator />
+        <ChartHeading title="Guesses By Day">
+          Your guesses in a game in any mode by day (last 30 days).
+        </ChartHeading>
+        <GuessesByDayChart data={stats.guessesByDay} />
+        <Separator />
+        <ChartHeading title="Games By Day">
+          Games that you won/gave up on in any mode by day (last 30 days).
+        </ChartHeading>
         <GamesByDayChart data={stats.gamesByDay} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">

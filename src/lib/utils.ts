@@ -1222,9 +1222,9 @@ export function transformChartData(
   gamesByDay: GamesByDayObject,
   guessesByDay: Record<string, number>
 ) {
-  stats.guessFrequency = transformGuessFrequency(guessFrequency, 90);
-  stats.gamesByDay = transformGamesByDay(gamesByDay, 90);
-  stats.guessesByDay = transformGuessesByDay(guessesByDay, 90);
+  stats.guessFrequency = transformGuessFrequency(guessFrequency, 30);
+  stats.gamesByDay = transformGamesByDay(gamesByDay, 30);
+  stats.guessesByDay = transformGuessesByDay(guessesByDay, 30);
 }
 
 export function calculateOtherStatsUser(

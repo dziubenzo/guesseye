@@ -11,7 +11,7 @@ type StatProps = {
 export default function Stat({ children, className, title, value }: StatProps) {
   return (
     <div
-      className={`flex flex-col items-center gap-2 ${className ? className : null}`}
+      className={`flex flex-col items-center gap-2 ${className ? className : ''}`}
     >
       <div className="flex gap-1">
         <p className="text-sm">{title}</p>
