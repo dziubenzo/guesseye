@@ -40,12 +40,15 @@ export default async function UserStats() {
     officialModeWinsPercentage,
     officialModeGiveUps,
     officialModeGiveUpsPercentage,
+  } = stats.games.official;
+
+  const {
     randomGamesPlayed,
     randomModeWins,
     randomModeWinsPercentage,
     randomModeGiveUps,
     randomModeGiveUpsPercentage,
-  } = stats.games;
+  } = stats.games.random;
 
   const { fastestWin, slowestWin } = stats.games.duration;
 
@@ -84,10 +87,10 @@ export default async function UserStats() {
           <Stat title="Total Guesses" value={totalGuesses}>
             All guesses you have made in any mode.
           </Stat>
-          <Stat title="Fewest Guesses" value={fewestGuesses}>
+          <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
             The minimum number of guesses you needed to win a game in any mode.
           </Stat>
-          <Stat title="Most Guesses" value={mostGuesses}>
+          <Stat title="Most Guesses To Win" value={mostGuesses}>
             The maximum number of guesses you needed to win a game in any mode.
           </Stat>
           <Stat title="Avg. Guesses" value={avgGuesses}>

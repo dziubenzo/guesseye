@@ -846,24 +846,24 @@ export function sortByWinsAndGiveUps(userA: Leaderboard, userB: Leaderboard) {
 
 export function countGamesForUserStats(game: UserStatsGame, stats: UserStats) {
   if (game.gameMode === 'official') {
-    stats.games.officialGamesPlayed++;
+    stats.games.official.officialGamesPlayed++;
 
     if (!game.hasWon && !game.hasGivenUp) return;
 
     if (game.hasWon) {
-      stats.games.officialModeWins++;
+      stats.games.official.officialModeWins++;
     } else if (game.hasGivenUp) {
-      stats.games.officialModeGiveUps++;
+      stats.games.official.officialModeGiveUps++;
     }
 
-    stats.games.officialGamesCompleted++;
+    stats.games.official.officialGamesCompleted++;
   } else if (game.gameMode === 'random') {
-    stats.games.randomGamesPlayed++;
+    stats.games.random.randomGamesPlayed++;
 
     if (game.hasWon) {
-      stats.games.randomModeWins++;
+      stats.games.random.randomModeWins++;
     } else if (game.hasGivenUp) {
-      stats.games.randomModeGiveUps++;
+      stats.games.random.randomModeGiveUps++;
     }
   }
 }
@@ -1238,60 +1238,66 @@ export function calculateOtherStatsUser(
   if (stats.guesses.avgGuessesToWin) {
     const avgGuessesToWin =
       stats.guesses.avgGuessesToWin /
-      (stats.games.officialModeWins + stats.games.randomModeWins);
+      (stats.games.official.officialModeWins +
+        stats.games.random.randomModeWins);
     stats.guesses.avgGuessesToWin = roundToNthDecimalPlace(avgGuessesToWin);
   }
 
   if (stats.guesses.avgGuessesToGiveUp) {
     const avgGuessesToGiveUp =
       stats.guesses.avgGuessesToGiveUp /
-      (stats.games.officialModeGiveUps + stats.games.randomModeGiveUps);
+      (stats.games.official.officialModeGiveUps +
+        stats.games.random.randomModeGiveUps);
     stats.guesses.avgGuessesToGiveUp =
       roundToNthDecimalPlace(avgGuessesToGiveUp);
   }
 
-  if (stats.games.officialGamesPlayed > 0) {
+  if (stats.games.official.officialGamesPlayed > 0) {
     const officialGamesPlayedPercentage =
-      (stats.games.officialGamesPlayed / scheduledPlayersCount) * 100;
-    stats.games.officialGamesPlayedPercentage = roundToNthDecimalPlace(
+      (stats.games.official.officialGamesPlayed / scheduledPlayersCount) * 100;
+    stats.games.official.officialGamesPlayedPercentage = roundToNthDecimalPlace(
       officialGamesPlayedPercentage
     );
   }
 
-  if (stats.games.officialGamesCompleted > 0) {
+  if (stats.games.official.officialGamesCompleted > 0) {
     const officialGamesCompletedPercentage =
-      (stats.games.officialGamesCompleted / scheduledPlayersCount) * 100;
-    stats.games.officialGamesCompletedPercentage = roundToNthDecimalPlace(
-      officialGamesCompletedPercentage
-    );
+      (stats.games.official.officialGamesCompleted / scheduledPlayersCount) *
+      100;
+    stats.games.official.officialGamesCompletedPercentage =
+      roundToNthDecimalPlace(officialGamesCompletedPercentage);
   }
 
-  if (stats.games.officialModeWins > 0) {
+  if (stats.games.official.officialModeWins > 0) {
     const officialModeWinsPercentage =
-      (stats.games.officialModeWins / scheduledPlayersCount) * 100;
-    stats.games.officialModeWinsPercentage = roundToNthDecimalPlace(
+      (stats.games.official.officialModeWins / scheduledPlayersCount) * 100;
+    stats.games.official.officialModeWinsPercentage = roundToNthDecimalPlace(
       officialModeWinsPercentage
     );
   }
 
-  if (stats.games.officialModeGiveUps > 0) {
+  if (stats.games.official.officialModeGiveUps > 0) {
     const officialModeGiveUpsPercentage =
-      (stats.games.officialModeGiveUps / scheduledPlayersCount) * 100;
-    stats.games.officialModeGiveUpsPercentage = roundToNthDecimalPlace(
+      (stats.games.official.officialModeGiveUps / scheduledPlayersCount) * 100;
+    stats.games.official.officialModeGiveUpsPercentage = roundToNthDecimalPlace(
       officialModeGiveUpsPercentage
     );
   }
 
-  if (stats.games.randomGamesPlayed > 0) {
+  if (stats.games.random.randomGamesPlayed > 0) {
     const randomModeWinsPercentage =
-      (stats.games.randomGamesPlayed / stats.games.randomModeWins) * 100;
-    stats.games.randomModeWinsPercentage = roundToNthDecimalPlace(
+      (stats.games.random.randomGamesPlayed /
+        stats.games.random.randomModeWins) *
+      100;
+    stats.games.random.randomModeWinsPercentage = roundToNthDecimalPlace(
       randomModeWinsPercentage
     );
 
     const randomModeGiveUpsPercentage =
-      (stats.games.randomGamesPlayed / stats.games.randomModeGiveUps) * 100;
-    stats.games.randomModeGiveUpsPercentage = roundToNthDecimalPlace(
+      (stats.games.random.randomGamesPlayed /
+        stats.games.random.randomModeGiveUps) *
+      100;
+    stats.games.random.randomModeGiveUpsPercentage = roundToNthDecimalPlace(
       randomModeGiveUpsPercentage
     );
   }

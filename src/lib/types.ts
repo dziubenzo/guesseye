@@ -231,19 +231,23 @@ export type UserStats = {
     totalGuesses: number;
   };
   games: {
-    officialGamesPlayed: number;
-    officialGamesPlayedPercentage: number;
-    officialGamesCompleted: number;
-    officialGamesCompletedPercentage: number;
-    officialModeWins: number;
-    officialModeWinsPercentage: number;
-    officialModeGiveUps: number;
-    officialModeGiveUpsPercentage: number;
-    randomGamesPlayed: number;
-    randomModeWins: number;
-    randomModeWinsPercentage: number;
-    randomModeGiveUps: number;
-    randomModeGiveUpsPercentage: number;
+    official: {
+      officialGamesPlayed: number;
+      officialGamesPlayedPercentage: number;
+      officialGamesCompleted: number;
+      officialGamesCompletedPercentage: number;
+      officialModeWins: number;
+      officialModeWinsPercentage: number;
+      officialModeGiveUps: number;
+      officialModeGiveUpsPercentage: number;
+    };
+    random: {
+      randomGamesPlayed: number;
+      randomModeWins: number;
+      randomModeWinsPercentage: number;
+      randomModeGiveUps: number;
+      randomModeGiveUpsPercentage: number;
+    };
     duration: {
       fastestWin?: number;
       slowestWin?: number;
