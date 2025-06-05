@@ -28,8 +28,14 @@ export type GameWithGuessesWithPlayer = Game & {
   guesses: GuessWithPlayer[];
 };
 
-export type GameWithGuessesWithPlayerName = Game & {
+export type UserStatsGame = Game & {
   guesses: GuessWithPlayerName[];
+};
+
+export type GlobalStatsGame = UserStatsGame & {
+  user: {
+    name: User['name'];
+  } | null;
 };
 
 export type GameWithGuessesAndUser = Game & {
@@ -262,3 +268,53 @@ export type GamesByDayObject = Record<
     givenUp: number;
   }
 >;
+
+export type GlobalStats = {
+  guesses: {
+    fewestGuesses?: number;
+    mostGuesses?: number;
+    avgGuesses?: number;
+    avgGuessesUser?: number;
+    avgGuessesGuest?: number;
+    avgGuessesToWin?: number;
+    avgGuessesToWinUser?: number;
+    avgGuessesToWinGuest?: number;
+    avgGuessesToGiveUp?: number;
+    avgGuessesToGiveUpUser?: number;
+    avgGuessesToGiveUpGuest?: number;
+    totalGuesses: number;
+    totalGuessesUser: number;
+    totalGuessesGuest: number;
+  };
+  games: {
+    official: {
+      officialGamesPlayed: number;
+      officialGamesCompleted: number;
+      officialModeWins: number;
+      officialModeGiveUps: number;
+      officialGamesPlayedUser: number;
+      officialGamesCompletedUser: number;
+      officialModeWinsUser: number;
+      officialModeGiveUpsUser: number;
+      officialGamesPlayedGuest: number;
+      officialGamesCompletedGuest: number;
+      officialModeWinsGuest: number;
+      officialModeGiveUpsGuest: number;
+    };
+    random: {
+      randomGamesPlayed: number;
+      randomGamesCompleted: number;
+      randomModeWins: number;
+      randomModeGiveUps: number;
+    };
+  };
+  players: {
+    latestOfficialGuess?: string;
+    latestOfficialGuessName?: string;
+    latestRandomGuess?: string;
+    latestRandomGuessName?: string;
+  };
+  guessFrequency: UserStats['guessFrequency'];
+  gamesByDay: UserStats['gamesByDay'];
+  guessesByDay: UserStats['guessesByDay'];
+};
