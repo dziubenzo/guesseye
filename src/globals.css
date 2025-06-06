@@ -47,6 +47,8 @@
   --color-wrong-guess: var(--wrong-guess);
   --color-wrong-guess-foreground: var(--wrong-guess-foreground);
   --color-medium-difficulty: var(--medium-difficulty);
+  --color-chart-male: var(--chart-male);
+  --color-chart-female: var(--chart-female);
 }
 
 /* Green with 0.5 radius */
@@ -89,6 +91,8 @@
   --wrong-guess: oklch(0.577 0.245 27.325);
   --wrong-guess-foreground: oklch(0.982 0.018 155.826);
   --medium-difficulty: oklch(0.828 0.189 84.429);
+  --chart-male: oklch(0.6304 0.099 225.25);
+  --chart-female: oklch(0.6304 0.1499 0);
 }
 
 .dark {
@@ -128,6 +132,8 @@
   --wrong-guess: oklch(0.704 0.191 22.216);
   --wrong-guess-foreground: oklch(0.141 0.005 285.823);
   --medium-difficulty: oklch(0.828 0.189 84.429);
+  --chart-male: oklch(0.6304 0.099 225.25);
+  --chart-female: oklch(0.6304 0.1499 0);
 }
 
 @layer base {
