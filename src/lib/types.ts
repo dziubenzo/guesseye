@@ -322,3 +322,41 @@ export type GlobalStats = {
   gamesByDay: UserStats['gamesByDay'];
   guessesByDay: UserStats['guessesByDay'];
 };
+
+export type DatabaseStatsPlayer = Omit<
+  Player,
+  'id' | 'createdAt' | 'updatedAt'
+>;
+
+export type DatabaseStatsType =
+  | 'gender'
+  | 'age'
+  | 'birthYear'
+  | 'birthMonth'
+  | 'birthDate'
+  | 'birthDay'
+  | 'country'
+  | 'playingSince'
+  | 'organisation'
+  | 'laterality'
+  | 'dartsBrand'
+  | 'dartsWeight'
+  | 'nineDartersPDC'
+  | 'bestResultPDC'
+  | 'bestResultWDF'
+  | 'yearOfBestResultPDC'
+  | 'yearOfBestResultWDF';
+
+export type DatabaseStatsResult = {
+  value: string;
+  count: number;
+  percentage: number;
+};
+
+export type DatabaseStatsObject = {
+  [key in DatabaseStatsType]: Record<string, number>;
+};
+
+export type DatabaseStats = {
+  [key in DatabaseStatsType]: DatabaseStatsResult[];
+};

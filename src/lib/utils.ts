@@ -1,11 +1,14 @@
 import type {
   BestResultColumnType,
   ComparisonResults,
+  DatabaseStats,
+  DatabaseStatsObject,
+  DatabaseStatsPlayer,
+  DatabaseStatsType,
   ErrorObject,
   GamesByDayObject,
   GameWithGuesses,
   GameWithGuessesAndUser,
-  UserStatsGame,
   GlobalStats,
   GlobalStatsGame,
   Guess,
@@ -19,6 +22,7 @@ import type {
   Schedule,
   SpecialRangedMatchKeys,
   UserStats,
+  UserStatsGame,
 } from '@/lib/types';
 import type { GuessSchemaType } from '@/lib/zod/guess';
 import { player } from '@/server/db/schema';
@@ -26,6 +30,10 @@ import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import {
   differenceInYears,
+  getDate,
+  getDay,
+  getMonth,
+  getYear,
   millisecondsToMinutes,
   millisecondsToSeconds,
 } from 'date-fns';
@@ -1392,4 +1400,180 @@ export function calculateOtherStatsGlobal(
   stats.games.official.officialModeGiveUps =
     stats.games.official.officialModeGiveUpsUser +
     stats.games.official.officialModeGiveUpsGuest;
+}
+
+export function countPlayersBy(
+  player: DatabaseStatsPlayer,
+  entryObject: Record<string, number>,
+  type: DatabaseStatsType
+) {
+  if (!entryObject) return;
+
+  let field: string | number;
+
+  switch (type) {
+    case 'gender':
+      field = player.gender;
+      break;
+    case 'age':
+      field = player.dateOfBirth ? getAge(player.dateOfBirth) : 'Unknown';
+      break;
+    case 'birthYear':
+      field = player.dateOfBirth ? getYear(player.dateOfBirth) : 'Unknown';
+      break;
+    case 'birthMonth':
+      field = player.dateOfBirth ? getMonth(player.dateOfBirth) : 'Unknown';
+      break;
+    case 'birthDate':
+      field = player.dateOfBirth ? getDate(player.dateOfBirth) : 'Unknown';
+      break;
+    case 'birthDay': {
+      const dayOfWeek = player.dateOfBirth
+        ? getDay(player.dateOfBirth)
+        : undefined;
+
+      switch (dayOfWeek) {
+        case 0:
+          field = 'Sunday';
+          break;
+        case 1:
+          field = 'Monday';
+          break;
+        case 2:
+          field = 'Tuesday';
+          break;
+        case 3:
+          field = 'Wednesday';
+          break;
+        case 4:
+          field = 'Thursday';
+          break;
+        case 5:
+          field = 'Friday';
+          break;
+        case 6:
+          field = 'Saturday';
+          break;
+        default:
+          field = 'Unknown';
+          break;
+      }
+      break;
+    }
+    case 'country':
+      field = player.country;
+      break;
+    case 'playingSince':
+      field = player.playingSince ? player.playingSince : 'Unknown';
+      break;
+    case 'organisation':
+      field = player.organisation;
+      break;
+    case 'laterality':
+      field = player.laterality;
+      break;
+    case 'dartsBrand':
+      field = player.dartsBrand ? player.dartsBrand : 'Unknown';
+      break;
+    case 'dartsWeight':
+      field = player.dartsWeight ? parseFloat(player.dartsWeight) : 'Unknown';
+      break;
+    case 'nineDartersPDC':
+      field = player.nineDartersPDC > 0 ? player.nineDartersPDC : 'None';
+      break;
+    case 'bestResultPDC':
+      field = player.bestResultPDC ? player.bestResultPDC : 'Did not play';
+      break;
+    case 'bestResultWDF':
+      field = player.bestResultWDF ? player.bestResultWDF : 'Did not play';
+      break;
+    case 'yearOfBestResultPDC':
+      field = player.yearOfBestResultPDC
+        ? player.yearOfBestResultPDC
+        : 'Did not play';
+      break;
+    case 'yearOfBestResultWDF':
+      field = player.yearOfBestResultWDF
+        ? player.yearOfBestResultWDF
+        : 'Did not play';
+      break;
+  }
+
+  if (entryObject[field] === undefined) {
+    entryObject[field] = 1;
+  } else {
+    entryObject[field]++;
+  }
+
+  return;
+}
+
+export function transformPlayerStats(
+  stats: DatabaseStats,
+  playerObject: DatabaseStatsObject,
+  players: DatabaseStatsPlayer[]
+) {
+  let key: keyof DatabaseStatsObject;
+
+  for (key in playerObject) {
+    for (const stat in playerObject[key]) {
+      const percentage = roundToNthDecimalPlace(
+        (playerObject[key][stat] / players.length) * 100,
+        2
+      );
+      stats[key].push({
+        value: stat,
+        count: playerObject[key][stat],
+        percentage,
+      });
+    }
+  }
+}
+
+export function sortPlayerStats(stats: DatabaseStats) {
+  let key: keyof DatabaseStats;
+
+  for (key in stats) {
+    switch (key) {
+      case 'age':
+      case 'birthYear':
+      case 'birthMonth':
+      case 'birthDate':
+      case 'playingSince':
+      case 'dartsWeight':
+      case 'nineDartersPDC':
+      case 'yearOfBestResultPDC':
+      case 'yearOfBestResultWDF':
+        // Sort values in the ascending order
+        stats[key].sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+        break;
+      case 'birthDay': {
+        // Sort days from Monday to Sunday
+        stats[key].sort((a, b) => {
+          const dayMap = new Map<string, number>();
+          dayMap.set('Monday', 1);
+          dayMap.set('Tuesday', 2);
+          dayMap.set('Wednesday', 3);
+          dayMap.set('Thursday', 4);
+          dayMap.set('Friday', 5);
+          dayMap.set('Saturday', 6);
+          dayMap.set('Sunday', 7);
+
+          const aValue = dayMap.get(a.value);
+          const bValue = dayMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
+      default:
+        // Sort count in the descending order
+        stats[key].sort((a, b) => b.count - a.count);
+        break;
+    }
+  }
 }

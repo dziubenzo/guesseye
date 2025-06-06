@@ -5,7 +5,7 @@ import { player } from '@/server/db/schema';
 import { desc } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 
-export const getLastDBUpdate = unstable_cache(
+export const getLastDatabaseUpdate = unstable_cache(
   async () => {
     const lastUpdatedPlayer = await db.query.player.findFirst({
       columns: {
@@ -16,6 +16,6 @@ export const getLastDBUpdate = unstable_cache(
 
     return lastUpdatedPlayer?.updatedAt;
   },
-  ['lastDBUpdate'],
-  { tags: ['lastDBUpdate'] }
+  ['lastDatabaseUpdate'],
+  { tags: ['lastDatabaseUpdate'] }
 );

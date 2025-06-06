@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { getLastDBUpdate } from '@/server/db/get-last-db-update';
+import { getLastDatabaseUpdate } from '@/server/db/get-last-database-update';
 import { getPlayerCount } from '@/server/db/get-player-count';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default async function Footer() {
   const [playerCount, lastDBUpdate] = await Promise.all([
     getPlayerCount(),
-    getLastDBUpdate(),
+    getLastDatabaseUpdate(),
   ]);
 
   return (
