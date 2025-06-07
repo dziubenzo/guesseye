@@ -1408,29 +1408,29 @@ export function countPlayersBy(
 ) {
   if (!entryObject) return;
 
-  let field: string | number;
+  let field: string | number | null;
 
   switch (type) {
     case 'gender':
       field = player.gender;
       break;
     case 'age':
-      field = player.dateOfBirth ? getAge(player.dateOfBirth) : 'Unknown';
+      field = player.dateOfBirth ? getAge(player.dateOfBirth) : null;
       break;
     case 'birthMonth':
-      field = player.dateOfBirth ? getMonth(player.dateOfBirth) : 'Unknown';
+      field = player.dateOfBirth ? getMonth(player.dateOfBirth) : null;
       break;
     case 'birthDate':
-      field = player.dateOfBirth ? getDate(player.dateOfBirth) : 'Unknown';
+      field = player.dateOfBirth ? getDate(player.dateOfBirth) : null;
       break;
     case 'birthDay':
-      field = player.dateOfBirth ? getDay(player.dateOfBirth) : 'Unknown';
+      field = player.dateOfBirth ? getDay(player.dateOfBirth) : null;
       break;
     case 'country':
       field = player.country;
       break;
     case 'playingSince':
-      field = player.playingSince ? player.playingSince : 'Unknown';
+      field = player.playingSince ? player.playingSince : null;
       break;
     case 'organisation':
       field = player.organisation;
@@ -1439,10 +1439,10 @@ export function countPlayersBy(
       field = player.laterality;
       break;
     case 'dartsBrand':
-      field = player.dartsBrand ? player.dartsBrand : 'Unknown';
+      field = player.dartsBrand ? player.dartsBrand : null;
       break;
     case 'dartsWeight':
-      field = player.dartsWeight ? parseFloat(player.dartsWeight) : 'Unknown';
+      field = player.dartsWeight ? parseFloat(player.dartsWeight) : null;
       break;
     case 'nineDartersPDC':
       field = player.nineDartersPDC > 0 ? player.nineDartersPDC : 'None';
@@ -1467,6 +1467,8 @@ export function countPlayersBy(
       field = player.difficulty;
       break;
   }
+
+  if (field === null) return;
 
   if (entryObject[field] === undefined) {
     entryObject[field] = 1;

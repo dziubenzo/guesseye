@@ -8,13 +8,7 @@ import {
 } from '@/components/ui/chart';
 import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
 import { enGB } from 'date-fns/locale';
-import {
-  Bar,
-  BarChart,
-  LabelList,
-  XAxis,
-  YAxis
-} from 'recharts';
+import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
   count: {
@@ -53,7 +47,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             <ChartTooltipContent
               hideIndicator={true}
               labelFormatter={(value) =>
-                `${enGB.localize.month(value, { width: 'wide' })}`
+                `Born in ${enGB.localize.month(value, { width: 'wide' })}`
               }
             />
           }

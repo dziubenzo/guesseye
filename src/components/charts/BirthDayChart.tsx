@@ -47,7 +47,7 @@ export default function BirthDayChart({ data }: BirthDayChartProps) {
             <ChartTooltipContent
               hideIndicator={true}
               labelFormatter={(value) =>
-                `${enGB.localize.day(value, { width: 'wide' })}`
+                `Born on ${enGB.localize.day(value, { width: 'wide' })}`
               }
             />
           }

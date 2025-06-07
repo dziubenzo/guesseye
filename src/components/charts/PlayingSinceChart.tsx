@@ -7,44 +7,41 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
-import { enGB } from 'date-fns/locale';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-birth-date)',
+    color: 'var(--chart-playing-since)',
   },
 } satisfies ChartConfig;
 
-type BirthDateChartProps = {
-  data: DatabaseStats['birthDate'];
+type PlayingSinceChartProps = {
+  data: DatabaseStats['playingSince'];
 };
 
-export default function BirthDateChart({ data }: BirthDateChartProps) {
+export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 25, right: 5, bottom: 5, left: 5 }}
+        margin={{ top: 25, right: 5, bottom: 25, left: 5 }}
       >
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="value"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={20}
           axisLine={false}
-          minTickGap={16}
-          tickFormatter={(value) => `${enGB.localize.ordinalNumber(value)}`}
+          minTickGap={8}
+          tickFormatter={(value) => value}
         />
         <ChartTooltip
           content={
             <ChartTooltipContent
               hideIndicator={true}
-              labelFormatter={(value) =>
-                `Born on the ${enGB.localize.ordinalNumber(value)}`
-              }
+              labelFormatter={(value) => `Playing since ${value}`}
             />
           }
         />
@@ -69,7 +66,7 @@ export default function BirthDateChart({ data }: BirthDateChartProps) {
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white hidden sm:text-base sm:block"
+            className="fill-white hidden sm:text-xs sm:block"
           />
         </Bar>
       </BarChart>
