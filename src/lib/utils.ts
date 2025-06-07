@@ -1423,39 +1423,9 @@ export function countPlayersBy(
     case 'birthDate':
       field = player.dateOfBirth ? getDate(player.dateOfBirth) : 'Unknown';
       break;
-    case 'birthDay': {
-      const dayOfWeek = player.dateOfBirth
-        ? getDay(player.dateOfBirth)
-        : undefined;
-
-      switch (dayOfWeek) {
-        case 0:
-          field = 'Sunday';
-          break;
-        case 1:
-          field = 'Monday';
-          break;
-        case 2:
-          field = 'Tuesday';
-          break;
-        case 3:
-          field = 'Wednesday';
-          break;
-        case 4:
-          field = 'Thursday';
-          break;
-        case 5:
-          field = 'Friday';
-          break;
-        case 6:
-          field = 'Saturday';
-          break;
-        default:
-          field = 'Unknown';
-          break;
-      }
+    case 'birthDay':
+      field = player.dateOfBirth ? getDay(player.dateOfBirth) : 'Unknown';
       break;
-    }
     case 'country':
       field = player.country;
       break;
@@ -1542,32 +1512,17 @@ export function sortPlayerStats(stats: DatabaseStats) {
       case 'nineDartersPDC':
       case 'yearOfBestResultPDC':
       case 'yearOfBestResultWDF':
+      case 'birthDay':
         // Sort values in the ascending order
         stats[key].sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
-        break;
-      case 'birthDay': {
-        // Sort days from Monday to Sunday
-        stats[key].sort((a, b) => {
-          const dayMap = new Map<string, number>();
-          dayMap.set('Monday', 1);
-          dayMap.set('Tuesday', 2);
-          dayMap.set('Wednesday', 3);
-          dayMap.set('Thursday', 4);
-          dayMap.set('Friday', 5);
-          dayMap.set('Saturday', 6);
-          dayMap.set('Sunday', 7);
-
-          const aValue = dayMap.get(a.value);
-          const bValue = dayMap.get(b.value);
-
-          if (!aValue || !bValue) {
-            return b.count - a.count;
+        // Move Sunday to the end
+        if (key === 'birthDay') {
+          if (stats[key][0].value === '0') {
+            const sunday = stats[key].shift();
+            stats[key].push(sunday!);
           }
-
-          return aValue - bValue;
-        });
+        }
         break;
-      }
       case 'gender': {
         // Sort gender from male to female
         stats[key].sort((a, b) => {

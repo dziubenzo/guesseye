@@ -8,52 +8,42 @@ import {
 } from '@/components/ui/chart';
 import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
 import { enGB } from 'date-fns/locale';
-import {
-  Bar,
-  BarChart,
-  LabelList,
-  XAxis,
-  YAxis
-} from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-birth-month)',
+    color: 'var(--chart-birth-date)',
   },
 } satisfies ChartConfig;
 
-type BirthMonthChartProps = {
-  data: DatabaseStats['birthMonth'];
+type BirthDateChartProps = {
+  data: DatabaseStats['birthDate'];
 };
 
-export default function BirthMonthChart({ data }: BirthMonthChartProps) {
+export default function BirthDateChart({ data }: BirthDateChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 5, right: 25, bottom: 5, left: 5 }}
-        layout="vertical"
+        margin={{ top: 25, right: 5, bottom: 5, left: 5 }}
       >
-        <XAxis type="number" hide />
-        <YAxis
+        <CartesianGrid vertical={false} />
+        <XAxis
           dataKey="value"
-          type="category"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={0}
-          tickFormatter={(value) =>
-            `${enGB.localize.month(value, { width: 'abbreviated' })}`
-          }
+          minTickGap={16}
+          tickFormatter={(value) => `${enGB.localize.ordinalNumber(value)}`}
         />
         <ChartTooltip
           content={
             <ChartTooltipContent
               hideIndicator={true}
               labelFormatter={(value) =>
-                `${enGB.localize.month(value, { width: 'wide' })}`
+                `${enGB.localize.ordinalNumber(value)}`
               }
             />
           }
@@ -61,33 +51,25 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
         <Bar dataKey="count" fill="var(--color-count)" radius={4}>
           <LabelList
             dataKey="count"
-            position="right"
-            offset={4}
-            className="fill-foreground hidden sm:text-sm sm:block"
+            position="top"
+            offset={12}
+            className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
-            position="right"
+            position="top"
             offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
+            className="fill-foreground text-[0.5rem] sm:hidden"
           />
           <LabelList
             dataKey="percentage"
-            position="insideLeft"
-            offset={8}
+            position="center"
+            angle={-90}
+            offset={12}
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white hidden sm:text-xs sm:block"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="insideLeft"
-            offset={4}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white text-[0.6rem] sm:hidden"
+            className="fill-white hidden sm:text-base sm:block"
           />
         </Bar>
       </BarChart>

@@ -58,6 +58,8 @@
   --color-chart-very-hard: var(--chart-very-hard);
   --color-chart-age: var(--chart-age);
   --color-chart-birth-month: var(--chart-birth-month);
+  --color-chart-birth-date: var(--chart-birth-date);
+  --color-chart-birth-day: var(--chart-birth-day);
 }
 
 /* Green with 0.5 radius */
@@ -111,6 +113,8 @@
   --chart-very-hard: oklch(0.5475 0.1912 337.07);
   --chart-age: oklch(0.6328 0.114 152.7);
   --chart-birth-month: oklch(0.6328 0.114 334.51);
+  --chart-birth-date: oklch(0.7419 0.1297 95.51);
+  --chart-birth-day: oklch(0.7241 0.1737 37.28);
 }
 
 .dark {
@@ -161,6 +165,8 @@
   --chart-very-hard: oklch(0.7726 0.1912 337.07);
   --chart-age: oklch(0.6328 0.114 152.7);
   --chart-birth-month: oklch(0.6328 0.114 334.51);
+  --chart-birth-date: oklch(0.7419 0.1297 95.51);
+  --chart-birth-day: oklch(0.7241 0.1737 37.28);
 }
 
 @layer base {

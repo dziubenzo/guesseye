@@ -8,28 +8,22 @@ import {
 } from '@/components/ui/chart';
 import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
 import { enGB } from 'date-fns/locale';
-import {
-  Bar,
-  BarChart,
-  LabelList,
-  XAxis,
-  YAxis
-} from 'recharts';
+import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-birth-month)',
+    color: 'var(--chart-birth-day)',
   },
 } satisfies ChartConfig;
 
-type BirthMonthChartProps = {
-  data: DatabaseStats['birthMonth'];
+type BirthDayChartProps = {
+  data: DatabaseStats['birthDay'];
 };
 
-export default function BirthMonthChart({ data }: BirthMonthChartProps) {
+export default function BirthDayChart({ data }: BirthDayChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[150px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
@@ -45,7 +39,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
           axisLine={false}
           minTickGap={0}
           tickFormatter={(value) =>
-            `${enGB.localize.month(value, { width: 'abbreviated' })}`
+            `${enGB.localize.day(value, { width: 'abbreviated' })}`
           }
         />
         <ChartTooltip
@@ -53,7 +47,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             <ChartTooltipContent
               hideIndicator={true}
               labelFormatter={(value) =>
-                `${enGB.localize.month(value, { width: 'wide' })}`
+                `${enGB.localize.day(value, { width: 'wide' })}`
               }
             />
           }
@@ -62,8 +56,8 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
           <LabelList
             dataKey="count"
             position="right"
-            offset={4}
-            className="fill-foreground hidden sm:text-sm sm:block"
+            offset={6}
+            className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
@@ -78,7 +72,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white hidden sm:text-xs sm:block"
+            className="fill-white hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="percentage"

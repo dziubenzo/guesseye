@@ -1,4 +1,6 @@
 import AgeChart from '@/components/charts/AgeChart';
+import BirthDateChart from '@/components/charts/BirthDateChart';
+import BirthDayChart from '@/components/charts/BirthDayChart';
 import BirthMonthChart from '@/components/charts/BirthMonthChart';
 import GeneralPieChart from '@/components/charts/GeneralPieChart';
 import {
@@ -59,7 +61,7 @@ export default async function DatabaseStats() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4 md:gap-8">
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2>Darts Players By Gender</h2>
                 <GeneralPieChart
@@ -94,14 +96,22 @@ export default async function DatabaseStats() {
               </div>
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="text-2xl text-center">Darts Players By Age</h2>
+              <h2 className="sm:text-2xl">Darts Players By Age</h2>
               <AgeChart data={age} />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-0">
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Birth Month</h2>
+                <BirthMonthChart data={birthMonth} />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Birth Day</h2>
+                <BirthDayChart data={birthDay} />
+              </div>
+            </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="text-2xl text-center">
-                Darts Players By Birth Month
-              </h2>
-              <BirthMonthChart data={birthMonth} />
+              <h2 className="sm:text-2xl">Darts Players By Birth Date</h2>
+              <BirthDateChart data={birthDate} />
             </div>
           </div>
         </CardContent>

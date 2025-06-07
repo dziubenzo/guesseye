@@ -16,11 +16,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type AgeProps = {
+type AgeChartProps = {
   data: DatabaseStats['age'];
 };
 
-export default function AgeChart({ data }: AgeProps) {
+export default function AgeChart({ data }: AgeChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart
@@ -68,16 +68,6 @@ export default function AgeChart({ data }: AgeProps) {
               value + '%'
             }
             className="fill-white hidden sm:text-xs sm:block"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="center"
-            angle={-90}
-            offset={3}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white text-[0.4rem] sm:hidden"
           />
         </Bar>
       </BarChart>
