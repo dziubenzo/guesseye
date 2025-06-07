@@ -21,7 +21,7 @@ export default function GeneralPieChart({
   colours,
 }: GeneralPieChartProps) {
   return (
-    <ChartContainer config={config} className="min-h-[200px] w-full">
+    <ChartContainer config={config} className="min-h-[250px] w-full">
       <PieChart>
         <ChartTooltip content={<ChartTooltipContent className="w-[150px]" />} />
         <Pie

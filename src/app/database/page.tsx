@@ -1,3 +1,5 @@
+import AgeChart from '@/components/charts/AgeChart';
+import BirthMonthChart from '@/components/charts/BirthMonthChart';
 import GeneralPieChart from '@/components/charts/GeneralPieChart';
 import {
   DIFFICULTY_CHART_CONFIG,
@@ -29,7 +31,6 @@ export default async function DatabaseStats() {
   const {
     gender,
     age,
-    birthYear,
     birthMonth,
     birthDate,
     birthDay,
@@ -47,8 +48,6 @@ export default async function DatabaseStats() {
     difficulty,
   } = stats;
 
-  console.log(difficulty);
-
   return (
     <div className="flex flex-col grow-1 justify-center">
       <Card>
@@ -59,38 +58,50 @@ export default async function DatabaseStats() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="flex flex-col justify-center items-center grow-1">
-              <h2>Darts Players By Gender</h2>
-              <GeneralPieChart
-                data={gender}
-                config={GENDER_CHART_CONFIG}
-                colours={GENDER_COLOURS}
-              />
+          <div className="flex flex-col gap-4 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Gender</h2>
+                <GeneralPieChart
+                  data={gender}
+                  config={GENDER_CHART_CONFIG}
+                  colours={GENDER_COLOURS}
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Laterality</h2>
+                <GeneralPieChart
+                  data={laterality}
+                  config={LATERALITY_CHART_CONFIG}
+                  colours={LATERALITY_COLOURS}
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Organisation</h2>
+                <GeneralPieChart
+                  data={organisation}
+                  config={ORGANISATION_CHART_CONFIG}
+                  colours={ORGANISATION_COLOURS}
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2>Darts Players By Difficulty</h2>
+                <GeneralPieChart
+                  data={difficulty}
+                  config={DIFFICULTY_CHART_CONFIG}
+                  colours={DIFFICULTY_COLOURS}
+                />
+              </div>
             </div>
-            <div className="flex flex-col justify-center items-center grow-1">
-              <h2>Darts Players By Laterality</h2>
-              <GeneralPieChart
-                data={laterality}
-                config={LATERALITY_CHART_CONFIG}
-                colours={LATERALITY_COLOURS}
-              />
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h2 className="text-2xl text-center">Darts Players By Age</h2>
+              <AgeChart data={age} />
             </div>
-            <div className="flex flex-col justify-center items-center grow-1">
-              <h2>Darts Players By Organisation</h2>
-              <GeneralPieChart
-                data={organisation}
-                config={ORGANISATION_CHART_CONFIG}
-                colours={ORGANISATION_COLOURS}
-              />
-            </div>
-            <div className="flex flex-col justify-center items-center grow-1">
-              <h2>Darts Players By Difficulty</h2>
-              <GeneralPieChart
-                data={difficulty}
-                config={DIFFICULTY_CHART_CONFIG}
-                colours={DIFFICULTY_COLOURS}
-              />
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h2 className="text-2xl text-center">
+                Darts Players By Birth Month
+              </h2>
+              <BirthMonthChart data={birthMonth} />
             </div>
           </div>
         </CardContent>

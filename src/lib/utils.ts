@@ -33,7 +33,6 @@ import {
   getDate,
   getDay,
   getMonth,
-  getYear,
   millisecondsToMinutes,
   millisecondsToSeconds,
 } from 'date-fns';
@@ -1418,9 +1417,6 @@ export function countPlayersBy(
     case 'age':
       field = player.dateOfBirth ? getAge(player.dateOfBirth) : 'Unknown';
       break;
-    case 'birthYear':
-      field = player.dateOfBirth ? getYear(player.dateOfBirth) : 'Unknown';
-      break;
     case 'birthMonth':
       field = player.dateOfBirth ? getMonth(player.dateOfBirth) : 'Unknown';
       break;
@@ -1539,7 +1535,6 @@ export function sortPlayerStats(stats: DatabaseStats) {
   for (key in stats) {
     switch (key) {
       case 'age':
-      case 'birthYear':
       case 'birthMonth':
       case 'birthDate':
       case 'playingSince':

@@ -47,7 +47,6 @@ const getCachedDatabaseStats = unstable_cache(
     const playerObject: DatabaseStatsObject = {
       gender: {},
       age: {},
-      birthYear: {},
       birthMonth: {},
       birthDate: {},
       birthDay: {},
@@ -68,7 +67,6 @@ const getCachedDatabaseStats = unstable_cache(
     const stats: DatabaseStats = {
       gender: [],
       age: [],
-      birthYear: [],
       birthMonth: [],
       birthDate: [],
       birthDay: [],

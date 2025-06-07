@@ -1,7 +1,7 @@
 import ChartHeading from '@/components/ChartHeading';
-import GamesByDayChart from '@/components/GamesByDayChart';
-import GuessFrequencyChart from '@/components/GuessFrequencyChart';
-import GuessesByDayChart from '@/components/GuessesByDayChart';
+import GamesByDayChart from '@/components/charts/GamesByDayChart';
+import GuessFrequencyChart from '@/components/charts/GuessFrequencyChart';
+import GuessesByDayChart from '@/components/charts/GuessesByDayChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { GlobalStats } from '@/lib/types';

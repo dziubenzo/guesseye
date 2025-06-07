@@ -331,7 +331,6 @@ export type DatabaseStatsPlayer = Omit<
 export type DatabaseStatsType =
   | 'gender'
   | 'age'
-  | 'birthYear'
   | 'birthMonth'
   | 'birthDate'
   | 'birthDay'

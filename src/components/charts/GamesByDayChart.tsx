@@ -43,7 +43,11 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
 
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={data}>
+      <BarChart
+        accessibilityLayer
+        data={data}
+        margin={{ top: 25, right: 5, bottom: 5, left: 5 }}
+      >
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="date"
