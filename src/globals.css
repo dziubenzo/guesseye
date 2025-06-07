@@ -49,6 +49,13 @@
   --color-medium-difficulty: var(--medium-difficulty);
   --color-chart-male: var(--chart-male);
   --color-chart-female: var(--chart-female);
+  --color-chart-PDC: var(--chart-PDC);
+  --color-chart-WDF: var(--chart-WDF);
+  --color-chart-BDO: var(--chart-BDO);
+  --color-chart-easy: var(--chart-easy);
+  --color-chart-medium: var(--chart-medium);
+  --color-chart-hard: var(--chart-hard);
+  --color-chart-very-hard: var(--chart-very-hard);
 }
 
 /* Green with 0.5 radius */
@@ -93,6 +100,13 @@
   --medium-difficulty: oklch(0.828 0.189 84.429);
   --chart-male: oklch(0.6304 0.099 225.25);
   --chart-female: oklch(0.6304 0.1499 0);
+  --chart-PDC: oklch(0.2991 0.1098 258.58);
+  --chart-WDF: oklch(0.6935 0.1854 46.45);
+  --chart-BDO: oklch(0.6565 0.2315 17.97);
+  --chart-easy: oklch(0.7941 0.1543 145.87);
+  --chart-medium: oklch(0.828 0.189 84.429);
+  --chart-hard: oklch(0.6328 0.2306 28.07);
+  --chart-very-hard: oklch(0.5475 0.1912 337.07);
 }
 
 .dark {
@@ -134,6 +148,13 @@
   --medium-difficulty: oklch(0.828 0.189 84.429);
   --chart-male: oklch(0.6304 0.099 225.25);
   --chart-female: oklch(0.6304 0.1499 0);
+  --chart-PDC: oklch(0.7016 0.1098 258.58);
+  --chart-WDF: oklch(0.6935 0.1854 46.45);
+  --chart-BDO: oklch(0.6565 0.2315 17.97);
+  --chart-easy: oklch(0.7941 0.1543 145.87);
+  --chart-medium: oklch(0.828 0.189 84.429);
+  --chart-hard: oklch(0.6328 0.2306 28.07);
+  --chart-very-hard: oklch(0.7726 0.1912 337.07);
 }
 
 @layer base {

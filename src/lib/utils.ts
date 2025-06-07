@@ -1573,6 +1573,81 @@ export function sortPlayerStats(stats: DatabaseStats) {
         });
         break;
       }
+      case 'gender': {
+        // Sort gender from male to female
+        stats[key].sort((a, b) => {
+          const dayMap = new Map<string, number>();
+          dayMap.set('male', 1);
+          dayMap.set('female', 2);
+
+          const aValue = dayMap.get(a.value);
+          const bValue = dayMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
+      case 'laterality': {
+        // Sort laterality from right-handed to left-handed
+        stats[key].sort((a, b) => {
+          const dayMap = new Map<string, number>();
+          dayMap.set('right-handed', 1);
+          dayMap.set('left-handed', 2);
+
+          const aValue = dayMap.get(a.value);
+          const bValue = dayMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
+      case 'organisation': {
+        // Sort organisation from PDC through WDF to BDO
+        stats[key].sort((a, b) => {
+          const dayMap = new Map<string, number>();
+          dayMap.set('PDC', 1);
+          dayMap.set('WDF', 2);
+          dayMap.set('BDO', 3);
+
+          const aValue = dayMap.get(a.value);
+          const bValue = dayMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
+      case 'difficulty': {
+        // Sort difficulty from easy to very hard
+        stats[key].sort((a, b) => {
+          const dayMap = new Map<string, number>();
+          dayMap.set('easy', 1);
+          dayMap.set('medium', 2);
+          dayMap.set('hard', 3);
+          dayMap.set('very hard', 4);
+
+          const aValue = dayMap.get(a.value);
+          const bValue = dayMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
       default:
         // Sort count in the descending order
         stats[key].sort((a, b) => b.count - a.count);
