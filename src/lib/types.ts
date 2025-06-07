@@ -345,7 +345,8 @@ export type DatabaseStatsType =
   | 'bestResultPDC'
   | 'bestResultWDF'
   | 'yearOfBestResultPDC'
-  | 'yearOfBestResultWDF';
+  | 'yearOfBestResultWDF'
+  | 'difficulty';
 
 export type DatabaseStatsResult = {
   value: string;

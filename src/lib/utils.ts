@@ -1497,6 +1497,9 @@ export function countPlayersBy(
         ? player.yearOfBestResultWDF
         : 'Did not play';
       break;
+    case 'difficulty':
+      field = player.difficulty;
+      break;
   }
 
   if (entryObject[field] === undefined) {

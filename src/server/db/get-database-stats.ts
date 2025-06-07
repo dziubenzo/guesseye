@@ -44,26 +44,6 @@ const getCachedDatabaseStats = unstable_cache(
       return error;
     }
 
-    const stats: DatabaseStats = {
-      gender: [],
-      age: [],
-      birthYear: [],
-      birthMonth: [],
-      birthDate: [],
-      birthDay: [],
-      country: [],
-      playingSince: [],
-      organisation: [],
-      laterality: [],
-      dartsBrand: [],
-      dartsWeight: [],
-      nineDartersPDC: [],
-      bestResultPDC: [],
-      bestResultWDF: [],
-      yearOfBestResultPDC: [],
-      yearOfBestResultWDF: [],
-    };
-
     const playerObject: DatabaseStatsObject = {
       gender: {},
       age: {},
@@ -82,6 +62,28 @@ const getCachedDatabaseStats = unstable_cache(
       bestResultWDF: {},
       yearOfBestResultPDC: {},
       yearOfBestResultWDF: {},
+      difficulty: {},
+    };
+
+    const stats: DatabaseStats = {
+      gender: [],
+      age: [],
+      birthYear: [],
+      birthMonth: [],
+      birthDate: [],
+      birthDay: [],
+      country: [],
+      playingSince: [],
+      organisation: [],
+      laterality: [],
+      dartsBrand: [],
+      dartsWeight: [],
+      nineDartersPDC: [],
+      bestResultPDC: [],
+      bestResultWDF: [],
+      yearOfBestResultPDC: [],
+      yearOfBestResultWDF: [],
+      difficulty: [],
     };
 
     players.forEach((player) => {
