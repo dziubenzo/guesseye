@@ -3,7 +3,10 @@ import BirthDateChart from '@/components/charts/BirthDateChart';
 import BirthDayChart from '@/components/charts/BirthDayChart';
 import BirthMonthChart from '@/components/charts/BirthMonthChart';
 import CountryChart from '@/components/charts/CountryChart';
+import DartsBrandChart from '@/components/charts/DartsBrandChart';
+import DartsWeightChart from '@/components/charts/DartsWeightChart';
 import GeneralPieChart from '@/components/charts/GeneralPieChart';
+import NineDartersChart from '@/components/charts/NineDartersChart';
 import {
   DIFFICULTY_CHART_CONFIG,
   DIFFICULTY_COLOURS,
@@ -122,6 +125,18 @@ export default async function DatabaseStats() {
             <div className="flex flex-col justify-center items-center gap-4">
               <h2 className="sm:text-2xl">Darts Players By Playing Since</h2>
               <PlayingSinceChart data={playingSince} />
+            </div>
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h2 className="sm:text-2xl">Darts Players By Darts Brand</h2>
+              <DartsBrandChart data={dartsBrand} />
+            </div>
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h2 className="sm:text-2xl">Darts Players By Darts Weight</h2>
+              <DartsWeightChart data={dartsWeight} />
+            </div>
+            <div className="flex flex-col justify-center items-center gap-4">
+              <h2 className="sm:text-2xl">Darts Players By PDC Nine-Darters</h2>
+              <NineDartersChart data={nineDartersPDC} />
             </div>
           </div>
         </CardContent>

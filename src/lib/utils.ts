@@ -1445,7 +1445,7 @@ export function countPlayersBy(
       field = player.dartsWeight ? parseFloat(player.dartsWeight) : null;
       break;
     case 'nineDartersPDC':
-      field = player.nineDartersPDC > 0 ? player.nineDartersPDC : 'None';
+      field = player.nineDartersPDC;
       break;
     case 'bestResultPDC':
       field = player.bestResultPDC ? player.bestResultPDC : 'Did not play';

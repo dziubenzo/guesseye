@@ -62,6 +62,9 @@
   --color-chart-birth-day: var(--chart-birth-day);
   --color-chart-country: var(--chart-country);
   --color-chart-playing-since: var(--chart-playing-since);
+  --color-chart-darts-brand: var(--chart-darts-brand);
+  --color-chart-darts-weight: var(--chart-darts-weight);
+  --color-chart-nine-darters: var(--chart-nine-darters);
 }
 
 /* Green with 0.5 radius */
@@ -119,6 +122,9 @@
   --chart-birth-day: oklch(0.7241 0.1737 37.28);
   --chart-country: oklch(0.7893 0.1737 118.81);
   --chart-playing-since: oklch(0.6233 0.1131 52.83);
+  --chart-darts-brand: oklch(0.7348 0.0964 197.94);
+  --chart-darts-weight: oklch(0.6328 0.2113 360);
+  --chart-nine-darters: oklch(0.7348 0.2026 143.31);
 }
 
 .dark {
@@ -173,6 +179,9 @@
   --chart-birth-day: oklch(0.7241 0.1737 37.28);
   --chart-country: oklch(0.7893 0.1737 118.81);
   --chart-playing-since: oklch(0.6233 0.1131 52.83);
+  --chart-darts-brand: oklch(0.7348 0.0964 197.94);
+  --chart-darts-weight: oklch(0.6328 0.2113 360);
+  --chart-nine-darters: oklch(0.7348 0.2026 143.31);
 }
 
 @layer base {
