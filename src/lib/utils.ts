@@ -1454,14 +1454,10 @@ export function countPlayersBy(
       field = player.bestResultWDF ? player.bestResultWDF : 'Did not play';
       break;
     case 'yearOfBestResultPDC':
-      field = player.yearOfBestResultPDC
-        ? player.yearOfBestResultPDC
-        : 'Did not play';
+      field = player.yearOfBestResultPDC ? player.yearOfBestResultPDC : null;
       break;
     case 'yearOfBestResultWDF':
-      field = player.yearOfBestResultWDF
-        ? player.yearOfBestResultWDF
-        : 'Did not play';
+      field = player.yearOfBestResultWDF ? player.yearOfBestResultWDF : null;
       break;
     case 'difficulty':
       field = player.difficulty;
@@ -1597,6 +1593,34 @@ export function sortPlayerStats(stats: DatabaseStats) {
           }
 
           return aValue - bValue;
+        });
+        break;
+      }
+      case 'bestResultPDC': {
+        // Sort PDC best result from best to worst
+        stats[key].sort((a, b) => {
+          const aResult = bestResultPDCMap.get(a.value as BestResultColumnType);
+          const bResult = bestResultPDCMap.get(b.value as BestResultColumnType);
+
+          if (!aResult && !bResult) return 0;
+          if (!aResult) return 1;
+          if (!bResult) return -1;
+
+          return aResult - bResult;
+        });
+        break;
+      }
+      case 'bestResultWDF': {
+        // Sort WDF best result from best to worst
+        stats[key].sort((a, b) => {
+          const aResult = bestResultWDFMap.get(a.value as BestResultColumnType);
+          const bResult = bestResultWDFMap.get(b.value as BestResultColumnType);
+
+          if (!aResult && !bResult) return 0;
+          if (!aResult) return 1;
+          if (!bResult) return -1;
+
+          return aResult - bResult;
         });
         break;
       }

@@ -6,22 +6,21 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
-import { enGB } from 'date-fns/locale';
+import type { DatabaseStats } from '@/lib/types';
 import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-birth-month)',
+    color: 'var(--chart-BDO)',
   },
 } satisfies ChartConfig;
 
-type BirthMonthChartProps = {
-  data: DatabaseStats['birthMonth'];
+type BestResultWDFChartProps = {
+  data: DatabaseStats['bestResultWDF'];
 };
 
-export default function BirthMonthChart({ data }: BirthMonthChartProps) {
+export default function BestResultWDFChart({ data }: BestResultWDFChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart
@@ -38,17 +37,14 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          tickFormatter={(value) =>
-            `${enGB.localize.month(value, { width: 'abbreviated' })}`
-          }
+          width={100}
+          tickFormatter={(value) => value}
         />
         <ChartTooltip
           content={
             <ChartTooltipContent
               hideIndicator={true}
-              labelFormatter={(value) =>
-                `Born in ${enGB.localize.month(value, { width: 'wide' })}`
-              }
+              labelFormatter={(value) => value}
             />
           }
         />
@@ -57,31 +53,13 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             dataKey="count"
             position="right"
             offset={4}
-            className="fill-foreground hidden sm:text-sm sm:block"
+            className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
             position="right"
             offset={3}
             className="fill-foreground text-[0.7rem] sm:hidden"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="insideLeft"
-            offset={8}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white hidden sm:text-xs sm:block"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="insideLeft"
-            offset={4}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white text-[0.6rem] sm:hidden"
           />
         </Bar>
       </BarChart>

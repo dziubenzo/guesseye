@@ -1,4 +1,8 @@
 import AgeChart from '@/components/charts/AgeChart';
+import BestResultPDCChart from '@/components/charts/BestResultPDCChart';
+import BestResultPDCYearChart from '@/components/charts/BestResultPDCYearChart';
+import BestResultWDFChart from '@/components/charts/BestResultWDFChart';
+import BestResultWDFYearChart from '@/components/charts/BestResultWDFYearChart';
 import BirthDateChart from '@/components/charts/BirthDateChart';
 import BirthDayChart from '@/components/charts/BirthDayChart';
 import BirthMonthChart from '@/components/charts/BirthMonthChart';
@@ -61,14 +65,16 @@ export default async function DatabaseStats() {
         <CardHeader>
           <CardTitle className="text-2xl">Database Stats</CardTitle>
           <CardDescription>
-            <p>Here you can find various database charts.</p>
+            <p>Here you can find miscellaneous database charts.</p>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="mt-4">
           <div className="flex flex-col gap-4 md:gap-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Gender</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Gender
+                </h2>
                 <GeneralPieChart
                   data={gender}
                   config={GENDER_CHART_CONFIG}
@@ -76,7 +82,9 @@ export default async function DatabaseStats() {
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Laterality</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Laterality
+                </h2>
                 <GeneralPieChart
                   data={laterality}
                   config={LATERALITY_CHART_CONFIG}
@@ -84,7 +92,9 @@ export default async function DatabaseStats() {
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Organisation</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Organisation
+                </h2>
                 <GeneralPieChart
                   data={organisation}
                   config={ORGANISATION_CHART_CONFIG}
@@ -92,7 +102,9 @@ export default async function DatabaseStats() {
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Difficulty</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Difficulty
+                </h2>
                 <GeneralPieChart
                   data={difficulty}
                   config={DIFFICULTY_CHART_CONFIG}
@@ -101,42 +113,88 @@ export default async function DatabaseStats() {
               </div>
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Age</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Age
+              </h2>
               <AgeChart data={age} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Birth Month</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Birth Month
+                </h2>
                 <BirthMonthChart data={birthMonth} />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
-                <h2>Darts Players By Birth Day</h2>
+                <h2 className="font-medium text-center">
+                  Darts Players By Birth Day
+                </h2>
                 <BirthDayChart data={birthDay} />
               </div>
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Birth Date</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Birth Date
+              </h2>
               <BirthDateChart data={birthDate} />
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Country</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Country
+              </h2>
               <CountryChart data={country} />
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Playing Since</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Playing Since
+              </h2>
               <PlayingSinceChart data={playingSince} />
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Darts Brand</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Darts Brand
+              </h2>
               <DartsBrandChart data={dartsBrand} />
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By Darts Weight</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By Darts Weight
+              </h2>
               <DartsWeightChart data={dartsWeight} />
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
-              <h2 className="sm:text-2xl">Darts Players By PDC Nine-Darters</h2>
+              <h2 className="sm:text-2xl font-medium text-center">
+                Darts Players By PDC Nine-Darters
+              </h2>
               <NineDartersChart data={nineDartersPDC} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Best PDC WC Result
+                </h2>
+                <BestResultPDCChart data={bestResultPDC} />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Best BDO/WDF WC Result
+                </h2>
+                <BestResultWDFChart data={bestResultWDF} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Year of Best PDC WC Result
+                </h2>
+                <BestResultPDCYearChart data={yearOfBestResultPDC} />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Year of Best BDO/WDF WC Result
+                </h2>
+                <BestResultWDFYearChart data={yearOfBestResultWDF} />
+              </div>
             </div>
           </div>
         </CardContent>

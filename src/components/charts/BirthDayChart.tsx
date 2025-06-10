@@ -63,7 +63,7 @@ export default function BirthDayChart({ data }: BirthDayChartProps) {
             dataKey="count"
             position="right"
             offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
+            className="fill-foreground text-[0.7rem] sm:hidden"
           />
           <LabelList
             dataKey="percentage"
