@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
+import ThemeProvider from '@/components/ThemeProvider';
 import '@/globals.css';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -26,15 +27,22 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className="">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center justify-center min-h-lvh bg-secondary`}
       >
-        <div className="flex flex-col min-h-lvh w-full max-w-lvw lg:max-w-5xl gap-4 p-2">
-          <Header />
-          <main className="flex flex-col grow-1">{children}</main>
-          <Footer />
-        </div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex flex-col min-h-lvh w-full max-w-lvw lg:max-w-5xl gap-4 p-2">
+            <Header />
+            <main className="flex flex-col grow-1">{children}</main>
+            <Footer />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

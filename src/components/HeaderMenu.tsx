@@ -1,5 +1,6 @@
 'use client';
 
+import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
@@ -29,7 +30,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const CUSTOM_TRIGGER_CLASS =
-  'bg-primary text-primary-foreground data-[state=open]:bg-primary data-[state=open]:text-primary-foreground data-[state=open]:hover:bg-primary data-[state=open]:hover:text-primary-foreground data-[state=closed]:hover:bg-primary data-[state=closed]:hover:text-primary-foreground data-[state=closed]:bg-primary data-[state=closed]:text-primary-foreground hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus:bg-primary focus-visible:text-primary-foreground focus:text-primary-foreground data-[state=open]:focus:bg-primary min-w-full w-full sm:min-h-10 sm:h-10';
+  'bg-primary text-primary-foreground data-[state=open]:bg-primary/90 data-[state=open]:text-primary-foreground data-[state=open]:hover:bg-primary/90 data-[state=open]:hover:text-primary-foreground data-[state=closed]:hover:bg-primary/90 data-[state=closed]:hover:text-primary-foreground data-[state=closed]:bg-primary data-[state=closed]:text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground focus-visible:bg-primary focus:bg-primary focus-visible:text-primary-foreground focus:text-primary-foreground data-[state=open]:focus:bg-primary min-w-full w-full sm:min-h-10 sm:h-10';
 
 const CUSTOM_MENU_CLASS = 'grid w-full sm:w-[420px] gap-2 sm:gap-4';
 
@@ -53,7 +54,7 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
   }
 
   return (
-    <header className="ml-auto mr-auto">
+    <header className="flex justify-center relative w-full">
       <NavigationMenu viewport={true} className="z-2">
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -205,10 +206,13 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={CUSTOM_MENU_CLASS}>
-                <li>
+                <li className="p-2">
                   <p className="text-sm text-center">
                     Hi, <span className="font-medium">{username}</span>!
                   </p>
+                  <div>
+                    <ThemeToggle type="menu" />
+                  </div>
                 </li>
                 <li>
                   <NavigationMenuLink asChild>
@@ -240,6 +244,9 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+      <div className="hidden sm:block">
+        <ThemeToggle type="header" />
+      </div>
     </header>
   );
 }
