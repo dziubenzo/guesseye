@@ -210,7 +210,7 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
                   <p className="text-sm text-center">
                     Hi, <span className="font-medium">{username}</span>!
                   </p>
-                  <div>
+                  <div className="sm:hidden">
                     <ThemeToggle type="menu" />
                   </div>
                 </li>
