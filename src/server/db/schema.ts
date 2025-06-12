@@ -320,10 +320,10 @@ export const game = pgTable(
     userId: text('user_id').references(() => user.id),
     guestIp: text('guest_ip'),
     guestUserAgent: text('guest_user_agent'),
-    guestName: text('guest_name'),
-    scheduledPlayerId: integer('scheduled_player_id')
-      .notNull()
-      .references(() => schedule.id),
+    scheduledPlayerId: integer('scheduled_player_id').references(
+      () => schedule.id
+    ),
+    randomPlayerId: integer('random_player_id').references(() => player.id),
     startDate: timestamp('start_date', {
       precision: 0,
     })
@@ -331,15 +331,19 @@ export const game = pgTable(
       .defaultNow(),
     endDate: timestamp('end_date', {
       precision: 0,
-    }).notNull(),
+    }),
     hasWon: boolean('has_won').default(false).notNull(),
     hasGivenUp: boolean('has_given_up').default(false).notNull(),
     gameMode: gameModeEnum('game_mode').notNull(),
   },
-  ({ userId, guestIp }) => [
+  ({ userId, guestIp, scheduledPlayerId, randomPlayerId }) => [
     check(
       'is_either_guest_or_user',
       sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`
+    ),
+    check(
+      'is_either_scheduled_or_random_player',
+      sql`(${scheduledPlayerId} IS NULL) <> (${randomPlayerId} IS NULL)`
     ),
   ]
 );
@@ -354,6 +358,11 @@ export const gameRelations = relations(game, ({ one, many }) => ({
     relationName: 'scheduled_player',
     fields: [game.scheduledPlayerId],
     references: [schedule.id],
+  }),
+  randomPlayer: one(player, {
+    relationName: 'random_player',
+    fields: [game.randomPlayerId],
+    references: [player.id],
   }),
   guesses: many(guess),
 }));

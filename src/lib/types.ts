@@ -24,8 +24,12 @@ export type GameWithGuesses = Game & {
   guesses: InferSelectModel<typeof guess>[];
 };
 
-export type GameWithGuessesWithPlayer = Game & {
+export type OfficialGame = Game & {
   guesses: GuessWithPlayer[];
+};
+
+export type RandomGame = OfficialGame & {
+  randomPlayer: Player | null;
 };
 
 export type UserStatsGame = Game & {
@@ -113,7 +117,7 @@ export type PlayerToFindRangedMatch<T> = {
   value: T;
 };
 
-export type ExistingGame = {
+export type ExistingOfficialGame = {
   gameInProgress: true;
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
@@ -121,6 +125,11 @@ export type ExistingGame = {
   winnersCount: number;
   nextPlayerStartDate: Schedule['startDate'];
 };
+
+export type ExistingRandomGame = Pick<
+  ExistingOfficialGame,
+  'gameInProgress' | 'guesses' | 'playerToFindMatches' | 'playerDifficulty'
+>;
 
 export type Guess = {
   guessedPlayer: Player;

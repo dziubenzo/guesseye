@@ -2,11 +2,7 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type {
-  CheckGuessAction,
-  Game,
-  GameWithGuessesWithPlayer,
-} from '@/lib/types';
+import type { CheckGuessAction } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   checkSearchResults,
@@ -17,10 +13,10 @@ import {
   normaliseGuess,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/guess';
-import { createGame } from '@/server/db/create-game';
 import { createGuess } from '@/server/db/create-guess';
+import { createOfficialGame } from '@/server/db/create-official-game';
 import { endGame } from '@/server/db/end-game';
-import { getGame } from '@/server/db/get-game';
+import { findOfficialGame } from '@/server/db/find-official-game';
 import { getPlayers } from '@/server/db/get-players';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
@@ -61,11 +57,11 @@ export const checkGuess = actionClient
       }
 
       // Get game if it exists
-      const existingGame = await getGame(scheduledPlayer);
+      const existingGame = await findOfficialGame(scheduledPlayer);
 
-      const game: Game | GameWithGuessesWithPlayer = existingGame
+      const game = existingGame
         ? existingGame
-        : await createGame(scheduledPlayer);
+        : await createOfficialGame(scheduledPlayer);
 
       const { playerToFind } = scheduledPlayer;
 

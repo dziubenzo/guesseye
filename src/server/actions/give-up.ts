@@ -1,16 +1,12 @@
 'use server';
 
 import { actionClient } from '@/lib/safe-action-client';
-import type {
-  Game,
-  GameWithGuessesWithPlayer,
-  GiveUpAction,
-} from '@/lib/types';
+import type { GiveUpAction } from '@/lib/types';
 import { isScheduleIdValid } from '@/lib/utils';
 import { giveUpSchema } from '@/lib/zod/give-up';
-import { createGame } from '@/server/db/create-game';
+import { createOfficialGame } from '@/server/db/create-official-game';
 import { endGame } from '@/server/db/end-game';
-import { getGame } from '@/server/db/get-game';
+import { findOfficialGame } from '@/server/db/find-official-game';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const giveUp = actionClient
@@ -42,11 +38,11 @@ export const giveUp = actionClient
     }
 
     // Get game if it exists
-    const existingGame = await getGame(scheduledPlayer);
+    const existingGame = await findOfficialGame(scheduledPlayer);
 
-    const game: Game | GameWithGuessesWithPlayer = existingGame
+    const game = existingGame
       ? existingGame
-      : await createGame(scheduledPlayer);
+      : await createOfficialGame(scheduledPlayer);
 
     const errorObject = await endGame('giveUp', game);
 

@@ -2,12 +2,12 @@
 
 import type {
   ErrorObject,
-  ExistingGame,
+  ExistingOfficialGame,
   GuessWithPlayer,
   NoGame,
 } from '@/lib/types';
 import { comparePlayers, isScheduleIdValid } from '@/lib/utils';
-import { getGame } from '@/server/db/get-game';
+import { findOfficialGame } from '@/server/db/find-official-game';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 import { getWinnersCount } from '@/server/db/get-winners-count';
@@ -38,7 +38,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   }
 
   // Get game if it exists
-  const existingGame = await getGame(scheduledPlayer);
+  const existingGame = await findOfficialGame(scheduledPlayer);
 
   // Get number of users who have found the scheduled player and the next scheduled player
   const [winnersCount, nextScheduledPlayer] = await Promise.all([
@@ -71,7 +71,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
     return data;
   }
 
-  const gameDetails: ExistingGame = {
+  const gameDetails: ExistingOfficialGame = {
     gameInProgress: true,
     guesses: [],
     playerToFindMatches: {},

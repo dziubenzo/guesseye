@@ -3,14 +3,14 @@
 import type {
   ErrorObject,
   GameGivenUp,
-  GameWithGuessesWithPlayer,
+  OfficialGame,
   ScheduleWithPlayer,
 } from '@/lib/types';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 
 export const handleGameGivenUp = async (
   scheduledPlayer: ScheduleWithPlayer,
-  previousGame: GameWithGuessesWithPlayer
+  previousGame: OfficialGame
 ) => {
   const nextScheduledPlayer = await getNextScheduledPlayer(
     scheduledPlayer.endDate
