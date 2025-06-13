@@ -27,7 +27,7 @@ export default async function PreviousOfficialGame({
   }
 
   if (game) {
-    const { playerDifficulty, winnersCount } = game;
+    const { playerDifficulty, winnersCount, gameMode } = game;
 
     return (
       <div className="flex flex-col gap-4">
@@ -35,9 +35,9 @@ export default async function PreviousOfficialGame({
         <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard difficulty={playerDifficulty} />
         {'gameInProgress' in game ? (
-          <Guesses existingGame={game} />
+          <Guesses existingGame={game} gameMode={gameMode} />
         ) : (
-          <Guesses />
+          <Guesses gameMode={gameMode} />
         )}
         <GameOverConfetti />
         <GameOverModal />

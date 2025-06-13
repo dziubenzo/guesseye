@@ -10,23 +10,31 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import { useGameStore } from '@/lib/game-store';
-import type { ExistingGame } from '@/lib/types';
+import type {
+  ExistingOfficialGame,
+  ExistingRandomGame,
+  GameMode,
+} from '@/lib/types';
 import { useEffect, useMemo, useState } from 'react';
 
 type GuessesProps = {
-  existingGame?: ExistingGame;
+  existingGame?: ExistingOfficialGame | ExistingRandomGame;
+  gameMode: GameMode;
 };
 
-export default function Guesses({ existingGame }: GuessesProps) {
-  const { guesses, setInitialGuesses, updateMatches } = useGameStore();
+export default function Guesses({ existingGame, gameMode }: GuessesProps) {
+  const { guesses, setInitialGuesses, updateMatches, setGameMode } =
+    useGameStore();
   const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
+    setGameMode(gameMode);
+
     if (existingGame) {
       setInitialGuesses(existingGame.guesses);
       updateMatches(existingGame.playerToFindMatches);
     }
-  }, [existingGame]);
+  }, [existingGame, gameMode]);
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 

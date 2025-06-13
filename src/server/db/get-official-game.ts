@@ -54,6 +54,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   if (!existingGame) {
     const playerDifficulty: NoGame = {
       noGame: true,
+      gameMode: 'official',
       playerDifficulty: scheduledPlayer.playerToFind.difficulty,
       winnersCount,
       nextPlayerStartDate: nextScheduledPlayer.startDate,
@@ -72,6 +73,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   }
 
   const gameDetails: ExistingOfficialGame = {
+    gameMode: 'official',
     gameInProgress: true,
     guesses: [],
     playerToFindMatches: {},

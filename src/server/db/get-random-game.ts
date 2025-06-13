@@ -10,7 +10,6 @@ import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 
 export const getRandomGame = async () => {
-  // Get random game if it exists
   const existingGame = await findRandomGame();
 
   const game = existingGame ? existingGame : await createRandomGame();
@@ -26,7 +25,7 @@ export const getRandomGame = async () => {
   }
 
   const gameDetails: ExistingRandomGame = {
-    gameInProgress: true,
+    gameMode: 'random',
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: game.randomPlayer.difficulty,

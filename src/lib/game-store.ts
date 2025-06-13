@@ -1,4 +1,4 @@
-import { Guess, Player, PlayerToFindMatches } from '@/lib/types';
+import type { GameMode, Guess, Player, PlayerToFindMatches } from '@/lib/types';
 import { create } from 'zustand';
 
 type GameStore = {
@@ -6,6 +6,7 @@ type GameStore = {
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   gameOver: boolean;
+  gameMode: GameMode;
   finishGame: (playerToFind: Player) => void;
   setInitialGuesses: (initialGuesses: Guess[]) => void;
   updateGuesses: (
@@ -14,11 +15,12 @@ type GameStore = {
   ) => void;
   updateMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
+  setGameMode: (gameMode: GameMode) => void;
 };
 
 type InitialState = Pick<
   GameStore,
-  'playerToFind' | 'guesses' | 'playerToFindMatches' | 'gameOver'
+  'playerToFind' | 'guesses' | 'playerToFindMatches' | 'gameOver' | 'gameMode'
 >;
 
 const initialState: InitialState = {
@@ -26,6 +28,7 @@ const initialState: InitialState = {
   guesses: [],
   playerToFindMatches: {},
   gameOver: false,
+  gameMode: 'official',
 };
 
 export const useGameStore = create<GameStore>()((set) => ({
@@ -33,6 +36,7 @@ export const useGameStore = create<GameStore>()((set) => ({
   guesses: [],
   playerToFindMatches: {},
   gameOver: false,
+  gameMode: 'official',
   finishGame: (playerToFind) =>
     set(() => ({
       playerToFind,
@@ -52,5 +56,10 @@ export const useGameStore = create<GameStore>()((set) => ({
     })),
   resetState: () => {
     set(initialState);
+  },
+  setGameMode: (gameMode) => {
+    set(() => ({
+      gameMode,
+    }));
   },
 }));

@@ -12,7 +12,7 @@ import { getOfficialGame } from '@/server/db/get-official-game';
 import { getRandomGame } from '@/server/db/get-random-game';
 import { headers } from 'next/headers';
 
-export default async function CurrentOfficialGame() {
+export default async function CurrentGame() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -33,7 +33,8 @@ export default async function CurrentOfficialGame() {
     }
 
     if (game) {
-      const { playerDifficulty, winnersCount, nextPlayerStartDate } = game;
+      const { playerDifficulty, winnersCount, nextPlayerStartDate, gameMode } =
+        game;
 
       return (
         <div className="flex flex-col gap-4">
@@ -44,9 +45,9 @@ export default async function CurrentOfficialGame() {
           />
           <PlayerToFindCard difficulty={playerDifficulty} />
           {'gameInProgress' in game ? (
-            <Guesses existingGame={game} />
+            <Guesses existingGame={game} gameMode={gameMode} />
           ) : (
-            <Guesses />
+            <Guesses gameMode={gameMode} />
           )}
           <GameOverConfetti />
           <GameOverModal />
@@ -61,13 +62,13 @@ export default async function CurrentOfficialGame() {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { playerDifficulty } = game;
+  const { playerDifficulty, gameMode } = game;
 
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
       <PlayerToFindCard difficulty={playerDifficulty} />
-      <Guesses existingGame={game} />
+      <Guesses existingGame={game} gameMode={gameMode} />
       <GameOverConfetti />
       <GameOverModal />
     </div>

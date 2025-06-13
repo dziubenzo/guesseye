@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function GameOverModal() {
-  const { gameOver, guesses, playerToFind } = useGameStore();
+  const { gameOver, guesses, playerToFind, resetState } = useGameStore();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -20,6 +20,7 @@ export default function GameOverModal() {
     if (pathname.includes('official')) {
       router.push('/official');
     } else {
+      resetState();
       router.refresh();
     }
   }

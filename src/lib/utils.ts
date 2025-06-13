@@ -664,9 +664,7 @@ export function findFirstWinner(
     !scheduledPlayerHistory.firstWinner &&
     !scheduledPlayerHistory.firstWinnerTime
   ) {
-    scheduledPlayerHistory.firstWinner = currentGame.user?.name
-      ? currentGame.user.name
-      : currentGame.guestName!;
+    scheduledPlayerHistory.firstWinner = currentGame.user?.name;
     scheduledPlayerHistory.firstWinnerTime = currentGame.endDate;
     return;
   }
@@ -684,9 +682,7 @@ export function findFirstWinner(
 
   if (currentDifference > previousDifference) return;
 
-  scheduledPlayerHistory.firstWinner = currentGame.user?.name
-    ? currentGame.user.name
-    : currentGame.guestName!;
+  scheduledPlayerHistory.firstWinner = currentGame.user?.name;
   scheduledPlayerHistory.firstWinnerTime = currentGame.endDate;
 
   return;
@@ -706,9 +702,7 @@ export function findFastestWinner(
     !scheduledPlayerHistory.fastestWinner &&
     !scheduledPlayerHistory.fastestWinnerDuration
   ) {
-    scheduledPlayerHistory.fastestWinner = currentGame.user?.name
-      ? currentGame.user.name
-      : currentGame.guestName!;
+    scheduledPlayerHistory.fastestWinner = currentGame.user?.name;
     scheduledPlayerHistory.fastestWinnerDuration = currentGameDuration;
     return;
   }
@@ -717,9 +711,7 @@ export function findFastestWinner(
 
   if (currentGameDuration > previousGameDuration) return;
 
-  scheduledPlayerHistory.fastestWinner = currentGame.user?.name
-    ? currentGame.user.name
-    : currentGame.guestName!;
+  scheduledPlayerHistory.fastestWinner = currentGame.user?.name;
   scheduledPlayerHistory.fastestWinnerDuration = currentGameDuration;
 
   return;
@@ -735,9 +727,7 @@ export function findWinnerWithFewestGuesses(
     !scheduledPlayerHistory.winnerWithFewestGuesses &&
     !scheduledPlayerHistory.winnerGuesses
   ) {
-    scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name
-      ? currentGame.user.name
-      : currentGame.guestName!;
+    scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name;
     scheduledPlayerHistory.winnerGuesses = currentGameGuesses;
     return;
   }
@@ -746,9 +736,7 @@ export function findWinnerWithFewestGuesses(
 
   if (currentGameGuesses > previousGameGuesses) return;
 
-  scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name
-    ? currentGame.user.name
-    : currentGame.guestName!;
+  scheduledPlayerHistory.winnerWithFewestGuesses = currentGame.user?.name;
   scheduledPlayerHistory.winnerGuesses = currentGameGuesses;
 
   return;

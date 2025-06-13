@@ -2,7 +2,15 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type { CheckGuessAction } from '@/lib/types';
+import type {
+  CheckGuessAction,
+  ErrorObject,
+  Game,
+  OfficialGame,
+  Player,
+  RandomGame,
+  ScheduleWithPlayer,
+} from '@/lib/types';
 import {
   checkIfGuessCorrect,
   checkSearchResults,
@@ -15,15 +23,19 @@ import {
 import { guessSchema } from '@/lib/zod/guess';
 import { createGuess } from '@/server/db/create-guess';
 import { createOfficialGame } from '@/server/db/create-official-game';
+import { createRandomGame } from '@/server/db/create-random-game';
 import { endGame } from '@/server/db/end-game';
 import { findOfficialGame } from '@/server/db/find-official-game';
+import { findRandomGame } from '@/server/db/find-random-game';
 import { getPlayers } from '@/server/db/get-players';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
   .action(
-    async ({ parsedInput: { guess, scheduleId, playerToFindMatches } }) => {
+    async ({
+      parsedInput: { guess, scheduleId, playerToFindMatches, gameMode },
+    }) => {
       const normalisedGuess = normaliseGuess(guess);
 
       if (scheduleId) {
@@ -43,27 +55,53 @@ export const checkGuess = actionClient
 
       const players = await getPlayers();
 
-      // Get scheduled player
-      const scheduledPlayer = await getScheduledPlayer(
-        validScheduleId ? validScheduleId : undefined
-      );
+      let scheduledPlayer: ScheduleWithPlayer | ErrorObject;
+      let game: OfficialGame | RandomGame | Game | ErrorObject;
+      let playerToFind: Player;
 
-      if ('error' in scheduledPlayer) {
-        const error: CheckGuessAction = {
-          type: 'error',
-          error: scheduledPlayer.error,
-        };
-        return error;
+      if (gameMode === 'official') {
+        scheduledPlayer = await getScheduledPlayer(
+          validScheduleId ? validScheduleId : undefined
+        );
+
+        if ('error' in scheduledPlayer) {
+          const error: CheckGuessAction = {
+            type: 'error',
+            error: scheduledPlayer.error,
+          };
+          return error;
+        }
+
+        const existingGame = await findOfficialGame(scheduledPlayer);
+
+        game = existingGame
+          ? existingGame
+          : await createOfficialGame(scheduledPlayer);
+
+        playerToFind = scheduledPlayer.playerToFind;
+      } else {
+        const existingGame = await findRandomGame();
+
+        game = existingGame ? existingGame : await createRandomGame();
+
+        if ('error' in game) {
+          const error: CheckGuessAction = {
+            type: 'error',
+            error: game.error,
+          };
+          return error;
+        }
+
+        if ('randomPlayer' in game && game.randomPlayer) {
+          playerToFind = game.randomPlayer;
+        } else {
+          const error: CheckGuessAction = {
+            type: 'error',
+            error: 'No player to find found.',
+          };
+          return error;
+        }
       }
-
-      // Get game if it exists
-      const existingGame = await findOfficialGame(scheduledPlayer);
-
-      const game = existingGame
-        ? existingGame
-        : await createOfficialGame(scheduledPlayer);
-
-      const { playerToFind } = scheduledPlayer;
 
       const searchResults = filterPlayers(players, normalisedGuess);
 
