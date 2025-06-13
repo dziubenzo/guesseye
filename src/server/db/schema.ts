@@ -109,6 +109,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Showtime Darts',
   'Custom',
   'Karella',
+  'Evolution',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 

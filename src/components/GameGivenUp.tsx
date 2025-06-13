@@ -12,6 +12,7 @@ type GameGivenUpProps = {
 export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
   const {
     previousPlayer,
+    previousPlayerDifficulty,
     nextPlayerStartDate,
     nextPlayerDifficulty,
     attempts,
@@ -24,7 +25,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
       <PlayerCard
         type="playerToFind"
         player={previousPlayer}
-        difficulty={previousPlayer.difficulty}
+        difficulty={previousPlayerDifficulty}
       />
       {attempts > 0 ? (
         <>

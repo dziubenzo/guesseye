@@ -4,8 +4,10 @@ import type {
   ErrorObject,
   GameGivenUp,
   OfficialGame,
+  PlayerToFindMatches,
   ScheduleWithPlayer,
 } from '@/lib/types';
+import { fillAllMatches } from '@/lib/utils';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 
 export const handleGameGivenUp = async (
@@ -23,10 +25,13 @@ export const handleGameGivenUp = async (
 
   const { guesses } = previousGame;
   const attempts = guesses.length;
+  const previousPlayer: PlayerToFindMatches = {};
+  fillAllMatches(scheduledPlayer.playerToFind, previousPlayer);
 
   const gameGivenUp: GameGivenUp = {
     hasGivenUp: true,
-    previousPlayer: scheduledPlayer.playerToFind,
+    previousPlayer,
+    previousPlayerDifficulty: scheduledPlayer.playerToFind.difficulty,
     attempts,
     nextPlayerStartDate: nextScheduledPlayer.startDate,
     nextPlayerDifficulty: nextScheduledPlayer.playerToFind.difficulty,
