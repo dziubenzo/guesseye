@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
 import { checkForDuplicateGuess } from '@/lib/utils';
-import { guessSchema, GuessSchemaType } from '@/lib/zod/guess';
+import { guessSchema, GuessSchemaType } from '@/lib/zod/check-guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';

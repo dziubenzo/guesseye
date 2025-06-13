@@ -2,47 +2,40 @@
 
 import { actionClient } from '@/lib/safe-action-client';
 import type { GiveUpAction } from '@/lib/types';
-import { isScheduleIdValid } from '@/lib/utils';
+import { validateScheduleId } from '@/lib/utils';
 import { giveUpSchema } from '@/lib/zod/give-up';
-import { createOfficialGame } from '@/server/db/create-official-game';
 import { endGame } from '@/server/db/end-game';
-import { findOfficialGame } from '@/server/db/find-official-game';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
+import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
 
 export const giveUp = actionClient
   .schema(giveUpSchema)
-  .action(async ({ parsedInput: { scheduleId } }) => {
-    if (scheduleId) {
-      // Make sure scheduleId is a positive integer
-      const isValid = isScheduleIdValid(scheduleId);
+  .action(async ({ parsedInput: { scheduleId, gameMode } }) => {
+    const validationResult = validateScheduleId(scheduleId);
 
-      if (!isValid) {
-        const error: GiveUpAction = { type: 'error', error: 'Invalid game.' };
-        return error;
-      }
-    }
-
-    const validScheduleId = Number(scheduleId);
-
-    // Get scheduled player
-    const scheduledPlayer = await getScheduledPlayer(
-      validScheduleId ? validScheduleId : undefined
-    );
-
-    if ('error' in scheduledPlayer) {
+    if ('error' in validationResult) {
       const error: GiveUpAction = {
         type: 'error',
-        error: scheduledPlayer.error,
+        error: validationResult.error,
       };
       return error;
     }
 
-    // Get game if it exists
-    const existingGame = await findOfficialGame(scheduledPlayer);
+    const validScheduleId = validationResult.validScheduleId;
 
-    const game = existingGame
-      ? existingGame
-      : await createOfficialGame(scheduledPlayer);
+    const gameAndPlayer = await getGameAndPlayerToFind(
+      gameMode,
+      validScheduleId
+    );
+
+    if ('error' in gameAndPlayer) {
+      const error: GiveUpAction = {
+        type: 'error',
+        error: gameAndPlayer.error,
+      };
+      return error;
+    }
+
+    const { game } = gameAndPlayer;
 
     const errorObject = await endGame('giveUp', game);
 

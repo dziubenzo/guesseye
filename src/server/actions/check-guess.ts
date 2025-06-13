@@ -2,33 +2,21 @@
 
 import { matchingComparisonResults } from '@/lib/constants';
 import { actionClient } from '@/lib/safe-action-client';
-import type {
-  CheckGuessAction,
-  ErrorObject,
-  Game,
-  OfficialGame,
-  Player,
-  RandomGame,
-  ScheduleWithPlayer,
-} from '@/lib/types';
+import type { CheckGuessAction } from '@/lib/types';
 import {
   checkIfGuessCorrect,
   checkSearchResults,
   comparePlayers,
   fillAllMatches,
   filterPlayers,
-  isScheduleIdValid,
   normaliseGuess,
+  validateScheduleId,
 } from '@/lib/utils';
-import { guessSchema } from '@/lib/zod/guess';
+import { guessSchema } from '@/lib/zod/check-guess';
 import { createGuess } from '@/server/db/create-guess';
-import { createOfficialGame } from '@/server/db/create-official-game';
-import { createRandomGame } from '@/server/db/create-random-game';
 import { endGame } from '@/server/db/end-game';
-import { findOfficialGame } from '@/server/db/find-official-game';
-import { findRandomGame } from '@/server/db/find-random-game';
+import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
 import { getPlayers } from '@/server/db/get-players';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -38,70 +26,34 @@ export const checkGuess = actionClient
     }) => {
       const normalisedGuess = normaliseGuess(guess);
 
-      if (scheduleId) {
-        // Make sure scheduleId is a positive integer
-        const isValid = isScheduleIdValid(scheduleId);
+      const validationResult = validateScheduleId(scheduleId);
 
-        if (!isValid) {
-          const error: CheckGuessAction = {
-            type: 'error',
-            error: 'Invalid game.',
-          };
-          return error;
-        }
+      if ('error' in validationResult) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: validationResult.error,
+        };
+        return error;
       }
 
-      const validScheduleId = Number(scheduleId);
+      const validScheduleId = validationResult.validScheduleId;
 
       const players = await getPlayers();
 
-      let scheduledPlayer: ScheduleWithPlayer | ErrorObject;
-      let game: OfficialGame | RandomGame | Game | ErrorObject;
-      let playerToFind: Player;
+      const gameAndPlayer = await getGameAndPlayerToFind(
+        gameMode,
+        validScheduleId
+      );
 
-      if (gameMode === 'official') {
-        scheduledPlayer = await getScheduledPlayer(
-          validScheduleId ? validScheduleId : undefined
-        );
-
-        if ('error' in scheduledPlayer) {
-          const error: CheckGuessAction = {
-            type: 'error',
-            error: scheduledPlayer.error,
-          };
-          return error;
-        }
-
-        const existingGame = await findOfficialGame(scheduledPlayer);
-
-        game = existingGame
-          ? existingGame
-          : await createOfficialGame(scheduledPlayer);
-
-        playerToFind = scheduledPlayer.playerToFind;
-      } else {
-        const existingGame = await findRandomGame();
-
-        game = existingGame ? existingGame : await createRandomGame();
-
-        if ('error' in game) {
-          const error: CheckGuessAction = {
-            type: 'error',
-            error: game.error,
-          };
-          return error;
-        }
-
-        if ('randomPlayer' in game && game.randomPlayer) {
-          playerToFind = game.randomPlayer;
-        } else {
-          const error: CheckGuessAction = {
-            type: 'error',
-            error: 'No player to find found.',
-          };
-          return error;
-        }
+      if ('error' in gameAndPlayer) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: gameAndPlayer.error,
+        };
+        return error;
       }
+
+      const { game, playerToFind } = gameAndPlayer;
 
       const searchResults = filterPlayers(players, normalisedGuess);
 

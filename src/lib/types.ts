@@ -1,4 +1,4 @@
-import type { GuessSchemaType } from '@/lib/zod/guess';
+import type { GuessSchemaType } from '@/lib/zod/check-guess';
 import { game, guess, player, schedule, user } from '@/server/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 

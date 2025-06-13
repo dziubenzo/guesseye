@@ -24,7 +24,7 @@ import type {
   UserStats,
   UserStatsGame,
 } from '@/lib/types';
-import type { GuessSchemaType } from '@/lib/zod/guess';
+import type { GuessSchemaType } from '@/lib/zod/check-guess';
 import { player } from '@/server/db/schema';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
@@ -596,12 +596,20 @@ export function getDifficultyColour(difficulty: Player['difficulty']) {
   }
 }
 
-export function isScheduleIdValid(scheduleId?: string) {
-  const isPositiveInteger =
-    Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
+export const validateScheduleId = (scheduleId: string | undefined) => {
+  if (scheduleId) {
+    // Make sure scheduleId is a positive integer
+    const isValid =
+      Number.isInteger(Number(scheduleId)) && Number(scheduleId) > 0;
 
-  return !isPositiveInteger ? false : true;
-}
+    if (!isValid) {
+      const error: ErrorObject = { error: 'Invalid game.' };
+      return error;
+    }
+  }
+
+  return { validScheduleId: scheduleId ? Number(scheduleId) : undefined };
+};
 
 export function filterPlayers(players: Player[], guess: string[]): Player[] {
   const searchResults = players.filter((player) => {

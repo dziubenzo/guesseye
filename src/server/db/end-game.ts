@@ -1,16 +1,20 @@
 'use server';
 
-import type { Game } from '@/lib/types';
+import type { ErrorObject, Game, OfficialGame, RandomGame } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game as gameTable } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
 
-export const endGame = async (type: 'win' | 'giveUp', game: Game) => {
+export const endGame = async (
+  type: 'win' | 'giveUp',
+  game: OfficialGame | RandomGame | Game
+) => {
   if (
     (type === 'win' && game.hasGivenUp) ||
     (type === 'giveUp' && game.hasWon)
   ) {
-    return { error: 'An unexpected error occurred.' };
+    const error: ErrorObject = { error: 'An unexpected error occurred.' };
+    return error;
   }
 
   await db

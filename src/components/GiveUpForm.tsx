@@ -10,13 +10,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { useGameStore } from '@/lib/game-store';
 import { giveUpSchema, type GiveUpSchemaType } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { usePathname, useRouter } from 'next/navigation';
-import type { Dispatch, SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 
 type GiveUpFormProps = {
@@ -28,14 +29,19 @@ export default function GiveUpForm({
   setGiveUpError,
   scheduleId,
 }: GiveUpFormProps) {
+  const { resetState, gameMode } = useGameStore();
+
   const giveUpForm = useForm({
     resolver: zodResolver(giveUpSchema),
     defaultValues: {
       scheduleId,
+      gameMode,
     },
   });
   const router = useRouter();
   const pathname = usePathname();
+
+  const [open, setOpen] = useState(false);
 
   const { execute, isPending } = useAction(giveUp, {
     onSuccess({ data }) {
@@ -47,6 +53,8 @@ export default function GiveUpForm({
         if (pathname.includes('official')) {
           router.push('/official');
         } else {
+          resetState();
+          setOpen(false);
           router.refresh();
         }
         return;
@@ -56,13 +64,13 @@ export default function GiveUpForm({
 
   function onSubmit(values: GiveUpSchemaType) {
     setGiveUpError('');
-    execute(values);
+    execute({ ...values, gameMode });
   }
 
   return (
     <>
       <div className="md:absolute md:top-2 md:right-2">
-        <AlertDialog>
+        <AlertDialog open={open} onOpenChange={setOpen}>
           <AlertDialogTrigger asChild>
             <Button
               variant="destructive"
