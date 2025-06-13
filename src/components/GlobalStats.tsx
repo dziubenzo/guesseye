@@ -40,14 +40,6 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
     officialGamesCompleted,
     officialModeWins,
     officialModeGiveUps,
-    officialGamesPlayedUser,
-    officialGamesCompletedUser,
-    officialModeWinsUser,
-    officialModeGiveUpsUser,
-    officialGamesPlayedGuest,
-    officialGamesCompletedGuest,
-    officialModeWinsGuest,
-    officialModeGiveUpsGuest,
   } = stats.games.official;
 
   const {
@@ -55,6 +47,14 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
     randomGamesCompleted,
     randomModeWins,
     randomModeGiveUps,
+    randomGamesPlayedUser,
+    randomGamesCompletedUser,
+    randomModeWinsUser,
+    randomModeGiveUpsUser,
+    randomGamesPlayedGuest,
+    randomGamesCompletedGuest,
+    randomModeWinsGuest,
+    randomModeGiveUpsGuest,
   } = stats.games.random;
 
   return (
@@ -81,7 +81,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             All guesses made by users in any mode.
           </Stat>
           <Stat title="Total Guesses (Guests)" value={totalGuessesGuest}>
-            All guesses made by guests in any mode.
+            All guesses made by guests in the random mode.
           </Stat>
           <Stat title="Avg. Guesses" value={avgGuesses}>
             The average number of guesses made by both users and guests in any
@@ -93,7 +93,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
           </Stat>
           <Stat title="Avg. Guesses (Guests)" value={avgGuessesGuest}>
             The average number of guesses made by guests in any game (won/given
-            up/in progress) in any mode.
+            up/in progress) in the random mode.
           </Stat>
           <Stat title="Avg. Guesses To Win" value={avgGuessesToWin}>
             The average number of guesses it takes both users and guests to win
@@ -107,8 +107,8 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             title="Avg. Guesses To Win (Guests)"
             value={avgGuessesToWinGuest}
           >
-            The average number of guesses it takes guests to win a game in any
-            mode.
+            The average number of guesses it takes guests to win a game in the
+            random mode.
           </Stat>
           <Stat title="Avg. Guesses To Give Up" value={avgGuessesToGiveUp}>
             The average number of guesses made by both users and guests before
@@ -126,7 +126,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             value={avgGuessesToGiveUpGuest}
           >
             The average number of guesses made by guests before giving up on a
-            game in any mode.
+            game in the random mode.
           </Stat>
         </div>
         <Separator />
@@ -153,79 +153,16 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
           <Stat title="Official Games Played" value={officialGamesPlayed}>
-            The number of games won/given up/in progress by both users and
-            guests in the official mode.
+            The number of games won/given up/in progress in the official mode.
           </Stat>
           <Stat title="Official Games Completed" value={officialGamesCompleted}>
-            The number of games won and given up by both users and guests in the
-            official mode.
+            The number of games won and given up in the official mode.
           </Stat>
           <Stat title="Official Mode Wins" value={officialModeWins}>
-            The number of games won by both users and guests in the official
-            mode.
+            The number of games won in the official mode.
           </Stat>
           <Stat title="Official Mode Give Ups" value={officialModeGiveUps}>
-            The number of games given up by both users and guests in the
-            official mode.
-          </Stat>
-        </div>
-        <Separator />
-        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
-          Games - Official Mode (Users)
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
-          <Stat
-            title="Official Games Played (Users)"
-            value={officialGamesPlayedUser}
-          >
-            The number of games won/given up/in progress by users in the
-            official mode.
-          </Stat>
-          <Stat
-            title="Official Games Completed (Users)"
-            value={officialGamesCompletedUser}
-          >
-            The number of games won and given up by users in the official mode.
-          </Stat>
-          <Stat title="Official Mode Wins (Users)" value={officialModeWinsUser}>
-            The number of games won by users in the official mode.
-          </Stat>
-          <Stat
-            title="Official Mode Give Ups (Users)"
-            value={officialModeGiveUpsUser}
-          >
-            The number of games given up by users in the official mode.
-          </Stat>
-        </div>
-        <Separator />
-        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
-          Games - Official Mode (Guests)
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
-          <Stat
-            title="Official Games Played (Guests)"
-            value={officialGamesPlayedGuest}
-          >
-            The number of games won/given up/in progress by guests in the
-            official mode.
-          </Stat>
-          <Stat
-            title="Official Games Completed (Guests)"
-            value={officialGamesCompletedGuest}
-          >
-            The number of games won and given up by guests in the official mode.
-          </Stat>
-          <Stat
-            title="Official Mode Wins (Guests)"
-            value={officialModeWinsGuest}
-          >
-            The number of games won by guests in the official mode.
-          </Stat>
-          <Stat
-            title="Official Mode Give Ups (Guests)"
-            value={officialModeGiveUpsGuest}
-          >
-            The number of games given up by guests in the official mode.
+            The number of games given up in the official mode.
           </Stat>
         </div>
         <Separator />
@@ -234,16 +171,75 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
           <Stat title="Random Games Played" value={randomGamesPlayed}>
-            The number of games won/given up/in progress in the random mode.
+            The number of games won/given up/in progress by both users and
+            guests in the random mode.
           </Stat>
           <Stat title="Random Games Completed" value={randomGamesCompleted}>
-            The number of games won and given up in the random mode.
+            The number of games won and given up by both users and guests in the
+            random mode.
           </Stat>
           <Stat title="Random Mode Wins" value={randomModeWins}>
-            The number of games won in the random mode.
+            The number of games won by both users and guests in the random mode.
           </Stat>
           <Stat title="Random Mode Give Ups" value={randomModeGiveUps}>
-            The number of games given up in the random mode.
+            The number of games given up by both users and guests in the random
+            mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Random Mode (Users)
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat
+            title="Random Games Played (Users)"
+            value={randomGamesPlayedUser}
+          >
+            The number of games won/given up/in progress by users in the random
+            mode.
+          </Stat>
+          <Stat
+            title="Random Games Completed (Users)"
+            value={randomGamesCompletedUser}
+          >
+            The number of games won and given up by users in the random mode.
+          </Stat>
+          <Stat title="Random Mode Wins (Users)" value={randomModeWinsUser}>
+            The number of games won by users in the random mode.
+          </Stat>
+          <Stat
+            title="Random Mode Give Ups (Users)"
+            value={randomModeGiveUpsUser}
+          >
+            The number of games given up by users in the random mode.
+          </Stat>
+        </div>
+        <Separator />
+        <h1 className="text-xl md:text-4xl font-medium text-center p-2">
+          Games - Random Mode (Guests)
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
+          <Stat
+            title="Random Games Played (Guests)"
+            value={randomGamesPlayedGuest}
+          >
+            The number of games won/given up/in progress by guests in the random
+            mode.
+          </Stat>
+          <Stat
+            title="Random Games Completed (Guests)"
+            value={randomGamesCompletedGuest}
+          >
+            The number of games won and given up by guests in the random mode.
+          </Stat>
+          <Stat title="Random Mode Wins (Guests)" value={randomModeWinsGuest}>
+            The number of games won by guests in the random mode.
+          </Stat>
+          <Stat
+            title="Random Mode Give Ups (Guests)"
+            value={randomModeGiveUpsGuest}
+          >
+            The number of games given up by guests in the random mode.
           </Stat>
         </div>
         <Separator />
@@ -259,7 +255,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
                 : undefined
             }
           >
-            Latest guess in a game in an official mode.
+            Latest guess in a game in the official mode.
           </Stat>
           <Stat
             title="Latest Random Guess"
@@ -269,7 +265,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
                 : undefined
             }
           >
-            Latest guess in a game in a random mode.
+            Latest guess in a game in the random mode.
           </Stat>
         </div>
       </div>

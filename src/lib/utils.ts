@@ -678,7 +678,7 @@ export function findFirstWinner(
   }
 
   const previousGameEndTime = scheduledPlayerHistory.firstWinnerTime!.getTime();
-  const currentGameEndTime = currentGame.endDate.getTime();
+  const currentGameEndTime = currentGame.endDate!.getTime();
   const scheduledPlayerStartTime = scheduledPlayerStartDate.getTime();
 
   const previousDifference = Math.abs(
@@ -701,7 +701,7 @@ export function findFastestWinner(
   scheduledPlayerHistory: OfficialGamesHistory
 ) {
   const currentGameStartTime = currentGame.startDate.getTime();
-  const currentGameEndTime = currentGame.endDate.getTime();
+  const currentGameEndTime = currentGame.endDate!.getTime();
   const currentGameDuration = Math.abs(
     currentGameEndTime - currentGameStartTime
   );
@@ -766,7 +766,7 @@ export function countGames(game: GameWithGuesses, user: Leaderboard) {
 
 export function findFastestWin(game: GameWithGuesses, stat?: number) {
   const currentGameStartTime = game.startDate.getTime();
-  const currentGameEndTime = game.endDate.getTime();
+  const currentGameEndTime = game.endDate!.getTime();
   const currentGameDuration = Math.abs(
     currentGameEndTime - currentGameStartTime
   );
@@ -786,7 +786,7 @@ export function findFastestWin(game: GameWithGuesses, stat?: number) {
 
 export function findSlowestWin(game: GameWithGuesses, stat?: number) {
   const currentGameStartTime = game.startDate.getTime();
-  const currentGameEndTime = game.endDate.getTime();
+  const currentGameEndTime = game.endDate!.getTime();
   const currentGameDuration = Math.abs(
     currentGameEndTime - currentGameStartTime
   );
@@ -996,7 +996,7 @@ export function countGamesByDay(
 ) {
   if (!gamesByDay) return;
 
-  const day = game.endDate.toISOString().split('T')[0];
+  const day = game.endDate!.toISOString().split('T')[0];
 
   if (gamesByDay[day] === undefined) {
     gamesByDay[day] = {
@@ -1087,44 +1087,46 @@ export function countGamesForGlobalStats(
   stats: GlobalStats
 ) {
   if (game.gameMode === 'official') {
-    if (game.userId) {
-      stats.games.official.officialGamesPlayedUser++;
-
-      if (!game.hasWon && !game.hasGivenUp) return;
-
-      if (game.hasWon) {
-        stats.games.official.officialModeWinsUser++;
-      } else if (game.hasGivenUp) {
-        stats.games.official.officialModeGiveUpsUser++;
-      }
-
-      stats.games.official.officialGamesCompletedUser++;
-    } else {
-      stats.games.official.officialGamesPlayedGuest++;
-
-      if (!game.hasWon && !game.hasGivenUp) return;
-
-      if (game.hasWon) {
-        stats.games.official.officialModeWinsGuest++;
-      } else if (game.hasGivenUp) {
-        stats.games.official.officialModeGiveUpsGuest++;
-      }
-
-      stats.games.official.officialGamesCompletedGuest++;
-    }
-  } else if (game.gameMode === 'random') {
-    stats.games.random.randomGamesPlayed++;
+    stats.games.official.officialGamesPlayed++;
 
     if (!game.hasWon && !game.hasGivenUp) return;
 
     if (game.hasWon) {
-      stats.games.random.randomModeWins++;
+      stats.games.official.officialModeWins++;
     } else if (game.hasGivenUp) {
-      stats.games.random.randomModeGiveUps++;
+      stats.games.official.officialModeGiveUps++;
     }
 
-    stats.games.random.randomGamesCompleted++;
+    stats.games.official.officialGamesCompleted++;
+  } else if (game.gameMode === 'random') {
+    if (game.userId) {
+      stats.games.random.randomGamesPlayedUser++;
+
+      if (!game.hasWon && !game.hasGivenUp) return;
+
+      if (game.hasWon) {
+        stats.games.random.randomModeWinsUser++;
+      } else if (game.hasGivenUp) {
+        stats.games.random.randomModeGiveUpsUser++;
+      }
+
+      stats.games.random.randomGamesCompletedUser++;
+    } else {
+      stats.games.random.randomGamesPlayedGuest++;
+
+      if (!game.hasWon && !game.hasGivenUp) return;
+
+      if (game.hasWon) {
+        stats.games.random.randomModeWinsGuest++;
+      } else if (game.hasGivenUp) {
+        stats.games.random.randomModeGiveUpsGuest++;
+      }
+
+      stats.games.random.randomGamesCompletedGuest++;
+    }
   }
+
+  return;
 }
 
 export function countTotalGuesses(game: UserStatsGame, stats: GlobalStats) {
@@ -1139,6 +1141,8 @@ export function countTotalGuesses(game: UserStatsGame, stats: GlobalStats) {
   } else {
     stats.guesses.totalGuessesGuest += guesses;
   }
+
+  return;
 }
 
 export function findLatestGuesses(
@@ -1151,18 +1155,14 @@ export function findLatestGuesses(
 
   if (game.gameMode === 'official') {
     stats.players.latestOfficialGuess = firstName + ' ' + lastName;
-    if (game.userId) {
-      stats.players.latestOfficialGuessName = game.user
-        ? `${game.user.name} (User)`
-        : 'User';
-    } else {
-      stats.players.latestOfficialGuessName = game.guestName
-        ? `${game.guestName} (Guest)`
-        : 'Guest';
-    }
+    stats.players.latestOfficialGuessName = game.user ? game.user.name : 'User';
   } else if (game.gameMode === 'random') {
     stats.players.latestRandomGuess = firstName + ' ' + lastName;
-    stats.players.latestOfficialGuessName = game.user ? game.user.name : 'User';
+    if (game.userId) {
+      stats.players.latestRandomGuessName = game.user ? game.user.name : 'User';
+    } else {
+      stats.players.latestRandomGuessName = 'Guest';
+    }
   }
 
   return;
@@ -1316,32 +1316,32 @@ export function calculateOtherStatsGlobal(
   if (stats.guesses.totalGuessesUser) {
     const avgGuessesUser =
       stats.guesses.totalGuessesUser /
-      (stats.games.official.officialGamesPlayedUser +
-        stats.games.random.randomGamesPlayed);
+      (stats.games.official.officialGamesPlayed +
+        stats.games.random.randomGamesPlayedUser);
     stats.guesses.avgGuessesUser = roundToNthDecimalPlace(avgGuessesUser);
   }
 
   if (stats.guesses.totalGuessesGuest) {
     const avgGuessesGuest =
       stats.guesses.totalGuessesGuest /
-      stats.games.official.officialGamesPlayedGuest;
+      stats.games.random.randomGamesPlayedGuest;
     stats.guesses.avgGuessesGuest = roundToNthDecimalPlace(avgGuessesGuest);
   }
 
   if (stats.guesses.avgGuessesToWin) {
     const avgGuessesToWin =
       stats.guesses.avgGuessesToWin /
-      (stats.games.official.officialModeWinsUser +
-        stats.games.official.officialModeWinsGuest +
-        stats.games.random.randomModeWins);
+      (stats.games.official.officialModeWins +
+        stats.games.random.randomModeWinsUser +
+        stats.games.random.randomModeWinsGuest);
     stats.guesses.avgGuessesToWin = roundToNthDecimalPlace(avgGuessesToWin);
   }
 
   if (stats.guesses.avgGuessesToWinUser) {
     const avgGuessesToWinUser =
       stats.guesses.avgGuessesToWinUser /
-      (stats.games.official.officialModeWinsUser +
-        stats.games.random.randomModeWins);
+      (stats.games.official.officialModeWins +
+        stats.games.random.randomModeWinsUser);
     stats.guesses.avgGuessesToWinUser =
       roundToNthDecimalPlace(avgGuessesToWinUser);
   }
@@ -1349,7 +1349,7 @@ export function calculateOtherStatsGlobal(
   if (stats.guesses.avgGuessesToWinGuest) {
     const avgGuessesToWinGuest =
       stats.guesses.avgGuessesToWinGuest /
-      stats.games.official.officialModeWinsGuest;
+      stats.games.random.randomModeWinsGuest;
     stats.guesses.avgGuessesToWinGuest =
       roundToNthDecimalPlace(avgGuessesToWinGuest);
   }
@@ -1357,9 +1357,9 @@ export function calculateOtherStatsGlobal(
   if (stats.guesses.avgGuessesToGiveUp) {
     const avgGuessesToGiveUp =
       stats.guesses.avgGuessesToGiveUp /
-      (stats.games.official.officialModeGiveUpsUser +
-        stats.games.official.officialModeGiveUpsGuest +
-        stats.games.random.randomModeGiveUps);
+      (stats.games.official.officialModeGiveUps +
+        stats.games.random.randomModeGiveUpsUser +
+        stats.games.random.randomModeGiveUpsGuest);
     stats.guesses.avgGuessesToGiveUp =
       roundToNthDecimalPlace(avgGuessesToGiveUp);
   }
@@ -1367,8 +1367,8 @@ export function calculateOtherStatsGlobal(
   if (stats.guesses.avgGuessesToGiveUpUser) {
     const avgGuessesToGiveUpUser =
       stats.guesses.avgGuessesToGiveUpUser /
-      (stats.games.official.officialModeGiveUpsUser +
-        stats.games.random.randomModeGiveUps);
+      (stats.games.official.officialModeGiveUps +
+        stats.games.random.randomModeGiveUpsUser);
     stats.guesses.avgGuessesToGiveUpUser = roundToNthDecimalPlace(
       avgGuessesToGiveUpUser
     );
@@ -1377,24 +1377,24 @@ export function calculateOtherStatsGlobal(
   if (stats.guesses.avgGuessesToGiveUpGuest) {
     const avgGuessesToGiveUpGuest =
       stats.guesses.avgGuessesToGiveUpGuest /
-      stats.games.official.officialModeGiveUpsGuest;
+      stats.games.random.randomModeGiveUpsGuest;
     stats.guesses.avgGuessesToGiveUpGuest = roundToNthDecimalPlace(
       avgGuessesToGiveUpGuest
     );
   }
 
-  stats.games.official.officialGamesPlayed =
-    stats.games.official.officialGamesPlayedUser +
-    stats.games.official.officialGamesPlayedGuest;
-  stats.games.official.officialGamesCompleted =
-    stats.games.official.officialGamesCompletedUser +
-    stats.games.official.officialGamesCompletedGuest;
-  stats.games.official.officialModeWins =
-    stats.games.official.officialModeWinsUser +
-    stats.games.official.officialModeWinsGuest;
-  stats.games.official.officialModeGiveUps =
-    stats.games.official.officialModeGiveUpsUser +
-    stats.games.official.officialModeGiveUpsGuest;
+  stats.games.random.randomGamesPlayed =
+    stats.games.random.randomGamesPlayedUser +
+    stats.games.random.randomGamesPlayedGuest;
+  stats.games.random.randomGamesCompleted =
+    stats.games.random.randomGamesCompletedUser +
+    stats.games.random.randomGamesCompletedGuest;
+  stats.games.random.randomModeWins =
+    stats.games.random.randomModeWinsUser +
+    stats.games.random.randomModeWinsGuest;
+  stats.games.random.randomModeGiveUps =
+    stats.games.random.randomModeGiveUpsUser +
+    stats.games.random.randomModeGiveUpsGuest;
 }
 
 export function countPlayersBy(

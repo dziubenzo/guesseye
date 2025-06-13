@@ -310,20 +310,20 @@ export type GlobalStats = {
       officialGamesCompleted: number;
       officialModeWins: number;
       officialModeGiveUps: number;
-      officialGamesPlayedUser: number;
-      officialGamesCompletedUser: number;
-      officialModeWinsUser: number;
-      officialModeGiveUpsUser: number;
-      officialGamesPlayedGuest: number;
-      officialGamesCompletedGuest: number;
-      officialModeWinsGuest: number;
-      officialModeGiveUpsGuest: number;
     };
     random: {
       randomGamesPlayed: number;
       randomGamesCompleted: number;
       randomModeWins: number;
       randomModeGiveUps: number;
+      randomGamesPlayedUser: number;
+      randomGamesCompletedUser: number;
+      randomModeWinsUser: number;
+      randomModeGiveUpsUser: number;
+      randomGamesPlayedGuest: number;
+      randomGamesCompletedGuest: number;
+      randomModeWinsGuest: number;
+      randomModeGiveUpsGuest: number;
     };
   };
   players: {
