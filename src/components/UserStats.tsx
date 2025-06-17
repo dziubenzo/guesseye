@@ -202,17 +202,17 @@ export default async function UserStats({ stats }: UserStatsProps) {
           First and Latest
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
-          <Stat title="First Guess" value={firstOfficialGuess}>
-            Your first guess in a game in an official mode.
+          <Stat title="First Official Guess" value={firstOfficialGuess}>
+            Your first guess in a game in the official mode.
           </Stat>
-          <Stat title="Latest Guess" value={latestOfficialGuess}>
-            Your latest guess in a game in an official mode.
+          <Stat title="Latest Official Guess" value={latestOfficialGuess}>
+            Your latest guess in a game in the official mode.
           </Stat>
-          <Stat title="First Winning Guess" value={firstOfficialWin}>
-            Your first guess that won you a game in an official mode.
+          <Stat title="First Winning Official Guess" value={firstOfficialWin}>
+            Your first guess that won you a game in the official mode.
           </Stat>
-          <Stat title="Latest Winning Guess" value={latestOfficialWin}>
-            Your latest guess that won you a game in an official mode.
+          <Stat title="Latest Winning Official Guess" value={latestOfficialWin}>
+            Your latest guess that won you a game in the official mode.
           </Stat>
         </div>
       </div>

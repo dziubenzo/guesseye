@@ -1287,7 +1287,7 @@ export function calculateOtherStatsUser(
     );
   }
 
-  if (stats.games.random.randomGamesPlayed > 0) {
+  if (stats.games.random.randomModeWins > 0) {
     const randomModeWinsPercentage =
       (stats.games.random.randomGamesPlayed /
         stats.games.random.randomModeWins) *
@@ -1295,7 +1295,9 @@ export function calculateOtherStatsUser(
     stats.games.random.randomModeWinsPercentage = roundToNthDecimalPlace(
       randomModeWinsPercentage
     );
+  }
 
+  if (stats.games.random.randomModeGiveUps > 0) {
     const randomModeGiveUpsPercentage =
       (stats.games.random.randomGamesPlayed /
         stats.games.random.randomModeGiveUps) *
