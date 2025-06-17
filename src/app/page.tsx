@@ -4,6 +4,7 @@ import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
 import GameWon from '@/components/GameWon';
 import Guesses from '@/components/Guesses';
+import ModeIndicator from '@/components/ModeIndicator';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
@@ -39,6 +40,7 @@ export default async function CurrentGame() {
       return (
         <div className="flex flex-col gap-4">
           <PlayerForm />
+          <ModeIndicator />
           <PlayerToFindInfo
             winnersCount={winnersCount}
             nextPlayerStartDate={nextPlayerStartDate}
@@ -67,6 +69,7 @@ export default async function CurrentGame() {
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
+      <ModeIndicator />
       <PlayerToFindCard difficulty={playerDifficulty} />
       <Guesses existingGame={game} gameMode={gameMode} />
       <GameOverConfetti />

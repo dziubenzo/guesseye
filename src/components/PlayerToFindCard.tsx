@@ -19,7 +19,7 @@ export default function PlayerToFindCard({
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-2xl opacity-50 text-center">Fields Found</h1>
+      <h2 className="text-2xl opacity-50 text-center">Fields Found</h2>
       <div className="flex justify-center items-center gap-2">
         <span>{fieldsFound}</span>
         <Progress

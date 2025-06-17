@@ -2,6 +2,7 @@ import ErrorPage from '@/components/ErrorPage';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
 import Guesses from '@/components/Guesses';
+import ModeIndicator from '@/components/ModeIndicator';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
@@ -32,6 +33,7 @@ export default async function PreviousOfficialGame({
     return (
       <div className="flex flex-col gap-4">
         <PlayerForm scheduleId={scheduleId} />
+        <ModeIndicator />
         <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard difficulty={playerDifficulty} />
         {'gameInProgress' in game ? (
