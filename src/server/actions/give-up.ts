@@ -35,7 +35,7 @@ export const giveUp = actionClient
       return error;
     }
 
-    const { game } = gameAndPlayer;
+    const { game, playerToFind } = gameAndPlayer;
 
     const errorObject = await endGame('giveUp', game);
 
@@ -47,6 +47,11 @@ export const giveUp = actionClient
       return error;
     }
 
-    const success: GiveUpAction = { type: 'success' };
+    const fullName = playerToFind.firstName + ' ' + playerToFind.lastName;
+    const success: GiveUpAction = {
+      type: 'success',
+      playerToFind: fullName,
+    };
+
     return success;
   });

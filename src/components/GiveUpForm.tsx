@@ -42,6 +42,7 @@ export default function GiveUpForm({
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
+  const [playerToFind, setPlayerToFind] = useState('');
 
   const { execute, isPending } = useAction(giveUp, {
     onSuccess({ data }) {
@@ -50,13 +51,7 @@ export default function GiveUpForm({
         return;
       }
       if (data?.type === 'success') {
-        if (pathname.includes('official')) {
-          router.push('/official');
-        } else {
-          resetState();
-          setOpen(false);
-          router.refresh();
-        }
+        setPlayerToFind(data.playerToFind);
         return;
       }
     },
@@ -65,6 +60,17 @@ export default function GiveUpForm({
   function onSubmit(values: GiveUpSchemaType) {
     setGiveUpError('');
     execute({ ...values, gameMode });
+  }
+
+  function handleButtonClick() {
+    resetState();
+    if (pathname.includes('official')) {
+      router.push('/official');
+    } else {
+      setOpen(false);
+      router.refresh();
+    }
+    return;
   }
 
   return (
@@ -79,41 +85,67 @@ export default function GiveUpForm({
               <span>Give Up</span>
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you 100% sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This cannot be undone. If you give up, you will learn the
-                current darts player, but you will also have to wait for the
-                next scheduled darts player to play again.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel
-                className="cursor-pointer"
-                onClick={() => setGiveUpError('')}
-                disabled={isPending}
-              >
-                Cancel
-              </AlertDialogCancel>
-              <Form {...giveUpForm}>
-                <form onSubmit={giveUpForm.handleSubmit(onSubmit)}>
-                  <Button
-                    type="submit"
-                    className="cursor-pointer min-w-21 w-full"
-                    variant="destructive"
-                    disabled={isPending}
-                  >
-                    {isPending ? (
-                      <Loader2 className="animate-spin size-7 h-full" />
-                    ) : (
-                      'Give Up'
-                    )}
-                  </Button>
-                </form>
-              </Form>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+          {playerToFind ? (
+            <AlertDialogContent
+              onEscapeKeyDown={(event) => {
+                event.preventDefault();
+              }}
+            >
+              <AlertDialogHeader>
+                <AlertDialogTitle>Game Given Up</AlertDialogTitle>
+                <AlertDialogDescription>
+                  <span>The darts player to find was... </span>
+                  <span className="uppercase font-medium text-primary text-xl">
+                    {playerToFind}!
+                  </span>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  className="cursor-pointer"
+                  onClick={handleButtonClick}
+                >
+                  Good to know!
+                </AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          ) : (
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you 100% sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This cannot be undone. If you give up, you will learn the
+                  current darts player, but you will be unable to try to guess
+                  them again.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  className="cursor-pointer"
+                  onClick={() => setGiveUpError('')}
+                  disabled={isPending}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <Form {...giveUpForm}>
+                  <form onSubmit={giveUpForm.handleSubmit(onSubmit)}>
+                    <Button
+                      type="submit"
+                      className="cursor-pointer min-w-21 w-full"
+                      variant="destructive"
+                      disabled={isPending}
+                    >
+                      {isPending ? (
+                        <Loader2 className="animate-spin size-7 h-full" />
+                      ) : (
+                        'Give Up'
+                      )}
+                    </Button>
+                  </form>
+                </Form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          )}
         </AlertDialog>
       </div>
     </>

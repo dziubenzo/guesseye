@@ -10,7 +10,7 @@ export default function NotFound() {
       <Image
         className="rounded-md shadow-md"
         src="/not-found.gif"
-        alt="A woman throwing a darts at the dartboard, but misses the dartboard entirely"
+        alt="A woman throwing a dart at the dartboard, but misses the dartboard entirely"
         priority={true}
         width={500}
         height={500}

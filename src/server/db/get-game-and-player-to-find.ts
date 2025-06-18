@@ -33,6 +33,14 @@ export const getGameAndPlayerToFind = async (
 
     const existingGame = await findOfficialGame(scheduledPlayer);
 
+    // Make sure the official game is not already completed
+    if (existingGame && (existingGame.hasGivenUp || existingGame.hasWon)) {
+      const error: ErrorObject = {
+        error: 'This official game has already been completed.',
+      };
+      return error;
+    }
+
     game = existingGame
       ? existingGame
       : await createOfficialGame(scheduledPlayer);

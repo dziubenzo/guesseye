@@ -1289,8 +1289,8 @@ export function calculateOtherStatsUser(
 
   if (stats.games.random.randomModeWins > 0) {
     const randomModeWinsPercentage =
-      (stats.games.random.randomGamesPlayed /
-        stats.games.random.randomModeWins) *
+      (stats.games.random.randomModeWins /
+        stats.games.random.randomGamesPlayed) *
       100;
     stats.games.random.randomModeWinsPercentage = roundToNthDecimalPlace(
       randomModeWinsPercentage
@@ -1299,8 +1299,8 @@ export function calculateOtherStatsUser(
 
   if (stats.games.random.randomModeGiveUps > 0) {
     const randomModeGiveUpsPercentage =
-      (stats.games.random.randomGamesPlayed /
-        stats.games.random.randomModeGiveUps) *
+      (stats.games.random.randomModeGiveUps /
+        stats.games.random.randomGamesPlayed) *
       100;
     stats.games.random.randomModeGiveUpsPercentage = roundToNthDecimalPlace(
       randomModeGiveUpsPercentage

@@ -160,7 +160,7 @@ type CheckGuessSuccess = {
 export type CheckGuessAction = CheckGuessError | CheckGuessSuccess;
 
 type GiveUpError = { type: 'error'; error: string };
-type GiveUpSuccess = { type: 'success' };
+type GiveUpSuccess = { type: 'success'; playerToFind: string };
 
 export type GiveUpAction = GiveUpError | GiveUpSuccess;
 
