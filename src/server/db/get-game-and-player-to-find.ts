@@ -9,7 +9,6 @@ import type {
   RandomGame,
 } from '@/lib/types';
 import { createOfficialGame } from '@/server/db/create-official-game';
-import { createRandomGame } from '@/server/db/create-random-game';
 import { findOfficialGame } from '@/server/db/find-official-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
@@ -33,11 +32,8 @@ export const getGameAndPlayerToFind = async (
 
     const existingGame = await findOfficialGame(scheduledPlayer);
 
-    // Make sure the official game is not already completed
-    if (existingGame && (existingGame.hasGivenUp || existingGame.hasWon)) {
-      const error: ErrorObject = {
-        error: 'This official game has already been completed.',
-      };
+    if (existingGame && 'error' in existingGame) {
+      const error: ErrorObject = { error: existingGame.error };
       return error;
     }
 
@@ -49,12 +45,12 @@ export const getGameAndPlayerToFind = async (
   } else {
     const existingGame = await findRandomGame();
 
-    game = existingGame ? existingGame : await createRandomGame();
-
-    if ('error' in game) {
-      const error: ErrorObject = { error: game.error };
+    if (!existingGame) {
+      const error: ErrorObject = { error: 'Failed to find random game.' };
       return error;
     }
+
+    game = existingGame;
 
     if ('randomPlayer' in game && game.randomPlayer) {
       playerToFind = game.randomPlayer;

@@ -37,6 +37,11 @@ export const getOfficialGame = async (scheduleId?: string) => {
   // Get game if it exists
   const existingGame = await findOfficialGame(scheduledPlayer);
 
+  if (existingGame && 'error' in existingGame) {
+    const error: ErrorObject = { error: existingGame.error };
+    return error;
+  }
+
   // Get number of users who have found the scheduled player and the next scheduled player
   const [winnersCount, nextScheduledPlayer] = await Promise.all([
     getWinnersCount(scheduledPlayer),

@@ -51,6 +51,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
         return;
       }
       if (data?.type === 'success') {
+        playerForm.resetField('guess');
         if (data.success.type === 'correctGuess') {
           updateGuesses(
             data.success.playerToFind,
@@ -66,7 +67,6 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.comparisonResults
           );
           updateMatches(data.success.playerToFindMatches);
-          playerForm.resetField('guess');
           return;
         }
       }
