@@ -8,6 +8,7 @@ import {
   countGamesForUserStats,
   countGuessedPlayers,
   countGuessesByDay,
+  countRandomPlayers,
   findFastestWin,
   findFewestAndMostGuesses,
   findFirstAndLatestOfficialGuess,
@@ -31,7 +32,7 @@ export const getUserStats = async () => {
     return error;
   }
 
-  // Get all games played by logged-in user (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name
+  // Get all games played by logged-in user (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name as well as the first and last name of the random player if it exists
   // Get the count of official games up to now
   const [games, scheduledPlayersCount] = await Promise.all([
     db.query.game.findMany({
@@ -46,6 +47,9 @@ export const getUserStats = async () => {
             },
           },
           orderBy: asc(guess.id),
+        },
+        randomPlayer: {
+          columns: { firstName: true, lastName: true },
         },
       },
       orderBy: asc(game.startDate),
@@ -100,6 +104,7 @@ export const getUserStats = async () => {
     guessFrequency: [],
     gamesByDay: [],
     guessesByDay: [],
+    randomPlayers: [],
   };
 
   if (games.length === 0) return stats;
@@ -107,6 +112,7 @@ export const getUserStats = async () => {
   const guessFrequency: Record<string, number> = {};
   const gamesByDay: GamesByDayObject = {};
   const guessesByDay: Record<string, number> = {};
+  const randomPlayers: Record<string, number> = {};
 
   // Calculate stats based on every game and guess
   games.forEach((game) => {
@@ -128,6 +134,7 @@ export const getUserStats = async () => {
         );
       }
       countGamesByDay(game, gamesByDay);
+      countRandomPlayers(game, randomPlayers);
     }
 
     if (game.guesses.length > 0) {
@@ -141,7 +148,13 @@ export const getUserStats = async () => {
 
   calculateOtherStatsUser(stats, games, scheduledPlayersCount);
 
-  transformChartData(stats, guessFrequency, gamesByDay, guessesByDay);
+  transformChartData(
+    stats,
+    guessFrequency,
+    gamesByDay,
+    guessesByDay,
+    randomPlayers
+  );
 
   return stats;
 };

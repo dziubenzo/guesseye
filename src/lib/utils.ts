@@ -991,7 +991,7 @@ export function countGuessesByDay(
 }
 
 export function countGamesByDay(
-  game: UserStatsGame,
+  game: UserStatsGame | GlobalStatsGame,
   gamesByDay: GamesByDayObject
 ) {
   if (!gamesByDay) return;
@@ -1014,6 +1014,29 @@ export function countGamesByDay(
 
   if (game.hasGivenUp) {
     gamesByDay[day].givenUp++;
+  }
+
+  return;
+}
+
+export function countRandomPlayers(
+  game: UserStatsGame | GlobalStatsGame,
+  randomPlayers: Record<string, number>
+) {
+  if (
+    !randomPlayers ||
+    game.gameMode === 'official' ||
+    game.randomPlayer === null
+  )
+    return;
+
+  const fullName =
+    game.randomPlayer.firstName + ' ' + game.randomPlayer.lastName;
+
+  if (randomPlayers[fullName] === undefined) {
+    randomPlayers[fullName] = 1;
+  } else {
+    randomPlayers[fullName]++;
   }
 
   return;
@@ -1069,6 +1092,19 @@ export function transformGuessesByDay(
   return array
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(-limit);
+}
+
+export function transformRandomPlayers(
+  randomPlayers: Record<string, number>,
+  limit: number
+): UserStats['randomPlayers'] {
+  const array: UserStats['randomPlayers'] = [];
+
+  for (const key in randomPlayers) {
+    array.push({ fullName: key, count: randomPlayers[key] });
+  }
+
+  return array.sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
 export function formatGameDuration(duration: number) {
@@ -1223,11 +1259,13 @@ export function transformChartData(
   stats: UserStats | GlobalStats,
   guessFrequency: Record<string, number>,
   gamesByDay: GamesByDayObject,
-  guessesByDay: Record<string, number>
+  guessesByDay: Record<string, number>,
+  randomPlayers: Record<string, number>
 ) {
   stats.guessFrequency = transformGuessFrequency(guessFrequency, 30);
   stats.gamesByDay = transformGamesByDay(gamesByDay, 30);
   stats.guessesByDay = transformGuessesByDay(guessesByDay, 30);
+  stats.randomPlayers = transformRandomPlayers(randomPlayers, 30);
 }
 
 export function calculateOtherStatsUser(

@@ -5,6 +5,7 @@ import GuessesByDayChart from '@/components/charts/GuessesByDayChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { GlobalStats } from '@/lib/types';
+import RandomPlayersChart from './charts/RandomPlayersChart';
 
 type GlobalStatsProps = {
   stats: GlobalStats;
@@ -242,6 +243,13 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             The number of games given up by guests in the random mode.
           </Stat>
         </div>
+        <Separator />
+        <ChartHeading title="Darts Players in Random Games">
+          The frequency of darts players assigned to be guessed in random mode
+          in games won/given up by all users and guests (limited to 30 most
+          frequent darts players).
+        </ChartHeading>
+        <RandomPlayersChart data={stats.randomPlayers} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Latest Guesses

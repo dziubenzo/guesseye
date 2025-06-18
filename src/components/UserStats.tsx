@@ -2,6 +2,7 @@ import ChartHeading from '@/components/ChartHeading';
 import GamesByDayChart from '@/components/charts/GamesByDayChart';
 import GuessesByDayChart from '@/components/charts/GuessesByDayChart';
 import GuessFrequencyChart from '@/components/charts/GuessFrequencyChart';
+import RandomPlayersChart from '@/components/charts/RandomPlayersChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { UserStats } from '@/lib/types';
@@ -156,7 +157,8 @@ export default async function UserStats({ stats }: UserStatsProps) {
             title="Random Games Played"
             value={randomGamesPlayed}
           >
-            The number of games you won/given up/in progress in the random mode.
+            The number of games you won/gave up on/in progress in the random
+            mode.
           </Stat>
           <Stat title="Random Mode Wins" value={randomModeWins}>
             The number of games you won in the random mode.
@@ -179,6 +181,13 @@ export default async function UserStats({ stats }: UserStatsProps) {
             to all random mode games.
           </Stat>
         </div>
+        <Separator />
+        <ChartHeading title="Darts Players in Random Games">
+          The frequency of darts players you were assigned to guess in games
+          that you won/gave up on in random mode (limited to 30 most frequent
+          darts players).
+        </ChartHeading>
+        <RandomPlayersChart data={stats.randomPlayers} />
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
           Games - Duration

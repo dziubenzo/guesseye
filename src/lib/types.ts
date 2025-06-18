@@ -34,6 +34,10 @@ export type RandomGame = OfficialGame & {
 
 export type UserStatsGame = Game & {
   guesses: GuessWithPlayerName[];
+  randomPlayer: {
+    firstName: Player['firstName'];
+    lastName: Player['lastName'];
+  } | null;
 };
 
 export type GlobalStatsGame = UserStatsGame & {
@@ -276,6 +280,7 @@ export type UserStats = {
   guessFrequency: { fullName: string; count: number }[];
   gamesByDay: { date: string; count: number; won: number; givenUp: number }[];
   guessesByDay: { date: string; count: number }[];
+  randomPlayers: { fullName: string; count: number }[];
 };
 
 export type GamesByDayObject = Record<
@@ -335,6 +340,7 @@ export type GlobalStats = {
   guessFrequency: UserStats['guessFrequency'];
   gamesByDay: UserStats['gamesByDay'];
   guessesByDay: UserStats['guessesByDay'];
+  randomPlayers: UserStats['randomPlayers'];
 };
 
 export type DatabaseStatsPlayer = Omit<

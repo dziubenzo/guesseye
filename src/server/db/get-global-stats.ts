@@ -8,6 +8,7 @@ import {
   countGamesForGlobalStats,
   countGuessedPlayers,
   countGuessesByDay,
+  countRandomPlayers,
   countTotalGuesses,
   findFewestAndMostGuesses,
   findGlobalGuessesToWinAndGiveUp,
@@ -29,7 +30,7 @@ export const getGlobalStats = async () => {
     return error;
   }
 
-  // Get all games (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name
+  // Get all games (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name as well as the first and last name of the random player if it exists
   const games = await db.query.game.findMany({
     with: {
       user: {
@@ -45,6 +46,9 @@ export const getGlobalStats = async () => {
           },
         },
         orderBy: asc(guess.id),
+      },
+      randomPlayer: {
+        columns: { firstName: true, lastName: true },
       },
     },
     orderBy: asc(game.startDate),
@@ -98,6 +102,7 @@ export const getGlobalStats = async () => {
     guessFrequency: [],
     gamesByDay: [],
     guessesByDay: [],
+    randomPlayers: [],
   };
 
   if (games.length === 0) return stats;
@@ -105,6 +110,7 @@ export const getGlobalStats = async () => {
   const guessFrequency: Record<string, number> = {};
   const gamesByDay: GamesByDayObject = {};
   const guessesByDay: Record<string, number> = {};
+  const randomPlayers: Record<string, number> = {};
 
   // Calculate stats based on every game and guess
   games.forEach((game) => {
@@ -115,6 +121,7 @@ export const getGlobalStats = async () => {
 
     if (game.hasWon || game.hasGivenUp) {
       countGamesByDay(game, gamesByDay);
+      countRandomPlayers(game, randomPlayers);
     }
 
     if (game.guesses.length > 0) {
@@ -128,7 +135,13 @@ export const getGlobalStats = async () => {
 
   calculateOtherStatsGlobal(stats, games);
 
-  transformChartData(stats, guessFrequency, gamesByDay, guessesByDay);
+  transformChartData(
+    stats,
+    guessFrequency,
+    gamesByDay,
+    guessesByDay,
+    randomPlayers
+  );
 
   return stats;
 };

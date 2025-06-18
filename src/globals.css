@@ -65,6 +65,7 @@
   --color-chart-darts-brand: var(--chart-darts-brand);
   --color-chart-darts-weight: var(--chart-darts-weight);
   --color-chart-nine-darters: var(--chart-nine-darters);
+  --color-chart-random-players: var(--chart-random-players);
 }
 
 /* Green with 0.5 radius */
@@ -125,6 +126,7 @@
   --chart-darts-brand: oklch(0.7348 0.0964 197.94);
   --chart-darts-weight: oklch(0.6328 0.2113 360);
   --chart-nine-darters: oklch(0.7348 0.2026 143.31);
+  --chart-random-players: oklch(0.5641 0.1754 316.59);
 }
 
 .dark {
@@ -182,6 +184,7 @@
   --chart-darts-brand: oklch(0.7348 0.0964 197.94);
   --chart-darts-weight: oklch(0.6328 0.2113 360);
   --chart-nine-darters: oklch(0.7348 0.2026 143.31);
+  --chart-random-players: oklch(0.5641 0.1754 316.59);
 }
 
 @layer base {
