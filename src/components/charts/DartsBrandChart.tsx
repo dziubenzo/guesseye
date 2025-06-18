@@ -26,7 +26,7 @@ export default function DartsBrandChart({ data }: DartsBrandChartProps) {
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 5, right: 25, bottom: 5, left: 0 }}
+        margin={{ top: 5, right: 55, bottom: 5, left: 0 }}
         layout="vertical"
       >
         <XAxis type="number" hide />
@@ -37,7 +37,7 @@ export default function DartsBrandChart({ data }: DartsBrandChartProps) {
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          width={120}
+          width={125}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

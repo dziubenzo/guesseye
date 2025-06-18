@@ -33,8 +33,9 @@ export const getOfficialGames = async () => {
   });
 
   // Return scheduled players enriched with game-specific information if there is a game associated with a scheduled player
-  const data = scheduleRows.map((scheduledPlayer) => {
+  const data = scheduleRows.map((scheduledPlayer, index) => {
     const result: OfficialGames = {
+      gameNo: scheduleRows.length - index,
       scheduleId: scheduledPlayer.id,
       startDate: scheduledPlayer.startDate,
       endDate: scheduledPlayer.endDate,

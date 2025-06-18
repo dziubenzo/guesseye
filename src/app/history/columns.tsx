@@ -37,7 +37,8 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       }
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.index + 1}</div>;
+      const gameNo = row.original.gameNo;
+      return <div className="font-medium">{gameNo}</div>;
     },
   },
   {
@@ -216,7 +217,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       const fastestWinnerDuration = row.original.fastestWinnerDuration;
 
       if (!fastestWinner || !fastestWinnerDuration) return;
-      
+
       return (
         <div>
           <p>{fastestWinner}</p>

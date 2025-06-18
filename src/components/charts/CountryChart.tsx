@@ -37,7 +37,7 @@ export default function CountryChart({ data }: CountryChartProps) {
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          width={120}
+          width={125}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

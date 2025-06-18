@@ -37,7 +37,8 @@ export const columns: ColumnDef<OfficialGames>[] = [
       }
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.index + 1}</div>;
+      const gameNo = row.original.gameNo;
+      return <div className="font-medium">{gameNo}</div>;
     },
   },
   {

@@ -65,7 +65,10 @@ export default async function DatabaseStats() {
         <CardHeader>
           <CardTitle className="text-2xl">Database Stats</CardTitle>
           <CardDescription>
-            <p>Here you can find miscellaneous database charts.</p>
+            <p>
+              Here you can find miscellaneous charts related to the database of
+              darts players that powers this app.
+            </p>
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-4">

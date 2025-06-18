@@ -201,6 +201,7 @@ export type GameGivenUp = {
 };
 
 export type OfficialGames = {
+  gameNo: number;
   scheduleId: Schedule['id'];
   startDate: Schedule['startDate'];
   endDate: Schedule['endDate'];
@@ -216,7 +217,7 @@ export type GameInfo = {
 
 export type OfficialGamesHistory = Pick<
   OfficialGames,
-  'startDate' | 'endDate' | 'playerDifficulty'
+  'gameNo' | 'startDate' | 'endDate' | 'playerDifficulty'
 > & {
   winners: number;
   firstWinner?: string;
