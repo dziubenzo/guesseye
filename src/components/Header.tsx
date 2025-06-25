@@ -2,6 +2,7 @@
 
 import AuthModal from '@/components/AuthModal';
 import HeaderMenu from '@/components/HeaderMenu';
+import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { useSession } from '@/lib/auth-client';
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
@@ -12,8 +13,8 @@ export default function Header() {
   if (data) return <HeaderMenu username={data.user.name} />;
 
   return (
-    <header className="grid grid-flow-col grid-cols-3 lg:grid-cols-4 text-center items-center justify-center">
-      <div className="col-start-3 lg:col-start-4">
+    <header className="grid grid-flow-col grid-cols-3 text-center items-center justify-center relative">
+      <div className="col-start-1">
         <Dialog>
           <DialogTrigger asChild>
             <Button className="cursor-pointer w-full sm:min-h-10 sm:h-10">
@@ -22,6 +23,7 @@ export default function Header() {
           </DialogTrigger>
           <AuthModal />
         </Dialog>
+        <ThemeToggle type="header" />
       </div>
     </header>
   );
