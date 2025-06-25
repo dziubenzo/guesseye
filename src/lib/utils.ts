@@ -753,13 +753,13 @@ export function findWinnerWithFewestGuesses(
 export function countGames(game: GameWithGuesses, user: Leaderboard) {
   if (!game.hasWon && !game.hasGivenUp) {
     user.gamesInProgress++;
-  } else if (game.hasWon && game.gameMode === 'official') {
+  } else if (game.hasWon && game.mode === 'official') {
     user.officialModeWins++;
-  } else if (game.hasGivenUp && game.gameMode === 'official') {
+  } else if (game.hasGivenUp && game.mode === 'official') {
     user.officialModeGiveUps++;
-  } else if (game.hasWon && game.gameMode === 'random') {
+  } else if (game.hasWon && game.mode === 'random') {
     user.randomModeWins++;
-  } else if (game.hasGivenUp && game.gameMode === 'random') {
+  } else if (game.hasGivenUp && game.mode === 'random') {
     user.randomModeGiveUps++;
   }
 }
@@ -848,7 +848,7 @@ export function sortByWinsAndGiveUps(userA: Leaderboard, userB: Leaderboard) {
 }
 
 export function countGamesForUserStats(game: UserStatsGame, stats: UserStats) {
-  if (game.gameMode === 'official') {
+  if (game.mode === 'official') {
     stats.games.official.officialGamesPlayed++;
 
     if (!game.hasWon && !game.hasGivenUp) return;
@@ -860,7 +860,7 @@ export function countGamesForUserStats(game: UserStatsGame, stats: UserStats) {
     }
 
     stats.games.official.officialGamesCompleted++;
-  } else if (game.gameMode === 'random') {
+  } else if (game.mode === 'random') {
     stats.games.random.randomGamesPlayed++;
 
     if (game.hasWon) {
@@ -875,7 +875,7 @@ export function findFirstAndLatestOfficialWin(
   game: UserStatsGame,
   stats: UserStats
 ) {
-  if (game.hasWon && game.gameMode === 'official') {
+  if (game.hasWon && game.mode === 'official') {
     const winningGuess = game.guesses[game.guesses.length - 1].player;
     const firstName = winningGuess.firstName;
     const lastName = winningGuess.lastName;
@@ -943,11 +943,11 @@ export function findFirstAndLatestOfficialGuess(
   const firstName = guess.player.firstName;
   const lastName = guess.player.lastName;
 
-  if (!stats.players.firstOfficialGuess && game.gameMode === 'official') {
+  if (!stats.players.firstOfficialGuess && game.mode === 'official') {
     stats.players.firstOfficialGuess = firstName + ' ' + lastName;
   }
 
-  if (game.gameMode === 'official') {
+  if (game.mode === 'official') {
     stats.players.latestOfficialGuess = firstName + ' ' + lastName;
   }
 
@@ -1025,7 +1025,7 @@ export function countRandomPlayers(
 ) {
   if (
     !randomPlayers ||
-    game.gameMode === 'official' ||
+    game.mode === 'official' ||
     game.randomPlayer === null
   )
     return;
@@ -1122,7 +1122,7 @@ export function countGamesForGlobalStats(
   game: UserStatsGame,
   stats: GlobalStats
 ) {
-  if (game.gameMode === 'official') {
+  if (game.mode === 'official') {
     stats.games.official.officialGamesPlayed++;
 
     if (!game.hasWon && !game.hasGivenUp) return;
@@ -1134,7 +1134,7 @@ export function countGamesForGlobalStats(
     }
 
     stats.games.official.officialGamesCompleted++;
-  } else if (game.gameMode === 'random') {
+  } else if (game.mode === 'random') {
     if (game.userId) {
       stats.games.random.randomGamesPlayedUser++;
 
@@ -1189,10 +1189,10 @@ export function findLatestGuesses(
   const firstName = guess.player.firstName;
   const lastName = guess.player.lastName;
 
-  if (game.gameMode === 'official') {
+  if (game.mode === 'official') {
     stats.players.latestOfficialGuess = firstName + ' ' + lastName;
     stats.players.latestOfficialGuessName = game.user ? game.user.name : 'User';
-  } else if (game.gameMode === 'random') {
+  } else if (game.mode === 'random') {
     stats.players.latestRandomGuess = firstName + ' ' + lastName;
     if (game.userId) {
       stats.players.latestRandomGuessName = game.user ? game.user.name : 'User';

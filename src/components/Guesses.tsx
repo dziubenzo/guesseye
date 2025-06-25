@@ -19,22 +19,20 @@ import { useEffect, useMemo, useState } from 'react';
 
 type GuessesProps = {
   existingGame?: ExistingOfficialGame | ExistingRandomGame;
-  gameMode: GameMode;
+  mode: GameMode;
 };
 
-export default function Guesses({ existingGame, gameMode }: GuessesProps) {
-  const { guesses, setInitialGuesses, updateMatches, setGameMode } =
-    useGameStore();
+export default function Guesses({ existingGame, mode }: GuessesProps) {
+  const { guesses, setInitialGuesses, updateMatches, setMode } = useGameStore();
   const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
-    setGameMode(gameMode);
-
+    setMode(mode);
     if (existingGame) {
       setInitialGuesses(existingGame.guesses);
       updateMatches(existingGame.playerToFindMatches);
     }
-  }, [existingGame, gameMode]);
+  }, [existingGame, mode]);
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 

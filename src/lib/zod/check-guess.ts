@@ -12,7 +12,7 @@ import { z } from 'zod';
 export const guessSchema = z.object({
   guess: z.string().min(3).max(64).trim(),
   scheduleId: z.string().optional(),
-  gameMode: z.union([z.literal('official'), z.literal('random')]),
+  mode: z.union([z.literal('official'), z.literal('random')]),
   playerToFindMatches: z.object({
     firstName: z.string().optional(),
     lastName: z.string().optional(),

@@ -28,7 +28,7 @@ export const getOfficialGamesHistory = async () => {
     with: {
       playerToFind: true,
       games: {
-        where: eq(game.gameMode, 'official'),
+        where: eq(game.mode, 'official'),
         with: { guesses: true, user: true },
       },
     },

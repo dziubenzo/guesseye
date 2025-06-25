@@ -9,7 +9,7 @@ import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find'
 
 export const giveUp = actionClient
   .schema(giveUpSchema)
-  .action(async ({ parsedInput: { scheduleId, gameMode } }) => {
+  .action(async ({ parsedInput: { scheduleId, mode } }) => {
     const validationResult = validateScheduleId(scheduleId);
 
     if ('error' in validationResult) {
@@ -22,10 +22,7 @@ export const giveUp = actionClient
 
     const validScheduleId = validationResult.validScheduleId;
 
-    const gameAndPlayer = await getGameAndPlayerToFind(
-      gameMode,
-      validScheduleId
-    );
+    const gameAndPlayer = await getGameAndPlayerToFind(mode, validScheduleId);
 
     if ('error' in gameAndPlayer) {
       const error: GiveUpAction = {

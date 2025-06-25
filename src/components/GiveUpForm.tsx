@@ -29,13 +29,13 @@ export default function GiveUpForm({
   setGiveUpError,
   scheduleId,
 }: GiveUpFormProps) {
-  const { resetState, gameMode } = useGameStore();
+  const { resetState, mode } = useGameStore();
 
   const giveUpForm = useForm({
     resolver: zodResolver(giveUpSchema),
     defaultValues: {
       scheduleId,
-      gameMode,
+      mode,
     },
   });
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function GiveUpForm({
 
   function onSubmit(values: GiveUpSchemaType) {
     setGiveUpError('');
-    execute({ ...values, gameMode });
+    execute({ ...values, mode });
   }
 
   function handleButtonClick() {

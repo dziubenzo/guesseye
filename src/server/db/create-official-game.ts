@@ -18,7 +18,7 @@ export const createOfficialGame = async (
       guestUserAgent: !session ? clientUserAgent : null,
       scheduledPlayerId: scheduledPlayer.id,
       startDate: new Date(),
-      gameMode: 'official',
+      mode: 'official',
     })
     .returning();
 

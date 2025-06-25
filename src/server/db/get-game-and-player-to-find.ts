@@ -14,13 +14,13 @@ import { findRandomGame } from '@/server/db/find-random-game';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 
 export const getGameAndPlayerToFind = async (
-  gameMode: GameMode,
+  mode: GameMode,
   scheduleId?: number
 ) => {
   let game: OfficialGame | RandomGame | Game | ErrorObject;
   let playerToFind: Player;
 
-  if (gameMode === 'official') {
+  if (mode === 'official') {
     const scheduledPlayer = await getScheduledPlayer(
       scheduleId ? scheduleId : undefined
     );

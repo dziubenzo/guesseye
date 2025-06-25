@@ -25,7 +25,7 @@ export const getRandomGame = async () => {
   }
 
   const gameDetails: ExistingRandomGame = {
-    gameMode: 'random',
+    mode: 'random',
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: game.randomPlayer.difficulty,

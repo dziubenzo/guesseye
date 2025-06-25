@@ -49,7 +49,7 @@ export const getLeaderboard = async () => {
         user.games.forEach((game) => {
           countGames(game, leaderboardUser);
 
-          if (game.gameMode === 'random' || game.hasGivenUp || !game.hasWon) {
+          if (game.mode === 'random' || game.hasGivenUp || !game.hasWon) {
             return;
           }
 

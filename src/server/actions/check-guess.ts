@@ -22,7 +22,7 @@ export const checkGuess = actionClient
   .schema(guessSchema)
   .action(
     async ({
-      parsedInput: { guess, scheduleId, playerToFindMatches, gameMode },
+      parsedInput: { guess, scheduleId, playerToFindMatches, mode },
     }) => {
       const normalisedGuess = normaliseGuess(guess);
 
@@ -40,10 +40,7 @@ export const checkGuess = actionClient
 
       const players = await getPlayers();
 
-      const gameAndPlayer = await getGameAndPlayerToFind(
-        gameMode,
-        validScheduleId
-      );
+      const gameAndPlayer = await getGameAndPlayerToFind(mode, validScheduleId);
 
       if ('error' in gameAndPlayer) {
         const error: CheckGuessAction = {

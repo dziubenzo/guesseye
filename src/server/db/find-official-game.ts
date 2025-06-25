@@ -22,7 +22,7 @@ export const findOfficialGame = async (scheduledPlayer: ScheduleWithPlayer) => {
     where: and(
       eq(game.userId, session.user.id),
       eq(game.scheduledPlayerId, scheduledPlayer.id),
-      eq(game.gameMode, 'official')
+      eq(game.mode, 'official')
     ),
     with: {
       guesses: {

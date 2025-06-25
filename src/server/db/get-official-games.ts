@@ -23,10 +23,7 @@ export const getOfficialGames = async () => {
     with: {
       playerToFind: true,
       games: {
-        where: and(
-          eq(game.userId, session.user.id),
-          eq(game.gameMode, 'official')
-        ),
+        where: and(eq(game.userId, session.user.id), eq(game.mode, 'official')),
       },
     },
     orderBy: desc(schedule.startDate),

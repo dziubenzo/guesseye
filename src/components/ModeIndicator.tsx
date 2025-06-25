@@ -4,13 +4,13 @@ import Tooltip from '@/components/Tooltip';
 import { useGameStore } from '@/lib/game-store';
 
 export default function ModeIndicator() {
-  const { gameMode } = useGameStore();
+  const { mode } = useGameStore();
 
   return (
     <span className="place-self-center md:place-self-end text-lg opacity-75 md:rotate-4 p-2 flex gap-1">
-      {gameMode === 'official' ? 'Official Mode' : 'Random Mode'}
+      {mode === 'official' ? 'Official Mode' : 'Random Mode'}
       <Tooltip>
-        {gameMode === 'official' ? (
+        {mode === 'official' ? (
           <p>
             In the <span className="font-medium">official</span> mode, a
             hand-picked darts player is selected for you to guess every day. You

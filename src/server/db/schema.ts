@@ -313,7 +313,8 @@ export const scheduleRelations = relations(schedule, ({ one, many }) => ({
   games: many(game),
 }));
 
-export const gameModeEnum = pgEnum('game_mode', ['official', 'random']);
+export const modeEnum = pgEnum('mode', ['official', 'random']);
+export const statusEnum = pgEnum('status', ['inProgress', 'won', 'givenUp']);
 
 export const game = pgTable(
   'game',
@@ -336,7 +337,8 @@ export const game = pgTable(
     }),
     hasWon: boolean('has_won').default(false).notNull(),
     hasGivenUp: boolean('has_given_up').default(false).notNull(),
-    gameMode: gameModeEnum('game_mode').notNull(),
+    mode: modeEnum('mode').notNull(),
+    status: statusEnum('status').notNull().default('inProgress'),
   },
   ({ userId, guestIp, scheduledPlayerId, randomPlayerId }) => [
     check(

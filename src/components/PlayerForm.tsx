@@ -28,7 +28,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     gameOver,
     resetState,
     playerToFindMatches,
-    gameMode,
+    mode
   } = useGameStore();
 
   const playerForm = useForm({
@@ -37,7 +37,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       guess: '',
       scheduleId,
       playerToFindMatches,
-      gameMode,
+      mode,
     },
     mode: 'onSubmit',
   });
@@ -80,7 +80,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       setError('You have already guessed this player.');
       return;
     }
-    execute({ ...values, playerToFindMatches, gameMode });
+    execute({ ...values, playerToFindMatches, mode });
   }
 
   useEffect(() => {

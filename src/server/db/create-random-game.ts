@@ -27,7 +27,7 @@ export const createRandomGame = async () => {
       guestUserAgent: !session ? clientUserAgent : null,
       randomPlayerId: randomPlayer.id,
       startDate: new Date(),
-      gameMode: 'random',
+      mode: 'random',
     })
     .returning();
 

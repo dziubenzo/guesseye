@@ -13,14 +13,14 @@ export const findRandomGame = async () => {
     where: session
       ? and(
           eq(game.userId, session.user.id),
-          eq(game.gameMode, 'random'),
+          eq(game.mode, 'random'),
           eq(game.hasGivenUp, false),
           eq(game.hasWon, false)
         )
       : and(
           eq(game.guestIp, clientIP),
           eq(game.guestUserAgent, clientUserAgent),
-          eq(game.gameMode, 'random'),
+          eq(game.mode, 'random'),
           eq(game.hasGivenUp, false),
           eq(game.hasWon, false)
         ),

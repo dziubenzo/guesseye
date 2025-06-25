@@ -25,14 +25,14 @@ export default async function CurrentGame() {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { playerDifficulty, gameMode } = game;
+  const { playerDifficulty, mode } = game;
 
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
       <ModeIndicator />
       <PlayerToFindCard difficulty={playerDifficulty} />
-      <Guesses existingGame={game} gameMode={gameMode} />
+      <Guesses existingGame={game} mode={mode} />
       <GameOverConfetti />
       <GameOverModal />
     </div>

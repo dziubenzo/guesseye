@@ -122,8 +122,8 @@ export type PlayerToFindRangedMatch<T> = {
 };
 
 export type ExistingOfficialGame = {
-  gameMode: 'official';
-  gameInProgress: true;
+  mode: 'official';
+  inProgress: true;
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
@@ -134,7 +134,7 @@ export type ExistingOfficialGame = {
 export type ExistingRandomGame = Pick<
   ExistingOfficialGame,
   'guesses' | 'playerToFindMatches' | 'playerDifficulty'
-> & { gameMode: 'random' };
+> & { mode: 'random' };
 
 export type GameMode = 'official' | 'random';
 
@@ -182,7 +182,7 @@ export type NextScheduledPlayer = {
 
 export type NoGame = {
   noGame: true;
-  gameMode: 'official';
+  mode: 'official';
   playerDifficulty: Player['difficulty'];
   winnersCount: number;
   nextPlayerStartDate: Schedule['startDate'];
