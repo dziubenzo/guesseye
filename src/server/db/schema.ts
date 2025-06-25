@@ -10,6 +10,7 @@ import {
   serial,
   text,
   timestamp,
+  type AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 
 // Authentication
@@ -391,3 +392,7 @@ export const guessRelations = relations(guess, ({ one }) => ({
     references: [player.id],
   }),
 }));
+
+export function lower(email: AnyPgColumn): SQL {
+  return sql`lower(${email})`;
+}

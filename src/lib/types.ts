@@ -170,6 +170,11 @@ export type GiveUpAction = GiveUpError | GiveUpSuccess;
 
 export type ErrorObject = { error: string };
 
+export type UpdateNameAction = {
+  type: 'error' | 'success';
+  message: string;
+};
+
 export type NextScheduledPlayer = {
   startDate: Schedule['startDate'];
   playerToFind: { difficulty: Player['difficulty'] };

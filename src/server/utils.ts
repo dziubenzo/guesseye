@@ -1,6 +1,9 @@
 'use server';
 
 import { auth } from '@/lib/auth';
+import { db } from '@/server/db';
+import { lower, user } from '@/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
 export async function getIPAndUserAgent() {
@@ -24,4 +27,12 @@ export async function getUserOrGuest() {
     const { clientIP, clientUserAgent } = await getIPAndUserAgent();
     return { session: null, clientIP, clientUserAgent };
   }
+}
+
+export async function isNameTaken(newName: string) {
+  const nameTaken = await db.query.user.findFirst({
+    where: eq(lower(user.name), newName.toLowerCase()),
+  });
+
+  return nameTaken ? true : false;
 }
