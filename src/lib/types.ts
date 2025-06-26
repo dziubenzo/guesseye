@@ -53,7 +53,8 @@ export type GameWithGuessesAndUser = Game & {
 
 export type BestResultColumnType =
   | NonNullable<Player['bestResultPDC']>
-  | NonNullable<Player['bestResultWDF']>;
+  | NonNullable<Player['bestResultWDF']>
+  | NonNullable<Player['bestResultUKOpen']>;
 
 export type Match = 'match' | 'noMatch';
 export type RangedMatch = Match | 'higher' | 'lower';

@@ -213,6 +213,9 @@ export const bestResultPDCMap = buildBestResultMap(
 export const bestResultWDFMap = buildBestResultMap(
   getTableColumns(player).bestResultWDF.enumValues
 );
+export const bestResultUKOpenMap = buildBestResultMap(
+  getTableColumns(player).bestResultUKOpen.enumValues
+);
 
 export function comparePlayers(
   guessedPlayer: Player,

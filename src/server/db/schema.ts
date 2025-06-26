@@ -209,6 +209,30 @@ export const bestResultWDFEnum = pgEnum('best_wdf_result', [
 ]);
 export const bestResultWDFEnumValues = bestResultWDFEnum.enumValues;
 
+export const bestResultUKOpenEnum = pgEnum('best_uk_open_result', [
+  'Last 178', // 2012 prelims
+  'Last 176', // 2005, 2007 prelims
+  'Last 172', // 2011 prelims
+  'Last 160', // 1st round
+  'Last 147', // 2015 prelims
+  'Last 146', // 2013 prelims
+  'Last 138', // 2010, 2014 prelims
+  'Last 136', // 2006, 2008 prelims
+  'Last 131', // 2003 prelims
+  'Last 130', // 2004 prelims
+  'Last 129', // 2009 prelims
+  'Last 128', // 2nd round
+  'Last 96', // 3rd round
+  'Last 64', // 4th round
+  'Last 32', // 5th round
+  'Last 16', // 6th round
+  'Quarter-Finals',
+  'Semi-Finals',
+  'Runner-Up',
+  'Winner',
+]);
+export const bestResultUKOpenEnumValues = bestResultUKOpenEnum.enumValues;
+
 export const difficultyEnum = pgEnum('difficulty', [
   'easy',
   'medium',
@@ -245,6 +269,8 @@ export const player = pgTable(
     yearOfBestResultPDC: integer('year_of_best_pdc_result'),
     bestResultWDF: bestResultWDFEnum('best_wdf_result'),
     yearOfBestResultWDF: integer('year_of_best_wdf_result'),
+    bestResultUKOpen: bestResultUKOpenEnum('best_uk_open_result'),
+    yearOfBestResultUKOpen: integer('year_of_best_uk_open_result'),
     playedInWCOD: boolean('played_in_wcod').notNull(),
     playedInWDF: boolean('played_in_wdf').notNull(),
     active: boolean('active').notNull(),
@@ -255,6 +281,7 @@ export const player = pgTable(
     nineDartersPDC,
     yearOfBestResultPDC,
     yearOfBestResultWDF,
+    yearOfBestResultUKOpen,
     rankingPDC,
     rankingWDF,
     prizeMoney,
@@ -271,6 +298,10 @@ export const player = pgTable(
     check(
       'is_year_best_wdf_result',
       sql`${yearOfBestResultWDF} >= 1900 AND ${yearOfBestResultWDF} < 2100`
+    ),
+    check(
+      'is_year_best_uk_open_result',
+      sql`${yearOfBestResultUKOpen} >= 1900 AND ${yearOfBestResultUKOpen} < 2100`
     ),
     check(
       'is_proper_ranking_PDC',
