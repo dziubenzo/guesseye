@@ -9,10 +9,7 @@ export const endGame = async (
   type: 'win' | 'giveUp',
   game: OfficialGame | RandomGame | Game
 ) => {
-  if (
-    (type === 'win' && game.hasGivenUp) ||
-    (type === 'giveUp' && game.hasWon)
-  ) {
+  if (game.status !== 'inProgress') {
     const error: ErrorObject = { error: 'An unexpected error occurred.' };
     return error;
   }
@@ -20,8 +17,7 @@ export const endGame = async (
   await db
     .update(gameTable)
     .set({
-      hasWon: type === 'win' ? true : false,
-      hasGivenUp: type === 'giveUp' ? true : false,
+      status: type === 'win' ? 'won' : 'givenUp',
       endDate: new Date(),
     })
     .where(eq(gameTable.id, game.id));

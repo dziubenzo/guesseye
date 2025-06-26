@@ -28,7 +28,7 @@ export const handleGameWon = async (
   const fullName = firstName + ' ' + lastName;
 
   const gameWon: GameWon = {
-    hasWon: true,
+    status: 'won',
     nextPlayerStartDate: nextScheduledPlayer.startDate,
     nextPlayerDifficulty: nextScheduledPlayer.playerToFind.difficulty,
     attempts,

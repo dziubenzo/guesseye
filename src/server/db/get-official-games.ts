@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import type { ErrorObject, GameInfo, OfficialGames } from '@/lib/types';
+import type { ErrorObject, OfficialGames } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, schedule } from '@/server/db/schema';
 import { and, desc, eq, lt } from 'drizzle-orm';
@@ -37,35 +37,27 @@ export const getOfficialGames = async () => {
       startDate: scheduledPlayer.startDate,
       endDate: scheduledPlayer.endDate,
       playerDifficulty: scheduledPlayer.playerToFind.difficulty,
-      gameExists: false,
       gameInfo: {
         fullName: undefined,
-        gameStatus: 'notPlayed',
+        status: 'notPlayed',
       },
     };
 
     if (scheduledPlayer.games.length === 1) {
       const game = scheduledPlayer.games[0];
-      result.gameExists = true;
 
       let fullName: string | undefined =
         scheduledPlayer.playerToFind.firstName +
         ' ' +
         scheduledPlayer.playerToFind.lastName;
-      let gameStatus: GameInfo['gameStatus'];
 
-      if (game.hasWon) {
-        gameStatus = 'won';
-      } else if (game.hasGivenUp) {
-        gameStatus = 'givenUp';
-      } else {
+      if (game.status === 'inProgress') {
         fullName = undefined;
-        gameStatus = 'inProgress';
       }
 
       result.gameInfo = {
         fullName,
-        gameStatus,
+        status: game.status,
       };
     }
 

@@ -52,12 +52,12 @@ export const getOfficialGamesHistory = async () => {
 
     if (scheduledPlayer.games.length > 0) {
       scheduledPlayer.games.forEach((game) => {
-        if (!game.hasWon || game.hasGivenUp) return;
-
-        history.winners++;
-        findFirstWinner(game, history, scheduledPlayer.startDate);
-        findFastestWinner(game, history);
-        findWinnerWithFewestGuesses(game, history);
+        if (game.status === 'won') {
+          history.winners++;
+          findFirstWinner(game, history, scheduledPlayer.startDate);
+          findFastestWinner(game, history);
+          findWinnerWithFewestGuesses(game, history);
+        }
       });
     }
 

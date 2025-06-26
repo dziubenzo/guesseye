@@ -335,8 +335,6 @@ export const game = pgTable(
     endDate: timestamp('end_date', {
       precision: 0,
     }),
-    hasWon: boolean('has_won').default(false).notNull(),
-    hasGivenUp: boolean('has_given_up').default(false).notNull(),
     mode: modeEnum('mode').notNull(),
     status: statusEnum('status').notNull().default('inProgress'),
   },

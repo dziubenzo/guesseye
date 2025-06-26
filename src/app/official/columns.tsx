@@ -45,7 +45,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
     accessorKey: 'gameInfo.fullName',
     header: 'Darts Player',
     cell: ({ row, cell }) => {
-      if (row.original.gameExists && row.original.gameInfo?.fullName) {
+      if (row.original.gameInfo?.fullName) {
         const fullName = cell.getValue<GameInfo['fullName']>();
         return fullName;
       } else {
@@ -146,10 +146,10 @@ export const columns: ColumnDef<OfficialGames>[] = [
     },
   },
   {
-    accessorKey: 'gameInfo.gameStatus',
+    accessorKey: 'gameInfo.status',
     header: 'Status',
     cell: ({ cell }) => {
-      const gameStatus = cell.getValue<GameInfo['gameStatus']>();
+      const gameStatus = cell.getValue<GameInfo['status']>();
 
       if (gameStatus === 'won') {
         return (
@@ -182,33 +182,28 @@ export const columns: ColumnDef<OfficialGames>[] = [
     accessorKey: 'action',
     header: 'Action',
     cell: ({ row }) => {
-      if (
-        !row.original.gameExists ||
-        row.original.gameInfo?.gameStatus === 'inProgress'
-      ) {
-        if (row.original.gameExists) {
-          return (
-            <Button
-              className="cursor-pointer w-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
-              variant={!row.original.gameExists ? 'secondary' : undefined}
-              asChild
-            >
-              <Link href={`/official/${row.original.scheduleId}`}>Resume</Link>
-            </Button>
-          );
-        } else if (!row.original.gameExists) {
-          return (
-            <Button
-              className="cursor-pointer w-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
-              variant={'secondary'}
-              asChild
-            >
-              <Link href={`/official/${row.original.scheduleId}`}>Play</Link>
-            </Button>
-          );
-        } else {
-          return;
-        }
+      if (row.original.gameInfo.status === 'inProgress') {
+        return (
+          <Button
+            className="cursor-pointer w-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
+            variant={'secondary'}
+            asChild
+          >
+            <Link href={`/official/${row.original.scheduleId}`}>Resume</Link>
+          </Button>
+        );
+      } else if (row.original.gameInfo.status === 'notPlayed') {
+        return (
+          <Button
+            className="cursor-pointer w-full bg-indigo-300 hover:bg-indigo-200 text-secondary-foreground dark:text-secondary"
+            variant={'secondary'}
+            asChild
+          >
+            <Link href={`/official/${row.original.scheduleId}`}>Play</Link>
+          </Button>
+        );
+      } else {
+        return;
       }
     },
   },

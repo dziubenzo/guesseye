@@ -29,7 +29,7 @@ export const handleGameGivenUp = async (
   fillAllMatches(scheduledPlayer.playerToFind, previousPlayer);
 
   const gameGivenUp: GameGivenUp = {
-    hasGivenUp: true,
+    status: 'givenUp',
     previousPlayer,
     previousPlayerDifficulty: scheduledPlayer.playerToFind.difficulty,
     attempts,

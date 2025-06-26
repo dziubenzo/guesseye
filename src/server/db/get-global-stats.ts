@@ -119,7 +119,7 @@ export const getGlobalStats = async () => {
     findFewestAndMostGuesses(game, stats);
     findGlobalGuessesToWinAndGiveUp(game, stats);
 
-    if (game.hasWon || game.hasGivenUp) {
+    if (game.status !== 'inProgress') {
       countGamesByDay(game, gamesByDay);
       countRandomPlayers(game, randomPlayers);
     }

@@ -25,17 +25,22 @@ export default async function CurrentGame() {
       return <ErrorPage errorMessage={game.error} />;
     }
 
-    if ('hasWon' in game) {
+    if (game.status === 'won') {
       return <GameWon previousGame={game} />;
     }
 
-    if ('hasGivenUp' in game) {
+    if (game.status === 'givenUp') {
       return <GameGivenUp previousGame={game} />;
     }
 
     if (game) {
-      const { playerDifficulty, winnersCount, nextPlayerStartDate, mode } =
-        game;
+      const {
+        playerDifficulty,
+        winnersCount,
+        nextPlayerStartDate,
+        mode,
+        status,
+      } = game;
 
       return (
         <div className="flex flex-col gap-4">
@@ -46,7 +51,7 @@ export default async function CurrentGame() {
             nextPlayerStartDate={nextPlayerStartDate}
           />
           <PlayerToFindCard difficulty={playerDifficulty} />
-          {'inProgress' in game ? (
+          {status === 'inProgress' ? (
             <Guesses existingGame={game} mode={mode} />
           ) : (
             <Guesses mode={mode} />

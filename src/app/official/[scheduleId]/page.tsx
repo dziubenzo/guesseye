@@ -23,7 +23,7 @@ export default async function PreviousOfficialGame({
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  if ('hasWon' in game || 'hasGivenUp' in game) {
+  if (game.status === 'won' || game.status === 'givenUp') {
     return notFound();
   }
 
@@ -36,7 +36,7 @@ export default async function PreviousOfficialGame({
         <ModeIndicator />
         <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard difficulty={playerDifficulty} />
-        {'inProgress' in game ? (
+        {game.status === 'inProgress' ? (
           <Guesses existingGame={game} mode={mode} />
         ) : (
           <Guesses mode={mode} />

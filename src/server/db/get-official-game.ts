@@ -4,7 +4,7 @@ import type {
   ErrorObject,
   ExistingOfficialGame,
   GuessWithPlayer,
-  NoGame,
+  GameNotPlayed,
 } from '@/lib/types';
 import { comparePlayers, validateScheduleId } from '@/lib/utils';
 import { findOfficialGame } from '@/server/db/find-official-game';
@@ -54,8 +54,8 @@ export const getOfficialGame = async (scheduleId?: string) => {
   }
 
   if (!existingGame) {
-    const playerDifficulty: NoGame = {
-      noGame: true,
+    const playerDifficulty: GameNotPlayed = {
+      status: 'notPlayed',
       mode: 'official',
       playerDifficulty: scheduledPlayer.playerToFind.difficulty,
       winnersCount,
@@ -64,19 +64,19 @@ export const getOfficialGame = async (scheduleId?: string) => {
     return playerDifficulty;
   }
 
-  if (existingGame.hasWon) {
+  if (existingGame.status === 'won') {
     const data = await handleGameWon(scheduledPlayer, existingGame);
     return data;
   }
 
-  if (existingGame.hasGivenUp) {
+  if (existingGame.status === 'givenUp') {
     const data = await handleGameGivenUp(scheduledPlayer, existingGame);
     return data;
   }
 
   const gameDetails: ExistingOfficialGame = {
+    status: existingGame.status,
     mode: 'official',
-    inProgress: true,
     guesses: [],
     playerToFindMatches: {},
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,

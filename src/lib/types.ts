@@ -122,8 +122,8 @@ export type PlayerToFindRangedMatch<T> = {
 };
 
 export type ExistingOfficialGame = {
+  status: 'inProgress';
   mode: 'official';
-  inProgress: true;
   guesses: Guess[];
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
@@ -180,8 +180,8 @@ export type NextScheduledPlayer = {
   playerToFind: { difficulty: Player['difficulty'] };
 };
 
-export type NoGame = {
-  noGame: true;
+export type GameNotPlayed = {
+  status: 'notPlayed';
   mode: 'official';
   playerDifficulty: Player['difficulty'];
   winnersCount: number;
@@ -189,7 +189,7 @@ export type NoGame = {
 };
 
 export type GameWon = {
-  hasWon: true;
+  status: 'won';
   nextPlayerStartDate: Schedule['startDate'];
   nextPlayerDifficulty: Player['difficulty'];
   attempts: number;
@@ -197,7 +197,7 @@ export type GameWon = {
 };
 
 export type GameGivenUp = {
-  hasGivenUp: true;
+  status: 'givenUp';
   previousPlayer: PlayerToFindMatches;
   previousPlayerDifficulty: Player['difficulty'];
   nextPlayerStartDate: Schedule['startDate'];
@@ -211,13 +211,12 @@ export type OfficialGames = {
   startDate: Schedule['startDate'];
   endDate: Schedule['endDate'];
   playerDifficulty: Player['difficulty'];
-  gameExists: boolean;
   gameInfo: GameInfo;
 };
 
 export type GameInfo = {
   fullName?: string;
-  gameStatus: 'won' | 'givenUp' | 'inProgress' | 'notPlayed';
+  status: 'won' | 'givenUp' | 'inProgress' | 'notPlayed';
 };
 
 export type OfficialGamesHistory = Pick<

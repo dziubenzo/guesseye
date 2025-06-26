@@ -122,8 +122,8 @@ export const getUserStats = async () => {
     findFewestAndMostGuesses(game, stats);
     findUserGuessesToWinAndGiveUp(game, stats);
 
-    if (game.hasWon || game.hasGivenUp) {
-      if (game.hasWon) {
+    if (game.status !== 'inProgress') {
+      if (game.status === 'won') {
         stats.games.duration.fastestWin = findFastestWin(
           game,
           stats.games.duration.fastestWin

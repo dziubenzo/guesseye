@@ -49,15 +49,13 @@ export const getLeaderboard = async () => {
         user.games.forEach((game) => {
           countGames(game, leaderboardUser);
 
-          if (game.mode === 'random' || game.hasGivenUp || !game.hasWon) {
-            return;
+          if (game.mode === 'official' && game.status === 'won') {
+            leaderboardUser.fastestWin = findFastestWin(
+              game,
+              leaderboardUser.fastestWin
+            );
+            findWinWithFewestGuesses(game, leaderboardUser);
           }
-
-          leaderboardUser.fastestWin = findFastestWin(
-            game,
-            leaderboardUser.fastestWin
-          );
-          findWinWithFewestGuesses(game, leaderboardUser);
         });
       }
 
