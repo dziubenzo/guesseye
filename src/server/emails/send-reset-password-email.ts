@@ -1,9 +1,10 @@
 'use server';
 
 import ResetPasswordEmail from '@/components/ResetPasswordEmail';
+import * as dotenvx from '@dotenvx/dotenvx';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = new Resend(dotenvx.get('RESEND_API_KEY'));
 
 export const sendResetPasswordEmail = async (
   email: string,
