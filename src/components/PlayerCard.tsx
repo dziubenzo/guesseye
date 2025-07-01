@@ -20,7 +20,6 @@ import {
   getDifficultyColour,
 } from '@/lib/utils';
 import {
-  BadgePoundSterling,
   Building,
   Cake,
   Calendar1,
@@ -28,7 +27,6 @@ import {
   Globe,
   Hand,
   History,
-  Layers2,
   Map,
   ScrollText,
   Star,
@@ -247,7 +245,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field>
+              <Field className="col-span-2 lg:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   PDC Ranking
@@ -262,34 +260,44 @@ export default function PlayerCard(props: PlayerCardProps) {
                   )}
                 </FieldValue>
               </Field>
-              <Field>
+              <Field className="col-span-2 lg:col-span-2">
                 <FieldName>
-                  <ScrollText size={18} />
-                  Tour Card
+                  <Trophy size={18} />
+                  Best UK Open Result
+                  <Tooltip>
+                    If a darts player achieved their best result more than once,
+                    the year is the latest one.
+                  </Tooltip>
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
-                  {player.tourCard === undefined
-                    ? ''
-                    : player.tourCard
-                      ? 'Yes'
-                      : 'No'}
-                </FieldValue>
-              </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
-                  <BadgePoundSterling size={18} />
-                  Prize Money
-                </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  comparisonResult={player.prizeMoney?.type}
-                  fieldName="Prize money"
-                >
-                  {formatPlayerToFindField<Player['prizeMoney']>(
-                    player.prizeMoney,
-                    'prizeMoney'
-                  )}
-                </FieldValue>
+                {player.bestResultUKOpen?.value &&
+                player.yearOfBestResultUKOpen?.value ? (
+                  <FieldValueBestResult
+                    fieldNameBestResult={'Best UK Open result'}
+                    fieldNameYearBestResult={'Year of best UK Open result'}
+                    bestResult={player.bestResultUKOpen.value}
+                    yearBestResult={player.yearOfBestResultUKOpen.value}
+                    comparisonBestResult={player.bestResultUKOpen.type}
+                    comparisonYearBestResult={
+                      player.yearOfBestResultUKOpen.type
+                    }
+                  />
+                ) : player.bestResultUKOpen?.value === null ? (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best UK Open result'}
+                    comparisonResult={player.bestResultUKOpen?.type}
+                  >
+                    N/A
+                  </FieldValue>
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best UK Open result'}
+                    comparisonResult={player.bestResultUKOpen?.type}
+                  >
+                    {' '}
+                  </FieldValue>
+                )}
               </Field>
               <Field className="col-span-2 lg:col-span-2">
                 <FieldName>
@@ -333,7 +341,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field>
+              <Field className="col-span-2 lg:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   WDF Ranking
@@ -350,6 +358,19 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
               <Field>
                 <FieldName>
+                  <ScrollText size={18} />
+                  Tour Card
+                </FieldName>
+                <FieldValue type={'playerToFind'}>
+                  {player.tourCard === undefined
+                    ? ''
+                    : player.tourCard
+                      ? 'Yes'
+                      : 'No'}
+                </FieldValue>
+              </Field>
+              <Field>
+                <FieldName>
                   <Globe size={18} />
                   Played in WCoD
                 </FieldName>
@@ -357,24 +378,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.playedInWCOD === undefined
                     ? ''
                     : player.playedInWCOD
-                      ? 'Yes'
-                      : 'No'}
-                </FieldValue>
-              </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
-                  <Layers2 size={18} />
-                  Played in BDO/WDF
-                  <Tooltip>
-                    If the value says &quot;No&quot;, it means that a darts
-                    player has <span className="font-bold">never</span> played
-                    in BDO/WDF events.
-                  </Tooltip>
-                </FieldName>
-                <FieldValue type={'playerToFind'}>
-                  {player.playedInWDF === undefined
-                    ? ''
-                    : player.playedInWDF
                       ? 'Yes'
                       : 'No'}
                 </FieldValue>
@@ -582,7 +585,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
-              <Field>
+              <Field className="col-span-2 lg:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   PDC Ranking
@@ -595,33 +598,35 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.rankingPDC ? player.rankingPDC : 'N/A'}
                 </FieldValue>
               </Field>
-              <Field>
+              <Field className="col-span-2 lg:col-span-2">
                 <FieldName>
-                  <ScrollText size={18} />
-                  Tour Card
+                  <Trophy size={18} />
+                  Best UK Open Result
+                  <Tooltip>
+                    If a darts player achieved their best result more than once,
+                    the year is the latest one.
+                  </Tooltip>
                 </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  fieldName={'Tour card'}
-                  comparisonResult={comparisonResults.tourCard}
-                >
-                  {player.tourCard ? 'Yes' : 'No'}
-                </FieldValue>
-              </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
-                  <BadgePoundSterling size={18} />
-                  Prize Money
-                </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  fieldName={'Prize money'}
-                  comparisonResult={comparisonResults.prizeMoney}
-                >
-                  {player.prizeMoney
-                    ? formatPrizeMoney(player.prizeMoney)
-                    : 'N/A'}
-                </FieldValue>
+                {player.bestResultUKOpen && player.yearOfBestResultUKOpen ? (
+                  <FieldValueBestResult
+                    fieldNameBestResult={'Best UK Open result'}
+                    fieldNameYearBestResult={'Year of best UK Open result'}
+                    bestResult={player.bestResultUKOpen}
+                    yearBestResult={player.yearOfBestResultUKOpen}
+                    comparisonBestResult={comparisonResults.bestResultUKOpen}
+                    comparisonYearBestResult={
+                      comparisonResults.yearOfBestResultUKOpen
+                    }
+                  />
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Best UK Open result'}
+                    comparisonResult={comparisonResults.bestResultUKOpen}
+                  >
+                    N/A
+                  </FieldValue>
+                )}
               </Field>
               <Field className="col-span-2 lg:col-span-2">
                 <FieldName>
@@ -658,7 +663,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
-              <Field>
+              <Field className="col-span-2 lg:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   WDF Ranking
@@ -673,6 +678,19 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
               <Field>
                 <FieldName>
+                  <ScrollText size={18} />
+                  Tour Card
+                </FieldName>
+                <FieldValue
+                  type={'guess'}
+                  fieldName={'Tour card'}
+                  comparisonResult={comparisonResults.tourCard}
+                >
+                  {player.tourCard ? 'Yes' : 'No'}
+                </FieldValue>
+              </Field>
+              <Field>
+                <FieldName>
                   <Globe size={18} />
                   Played in WCoD
                 </FieldName>
@@ -682,24 +700,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                   comparisonResult={comparisonResults.playedInWCOD}
                 >
                   {player.playedInWCOD ? 'Yes' : 'No'}
-                </FieldValue>
-              </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName className="lg:text-xs xl:text-sm">
-                  <Layers2 size={18} />
-                  Played in BDO/WDF
-                  <Tooltip>
-                    If the value says &quot;No&quot;, it means that a darts
-                    player has <span className="font-bold">never</span> played
-                    in BDO/WDF events.
-                  </Tooltip>
-                </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  fieldName={'Played in BDO/WDF'}
-                  comparisonResult={comparisonResults.playedInWDF}
-                >
-                  {player.playedInWDF ? 'Yes' : 'No'}
                 </FieldValue>
               </Field>
               <Field className="col-span-2 lg:col-start-4">

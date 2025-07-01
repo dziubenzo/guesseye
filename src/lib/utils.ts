@@ -278,6 +278,7 @@ export function comparePlayers(
         case 'rankingWDF':
         case 'yearOfBestResultPDC':
         case 'yearOfBestResultWDF':
+        case 'yearOfBestResultUKOpen':
           currentMatches[key] = {
             type: 'match',
             value: playerToFind[key],
@@ -384,6 +385,13 @@ export function comparePlayers(
           ? bestResultWDFMap.get(currentMatches[key]?.value)
           : undefined;
         break;
+      case 'bestResultUKOpen':
+        guessedValue = bestResultUKOpenMap.get(guessedPlayer[key]!)!;
+        playerToFindValue = bestResultUKOpenMap.get(playerToFind[key]!)!;
+        currentMatchValue = currentMatches[key]?.value
+          ? bestResultWDFMap.get(currentMatches[key]?.value)
+          : undefined;
+        break;
     }
 
     if (guessedValue > playerToFindValue) {
@@ -422,6 +430,12 @@ export function comparePlayers(
           };
           break;
         case 'bestResultWDF':
+          currentMatches[key] = {
+            type: 'match',
+            value: playerToFind[key],
+          };
+          break;
+        case 'bestResultUKOpen':
           currentMatches[key] = {
             type: 'match',
             value: playerToFind[key],
@@ -479,6 +493,15 @@ export function comparePlayers(
                 : guessedPlayer[key],
           };
           break;
+        case 'bestResultUKOpen':
+          currentMatches[key] = {
+            type: newClosest.type === 'current' ? currentType! : newType,
+            value:
+              newClosest.type === 'current'
+                ? currentMatches[key]!.value
+                : guessedPlayer[key],
+          };
+          break;
         case 'dartsWeight':
           currentMatches[key] = {
             type: newClosest.type === 'current' ? currentType! : newType,
@@ -522,6 +545,7 @@ export function comparePlayers(
       case 'nineDartersPDC':
       case 'yearOfBestResultPDC':
       case 'yearOfBestResultWDF':
+      case 'yearOfBestResultUKOpen':
         compareRangedMatch(key);
         break;
       // Special ranged match cases
@@ -529,6 +553,7 @@ export function comparePlayers(
       case 'dartsWeight':
       case 'bestResultPDC':
       case 'bestResultWDF':
+      case 'bestResultUKOpen':
         compareSpecialRangedMatch(key);
         break;
     }

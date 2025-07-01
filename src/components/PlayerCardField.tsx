@@ -80,7 +80,10 @@ export function FieldValue(props: FieldValueProps) {
 type FieldValueBestResult = {
   fieldNameBestResult: string;
   fieldNameYearBestResult: string;
-  bestResult: Player['bestResultPDC'] | Player['bestResultWDF'];
+  bestResult:
+    | Player['bestResultPDC']
+    | Player['bestResultWDF']
+    | Player['bestResultUKOpen'];
   yearBestResult: Player['yearOfBestResultPDC'] | Player['yearOfBestResultWDF'];
   comparisonBestResult?: RangedMatch;
   comparisonYearBestResult?: RangedMatch;

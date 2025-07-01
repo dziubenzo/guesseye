@@ -79,6 +79,8 @@ export type ComparisonResults = {
   yearOfBestResultPDC: RangedMatch;
   bestResultWDF: RangedMatch;
   yearOfBestResultWDF: RangedMatch;
+  bestResultUKOpen: RangedMatch;
+  yearOfBestResultUKOpen: RangedMatch;
   playedInWCOD: Match;
   playedInWDF: Match;
   active: Match;
@@ -110,11 +112,16 @@ export type RangedMatchKeys = keyof Pick<
   | 'rankingWDF'
   | 'yearOfBestResultPDC'
   | 'yearOfBestResultWDF'
+  | 'yearOfBestResultUKOpen'
 >;
 
 export type SpecialRangedMatchKeys = keyof Pick<
   Player,
-  'bestResultPDC' | 'bestResultWDF' | 'dateOfBirth' | 'dartsWeight'
+  | 'bestResultPDC'
+  | 'bestResultWDF'
+  | 'bestResultUKOpen'
+  | 'dateOfBirth'
+  | 'dartsWeight'
 >;
 
 export type PlayerToFindRangedMatch<T> = {

@@ -1,5 +1,6 @@
 import {
   bestResultPDCEnumValues,
+  bestResultUKOpenEnumValues,
   bestResultWDFEnumValues,
   dartsBrandEnumValues,
   dartsWeightEnumValues,
@@ -123,6 +124,26 @@ export const guessSchema = z.object({
       })
       .optional(),
     yearOfBestResultWDF: z
+      .object({
+        type: z.union([
+          z.literal('higher'),
+          z.literal('lower'),
+          z.literal('match'),
+        ]),
+        value: z.union([z.number(), z.null()]),
+      })
+      .optional(),
+    bestResultUKOpen: z
+      .object({
+        type: z.union([
+          z.literal('higher'),
+          z.literal('lower'),
+          z.literal('match'),
+        ]),
+        value: z.union([z.enum(bestResultUKOpenEnumValues), z.null()]),
+      })
+      .optional(),
+    yearOfBestResultUKOpen: z
       .object({
         type: z.union([
           z.literal('higher'),
