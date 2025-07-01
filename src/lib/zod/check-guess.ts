@@ -73,16 +73,6 @@ export const guessSchema = z.object({
         value: z.union([z.number(), z.null()]),
       })
       .optional(),
-    prizeMoney: z
-      .object({
-        type: z.union([
-          z.literal('higher'),
-          z.literal('lower'),
-          z.literal('match'),
-        ]),
-        value: z.union([z.number(), z.null()]),
-      })
-      .optional(),
     nineDartersPDC: z
       .object({
         type: z.union([
@@ -154,7 +144,6 @@ export const guessSchema = z.object({
       })
       .optional(),
     playedInWCOD: z.boolean().optional(),
-    playedInWDF: z.boolean().optional(),
     active: z.boolean().optional(),
   }),
 });

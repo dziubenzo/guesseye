@@ -73,7 +73,6 @@ export type ComparisonResults = {
   tourCard: Match;
   rankingPDC: RangedMatch;
   rankingWDF: RangedMatch;
-  prizeMoney: RangedMatch;
   nineDartersPDC: RangedMatch;
   bestResultPDC: RangedMatch;
   yearOfBestResultPDC: RangedMatch;
@@ -82,7 +81,6 @@ export type ComparisonResults = {
   bestResultUKOpen: RangedMatch;
   yearOfBestResultUKOpen: RangedMatch;
   playedInWCOD: Match;
-  playedInWDF: Match;
   active: Match;
 };
 
@@ -99,7 +97,6 @@ export type MatchKeys = keyof Pick<
   | 'organisation'
   | 'tourCard'
   | 'playedInWCOD'
-  | 'playedInWDF'
   | 'active'
 >;
 
@@ -107,7 +104,6 @@ export type RangedMatchKeys = keyof Pick<
   Player,
   | 'nineDartersPDC'
   | 'playingSince'
-  | 'prizeMoney'
   | 'rankingPDC'
   | 'rankingWDF'
   | 'yearOfBestResultPDC'

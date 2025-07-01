@@ -64,14 +64,6 @@ export function capitalise(string: string) {
   return string[0].toUpperCase() + string.slice(1);
 }
 
-export function formatPrizeMoney(prizeMoney: number) {
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: 'GBP',
-    trailingZeroDisplay: 'stripIfInteger',
-  }).format(prizeMoney * 1000);
-}
-
 export function normaliseGuess(guess: string) {
   return guess
     .toLowerCase()
@@ -125,7 +117,6 @@ export function fillAllMatches(
         break;
       case 'tourCard':
       case 'playedInWCOD':
-      case 'playedInWDF':
       case 'active':
         currentMatches[key] = playerToFind[key];
         break;
@@ -149,7 +140,6 @@ export function fillAllMatches(
         };
         break;
       case 'playingSince':
-      case 'prizeMoney':
       case 'rankingPDC':
       case 'rankingWDF':
       case 'yearOfBestResultPDC':
@@ -239,7 +229,6 @@ export function comparePlayers(
           break;
         case 'tourCard':
         case 'playedInWCOD':
-        case 'playedInWDF':
         case 'active':
           currentMatches[key] = playerToFind[key];
           break;
@@ -273,7 +262,6 @@ export function comparePlayers(
           };
           break;
         case 'playingSince':
-        case 'prizeMoney':
         case 'rankingPDC':
         case 'rankingWDF':
         case 'yearOfBestResultPDC':
@@ -533,7 +521,6 @@ export function comparePlayers(
       case 'organisation':
       case 'tourCard':
       case 'playedInWCOD':
-      case 'playedInWDF':
       case 'active':
         compareMatch(key);
         break;
@@ -541,7 +528,6 @@ export function comparePlayers(
       case 'playingSince':
       case 'rankingPDC':
       case 'rankingWDF':
-      case 'prizeMoney':
       case 'nineDartersPDC':
       case 'yearOfBestResultPDC':
       case 'yearOfBestResultWDF':

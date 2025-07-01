@@ -1,7 +1,7 @@
 import type { ComparisonResults } from '@/lib/types';
 
 // Corresponds to the number of properties in the ComparisonResults and the PlayerToFindMatches type
-export const ALL_MATCHES = 24;
+export const ALL_MATCHES = 22;
 
 export const matchingComparisonResults: ComparisonResults = {
   firstName: 'match',
@@ -17,7 +17,6 @@ export const matchingComparisonResults: ComparisonResults = {
   tourCard: 'match',
   rankingPDC: 'match',
   rankingWDF: 'match',
-  prizeMoney: 'match',
   nineDartersPDC: 'match',
   bestResultPDC: 'match',
   yearOfBestResultPDC: 'match',
@@ -26,6 +25,5 @@ export const matchingComparisonResults: ComparisonResults = {
   bestResultUKOpen: 'match',
   yearOfBestResultUKOpen: 'match',
   playedInWCOD: 'match',
-  playedInWDF: 'match',
   active: 'match',
 } as const;

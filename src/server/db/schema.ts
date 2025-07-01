@@ -6,7 +6,6 @@ import {
   integer,
   pgEnum,
   pgTable,
-  real,
   serial,
   text,
   timestamp,
@@ -264,7 +263,6 @@ export const player = pgTable(
     tourCard: boolean('tour_card').notNull(),
     rankingPDC: integer('ranking_pdc'),
     rankingWDF: integer('ranking_wdf'),
-    prizeMoney: real('prize_money'),
     nineDartersPDC: integer('nine_darters_pdc').default(0).notNull(),
     bestResultPDC: bestResultPDCEnum('best_pdc_result'),
     yearOfBestResultPDC: integer('year_of_best_pdc_result'),
@@ -273,7 +271,6 @@ export const player = pgTable(
     bestResultUKOpen: bestResultUKOpenEnum('best_uk_open_result'),
     yearOfBestResultUKOpen: integer('year_of_best_uk_open_result'),
     playedInWCOD: boolean('played_in_wcod').notNull(),
-    playedInWDF: boolean('played_in_wdf').notNull(),
     active: boolean('active').notNull(),
     difficulty: difficultyEnum('difficulty').notNull(),
   },
@@ -285,7 +282,6 @@ export const player = pgTable(
     yearOfBestResultUKOpen,
     rankingPDC,
     rankingWDF,
-    prizeMoney,
   }) => [
     check(
       'is_year_playing_since',
@@ -312,7 +308,6 @@ export const player = pgTable(
       'is_proper_ranking_WDF',
       sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2000`
     ),
-    check('is_non_negative_prize_money', sql`${prizeMoney} >= 0`),
   ]
 );
 

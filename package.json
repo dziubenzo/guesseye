@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dotenvx": "dotenvx",
     "dev": "dotenvx run -- next dev",
     "build": "dotenvx run -- next build",
     "start": "dotenvx run -- next start",
-    "lint": "next lint",
+    "type-check": "tsc --noEmit --watch",
     "db:push": "npx drizzle-kit push",
-    "db:studio": "npx drizzle-kit studio"
+    "db:studio": "npx drizzle-kit studio",
+    "dotenvx": "dotenvx"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.45.1",

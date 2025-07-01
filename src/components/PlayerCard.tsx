@@ -13,12 +13,7 @@ import type {
   PlayerToFindMatches,
   PlayerToFindRangedMatch,
 } from '@/lib/types';
-import {
-  capitalise,
-  formatPrizeMoney,
-  getAge,
-  getDifficultyColour,
-} from '@/lib/utils';
+import { capitalise, getAge, getDifficultyColour } from '@/lib/utils';
 import {
   Building,
   Cake,
@@ -55,7 +50,7 @@ export default function PlayerCard(props: PlayerCardProps) {
 
   function formatPlayerToFindField<T>(
     field: PlayerToFindRangedMatch<T> | undefined,
-    type?: 'age' | 'prizeMoney'
+    isAge?: boolean
   ) {
     if (field === undefined) {
       return '';
@@ -64,10 +59,8 @@ export default function PlayerCard(props: PlayerCardProps) {
       return 'N/A';
     }
 
-    if (type === 'age' && field.value) {
+    if (isAge && field.value) {
       return getAge(field.value as string);
-    } else if (type === 'prizeMoney' && field.value) {
-      return formatPrizeMoney(field.value as number);
     } else {
       return field.value as T;
     }
@@ -130,7 +123,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 >
                   {formatPlayerToFindField<Player['dateOfBirth']>(
                     player.dateOfBirth,
-                    'age'
+                    true
                   )}
                 </FieldValue>
               </Field>
