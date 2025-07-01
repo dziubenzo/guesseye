@@ -7,7 +7,7 @@ export default function ModeIndicator() {
   const { mode } = useGameStore();
 
   return (
-    <span className="place-self-center md:place-self-end text-lg opacity-75 md:rotate-4 p-2 flex gap-1">
+    <span className="place-self-center sm:place-self-end text-lg opacity-75 sm:rotate-4 p-2 flex gap-1">
       {mode === 'official' ? 'Official Mode' : 'Random Mode'}
       <Tooltip>
         {mode === 'official' ? (

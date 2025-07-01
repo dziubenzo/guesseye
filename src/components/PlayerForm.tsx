@@ -28,7 +28,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     gameOver,
     resetState,
     playerToFindMatches,
-    mode
+    mode,
   } = useGameStore();
 
   const playerForm = useForm({
@@ -93,7 +93,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   }, [scheduleId]);
 
   return (
-    <div className="md:flex md:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">
+    <div className="sm:flex sm:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField
@@ -101,11 +101,11 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             name="guess"
             render={({ field }) => (
               <FormItem>
-                <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
                   <div className="flex gap-2">
                     <FormControl>
                       <Input
-                        className="lg:text-lg h-auto p-3 text-center placeholder:text-center"
+                        className="text-lg md:text-lg h-auto p-3 text-center placeholder:text-center"
                         disabled={isPending || gameOver}
                         autoFocus
                         {...field}
@@ -120,7 +120,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                     type="submit"
                     variant="default"
                     disabled={isPending || gameOver}
-                    className={`cursor-pointer text-lg px-4 py-4 md:h-full md:w-24`}
+                    className={`cursor-pointer text-lg px-4 py-4 sm:h-full sm:w-24`}
                   >
                     {isPending ? (
                       <Loader2 className="animate-spin size-7 h-full" />

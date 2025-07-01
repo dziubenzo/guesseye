@@ -72,8 +72,8 @@ export default function PlayerCard(props: PlayerCardProps) {
     return (
       <Card className="bg-secondary w-full">
         <CardHeader>
-          <CardTitle className="flex flex-col justify-center md:justify-start items-center gap-4 md:flex-row">
-            <div className="flex items-center gap-3 w-[250px] md:w-[300px]">
+          <CardTitle className="flex flex-col justify-center sm:justify-start items-center gap-4 sm:flex-row">
+            <div className="flex items-center gap-3 w-[250px] sm:w-[300px]">
               <p
                 className={`${player.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
               >
@@ -87,7 +87,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             {difficulty && (
               <div
-                className={`md:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(difficulty)} dark:text-secondary`}
+                className={`sm:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(difficulty)} dark:text-secondary`}
               >
                 <Gauge size={24} />
                 <span>{difficulty.toUpperCase()}</span>
@@ -101,7 +101,7 @@ export default function PlayerCard(props: PlayerCardProps) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <VenusAndMars size={18} />
@@ -154,7 +154,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       : 'No'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-1">
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
                   Playing Since
@@ -171,7 +171,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <Building size={18} />
@@ -220,8 +220,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   )}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
+                <FieldName className="sm:text-sm md:text-xs lg:text-sm">
                   <PiNumberCircleNine size={18} />
                   PDC Nine-Darters
                 </FieldName>
@@ -237,8 +237,8 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field className="col-span-2 lg:col-span-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+              <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName>
                   <Calendar1 size={18} />
                   PDC Ranking
@@ -253,7 +253,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   )}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-2">
+              <Field className="col-span-2">
                 <FieldName>
                   <Trophy size={18} />
                   Best UK Open Result
@@ -292,8 +292,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   </FieldValue>
                 )}
               </Field>
-              <Field className="col-span-2 lg:col-span-2">
-                <FieldName>
+              <Field className="col-span-2">
+                <FieldName className="sm:text-xs lg:text-sm">
                   <Trophy size={18} />
                   Best PDC World Championship Result
                   <Tooltip>
@@ -333,8 +333,8 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field className="col-span-2 lg:col-span-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
+              <Field className="col-span-2 sm:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   WDF Ranking
@@ -375,8 +375,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                       : 'No'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-start-4">
-                <FieldName className="text-xs lg:text-sm">
+              <Field className="col-span-2 sm:col-span-full md:col-span-2">
+                <FieldName className="text-xs sm:text-sm md:text-[0.65rem] lg:text-sm">
                   <Trophy size={18} />
                   Best BDO/WDF World Championship Result
                   <Tooltip>
@@ -436,7 +436,7 @@ export default function PlayerCard(props: PlayerCardProps) {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <VenusAndMars size={18} />
@@ -494,7 +494,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.active ? 'Yes' : 'No'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-1">
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
                   Playing Since
@@ -509,7 +509,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
                   <Building size={18} />
@@ -562,8 +562,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.dartsWeight ? player.dartsWeight : 'N/A'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-1">
-                <FieldName>
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
+                <FieldName className="sm:text-sm md:text-xs lg:text-sm">
                   <PiNumberCircleNine size={18} />
                   PDC Nine-Darters
                 </FieldName>
@@ -577,8 +577,8 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
-              <Field className="col-span-2 lg:col-span-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
+              <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName>
                   <Calendar1 size={18} />
                   PDC Ranking
@@ -591,7 +591,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.rankingPDC ? player.rankingPDC : 'N/A'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-span-2">
+              <Field className="col-span-2">
                 <FieldName>
                   <Trophy size={18} />
                   Best UK Open Result
@@ -621,8 +621,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   </FieldValue>
                 )}
               </Field>
-              <Field className="col-span-2 lg:col-span-2">
-                <FieldName>
+              <Field className="col-span-2">
+                <FieldName className="sm:text-xs lg:text-sm">
                   <Trophy size={18} />
                   Best PDC World Championship Result
                   <Tooltip>
@@ -655,8 +655,8 @@ export default function PlayerCard(props: PlayerCardProps) {
               </Field>
             </div>
             <Separator />
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
-              <Field className="col-span-2 lg:col-span-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
+              <Field className="col-span-2 sm:col-span-1">
                 <FieldName>
                   <Calendar1 size={18} />
                   WDF Ranking
@@ -695,8 +695,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.playedInWCOD ? 'Yes' : 'No'}
                 </FieldValue>
               </Field>
-              <Field className="col-span-2 lg:col-start-4">
-                <FieldName className="text-xs lg:text-sm">
+              <Field className="col-span-2 sm:col-span-full md:col-span-2">
+                <FieldName className="text-xs sm:text-sm md:text-[0.65rem] lg:text-sm">
                   <Trophy size={18} />
                   Best BDO/WDF World Championship Result
                   <Tooltip>

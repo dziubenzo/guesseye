@@ -53,7 +53,7 @@ export default function Guesses({ existingGame, mode }: GuessesProps) {
             : `(${guesses.length} players)`}
         </h1>
       )}
-      <Carousel className="max-w-4xl xl:max-w-5xl" setApi={setApi}>
+      <Carousel className="max-w-full lg:max-w-4xl" setApi={setApi}>
         <CarouselContent>
           {reversedGuesses.map((guess) => (
             <CarouselItem

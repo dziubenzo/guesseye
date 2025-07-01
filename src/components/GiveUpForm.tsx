@@ -75,7 +75,7 @@ export default function GiveUpForm({
 
   return (
     <>
-      <div className="md:absolute md:top-2 md:right-2">
+      <div className="sm:absolute sm:top-2 sm:right-2">
         <AlertDialog open={open} onOpenChange={setOpen}>
           <AlertDialogTrigger asChild>
             <Button
