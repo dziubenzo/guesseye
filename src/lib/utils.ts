@@ -65,13 +65,21 @@ export function capitalise(string: string) {
 }
 
 // Get rid of all special characters in player's name
-export function normalise(name: string) {
+export function normaliseArray(name: string) {
   return name
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replaceAll('ł', 'l')
     .split(' ');
+}
+
+export function normaliseString(name: string) {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replaceAll('ł', 'l');
 }
 
 export function checkIfGuessCorrect(
@@ -576,9 +584,9 @@ export function checkForDuplicateGuess(
   prevGuesses: Guess[]
 ) {
   const isDuplicateGuess = prevGuesses.some((prevGuess) => {
-    const splitGuess = normalise(guess);
-    const firstName = normalise(prevGuess.guessedPlayer.firstName);
-    const lastName = normalise(prevGuess.guessedPlayer.lastName);
+    const splitGuess = normaliseArray(guess);
+    const firstName = normaliseString(prevGuess.guessedPlayer.firstName);
+    const lastName = normaliseString(prevGuess.guessedPlayer.lastName);
     const lastWordIndex = splitGuess.length - 1;
 
     if (splitGuess.length === 1) {
@@ -628,8 +636,8 @@ export const validateScheduleId = (scheduleId: string | undefined) => {
 
 export function filterPlayers(players: Player[], guess: string[]): Player[] {
   const searchResults = players.filter((player) => {
-    const firstName = normalise(player.firstName);
-    const lastName = normalise(player.lastName);
+    const firstName = normaliseString(player.firstName);
+    const lastName = normaliseString(player.lastName);
     const lastWordIndex = guess.length - 1;
 
     if (guess.length === 1) {
