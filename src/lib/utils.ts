@@ -1508,11 +1508,21 @@ export function countPlayersBy(
     case 'bestResultWDF':
       field = player.bestResultWDF ? player.bestResultWDF : 'Did not play';
       break;
+    case 'bestResultUKOpen':
+      field = player.bestResultUKOpen
+        ? player.bestResultUKOpen
+        : 'Did not play';
+      break;
     case 'yearOfBestResultPDC':
       field = player.yearOfBestResultPDC ? player.yearOfBestResultPDC : null;
       break;
     case 'yearOfBestResultWDF':
       field = player.yearOfBestResultWDF ? player.yearOfBestResultWDF : null;
+      break;
+    case 'yearOfBestResultUKOpen':
+      field = player.yearOfBestResultUKOpen
+        ? player.yearOfBestResultUKOpen
+        : null;
       break;
     case 'difficulty':
       field = player.difficulty;
@@ -1565,6 +1575,7 @@ export function sortPlayerStats(stats: DatabaseStats) {
       case 'nineDartersPDC':
       case 'yearOfBestResultPDC':
       case 'yearOfBestResultWDF':
+      case 'yearOfBestResultUKOpen':
       case 'birthDay':
         // Sort values in the ascending order
         stats[key].sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
@@ -1652,7 +1663,7 @@ export function sortPlayerStats(stats: DatabaseStats) {
         break;
       }
       case 'bestResultPDC': {
-        // Sort PDC best result from best to worst
+        // Sort best PDC WC result from best to worst
         stats[key].sort((a, b) => {
           const aResult = bestResultPDCMap.get(a.value as BestResultColumnType);
           const bResult = bestResultPDCMap.get(b.value as BestResultColumnType);
@@ -1666,10 +1677,28 @@ export function sortPlayerStats(stats: DatabaseStats) {
         break;
       }
       case 'bestResultWDF': {
-        // Sort WDF best result from best to worst
+        // Sort best WDF WC result from best to worst
         stats[key].sort((a, b) => {
           const aResult = bestResultWDFMap.get(a.value as BestResultColumnType);
           const bResult = bestResultWDFMap.get(b.value as BestResultColumnType);
+
+          if (!aResult && !bResult) return 0;
+          if (!aResult) return 1;
+          if (!bResult) return -1;
+
+          return aResult - bResult;
+        });
+        break;
+      }
+      case 'bestResultUKOpen': {
+        // Sort best UK Open result from best to worst
+        stats[key].sort((a, b) => {
+          const aResult = bestResultUKOpenMap.get(
+            a.value as BestResultColumnType
+          );
+          const bResult = bestResultUKOpenMap.get(
+            b.value as BestResultColumnType
+          );
 
           if (!aResult && !bResult) return 0;
           if (!aResult) return 1;

@@ -59,8 +59,10 @@ const getCachedDatabaseStats = unstable_cache(
       nineDartersPDC: {},
       bestResultPDC: {},
       bestResultWDF: {},
+      bestResultUKOpen: {},
       yearOfBestResultPDC: {},
       yearOfBestResultWDF: {},
+      yearOfBestResultUKOpen: {},
       difficulty: {},
     };
 
@@ -79,8 +81,10 @@ const getCachedDatabaseStats = unstable_cache(
       nineDartersPDC: [],
       bestResultPDC: [],
       bestResultWDF: [],
+      bestResultUKOpen: [],
       yearOfBestResultPDC: [],
       yearOfBestResultWDF: [],
+      yearOfBestResultUKOpen: [],
       difficulty: [],
     };
 

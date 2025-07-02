@@ -372,8 +372,10 @@ export type DatabaseStatsType =
   | 'nineDartersPDC'
   | 'bestResultPDC'
   | 'bestResultWDF'
+  | 'bestResultUKOpen'
   | 'yearOfBestResultPDC'
   | 'yearOfBestResultWDF'
+  | 'yearOfBestResultUKOpen'
   | 'difficulty';
 
 export type DatabaseStatsResult = {

@@ -12,15 +12,17 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-PDC)',
+    color: 'var(--chart-WDF)',
   },
 } satisfies ChartConfig;
 
-type BestResultPDCChartProps = {
-  data: DatabaseStats['bestResultPDC'];
+type BestResultUKOpenChartProps = {
+  data: DatabaseStats['bestResultUKOpen'];
 };
 
-export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
+export default function BestResultUKOpenChart({
+  data,
+}: BestResultUKOpenChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart

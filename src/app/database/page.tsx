@@ -1,6 +1,8 @@
 import AgeChart from '@/components/charts/AgeChart';
 import BestResultPDCChart from '@/components/charts/BestResultPDCChart';
 import BestResultPDCYearChart from '@/components/charts/BestResultPDCYearChart';
+import BestResultUKOpenChart from '@/components/charts/BestResultUKOpenChart';
+import BestResultUKOpenYearChart from '@/components/charts/BestResultUKOpenYearChart';
 import BestResultWDFChart from '@/components/charts/BestResultWDFChart';
 import BestResultWDFYearChart from '@/components/charts/BestResultWDFYearChart';
 import BirthDateChart from '@/components/charts/BirthDateChart';
@@ -54,8 +56,10 @@ export default async function DatabaseStats() {
     nineDartersPDC,
     bestResultPDC,
     bestResultWDF,
+    bestResultUKOpen,
     yearOfBestResultPDC,
     yearOfBestResultWDF,
+    yearOfBestResultUKOpen,
     difficulty,
   } = stats;
 
@@ -180,23 +184,37 @@ export default async function DatabaseStats() {
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2 className="font-medium text-center">
-                  Darts Players By Best BDO/WDF WC Result
+                  Darts Players By Year of Best PDC WC Result
                 </h2>
-                <BestResultWDFChart data={bestResultWDF} />
+                <BestResultPDCYearChart data={yearOfBestResultPDC} />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2 className="font-medium text-center">
-                  Darts Players By Year of Best PDC WC Result
+                  Darts Players By Best BDO/WDF WC Result
                 </h2>
-                <BestResultPDCYearChart data={yearOfBestResultPDC} />
+                <BestResultWDFChart data={bestResultWDF} />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2 className="font-medium text-center">
                   Darts Players By Year of Best BDO/WDF WC Result
                 </h2>
                 <BestResultWDFYearChart data={yearOfBestResultWDF} />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Best UK Open Result
+                </h2>
+                <BestResultUKOpenChart data={bestResultUKOpen} />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Year of Best UK Open Result
+                </h2>
+                <BestResultUKOpenYearChart data={yearOfBestResultUKOpen} />
               </div>
             </div>
           </div>

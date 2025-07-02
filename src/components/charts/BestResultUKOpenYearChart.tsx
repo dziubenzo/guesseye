@@ -12,15 +12,17 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-PDC)',
+    color: 'var(--chart-WDF)',
   },
 } satisfies ChartConfig;
 
-type BestResultPDCChartProps = {
-  data: DatabaseStats['bestResultPDC'];
+type BestResultUKOpenYearChartProps = {
+  data: DatabaseStats['yearOfBestResultUKOpen'];
 };
 
-export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
+export default function BestResultUKOpenYearChart({
+  data,
+}: BestResultUKOpenYearChartProps) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart
@@ -44,7 +46,7 @@ export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
           content={
             <ChartTooltipContent
               hideIndicator={true}
-              labelFormatter={(value) => value}
+              labelFormatter={(value) => `Best result in ${value}`}
             />
           }
         />
@@ -59,7 +61,7 @@ export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
             dataKey="count"
             position="right"
             offset={3}
-            className="fill-foreground text-[0.7rem] sm:hidden"
+            className="fill-foreground text-[0.6rem] sm:hidden"
           />
         </Bar>
       </BarChart>

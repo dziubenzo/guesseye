@@ -53,7 +53,7 @@ export default function BestResultWDFChart({ data }: BestResultWDFChartProps) {
             dataKey="count"
             position="right"
             offset={4}
-            className="fill-foreground hidden sm:text-base sm:block"
+            className="fill-foreground hidden sm:text-sm sm:block"
           />
           <LabelList
             dataKey="count"
