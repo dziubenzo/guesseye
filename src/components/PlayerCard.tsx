@@ -14,6 +14,7 @@ import type {
   PlayerToFindRangedMatch,
 } from '@/lib/types';
 import { capitalise, getAge, getDifficultyColour } from '@/lib/utils';
+import { format } from 'date-fns';
 import {
   Building,
   Cake,
@@ -114,18 +115,29 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field>
                 <FieldName>
                   <Cake size={18} />
-                  Age
+                  {player.status === 'deceased' ? 'Born In' : 'Age'}
                 </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  comparisonResult={player.dateOfBirth?.type}
-                  fieldName="Age"
-                >
-                  {formatPlayerToFindField<Player['dateOfBirth']>(
-                    player.dateOfBirth,
-                    true
-                  )}
-                </FieldValue>
+                {player.status === 'deceased' ? (
+                  <FieldValue type={'guess'} fieldName="Born In">
+                    {player.dateOfBirth === undefined ||
+                    player.dateOfBirth.type !== 'match'
+                      ? ''
+                      : player.dateOfBirth.value !== null
+                        ? format(player.dateOfBirth.value, 'y')
+                        : 'N/A'}
+                  </FieldValue>
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    comparisonResult={player.dateOfBirth?.type}
+                    fieldName="Age"
+                  >
+                    {formatPlayerToFindField<Player['dateOfBirth']>(
+                      player.dateOfBirth,
+                      true
+                    )}
+                  </FieldValue>
+                )}
               </Field>
               <Field>
                 <FieldName>
@@ -144,14 +156,10 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field>
                 <FieldName>
                   <Star size={18} />
-                  Active
+                  Status
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.active === undefined
-                    ? ''
-                    : player.active
-                      ? 'Yes'
-                      : 'No'}
+                  {player.status === undefined ? '' : capitalise(player.status)}
                 </FieldValue>
               </Field>
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
@@ -457,15 +465,23 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field>
                 <FieldName>
                   <Cake size={18} />
-                  Age
+                  {player.status === 'deceased' ? 'Born In' : 'Age'}
                 </FieldName>
-                <FieldValue
-                  type={'guess'}
-                  fieldName={'Age'}
-                  comparisonResult={comparisonResults.dateOfBirth}
-                >
-                  {player.dateOfBirth ? getAge(player.dateOfBirth) : 'N/A'}
-                </FieldValue>
+                {player.status === 'deceased' ? (
+                  <FieldValue type={'guess'} fieldName={'Born In'}>
+                    {player.dateOfBirth !== null
+                      ? format(player.dateOfBirth, 'y')
+                      : 'N/A'}
+                  </FieldValue>
+                ) : (
+                  <FieldValue
+                    type={'guess'}
+                    fieldName={'Age'}
+                    comparisonResult={comparisonResults.dateOfBirth}
+                  >
+                    {player.dateOfBirth ? getAge(player.dateOfBirth) : 'N/A'}
+                  </FieldValue>
+                )}
               </Field>
               <Field>
                 <FieldName>
@@ -488,14 +504,14 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field>
                 <FieldName>
                   <Star size={18} />
-                  Active
+                  Status
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Active'}
-                  comparisonResult={comparisonResults.active}
+                  fieldName={'Status'}
+                  comparisonResult={comparisonResults.status}
                 >
-                  {player.active ? 'Yes' : 'No'}
+                  {capitalise(player.status)}
                 </FieldValue>
               </Field>
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">

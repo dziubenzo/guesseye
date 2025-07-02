@@ -7,6 +7,7 @@ import {
   genderEnumValues,
   lateralityEnumValues,
   organisationEnumValues,
+  playerStatusEnumValues,
 } from '@/server/db/schema';
 import { z } from 'zod';
 
@@ -144,7 +145,7 @@ export const guessSchema = z.object({
       })
       .optional(),
     playedInWCOD: z.boolean().optional(),
-    active: z.boolean().optional(),
+    status: z.enum(playerStatusEnumValues).optional(),
   }),
 });
 

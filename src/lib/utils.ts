@@ -126,7 +126,9 @@ export function fillAllMatches(
         break;
       case 'tourCard':
       case 'playedInWCOD':
-      case 'active':
+        currentMatches[key] = playerToFind[key];
+        break;
+      case 'status':
         currentMatches[key] = playerToFind[key];
         break;
       case 'dartsBrand':
@@ -238,7 +240,9 @@ export function comparePlayers(
           break;
         case 'tourCard':
         case 'playedInWCOD':
-        case 'active':
+          currentMatches[key] = playerToFind[key];
+          break;
+        case 'status':
           currentMatches[key] = playerToFind[key];
           break;
         case 'dartsBrand':
@@ -530,7 +534,7 @@ export function comparePlayers(
       case 'organisation':
       case 'tourCard':
       case 'playedInWCOD':
-      case 'active':
+      case 'status':
         compareMatch(key);
         break;
       // Ranged match cases

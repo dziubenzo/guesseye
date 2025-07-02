@@ -25,5 +25,5 @@ export const matchingComparisonResults: ComparisonResults = {
   bestResultUKOpen: 'match',
   yearOfBestResultUKOpen: 'match',
   playedInWCOD: 'match',
-  active: 'match',
+  status: 'match',
 } as const;

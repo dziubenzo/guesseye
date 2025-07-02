@@ -81,7 +81,7 @@ export type ComparisonResults = {
   bestResultUKOpen: RangedMatch;
   yearOfBestResultUKOpen: RangedMatch;
   playedInWCOD: Match;
-  active: Match;
+  status: Match;
 };
 
 export type PlayerToFindMatches = GuessSchemaType['playerToFindMatches'];
@@ -97,7 +97,7 @@ export type MatchKeys = keyof Pick<
   | 'organisation'
   | 'tourCard'
   | 'playedInWCOD'
-  | 'active'
+  | 'status'
 >;
 
 export type RangedMatchKeys = keyof Pick<

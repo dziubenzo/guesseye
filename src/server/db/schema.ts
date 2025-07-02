@@ -233,6 +233,13 @@ export const bestResultUKOpenEnum = pgEnum('best_uk_open_result', [
 ]);
 export const bestResultUKOpenEnumValues = bestResultUKOpenEnum.enumValues;
 
+export const playerStatusEnum = pgEnum('player_status', [
+  'active',
+  'retired',
+  'deceased',
+]);
+export const playerStatusEnumValues = playerStatusEnum.enumValues;
+
 export const difficultyEnum = pgEnum('difficulty', [
   'easy',
   'medium',
@@ -271,7 +278,7 @@ export const player = pgTable(
     bestResultUKOpen: bestResultUKOpenEnum('best_uk_open_result'),
     yearOfBestResultUKOpen: integer('year_of_best_uk_open_result'),
     playedInWCOD: boolean('played_in_wcod').notNull(),
-    active: boolean('active').notNull(),
+    status: playerStatusEnum('status').default('active').notNull(),
     difficulty: difficultyEnum('difficulty').notNull(),
   },
   ({
@@ -341,7 +348,11 @@ export const scheduleRelations = relations(schedule, ({ one, many }) => ({
 }));
 
 export const modeEnum = pgEnum('mode', ['official', 'random']);
-export const statusEnum = pgEnum('status', ['inProgress', 'won', 'givenUp']);
+export const gameStatusEnum = pgEnum('game_status', [
+  'inProgress',
+  'won',
+  'givenUp',
+]);
 
 export const game = pgTable(
   'game',
@@ -363,7 +374,7 @@ export const game = pgTable(
       precision: 0,
     }),
     mode: modeEnum('mode').notNull(),
-    status: statusEnum('status').notNull().default('inProgress'),
+    status: gameStatusEnum('status').notNull().default('inProgress'),
   },
   ({ userId, guestIp, scheduledPlayerId, randomPlayerId }) => [
     check(
