@@ -298,7 +298,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best PDC World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one.
+                    the year is the latest one. Also, this field does{' '}
+                    <span className="font-medium">not</span> include the best
+                    PDC World Youth Championship result.
                   </Tooltip>
                 </FieldName>
                 {player.bestResultPDC?.value &&
@@ -381,7 +383,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best BDO/WDF World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one.
+                    the year is the latest one. Also, this field does{' '}
+                    <span className="font-medium">not</span> include the best
+                    BDO/WDF World Youth Championship result.
                   </Tooltip>
                 </FieldName>
                 {player.bestResultWDF?.value &&
@@ -627,7 +631,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best PDC World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one.
+                    the year is the latest one. Also, this field does{' '}
+                    <span className="font-medium">not</span> include the best
+                    PDC World Youth Championship result.
                   </Tooltip>
                 </FieldName>
                 {player.bestResultPDC && player.yearOfBestResultPDC ? (
@@ -701,7 +707,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best BDO/WDF World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one.
+                    the year is the latest one. Also, this field does{' '}
+                    <span className="font-medium">not</span> include the best
+                    BDO/WDF World Youth Championship result.
                   </Tooltip>
                 </FieldName>
                 {player.bestResultWDF && player.yearOfBestResultWDF ? (

@@ -125,9 +125,13 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
     >
       {bestResult}
       {comparisonBestResult === 'higher' ? (
-        <Arrow type="higher">{fieldNameBestResult}</Arrow>
+        <Arrow type="higher" bestResult="better">
+          {fieldNameBestResult}
+        </Arrow>
       ) : comparisonBestResult === 'lower' ? (
-        <Arrow type="lower">{fieldNameBestResult}</Arrow>
+        <Arrow type="lower" bestResult="worse">
+          {fieldNameBestResult}
+        </Arrow>
       ) : undefined}
       <span
         className={`${getRightYearColour()} text-center flex justify-center items-center gap-1 rounded-sm`}
