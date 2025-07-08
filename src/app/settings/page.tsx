@@ -1,3 +1,4 @@
+import DeleteAccount from '@/components/DeleteAccount';
 import {
   Card,
   CardContent,
@@ -30,8 +31,9 @@ export default async function Settings() {
             </p>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-2 grow-1">
           <UpdateNameForm />
+          <DeleteAccount />
         </CardContent>
       </Card>
     </div>

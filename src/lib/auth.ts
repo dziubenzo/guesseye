@@ -1,5 +1,6 @@
 import { db } from '@/server/db/index';
 import { sendConfirmationEmail } from '@/server/emails/send-confirmation-email';
+import { sendDeleteAccountEmail } from '@/server/emails/send-delete-account-email';
 import { sendResetPasswordEmail } from '@/server/emails/send-reset-password-email';
 import * as dotenvx from '@dotenvx/dotenvx';
 import { betterAuth } from 'better-auth';
@@ -28,6 +29,15 @@ export const auth = betterAuth({
     google: {
       clientId: dotenvx.get('GOOGLE_CLIENT_ID'),
       clientSecret: dotenvx.get('GOOGLE_CLIENT_SECRET'),
+    },
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url }) => {
+        await sendDeleteAccountEmail(user.email, user.name, url);
+      },
+      deleteTokenExpiresIn: 15 * 60,
     },
   },
   advanced: {

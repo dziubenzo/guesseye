@@ -111,6 +111,10 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Karella',
   'Evolution',
   'Darts GB',
+  'Superdarts',
+  'Pentathlon',
+  'Robson',
+  'XQ Max',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -358,7 +362,7 @@ export const game = pgTable(
   'game',
   {
     id: serial('id').primaryKey(),
-    userId: text('user_id').references(() => user.id),
+    userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
     guestIp: text('guest_ip'),
     guestUserAgent: text('guest_user_agent'),
     scheduledPlayerId: integer('scheduled_player_id').references(
