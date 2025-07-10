@@ -21,6 +21,14 @@ type RandomPlayersChartProps = {
 };
 
 export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
+  if (data.length === 0) {
+    return (
+      <div className="text-center">
+        <p>Complete a game in random mode to see the chart.</p>
+      </div>
+    );
+  }
+
   return (
     <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
       <BarChart

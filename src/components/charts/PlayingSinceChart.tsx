@@ -32,7 +32,7 @@ export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
         <XAxis
           dataKey="value"
           tickLine={false}
-          tickMargin={20}
+          tickMargin={10}
           axisLine={false}
           minTickGap={8}
           tickFormatter={(value) => value}

@@ -115,6 +115,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Pentathlon',
   'Robson',
   'XQ Max',
+  'Victory',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -313,11 +314,11 @@ export const player = pgTable(
     ),
     check(
       'is_proper_ranking_PDC',
-      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 250`
+      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 300`
     ),
     check(
       'is_proper_ranking_WDF',
-      sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2000`
+      sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`
     ),
   ]
 );
@@ -326,7 +327,7 @@ export const schedule = pgTable('schedule', {
   id: serial('id').primaryKey(),
   playerToFindId: integer('player_to_find_id')
     .notNull()
-    .references(() => player.id),
+    .references(() => player.id, { onDelete: 'restrict' }),
   startDate: timestamp('start_date', {
     precision: 0,
   })
@@ -338,7 +339,7 @@ export const schedule = pgTable('schedule', {
     .notNull()
     .unique()
     .generatedAlwaysAs(
-      (): SQL => sql`${schedule.startDate} + interval '12' hour`
+      (): SQL => sql`${schedule.startDate} + interval '1' day`
     ),
 });
 
@@ -366,9 +367,12 @@ export const game = pgTable(
     guestIp: text('guest_ip'),
     guestUserAgent: text('guest_user_agent'),
     scheduledPlayerId: integer('scheduled_player_id').references(
-      () => schedule.id
+      () => schedule.id,
+      { onDelete: 'restrict' }
     ),
-    randomPlayerId: integer('random_player_id').references(() => player.id),
+    randomPlayerId: integer('random_player_id').references(() => player.id, {
+      onDelete: 'restrict',
+    }),
     startDate: timestamp('start_date', {
       precision: 0,
     })
@@ -418,7 +422,7 @@ export const guess = pgTable('guess', {
     .references(() => game.id, { onDelete: 'cascade' }),
   playerId: integer('player_id')
     .notNull()
-    .references(() => player.id),
+    .references(() => player.id, { onDelete: 'restrict' }),
   time: timestamp('time', { mode: 'date' }).notNull().defaultNow(),
 });
 

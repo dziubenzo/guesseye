@@ -35,7 +35,6 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
   if (data.length === 0) {
     return (
       <div className="text-center">
-        <p>No data to display.</p>
         <p>Complete a game in any mode to see the chart.</p>
       </div>
     );

@@ -26,7 +26,6 @@ export default function GuessFrequencyChart({
   if (data.length === 0) {
     return (
       <div className="text-center">
-        <p>No data to display.</p>
         <p>Make a guess in any game to see the chart.</p>
       </div>
     );
