@@ -8,11 +8,11 @@ import { getPDCOoM } from '@/server/utils';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { revalidateTag } from 'next/cache';
 
-const URL = 'https://www.dartsrankings.com/';
+const URL = 'https://www.dartsrankings.com/womens-series';
 const rankingsSelector = 'tr td:first-child';
-const fullNamesSelector = 'tr td:nth-child(3)';
+const fullNamesSelector = 'tr td:nth-child(2)';
 
-export default async function updatePDCOoM() {
+export default async function updateWomensSeriesOoM() {
   const updatedRankings = await getPDCOoM(
     URL,
     rankingsSelector,
@@ -29,18 +29,18 @@ export default async function updatePDCOoM() {
     return result;
   }
 
-  // Get male darts players
+  // Get female darts players
   const players = await db.query.player.findMany({
-    where: eq(playerSchema.gender, 'male'),
+    where: eq(playerSchema.gender, 'female'),
     columns: { firstName: true, lastName: true, rankingPDC: true },
   });
 
-  // Set PDC ranking value to null for all male darts players
+  // Set PDC ranking value to null for all female darts players
   await db
     .update(playerSchema)
     .set({ rankingPDC: null })
     .where(
-      and(isNotNull(playerSchema.rankingPDC), eq(playerSchema.gender, 'male'))
+      and(isNotNull(playerSchema.rankingPDC), eq(playerSchema.gender, 'female'))
     );
 
   let updateCount = 0;
@@ -77,11 +77,9 @@ export default async function updatePDCOoM() {
   // Clear the players cache
   revalidateTag('players');
 
-  const femaleCount = updatedRankings.length - updateCount;
-
   result = {
     type: 'success',
-    message: `PDC Order of Merit rankings updated successfully. ${updateCount} players out of ${players.length} male players in the DB were updated. There are ${updatedRankings.length} players in the PDC Order of Merit, including ${femaleCount === 1 ? `${femaleCount} female` : `${femaleCount} females`}.`,
+    message: `PDC Women's Series Order of Merit rankings updated successfully. ${updateCount} players out of ${players.length} female players in the DB were updated. There are ${updatedRankings.length} players in the PDC Women's Series Order of Merit.`,
   };
 
   return result;
