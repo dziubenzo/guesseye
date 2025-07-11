@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth';
 import { actionClient } from '@/lib/safe-action-client';
-import type { UpdateNameAction } from '@/lib/types';
+import type { UpdateAction } from '@/lib/types';
 import { updateNameSchema } from '@/lib/zod/update-name';
 import { isNameTaken } from '@/server/utils';
 import { headers } from 'next/headers';
@@ -12,7 +12,7 @@ export const updateName = actionClient
   .action(async ({ parsedInput: { newName } }) => {
     const nameTaken = await isNameTaken(newName);
 
-    let result: UpdateNameAction;
+    let result: UpdateAction;
 
     if (nameTaken) {
       result = {

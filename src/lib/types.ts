@@ -174,7 +174,7 @@ export type GiveUpAction = GiveUpError | GiveUpSuccess;
 
 export type ErrorObject = { error: string };
 
-export type UpdateNameAction = {
+export type UpdateAction = {
   type: 'error' | 'success';
   message: string;
 };
@@ -391,3 +391,9 @@ export type DatabaseStatsObject = {
 export type DatabaseStats = {
   [key in DatabaseStatsType]: DatabaseStatsResult[];
 };
+
+export type UpdatedRankings = {
+  firstName: string;
+  lastName: string;
+  ranking: number;
+}[];

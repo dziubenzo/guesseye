@@ -1719,3 +1719,21 @@ export function sortPlayerStats(stats: DatabaseStats) {
     }
   }
 }
+
+// Make sure all names are spelled according to what's in the DB
+export function handleDifferentSpellings(fullName: string) {
+  switch (fullName) {
+    case 'Dominik Gruellich':
+      return 'Dominik Grüllich';
+    case 'Christian Goedl':
+      return 'Christian Gödl';
+    case 'Patrick Klingelhoefer':
+      return 'Patrick Klingelhöfer';
+    case 'Kai-Fan Leung':
+      return 'Kai Fan Leung';
+    case 'Rob Owen':
+      return 'Robert Owen';
+  }
+
+  return fullName;
+}
