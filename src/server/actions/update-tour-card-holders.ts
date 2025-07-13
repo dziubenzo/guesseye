@@ -1,0 +1,90 @@
+'use server';
+
+import type { UpdateAction } from '@/lib/types';
+import { db } from '@/server/db';
+import { getTourCardHolders } from '@/server/utils';
+import { player as playerSchema } from '@/server/db/schema';
+import { revalidateTag } from 'next/cache';
+import { and, eq } from 'drizzle-orm';
+import { normaliseString } from '@/lib/utils';
+
+export default async function updateTourCardHolders() {
+  const tourCardHolders = await getTourCardHolders();
+
+  let result: UpdateAction;
+
+  if ('error' in tourCardHolders) {
+    result = {
+      type: 'error',
+      message: tourCardHolders.error,
+    };
+    return result;
+  }
+
+  // Get all darts players
+  const players = await db.query.player.findMany({
+    columns: {
+      firstName: true,
+      lastName: true,
+    },
+  });
+
+  // Set tour card value to false and organisation to WDF for all darts players who currently have the tour card value of true
+  await db
+    .update(playerSchema)
+    .set({ tourCard: false, organisation: 'WDF' })
+    .where(eq(playerSchema.tourCard, true));
+
+  let updateCount = 0;
+  const missingPlayers: string[] = [];
+
+  // Update the tour card value to true and organisation to PDC if player's first name and last name match the scraped data
+  for (const tourCardHolder of tourCardHolders) {
+    let playerFound = false;
+
+    for (const player of players) {
+      const playerFirstName = normaliseString(player.firstName);
+      const playerLastName = normaliseString(player.lastName);
+      const tourCardHolderFirstName = normaliseString(tourCardHolder.firstName);
+      const tourCardHolderLastName = normaliseString(tourCardHolder.lastName);
+
+      if (
+        playerFirstName !== tourCardHolderFirstName ||
+        playerLastName !== tourCardHolderLastName
+      ) {
+        continue;
+      }
+
+      await db
+        .update(playerSchema)
+        .set({ tourCard: true, organisation: 'PDC' })
+        .where(
+          and(
+            eq(playerSchema.firstName, player.firstName),
+            eq(playerSchema.lastName, player.lastName)
+          )
+        );
+      updateCount++;
+      playerFound = true;
+      break;
+    }
+
+    // Identify Tour Card Holders who are not in the DB
+    if (!playerFound) {
+      missingPlayers.push(
+        tourCardHolder.firstName + ' ' + tourCardHolder.lastName
+      );
+    }
+  }
+
+  // Clear the players and last database update cache
+  revalidateTag('players');
+  revalidateTag('lastDatabaseUpdate');
+
+  result = {
+    type: 'success',
+    message: `${updateCount} players updated successfully. ${missingPlayers.length === 0 ? 'No missing Tour Card Holders.' : `Missing Tour Card Holders: ${missingPlayers.toString()}.`}`,
+  };
+
+  return result;
+}

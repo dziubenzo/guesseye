@@ -1,7 +1,11 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import type { ErrorObject, UpdatedRankings } from '@/lib/types';
+import type {
+  ErrorObject,
+  TourCardHolders,
+  UpdatedRankings,
+} from '@/lib/types';
 import { handleDifferentSpellings, normaliseString } from '@/lib/utils';
 import { db } from '@/server/db';
 import { lower, player as playerSchema, user } from '@/server/db/schema';
@@ -53,7 +57,7 @@ export async function getPDCOoM(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRankings = [];
+  const updatedRankings: UpdatedRankings[] = [];
 
   // Get current rankings from the selector
   const rankings = await page.$$eval(rankingsSelector, (rankingTds) => {
@@ -120,7 +124,7 @@ export async function getWDFOoM(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRankings = [];
+  const updatedRankings: UpdatedRankings[] = [];
 
   // Get current rankings from the selector, applying the limit
   const rankings = await page.$$eval(
@@ -191,15 +195,12 @@ export async function getWDFOoM(
 export async function updateDBRankings(
   organisation: 'PDC' | 'WDF',
   type: 'men' | 'women',
-  updatedRankings: UpdatedRankings
+  updatedRankings: UpdatedRankings[]
 ) {
   // Get darts players
   const players = await db.query.player.findMany({
     where: eq(playerSchema.gender, type === 'men' ? 'male' : 'female'),
-    columns:
-      organisation === 'PDC'
-        ? { firstName: true, lastName: true, rankingPDC: true }
-        : { firstName: true, lastName: true, rankingWDF: true },
+    columns: { firstName: true, lastName: true },
   });
 
   // Set ranking value to null for all darts players
@@ -253,4 +254,51 @@ export async function updateDBRankings(
   }
 
   return { updateCount, playersDB: players.length };
+}
+
+// Get current Tour Card Holders
+export async function getTourCardHolders() {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+
+  await page.goto('https://pdpa.co.uk/event-entry/tour-cards/');
+
+  await page.setViewport({ width: 1080, height: 1024 });
+
+  const tourCardHolders: TourCardHolders[] = [];
+
+  // Get full names
+  const fullNames = await page.$$eval('tr td:nth-child(3)', (fullNameSpans) => {
+    return fullNameSpans.map((fullNameSpan) => fullNameSpan.textContent);
+  });
+
+  // Make sure there are exactly 128 TC holders
+  if (fullNames.length !== 128) {
+    const error: ErrorObject = { error: 'Array length is not 128.' };
+    return error;
+  }
+
+  // Build the object
+  for (let i = 0; i < fullNames.length; i++) {
+    const currentFullName = fullNames[i];
+
+    if (currentFullName === null) {
+      const error: ErrorObject = {
+        error: 'Full name array item is empty.',
+      };
+      return error;
+    }
+
+    const fullName = handleDifferentSpellings(currentFullName.trim());
+
+    const firstName = fullName.split(' ')[0];
+    const lastName = fullName.split(' ').slice(1).join(' ');
+
+    tourCardHolders.push({
+      firstName,
+      lastName,
+    });
+  }
+
+  return tourCardHolders;
 }

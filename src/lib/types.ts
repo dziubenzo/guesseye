@@ -396,4 +396,6 @@ export type UpdatedRankings = {
   firstName: string;
   lastName: string;
   ranking: number;
-}[];
+};
+
+export type TourCardHolders = Omit<UpdatedRankings, 'ranking'>;

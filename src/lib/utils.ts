@@ -1735,6 +1735,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Robert Owen';
     case 'Joanne Locke':
       return 'Jo Locke';
+    case 'Cameron Crabtree':
+      return 'Cam Crabtree';
   }
 
   return fullName;

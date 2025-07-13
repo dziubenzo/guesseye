@@ -25,7 +25,7 @@ export default async function getUpdatedRankings(
   organisation: 'PDC' | 'WDF',
   type: 'men' | 'women'
 ) {
-  let updatedRankings: UpdatedRankings | ErrorObject;
+  let updatedRankings: UpdatedRankings[] | ErrorObject;
 
   if (organisation === 'PDC' && type === 'men') {
     updatedRankings = await getPDCOoM(
