@@ -2,10 +2,10 @@
 
 import { auth } from '@/lib/auth';
 import type { ErrorObject, UpdatedRankings } from '@/lib/types';
-import { handleDifferentSpellings } from '@/lib/utils';
+import { handleDifferentSpellings, normaliseString } from '@/lib/utils';
 import { db } from '@/server/db';
-import { lower, user } from '@/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { lower, player as playerSchema, user } from '@/server/db/schema';
+import { and, eq, isNotNull } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import puppeteer from 'puppeteer';
 
@@ -74,7 +74,7 @@ export async function getPDCOoM(
   for (let i = 0; i < rankings.length; i++) {
     const currentRanking = rankings[i];
     const currentFullName = fullNames[i];
-    
+
     if (currentRanking === null || currentFullName === null) {
       const error: ErrorObject = {
         error: 'Ranking or full name array item is empty.',
@@ -186,4 +186,71 @@ export async function getWDFOoM(
   }
 
   return updatedRankings;
+}
+
+export async function updateDBRankings(
+  organisation: 'PDC' | 'WDF',
+  type: 'men' | 'women',
+  updatedRankings: UpdatedRankings
+) {
+  // Get darts players
+  const players = await db.query.player.findMany({
+    where: eq(playerSchema.gender, type === 'men' ? 'male' : 'female'),
+    columns:
+      organisation === 'PDC'
+        ? { firstName: true, lastName: true, rankingPDC: true }
+        : { firstName: true, lastName: true, rankingWDF: true },
+  });
+
+  // Set ranking value to null for all darts players
+  await db
+    .update(playerSchema)
+    .set(organisation === 'PDC' ? { rankingPDC: null } : { rankingWDF: null })
+    .where(
+      and(
+        isNotNull(
+          organisation === 'PDC'
+            ? playerSchema.rankingPDC
+            : playerSchema.rankingWDF
+        ),
+        eq(playerSchema.gender, type === 'men' ? 'male' : 'female')
+      )
+    );
+
+  let updateCount = 0;
+
+  // Update the ranking of a darts player if their first name and last name match the scraped data
+  for (const player of players) {
+    for (const updatedRanking of updatedRankings) {
+      const playerFirstName = normaliseString(player.firstName);
+      const playerLastName = normaliseString(player.lastName);
+      const updatedPlayerFirstName = normaliseString(updatedRanking.firstName);
+      const updatedPlayerLastName = normaliseString(updatedRanking.lastName);
+
+      if (
+        playerFirstName !== updatedPlayerFirstName ||
+        playerLastName !== updatedPlayerLastName
+      ) {
+        continue;
+      }
+
+      await db
+        .update(playerSchema)
+        .set(
+          organisation === 'PDC'
+            ? { rankingPDC: updatedRanking.ranking }
+            : { rankingWDF: updatedRanking.ranking }
+        )
+        .where(
+          and(
+            eq(playerSchema.firstName, player.firstName),
+            eq(playerSchema.lastName, player.lastName)
+          )
+        );
+      updateCount++;
+      break;
+    }
+  }
+
+  return { updateCount, playersDB: players.length };
 }
