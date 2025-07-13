@@ -1733,6 +1733,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Kai Fan Leung';
     case 'Rob Owen':
       return 'Robert Owen';
+    case 'Joanne Locke':
+      return 'Jo Locke';
   }
 
   return fullName;
