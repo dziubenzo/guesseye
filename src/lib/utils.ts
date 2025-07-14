@@ -1737,6 +1737,14 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Jo Locke';
     case 'Cameron Crabtree':
       return 'Cam Crabtree';
+    case 'Stefanie Lueck':
+      return 'Stefanie Lück';
+    case 'Steffi Lueck':
+      return 'Stefanie Lück';
+    case 'Steffi Luck':
+      return 'Stefanie Lück';
+    case 'Steffi Lück':
+      return 'Stefanie Lück';
   }
 
   return fullName;

@@ -249,12 +249,12 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName>
                   <Calendar1 size={18} />
-                  PDC Ranking
+                  {player.gender === 'female' ? 'WS Ranking' : 'PDC Ranking'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
                   comparisonResult={player.rankingPDC?.type}
-                  fieldName="PDC ranking"
+                  fieldName={'PDC ranking'}
                 >
                   {formatPlayerToFindField<Player['rankingPDC']>(
                     player.rankingPDC
@@ -601,7 +601,7 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName>
                   <Calendar1 size={18} />
-                  PDC Ranking
+                  {player.gender === 'male' ? 'PDC Ranking' : 'WS Ranking'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
