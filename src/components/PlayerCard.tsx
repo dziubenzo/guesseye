@@ -157,6 +157,25 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName>
                   <Star size={18} />
                   Status
+                  <Tooltip>
+                    A darts player can be:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">active</span> (playing in
+                        PDC/WDF/WSD/other competitive events);
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">retired</span> (no longer
+                        taking part in events apart from exhibitions, the
+                        example being Phil Taylor); or
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">deceased</span> (no longer
+                        with us, but deserved to be included in the database).
+                      </li>
+                    </ul>
+                  </Tooltip>
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
                   {player.status === undefined ? '' : capitalise(player.status)}
@@ -184,6 +203,31 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName>
                   <Building size={18} />
                   Organisation
+                  <Tooltip>
+                    A darts player can belong to one of the following three
+                    organisations:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">PDC</span> (reserved only
+                        for Tour Card Holders for database maintenance reasons);
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">WDF</span> (pretty much
+                        all others - Challenge/Development Tour participants,
+                        Women&apos;s Series participants, players listed in
+                        WDF/WSD rankings, etc.); or
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">BDO</span> (reserved for
+                        players who{' '}
+                        <span className="font-medium">exclusively</span> played
+                        in BDO events before its dissolution or before the WDC,
+                        later renamed to PDC, was formed. Leighton Rees, for
+                        example, is in this category.).
+                      </li>
+                    </ul>
+                  </Tooltip>
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
                   {player.organisation === undefined ? '' : player.organisation}
@@ -247,9 +291,25 @@ export default function PlayerCard(props: PlayerCardProps) {
             <Separator />
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
-                <FieldName>
+                <FieldName className="md:text-xs lg:text-sm">
                   <Calendar1 size={18} />
                   {player.gender === 'female' ? 'WS Ranking' : 'PDC Ranking'}
+                  <Tooltip>
+                    It refers to:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">PDC World Rankings</span>{' '}
+                        for male darts players, and;
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          PDC Women&apos;s Series Rankings
+                        </span>{' '}
+                        for female darts players.
+                      </li>
+                    </ul>
+                  </Tooltip>
                 </FieldName>
                 <FieldValue
                   type={'guess'}
@@ -345,9 +405,31 @@ export default function PlayerCard(props: PlayerCardProps) {
             <Separator />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field className="col-span-2 sm:col-span-1">
-                <FieldName>
+                <FieldName className="md:text-xs lg:text-sm">
                   <Calendar1 size={18} />
                   WDF Ranking
+                  <Tooltip>
+                    It refers to:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          WDF Main Ranking Men
+                        </span>{' '}
+                        for male darts players, and;
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          WDF Main Ranking Women
+                        </span>{' '}
+                        for female darts players.
+                      </li>
+                      <br />
+                    </ul>
+                    Also, a darts player must be ranked at least{' '}
+                    <span className="font-medium">500th or better</span> for
+                    their ranking to be listed here.
+                  </Tooltip>
                 </FieldName>
                 <FieldValue
                   type={'guess'}
@@ -487,11 +569,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName>
                   <Map size={18} />
                   Country
-                  <Tooltip>
-                    The country that a darts player represents. For example,
-                    Jeffrey de Graaf represents Sweden, but he was born in the
-                    Netherlands.
-                  </Tooltip>
                 </FieldName>
                 <FieldValue
                   type={'guess'}
@@ -615,10 +692,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName>
                   <Trophy size={18} />
                   Best UK Open Result
-                  <Tooltip>
-                    If a darts player achieved their best result more than once,
-                    the year is the latest one.
-                  </Tooltip>
                 </FieldName>
                 {player.bestResultUKOpen && player.yearOfBestResultUKOpen ? (
                   <FieldValueBestResult
@@ -645,12 +718,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName className="sm:text-xs lg:text-sm">
                   <Trophy size={18} />
                   Best PDC World Championship Result
-                  <Tooltip>
-                    If a darts player achieved their best result more than once,
-                    the year is the latest one. Also, this field does{' '}
-                    <span className="font-medium">not</span> include the best
-                    PDC World Youth Championship result.
-                  </Tooltip>
                 </FieldName>
                 {player.bestResultPDC && player.yearOfBestResultPDC ? (
                   <FieldValueBestResult
@@ -721,12 +788,6 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldName className="text-xs sm:text-sm md:text-[0.65rem] lg:text-sm">
                   <Trophy size={18} />
                   Best BDO/WDF World Championship Result
-                  <Tooltip>
-                    If a darts player achieved their best result more than once,
-                    the year is the latest one. Also, this field does{' '}
-                    <span className="font-medium">not</span> include the best
-                    BDO/WDF World Youth Championship result.
-                  </Tooltip>
                 </FieldName>
                 {player.bestResultWDF && player.yearOfBestResultWDF ? (
                   <FieldValueBestResult
