@@ -348,7 +348,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best UK Open result'}
                     comparisonResult={player.bestResultUKOpen?.type}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 ) : (
                   <FieldValue
@@ -389,7 +389,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best PDC World Championship result'}
                     comparisonResult={player.bestResultPDC?.type}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 ) : (
                   <FieldValue
@@ -496,7 +496,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best PDC World Championship result'}
                     comparisonResult={player.bestResultWDF?.type}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 ) : (
                   <FieldValue
@@ -710,7 +710,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best UK Open result'}
                     comparisonResult={comparisonResults.bestResultUKOpen}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 )}
               </Field>
@@ -738,7 +738,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best PDC World Championship result'}
                     comparisonResult={comparisonResults.bestResultPDC}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 )}
               </Field>
@@ -810,7 +810,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                     fieldName={'Best BDO/WDF World Championship result'}
                     comparisonResult={comparisonResults.bestResultWDF}
                   >
-                    N/A
+                    Did Not Play
                   </FieldValue>
                 )}
               </Field>
