@@ -1,17 +1,31 @@
 'use server';
 
-import type { UpdateAction } from '@/lib/types';
+import type {
+  UpdateAction,
+  UpdateRankingsOrganisation,
+  UpdateRankingsType,
+} from '@/lib/types';
 import getUpdatedRankings from '@/server/scripts/get-updated-rankings';
-import { updateDBRankings } from '@/server/utils';
+import { checkForAdmin, updateDBRankings } from '@/server/utils';
 import { revalidateTag } from 'next/cache';
 
 export default async function updateRankings(
-  organisation: 'PDC' | 'WDF',
-  type: 'men' | 'women'
+  organisation: UpdateRankingsOrganisation,
+  type: UpdateRankingsType
 ) {
-  const updatedRankings = await getUpdatedRankings(organisation, type);
-
   let result: UpdateAction;
+
+  const isAdmin = await checkForAdmin();
+
+  if (!isAdmin) {
+    result = {
+      type: 'error',
+      message: 'You are not authorised to perform this operation.',
+    };
+    return result;
+  }
+
+  const updatedRankings = await getUpdatedRankings(organisation, type);
 
   if ('error' in updatedRankings) {
     result = {

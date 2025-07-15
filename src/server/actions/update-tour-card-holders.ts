@@ -1,17 +1,27 @@
 'use server';
 
 import type { UpdateAction } from '@/lib/types';
-import { db } from '@/server/db';
-import { getTourCardHolders } from '@/server/utils';
-import { player as playerSchema } from '@/server/db/schema';
-import { revalidateTag } from 'next/cache';
-import { and, eq } from 'drizzle-orm';
 import { normaliseString } from '@/lib/utils';
+import { db } from '@/server/db';
+import { player as playerSchema } from '@/server/db/schema';
+import { checkForAdmin, getTourCardHolders } from '@/server/utils';
+import { and, eq } from 'drizzle-orm';
+import { revalidateTag } from 'next/cache';
 
 export default async function updateTourCardHolders() {
-  const tourCardHolders = await getTourCardHolders();
-
   let result: UpdateAction;
+
+  const isAdmin = await checkForAdmin();
+
+  if (!isAdmin) {
+    result = {
+      type: 'error',
+      message: 'You are not authorised to perform this operation.',
+    };
+    return result;
+  }
+
+  const tourCardHolders = await getTourCardHolders();
 
   if ('error' in tourCardHolders) {
     result = {

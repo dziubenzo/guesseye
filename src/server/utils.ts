@@ -4,6 +4,8 @@ import { auth } from '@/lib/auth';
 import type {
   ErrorObject,
   TourCardHolders,
+  UpdateRankingsOrganisation,
+  UpdateRankingsType,
   UpdatedRankings,
 } from '@/lib/types';
 import { handleDifferentSpellings, normaliseString } from '@/lib/utils';
@@ -34,6 +36,14 @@ export async function getUserOrGuest() {
     const { clientIP, clientUserAgent } = await getIPAndUserAgent();
     return { session: null, clientIP, clientUserAgent };
   }
+}
+
+export async function checkForAdmin() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return session?.user.role === 'admin';
 }
 
 export async function isNameTaken(newName: string) {
@@ -193,8 +203,8 @@ export async function getWDFOoM(
 }
 
 export async function updateDBRankings(
-  organisation: 'PDC' | 'WDF',
-  type: 'men' | 'women',
+  organisation: UpdateRankingsOrganisation,
+  type: UpdateRankingsType,
   updatedRankings: UpdatedRankings[]
 ) {
   // Get darts players

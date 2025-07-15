@@ -1,6 +1,11 @@
 'use server';
 
-import type { ErrorObject, UpdatedRankings } from '@/lib/types';
+import type {
+  ErrorObject,
+  UpdateRankingsOrganisation,
+  UpdateRankingsType,
+  UpdatedRankings,
+} from '@/lib/types';
 import { getPDCOoM, getWDFOoM } from '@/server/utils';
 
 // PDC rankings
@@ -22,8 +27,8 @@ const rankingsSelectorWomenWDF = 'div.text-sm a.inline-flex span:first-child';
 const fullNamesSelectorWomenWDF = 'div.text-sm a.inline-flex span.truncate';
 
 export default async function getUpdatedRankings(
-  organisation: 'PDC' | 'WDF',
-  type: 'men' | 'women'
+  organisation: UpdateRankingsOrganisation,
+  type: UpdateRankingsType
 ) {
   let updatedRankings: UpdatedRankings[] | ErrorObject;
 
