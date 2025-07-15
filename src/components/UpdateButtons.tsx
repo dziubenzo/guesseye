@@ -10,13 +10,17 @@ import type {
 } from '@/lib/types';
 import updateAllRankings from '@/server/actions/update-all-rankings';
 import updateRankings from '@/server/actions/update-rankings';
+import updateTourCardHolders from '@/server/actions/update-tour-card-holders';
 import { useState } from 'react';
 
-export default function UpdateRankings() {
+export default function UpdateButtons() {
   const [updateRankingResult, setUpdateRankingResult] =
     useState<UpdateAction | null>(null);
   const [updateAllRankingsResult, setUpdateAllRankingsResult] =
     useState<UpdateAction | null>(null);
+  const [updateTCHResult, setUpdateTCHResult] = useState<UpdateAction | null>(
+    null
+  );
   const [isDisabled, setIsDisabled] = useState(false);
 
   async function handleUpdateRankingClick(
@@ -35,6 +39,14 @@ export default function UpdateRankings() {
     setIsDisabled(true);
     const result = await updateAllRankings();
     setUpdateAllRankingsResult(result);
+    setIsDisabled(false);
+  }
+
+  async function handleUpdateTCHClick() {
+    setUpdateTCHResult(null);
+    setIsDisabled(true);
+    const result = await updateTourCardHolders();
+    setUpdateTCHResult(result);
     setIsDisabled(false);
   }
 
@@ -78,20 +90,38 @@ export default function UpdateRankings() {
         <SuccessMessage successMessage={updateRankingResult.message} />
       )}
       <h1 className="text-xl font-medium">Update All Rankings</h1>
-      <Button
-        className="cursor-pointer"
-        variant={'destructive'}
-        onClick={handleUpdateAllRankingsClick}
-        disabled={isDisabled}
-      >
-        Update All Rankings
-      </Button>
-      {updateAllRankingsResult?.type === 'error' && (
-        <ErrorMessage errorMessage={updateAllRankingsResult.message} />
-      )}
-      {updateAllRankingsResult?.type === 'success' && (
-        <SuccessMessage successMessage={updateAllRankingsResult.message} />
-      )}
+      <div className="flex flex-col gap-4">
+        <Button
+          className="cursor-pointer"
+          variant={'destructive'}
+          onClick={handleUpdateAllRankingsClick}
+          disabled={isDisabled}
+        >
+          Update All Rankings
+        </Button>
+        {updateAllRankingsResult?.type === 'error' && (
+          <ErrorMessage errorMessage={updateAllRankingsResult.message} />
+        )}
+        {updateAllRankingsResult?.type === 'success' && (
+          <SuccessMessage successMessage={updateAllRankingsResult.message} />
+        )}
+      </div>
+      <h1 className="text-xl font-medium">Update Tour Card Holders</h1>
+      <div className="flex flex-col gap-4">
+        <Button
+          className="cursor-pointer"
+          onClick={handleUpdateTCHClick}
+          disabled={isDisabled}
+        >
+          Update Tour Card Holders
+        </Button>
+        {updateTCHResult?.type === 'error' && (
+          <ErrorMessage errorMessage={updateTCHResult.message} />
+        )}
+        {updateTCHResult?.type === 'success' && (
+          <SuccessMessage successMessage={updateTCHResult.message} />
+        )}
+      </div>
     </div>
   );
 }
