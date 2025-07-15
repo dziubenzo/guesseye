@@ -14,6 +14,8 @@ import {
 
 // Authentication
 
+export const roleEnum = pgEnum('role_enum', ['user', 'admin']);
+
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -22,6 +24,7 @@ export const user = pgTable('user', {
   image: text('image'),
   createdAt: timestamp('created_at').notNull(),
   updatedAt: timestamp('updated_at').notNull(),
+  role: roleEnum('role').notNull().default('user'),
 });
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -117,7 +120,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'XQ Max',
   'Victory',
   '95Darts',
-  'Grand Slam'
+  'Grand Slam',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 

@@ -32,6 +32,15 @@ export const auth = betterAuth({
     },
   },
   user: {
+    additionalFields: {
+      role: {
+        fieldName: 'role',
+        type: 'string',
+        required: true,
+        defaultValue: 'user',
+        input: false,
+      },
+    },
     deleteUser: {
       enabled: true,
       sendDeleteAccountVerification: async ({ user, url }) => {

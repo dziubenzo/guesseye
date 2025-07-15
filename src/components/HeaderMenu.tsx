@@ -10,7 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import { signOut } from '@/lib/auth-client';
+import { signOut, useSession } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
 import {
   ArrowBigLeft,
@@ -23,6 +23,7 @@ import {
   LogOut,
   Presentation,
   Settings,
+  ShieldHalf,
   Shuffle,
   Table,
 } from 'lucide-react';
@@ -41,6 +42,7 @@ type HeaderMenuProps = {
 export default function HeaderMenu({ username }: HeaderMenuProps) {
   const router = useRouter();
   const { resetState } = useGameStore();
+  const { data } = useSession();
 
   async function logOut() {
     await signOut({
@@ -228,6 +230,21 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
                       </div>
                     </Link>
                   </NavigationMenuLink>
+                  {data?.user.role === 'admin' && (
+                    <NavigationMenuLink asChild>
+                      <Link href="/admin">
+                        <div className="flex gap-4 items-center">
+                          <ShieldHalf className="min-w-4 max-w-4" />
+                          <div>
+                            <div className="font-medium">Admin Page</div>
+                            <div className="text-muted-foreground">
+                              Go to Admin page.
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
                   <NavigationMenuLink asChild>
                     <Button
                       className="cursor-pointer w-full flex flex-row gap-2 items-center justify-end"
