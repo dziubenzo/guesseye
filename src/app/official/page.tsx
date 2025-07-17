@@ -8,7 +8,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getOfficialGames } from '@/server/db/get-official-games';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Official Games' };
 
 export default async function OfficialGames() {
   const officialGames = await getOfficialGames();

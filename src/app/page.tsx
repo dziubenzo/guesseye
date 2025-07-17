@@ -11,7 +11,10 @@ import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getRandomGame } from '@/server/db/get-random-game';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
+
+export const metadata: Metadata = { title: 'GuessEye' };
 
 export default async function CurrentGame() {
   const session = await auth.api.getSession({

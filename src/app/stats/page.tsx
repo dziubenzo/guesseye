@@ -10,7 +10,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getGlobalStats } from '@/server/db/get-global-stats';
 import { getUserStats } from '@/server/db/get-user-stats';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Game Stats' };
 
 export default async function Stats() {
   const [userStats, globalStats] = await Promise.all([

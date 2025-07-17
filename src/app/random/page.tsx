@@ -7,10 +7,13 @@ import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import { auth } from '@/lib/auth';
 import { getRandomGame } from '@/server/db/get-random-game';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-export default async function CurrentGame() {
+export const metadata: Metadata = { title: 'Random Game' };
+
+export default async function RandomGame() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

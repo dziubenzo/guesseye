@@ -8,7 +8,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getLeaderboard } from '@/server/db/get-leaderboard';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Leaderboard' };
 
 export default async function Leaderboard() {
   const leaderboard = await getLeaderboard();

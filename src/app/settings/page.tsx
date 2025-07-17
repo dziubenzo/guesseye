@@ -8,8 +8,11 @@ import {
 } from '@/components/ui/card';
 import UpdateNameForm from '@/components/UpdateNameForm';
 import { auth } from '@/lib/auth';
+import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Settings' };
 
 export default async function Settings() {
   const session = await auth.api.getSession({

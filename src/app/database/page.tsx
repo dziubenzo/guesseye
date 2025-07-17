@@ -33,6 +33,9 @@ import {
 } from '@/components/ui/card';
 import { getDatabaseStats } from '@/server/db/get-database-stats';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Database Stats' };
 
 export default async function DatabaseStats() {
   const stats = await getDatabaseStats();

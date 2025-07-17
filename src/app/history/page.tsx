@@ -8,7 +8,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getOfficialGamesHistory } from '@/server/db/get-official-games-history';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Official Games History' };
 
 export default async function History() {
   const history = await getOfficialGamesHistory();

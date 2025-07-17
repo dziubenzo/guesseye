@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata: Metadata = { title: '404 | GuessEye' };
 
 export default function NotFound() {
   return (

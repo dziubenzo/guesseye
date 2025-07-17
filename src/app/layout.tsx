@@ -17,8 +17,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'GuessEye',
-  description: 'To be completed',
+  applicationName: 'GuessEye',
+  title: { default: 'GuessEye', template: '%s | GuessEye' },
+  description:
+    'Challenge yourself and play a completely free game where you have to guess a darts player hand-picked from the actively maintained database of hundreds of darts players.',
+  keywords: [
+    'Darts',
+    'Game',
+    'Guess',
+    'Beau Greaves',
+    'Phil Taylor',
+    'Luke Littler',
+    'Michael van Gerwen',
+    'Krzysztof Ratajski',
+  ],
 };
 
 export default function RootLayout({

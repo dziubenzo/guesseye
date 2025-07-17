@@ -7,7 +7,10 @@ import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { getOfficialGame } from '@/server/db/get-official-game';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+export const metadata: Metadata = { title: 'Official Game' };
 
 type PreviousOfficialGameProps = {
   params: Promise<{ scheduleId: string }>;
