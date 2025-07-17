@@ -66,7 +66,7 @@ export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white hidden sm:text-xs sm:block"
+            className="fill-white hidden sm:text-[0.6rem] sm:block"
           />
         </Bar>
       </BarChart>

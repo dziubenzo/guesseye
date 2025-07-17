@@ -34,7 +34,7 @@ export default function AgeChart({ data }: AgeChartProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={16}
+          minTickGap={0}
         />
         <ChartTooltip
           content={
@@ -67,7 +67,7 @@ export default function AgeChart({ data }: AgeChartProps) {
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white hidden sm:text-xs sm:block"
+            className="fill-white hidden sm:text-[0.6rem] sm:block"
           />
         </Bar>
       </BarChart>

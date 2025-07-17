@@ -22,7 +22,7 @@ type CountryChartProps = {
 
 export default function CountryChart({ data }: CountryChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[500px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[800px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
@@ -52,7 +52,7 @@ export default function CountryChart({ data }: CountryChartProps) {
           <LabelList
             dataKey="count"
             position="insideRight"
-            offset={3}
+            offset={1}
             className="fill-black hidden sm:text-sm sm:block"
           />
           <LabelList

@@ -35,7 +35,7 @@ export default function BirthDateChart({ data }: BirthDateChartProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={16}
+          minTickGap={0}
           tickFormatter={(value) => `${enGB.localize.ordinalNumber(value)}`}
         />
         <ChartTooltip

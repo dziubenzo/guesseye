@@ -28,7 +28,7 @@ export default async function History() {
           <CardDescription>
             <p>
               Here you can find winners of every official game by three
-              categories: first, fastest and fewest guesses.
+              categories: first, fastest, and fewest guesses.
             </p>
           </CardDescription>
         </CardHeader>

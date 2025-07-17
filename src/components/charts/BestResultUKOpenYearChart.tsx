@@ -24,7 +24,7 @@ export default function BestResultUKOpenYearChart({
   data,
 }: BestResultUKOpenYearChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[400px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
@@ -38,7 +38,7 @@ export default function BestResultUKOpenYearChart({
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={0}
+          minTickGap={-25}
           width={100}
           tickFormatter={(value) => value}
         />

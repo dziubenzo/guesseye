@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
+import type { DatabaseStats } from '@/lib/types';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 const chartConfig = {
@@ -57,15 +57,6 @@ export default function DartsWeightChart({ data }: DartsWeightChartProps) {
             position="top"
             offset={6}
             className="fill-foreground text-sm sm:hidden"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="center"
-            offset={0}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white hidden sm:text-[0.6rem] md:text-xs lg:text-sm sm:block"
           />
         </Bar>
       </BarChart>
