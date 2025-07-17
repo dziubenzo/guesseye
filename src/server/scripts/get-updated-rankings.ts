@@ -4,7 +4,7 @@ import type {
   ErrorObject,
   UpdateRankingsOrganisation,
   UpdateRankingsType,
-  UpdatedRankings,
+  UpdatedRanking,
 } from '@/lib/types';
 import { getPDCOoM, getWDFOoM } from '@/server/utils';
 
@@ -30,7 +30,7 @@ export default async function getUpdatedRankings(
   organisation: UpdateRankingsOrganisation,
   type: UpdateRankingsType
 ) {
-  let updatedRankings: UpdatedRankings[] | ErrorObject;
+  let updatedRankings: UpdatedRanking[] | ErrorObject;
 
   if (organisation === 'PDC' && type === 'men') {
     updatedRankings = await getPDCOoM(

@@ -1750,6 +1750,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Stefanie Lück';
     case 'Steffi Lück':
       return 'Stefanie Lück';
+    case 'Maria Carli-Mason':
+      return 'Maria Carli';
   }
 
   return fullName;

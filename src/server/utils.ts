@@ -3,10 +3,10 @@
 import { auth } from '@/lib/auth';
 import type {
   ErrorObject,
-  TourCardHolders,
+  TourCardHolder,
   UpdateRankingsOrganisation,
   UpdateRankingsType,
-  UpdatedRankings,
+  UpdatedRanking,
 } from '@/lib/types';
 import { handleDifferentSpellings, normaliseString } from '@/lib/utils';
 import { db } from '@/server/db';
@@ -67,7 +67,7 @@ export async function getPDCOoM(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRankings[] = [];
+  const updatedRankings: UpdatedRanking[] = [];
 
   // Get current rankings from the selector
   const rankings = await page.$$eval(rankingsSelector, (rankingTds) => {
@@ -134,7 +134,7 @@ export async function getWDFOoM(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRankings[] = [];
+  const updatedRankings: UpdatedRanking[] = [];
 
   // Get current rankings from the selector, applying the limit
   const rankings = await page.$$eval(
@@ -205,7 +205,7 @@ export async function getWDFOoM(
 export async function updateDBRankings(
   organisation: UpdateRankingsOrganisation,
   type: UpdateRankingsType,
-  updatedRankings: UpdatedRankings[]
+  updatedRankings: UpdatedRanking[]
 ) {
   // Get darts players
   const players = await db.query.player.findMany({
@@ -275,7 +275,7 @@ export async function getTourCardHolders() {
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const tourCardHolders: TourCardHolders[] = [];
+  const tourCardHolders: TourCardHolder[] = [];
 
   // Get full names
   const fullNames = await page.$$eval('tr td:nth-child(3)', (fullNameSpans) => {

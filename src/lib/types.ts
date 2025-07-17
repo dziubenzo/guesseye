@@ -392,7 +392,7 @@ export type DatabaseStats = {
   [key in DatabaseStatsType]: DatabaseStatsResult[];
 };
 
-export type UpdatedRankings = {
+export type UpdatedRanking = {
   firstName: string;
   lastName: string;
   ranking: number;
@@ -401,4 +401,13 @@ export type UpdatedRankings = {
 export type UpdateRankingsOrganisation = 'PDC' | 'WDF';
 export type UpdateRankingsType = 'men' | 'women';
 
-export type TourCardHolders = Omit<UpdatedRankings, 'ranking'>;
+export type TourCardHolder = Omit<UpdatedRanking, 'ranking'>;
+
+export type PlayerWithCount = {
+  id: Player['id'];
+  firstName: Player['firstName'];
+  lastName: Player['lastName'];
+  gender: Player['gender'];
+  difficulty: Player['difficulty'];
+  officialModeCount: number;
+};
