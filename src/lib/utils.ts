@@ -1752,6 +1752,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Stefanie Lück';
     case 'Maria Carli-Mason':
       return 'Maria Carli';
+    case 'Taylor Marsh-Kahaki':
+      return 'Taylor-Marsh Kahaki';
   }
 
   return fullName;

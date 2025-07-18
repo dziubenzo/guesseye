@@ -1,3 +1,4 @@
+import Logo from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { getLastDatabaseUpdate } from '@/server/db/get-last-database-update';
 import { getPlayerCount } from '@/server/db/get-player-count';
@@ -11,7 +12,8 @@ export default async function Footer() {
   ]);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 place-items-center rounded-md text-center p-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 place-items-center rounded-md text-center p-0 sm:p-4">
+      <Logo location="footer" />
       <div className="flex flex-col items-center gap-1">
         <p className="text-xs">Players in the Database</p>
         <p className="text-lg">{playerCount}</p>

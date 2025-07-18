@@ -2,6 +2,7 @@
 
 import AuthModal from '@/components/AuthModal';
 import HeaderMenu from '@/components/HeaderMenu';
+import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { useSession } from '@/lib/auth-client';
@@ -14,6 +15,7 @@ export default function Header() {
 
   return (
     <header className="grid grid-flow-col grid-cols-3 text-center items-center justify-center relative">
+      <Logo location="headerGuest" />
       <div className="col-start-1">
         <Dialog>
           <DialogTrigger asChild>

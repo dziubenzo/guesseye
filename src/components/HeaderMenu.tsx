@@ -1,5 +1,6 @@
 'use client';
 
+import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -57,6 +58,7 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
 
   return (
     <header className="flex justify-center relative w-full">
+      <Logo location="header" />
       <NavigationMenu viewport={true} className="z-2">
         <NavigationMenuList>
           <NavigationMenuItem>
