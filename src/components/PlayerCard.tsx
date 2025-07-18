@@ -426,9 +426,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                       </li>
                       <br />
                     </ul>
-                    Also, a darts player must be ranked at least{' '}
-                    <span className="font-medium">500th or better</span> for
-                    their ranking to be listed here.
+                    Due to a large number of darts players in the WDF main
+                    rankings, this field is updated only for{' '}
+                    <span className="font-medium">
+                      the first 500 darts players
+                    </span>{' '}
+                    in the ranking.
                   </Tooltip>
                 </FieldName>
                 <FieldValue

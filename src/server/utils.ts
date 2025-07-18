@@ -207,13 +207,13 @@ export async function updateDBRankings(
   type: UpdateRankingsType,
   updatedRankings: UpdatedRanking[]
 ) {
-  // Get darts players
+  // Get male/female darts players
   const players = await db.query.player.findMany({
     where: eq(playerSchema.gender, type === 'men' ? 'male' : 'female'),
     columns: { firstName: true, lastName: true },
   });
 
-  // Set ranking value to null for all darts players
+  // Set ranking value to null for male/female darts players
   await db
     .update(playerSchema)
     .set(organisation === 'PDC' ? { rankingPDC: null } : { rankingWDF: null })
@@ -229,10 +229,13 @@ export async function updateDBRankings(
     );
 
   let updateCount = 0;
+  const missingPlayers: string[] = [];
 
   // Update the ranking of a darts player if their first name and last name match the scraped data
-  for (const player of players) {
-    for (const updatedRanking of updatedRankings) {
+  for (const updatedRanking of updatedRankings) {
+    let playerFound = false;
+
+    for (const player of players) {
       const playerFirstName = normaliseString(player.firstName);
       const playerLastName = normaliseString(player.lastName);
       const updatedPlayerFirstName = normaliseString(updatedRanking.firstName);
@@ -259,11 +262,19 @@ export async function updateDBRankings(
           )
         );
       updateCount++;
+      playerFound = true;
       break;
+    }
+
+    // Identify players who are not in the DB
+    if (!playerFound) {
+      missingPlayers.push(
+        updatedRanking.firstName + ' ' + updatedRanking.lastName
+      );
     }
   }
 
-  return { updateCount, playersDB: players.length };
+  return { updateCount, playersDB: players.length, missingPlayers };
 }
 
 // Get current Tour Card Holders

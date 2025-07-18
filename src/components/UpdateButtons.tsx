@@ -23,11 +23,17 @@ export default function UpdateButtons() {
   );
   const [isDisabled, setIsDisabled] = useState(false);
 
+  function clearResults() {
+    setUpdateRankingResult(null);
+    setUpdateAllRankingsResult(null);
+    setUpdateTCHResult(null);
+  }
+
   async function handleUpdateRankingClick(
     organisation: UpdateRankingsOrganisation,
     type: UpdateRankingsType
   ) {
-    setUpdateRankingResult(null);
+    clearResults();
     setIsDisabled(true);
     const result = await updateRankings(organisation, type);
     setUpdateRankingResult(result);
@@ -35,7 +41,7 @@ export default function UpdateButtons() {
   }
 
   async function handleUpdateAllRankingsClick() {
-    setUpdateAllRankingsResult(null);
+    clearResults();
     setIsDisabled(true);
     const result = await updateAllRankings();
     setUpdateAllRankingsResult(result);
@@ -43,7 +49,7 @@ export default function UpdateButtons() {
   }
 
   async function handleUpdateTCHClick() {
-    setUpdateTCHResult(null);
+    clearResults();
     setIsDisabled(true);
     const result = await updateTourCardHolders();
     setUpdateTCHResult(result);

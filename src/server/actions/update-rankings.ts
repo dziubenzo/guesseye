@@ -35,7 +35,7 @@ export default async function updateRankings(
     return result;
   }
 
-  const { updateCount, playersDB } = await updateDBRankings(
+  const { updateCount, playersDB, missingPlayers } = await updateDBRankings(
     organisation,
     type,
     updatedRankings
@@ -47,9 +47,17 @@ export default async function updateRankings(
 
   const gender = type === 'men' ? 'male' : 'female';
 
+  // List PDC World Rankings players that are missing in the DB
+  const missingPlayersString =
+    organisation === 'PDC' && type === 'men' && missingPlayers.length > 0
+      ? ` Missing players: ${missingPlayers.toString()}.`
+      : '';
+
   result = {
     type: 'success',
-    message: `${organisation} rankings for ${type} updated successfully. ${updateCount} ${gender} players out of ${playersDB} ${gender} players in the DB were updated.`,
+    message:
+      `${organisation} rankings for ${type} updated successfully. ${updateCount} ${gender} players out of ${playersDB} ${gender} players in the DB were updated.` +
+      missingPlayersString,
   };
 
   return result;
