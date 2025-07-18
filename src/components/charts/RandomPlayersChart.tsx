@@ -30,7 +30,7 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
   }
 
   return (
-    <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[800px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
@@ -45,7 +45,7 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          width={150}
+          width={125}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

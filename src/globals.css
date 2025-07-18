@@ -114,12 +114,12 @@
   --chart-WDF: oklch(0.6935 0.1854 46.45);
   --chart-BDO: oklch(0.6565 0.2315 17.97);
   --chart-easy: oklch(0.7941 0.1543 145.87);
-  --chart-medium: oklch(0.828 0.189 84.429);
+  --chart-medium: oklch(76.03% 0.1523 102.628);
   --chart-hard: oklch(0.6328 0.2306 28.07);
   --chart-very-hard: oklch(0.5475 0.1912 337.07);
   --chart-age: oklch(0.6328 0.114 152.7);
   --chart-birth-month: oklch(0.6328 0.114 334.51);
-  --chart-birth-date: oklch(0.7419 0.1297 95.51);
+  --chart-birth-date: oklch(77.685% 0.14371 105.274);
   --chart-birth-day: oklch(0.7241 0.1737 37.28);
   --chart-country: oklch(0.7893 0.1737 118.81);
   --chart-playing-since: oklch(0.6233 0.1131 52.83);

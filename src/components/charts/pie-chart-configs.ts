@@ -63,7 +63,7 @@ export const DIFFICULTY_CHART_CONFIG = {
 
 export const GENDER_COLOURS = ['var(--chart-male)', 'var(--chart-female)'];
 
-export const LATERALITY_COLOURS = ['var(--chart-2)', 'var(--chart-4)'];
+export const LATERALITY_COLOURS = ['var(--chart-2)', 'var(--chart-3)'];
 
 export const ORGANISATION_COLOURS = [
   'var(--chart-PDC)',

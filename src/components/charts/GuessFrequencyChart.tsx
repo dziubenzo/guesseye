@@ -7,7 +7,13 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import type { UserStats } from '@/lib/types';
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  LabelList,
+  XAxis,
+  YAxis
+} from 'recharts';
 
 const chartConfig = {
   count: {
@@ -32,39 +38,44 @@ export default function GuessFrequencyChart({
   }
 
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[800px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 25, right: 5, bottom: 5, left: 5 }}
+        margin={{ top: 5, right: 25, bottom: 5, left: 0 }}
+        layout="vertical"
       >
-        <CartesianGrid vertical={false} />
-        <XAxis
+        <XAxis type="number" hide />
+        <YAxis
           dataKey="fullName"
-          hide
+          type="category"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={32}
-          tickFormatter={(value) => {
-            const array = value.split(' ');
-            const lastName = array[array.length - 1];
-            return lastName;
-          }}
+          minTickGap={0}
+          width={125}
+          tickFormatter={(value) => value}
         />
-        <ChartTooltip content={<ChartTooltipContent hideIndicator={true} />} />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              hideIndicator={true}
+              labelFormatter={(value) => value}
+            />
+          }
+        />
         <Bar dataKey="count" fill="var(--color-count)" radius={4}>
           <LabelList
             dataKey="count"
-            position="top"
-            offset={12}
-            className="fill-foreground hidden sm:text-base sm:block"
+            position="insideRight"
+            offset={2}
+            className="fill-white hidden sm:text-sm sm:block"
           />
           <LabelList
             dataKey="count"
-            position="top"
-            offset={3}
-            className="fill-foreground text-[0.5rem] sm:hidden"
+            position="right"
+            offset={4}
+            className="fill-foreground text-[0.7rem] sm:hidden"
           />
         </Bar>
       </BarChart>
