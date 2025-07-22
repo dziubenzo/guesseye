@@ -29,7 +29,7 @@ export default async function Footer() {
           <Link href="/">About</Link>
         </Button>
         <Button className="cursor-pointer" variant="link" asChild>
-          <Link href="/">Contact</Link>
+          <Link href="/about">About & Contact</Link>
         </Button>
       </div>
     </div>
