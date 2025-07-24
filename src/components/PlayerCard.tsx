@@ -184,12 +184,18 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
-                  Playing Since
+                  {player.status === 'retired' || player.status == 'deceased'
+                    ? 'Played Since'
+                    : 'Playing Since'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
                   comparisonResult={player.playingSince?.type}
-                  fieldName="Playing since"
+                  fieldName={
+                    player.status === 'retired' || player.status == 'deceased'
+                      ? 'Played Since'
+                      : 'Playing Since'
+                  }
                 >
                   {formatPlayerToFindField<Player['playingSince']>(
                     player.playingSince
@@ -597,11 +603,17 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
-                  Playing Since
+                  {player.status === 'retired' || player.status == 'deceased'
+                    ? 'Played Since'
+                    : 'Playing Since'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Playing since'}
+                  fieldName={
+                    player.status === 'retired' || player.status == 'deceased'
+                      ? 'Played Since'
+                      : 'Playing Since'
+                  }
                   comparisonResult={comparisonResults.playingSince}
                 >
                   {player.playingSince ? player.playingSince : 'N/A'}
