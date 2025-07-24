@@ -3,6 +3,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { CircleHelp } from 'lucide-react';
 import { ReactNode } from 'react';
 
@@ -17,7 +18,7 @@ export default function Tooltip({ children, className }: TooltipProps) {
       <PopoverTrigger>
         <CircleHelp size={12} className="cursor-pointer" />
       </PopoverTrigger>
-      <PopoverContent className={`text-xs p-3 ${className ? className : ''}`}>
+      <PopoverContent className={cn('text-xs p-3', className)}>
         {children}
       </PopoverContent>
     </Popover>
