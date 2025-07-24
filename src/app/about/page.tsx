@@ -143,13 +143,14 @@ export default async function About() {
         </section>
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-medium">Game Modes</h2>
-          <p><Logo /> features two game modes:</p>
+          <p>
+            <Logo /> features two game modes:
+          </p>
           <ul className="list-disc list-inside">
             <li>
               <Bold>official mode</Bold>, where a hand-picked darts player is
               available for you to find. It changes every single day at midnight
-              UTC (which is {format(getMidnightUTC(), 'HH:mm')} for you in the
-              24-hour format);
+              UTC (which is {format(getMidnightUTC(), 'hh:mm a')} for you);
             </li>
             <li>
               <Bold>random mode</Bold>, where a darts player is selected for you

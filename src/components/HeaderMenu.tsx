@@ -64,35 +64,51 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
           <NavigationMenuItem>
             <NavigationMenuTrigger className={CUSTOM_TRIGGER_CLASS}>
               <div className="sm:hidden">
-                <ChartSpline />
+                <Dices />
               </div>
-              <div className="hidden sm:block">Stats</div>
+              <div className="hidden sm:block">Games</div>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={CUSTOM_MENU_CLASS}>
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/stats">
+                    <Link href="/">
                       <div className="flex gap-4 items-center">
-                        <ChartNoAxesCombined className="min-w-4 max-w-4" />
+                        <ArrowBigUp className="min-w-4 max-w-4" />
                         <div>
-                          <div className="font-medium">Game Stats</div>
+                          <div className="font-medium">
+                            Current Official Game
+                          </div>
                           <div className="text-muted-foreground">
-                            Discover your game stats as well as global game
-                            stats.
+                            Play the current official game.
                           </div>
                         </div>
                       </div>
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href="/database">
+                    <Link href="/official">
                       <div className="flex gap-4 items-center">
-                        <DatabaseZap className="min-w-4 max-w-4" />
+                        <ArrowBigLeft className="min-w-4 max-w-4" />
                         <div>
-                          <div className="font-medium">Database Stats</div>
+                          <div className="font-medium">
+                            Previous Official Games
+                          </div>
                           <div className="text-muted-foreground">
-                            Take a look at database stats.
+                            Browse, play or resume all previous official games.
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink asChild>
+                    <Link href="/random">
+                      <div className="flex gap-4 items-center">
+                        <Shuffle className="min-w-4 max-w-4" />
+                        <div>
+                          <div className="font-medium">Random Game</div>
+                          <div className="text-muted-foreground">
+                            Play or resume a random game.
                           </div>
                         </div>
                       </div>
@@ -147,51 +163,35 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
           <NavigationMenuItem>
             <NavigationMenuTrigger className={CUSTOM_TRIGGER_CLASS}>
               <div className="sm:hidden">
-                <Dices />
+                <ChartSpline />
               </div>
-              <div className="hidden sm:block">Games</div>
+              <div className="hidden sm:block">Stats</div>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className={CUSTOM_MENU_CLASS}>
                 <li>
                   <NavigationMenuLink asChild>
-                    <Link href="/">
+                    <Link href="/stats">
                       <div className="flex gap-4 items-center">
-                        <ArrowBigUp className="min-w-4 max-w-4" />
+                        <ChartNoAxesCombined className="min-w-4 max-w-4" />
                         <div>
-                          <div className="font-medium">
-                            Current Official Game
-                          </div>
+                          <div className="font-medium">Game Stats</div>
                           <div className="text-muted-foreground">
-                            Play the current official game.
+                            Discover your game stats as well as global game
+                            stats.
                           </div>
                         </div>
                       </div>
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link href="/official">
+                    <Link href="/database">
                       <div className="flex gap-4 items-center">
-                        <ArrowBigLeft className="min-w-4 max-w-4" />
+                        <DatabaseZap className="min-w-4 max-w-4" />
                         <div>
-                          <div className="font-medium">
-                            Previous Official Games
-                          </div>
+                          <div className="font-medium">Database Stats</div>
                           <div className="text-muted-foreground">
-                            Browse, play or resume all previous official games.
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="/random">
-                      <div className="flex gap-4 items-center">
-                        <Shuffle className="min-w-4 max-w-4" />
-                        <div>
-                          <div className="font-medium">Random Game</div>
-                          <div className="text-muted-foreground">
-                            Play or resume a random game.
+                            Take a look at database stats.
                           </div>
                         </div>
                       </div>

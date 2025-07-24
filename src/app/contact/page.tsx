@@ -68,6 +68,12 @@ export default function Contact() {
               for WDF rankings;
             </li>
             <li>
+              <ExternalLink href="https://www.dartsrec.com/power-rankings">
+                DartsRec
+              </ExternalLink>{' '}
+              for Elo rankings;
+            </li>
+            <li>
               <ExternalLink href="https://www.pdc.tv/">
                 PDC website
               </ExternalLink>
@@ -113,8 +119,8 @@ export default function Contact() {
               websites featuring, for example, interviews with darts players;
             </li>
             <li>English, German, and Dutch Wikipedia;</li>
-            <li>Facebook, X, TikTok, and YouTube;</li>
-            <li>and the good old Google search engine.</li>
+            <li>Facebook, X, TikTok, and YouTube; and</li>
+            <li>the good old Google search engine.</li>
           </ul>
           <p>You are encouraged to use them to help you in your guesses!</p>
         </section>
