@@ -14,7 +14,7 @@ export const findOfficialGame = async (scheduledPlayer: ScheduleWithPlayer) => {
   const { session } = await getUserOrGuest();
 
   if (!session) {
-    const error: ErrorObject = { error: 'No session found.' };
+    const error: ErrorObject = { error: 'You are not logged in.' };
     return error;
   }
 

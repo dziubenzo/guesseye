@@ -1756,7 +1756,27 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Taylor-Marsh Kahaki';
     case 'Sharon Boxem-Prins':
       return 'Sharon Prins';
+    case 'Karin van Leeuwen-Krappen':
+      return 'Karin Krappen';
+    case 'Rilana Honsbeek':
+      return 'Rilana Honsbeek-Erades';
+    case 'Rilana Erades':
+      return 'Rilana Honsbeek-Erades';
+    case 'Linda Ithurralde':
+      return 'Linda Hindmarch-Ithurralde';
+    case 'Linda Hindmarch':
+      return 'Linda Hindmarch-Ithurralde';
   }
 
   return fullName;
+}
+
+export function getMidnightUTC() {
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth();
+  const day = new Date().getDate();
+
+  const midnightUTC = new Date(Date.UTC(year, month, day, 0, 0, 0));
+
+  return midnightUTC;
 }

@@ -26,10 +26,10 @@ export default async function Footer() {
       </div>
       <div className="flex col-span-2 sm:col-span-1 items-center gap-4">
         <Button className="cursor-pointer" variant="link" asChild>
-          <Link href="/">About</Link>
+          <Link href="/about">About</Link>
         </Button>
         <Button className="cursor-pointer" variant="link" asChild>
-          <Link href="/about">About & Contact</Link>
+          <Link href="/contact">Contact</Link>
         </Button>
       </div>
     </div>
