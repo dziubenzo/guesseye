@@ -2,6 +2,7 @@
 
 import ErrorMessage from '@/components/ErrorMessage';
 import ForgotPassword from '@/components/ForgotPassword';
+import Logo from '@/components/Logo';
 import SignupSuccess from '@/components/SignupSuccess';
 import { Button } from '@/components/ui/button';
 import {
@@ -104,7 +105,9 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
   return (
     <TabsContent value="login">
       <DialogHeader>
-        <DialogTitle className="text-xl mb-4">Log in to GuessEye</DialogTitle>
+        <DialogTitle className="text-xl mb-4">
+          Log in to <Logo />
+        </DialogTitle>
       </DialogHeader>
       <GoogleLogin />
       <Separator className="my-3" />
@@ -243,7 +246,7 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
     <TabsContent value="signup">
       <DialogHeader>
         <DialogTitle className="text-xl mb-4">
-          Create GuessEye Account
+          Create <Logo /> Account
         </DialogTitle>
       </DialogHeader>
       <Form {...signupForm}>

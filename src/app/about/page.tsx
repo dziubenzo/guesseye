@@ -1,5 +1,6 @@
 import Bold from '@/components/Bold';
 import Italic from '@/components/Italic';
+import Logo from '@/components/Logo';
 import { Card, CardContent } from '@/components/ui/card';
 import ExternalLink from '@/components/ui/ExternalLink';
 import { auth } from '@/lib/auth';
@@ -20,9 +21,9 @@ export default async function About() {
     <Card>
       <CardContent className="flex flex-col gap-4 text-pretty">
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">About GuessEye</h2>
+          <h2 className="text-2xl font-medium">About</h2>
           <p>
-            GuessEye was inspired by{' '}
+            <Logo /> was inspired by{' '}
             <ExternalLink href="https://trackmadle.gearfive.org">
               a conceptually similar guessing game for Trackmania players
             </ExternalLink>
@@ -52,7 +53,7 @@ export default async function About() {
             if you&apos;ve encountered any inaccurate information.
           </p>
           <p>
-            GuessEye is and will continue to be{' '}
+            <Logo /> is and will continue to be{' '}
             <Bold>100% free and open-source</Bold> and you can find it on{' '}
             <ExternalLink href="https://github.com/dziubenzo/guesseye">
               GitHub
@@ -142,7 +143,7 @@ export default async function About() {
         </section>
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-medium">Game Modes</h2>
-          <p>GuessEye features two game modes:</p>
+          <p><Logo /> features two game modes:</p>
           <ul className="list-disc list-inside">
             <li>
               <Bold>official mode</Bold>, where a hand-picked darts player is
@@ -168,7 +169,7 @@ export default async function About() {
               <section className="flex flex-col gap-4">
                 <h2 className="text-2xl font-medium">Why Should I Sign Up?</h2>
                 <p>
-                  If you find GuessEye fun, you might consider signing up for
+                  If you find <Logo /> fun, you might consider signing up for
                   extra and completely free features. They include:
                 </p>
                 <ul className="list-disc list-inside">
