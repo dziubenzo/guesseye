@@ -124,7 +124,7 @@ export default async function DatabaseStats() {
             </div>
             <div className="flex flex-col justify-center items-center gap-4">
               <h2 className="sm:text-2xl font-medium text-center">
-                Darts Players By Age
+                Active Darts Players By Age
               </h2>
               <AgeChart data={age} />
             </div>

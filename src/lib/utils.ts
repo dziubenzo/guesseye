@@ -1474,12 +1474,11 @@ export function countPlayersBy(
       field = player.gender;
       break;
     case 'age':
-      // Do not count by age for deceased darts players
-      if (player.status === 'deceased') {
-        field = null;
-      } else {
-        field = player.dateOfBirth ? getAge(player.dateOfBirth) : null;
-      }
+      // Count only active darts players by age
+      field =
+        player.dateOfBirth && player.status === 'active'
+          ? getAge(player.dateOfBirth)
+          : null;
       break;
     case 'birthMonth':
       field = player.dateOfBirth ? getMonth(player.dateOfBirth) : null;
