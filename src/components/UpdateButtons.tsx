@@ -3,18 +3,14 @@
 import ErrorMessage from '@/components/ErrorMessage';
 import SuccessMessage from '@/components/SuccessMessage';
 import { Button } from '@/components/ui/button';
-import type {
-  UpdateAction,
-  UpdateRankingsOrganisation,
-  UpdateRankingsType,
-} from '@/lib/types';
+import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
 import updateAllRankings from '@/server/actions/update-all-rankings';
 import updateRankings from '@/server/actions/update-rankings';
 import updateTourCardHolders from '@/server/actions/update-tour-card-holders';
 import { useState } from 'react';
 
 export default function UpdateButtons() {
-  const [updateRankingResult, setUpdateRankingResult] =
+  const [updateRankingsResult, setUpdateRankingsResult] =
     useState<UpdateAction | null>(null);
   const [updateAllRankingsResult, setUpdateAllRankingsResult] =
     useState<UpdateAction | null>(null);
@@ -24,19 +20,16 @@ export default function UpdateButtons() {
   const [isDisabled, setIsDisabled] = useState(false);
 
   function clearResults() {
-    setUpdateRankingResult(null);
+    setUpdateRankingsResult(null);
     setUpdateAllRankingsResult(null);
     setUpdateTCHResult(null);
   }
 
-  async function handleUpdateRankingClick(
-    organisation: UpdateRankingsOrganisation,
-    type: UpdateRankingsType
-  ) {
+  async function handleUpdateRankingsClick(type: UpdateRankingsType) {
     clearResults();
     setIsDisabled(true);
-    const result = await updateRankings(organisation, type);
-    setUpdateRankingResult(result);
+    const result = await updateRankings(type);
+    setUpdateRankingsResult(result);
     setIsDisabled(false);
   }
 
@@ -62,38 +55,45 @@ export default function UpdateButtons() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Button
           className="cursor-pointer"
-          onClick={async () => await handleUpdateRankingClick('PDC', 'men')}
+          onClick={async () => await handleUpdateRankingsClick('menPDC')}
           disabled={isDisabled}
         >
-          Update PDC Ranking - Men
+          Update PDC Rankings - Men
         </Button>
         <Button
           className="cursor-pointer"
-          onClick={async () => await handleUpdateRankingClick('PDC', 'women')}
+          onClick={async () => await handleUpdateRankingsClick('womenPDC')}
           disabled={isDisabled}
         >
-          Update PDC Ranking - Women
+          Update PDC Rankings - Women
         </Button>
         <Button
           className="cursor-pointer"
-          onClick={async () => await handleUpdateRankingClick('WDF', 'men')}
+          onClick={async () => await handleUpdateRankingsClick('menWDF')}
           disabled={isDisabled}
         >
-          Update WDF Ranking - Men
+          Update WDF Rankings - Men
         </Button>
         <Button
           className="cursor-pointer"
-          onClick={async () => await handleUpdateRankingClick('WDF', 'women')}
+          onClick={async () => await handleUpdateRankingsClick('womenWDF')}
           disabled={isDisabled}
         >
-          Update WDF Ranking - Women
+          Update WDF Rankings - Women
+        </Button>
+        <Button
+          className="cursor-pointer col-span-1 sm:col-span-2 "
+          onClick={async () => await handleUpdateRankingsClick('elo')}
+          disabled={isDisabled}
+        >
+          Update Elo Rankings
         </Button>
       </div>
-      {updateRankingResult?.type === 'error' && (
-        <ErrorMessage errorMessage={updateRankingResult.message} />
+      {updateRankingsResult?.type === 'error' && (
+        <ErrorMessage errorMessage={updateRankingsResult.message} />
       )}
-      {updateRankingResult?.type === 'success' && (
-        <SuccessMessage successMessage={updateRankingResult.message} />
+      {updateRankingsResult?.type === 'success' && (
+        <SuccessMessage successMessage={updateRankingsResult.message} />
       )}
       <h1 className="text-xl font-medium">Update All Rankings</h1>
       <div className="flex flex-col gap-4">

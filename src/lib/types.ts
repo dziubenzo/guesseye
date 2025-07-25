@@ -398,8 +398,12 @@ export type UpdatedRanking = {
   ranking: number;
 };
 
-export type UpdateRankingsOrganisation = 'PDC' | 'WDF';
-export type UpdateRankingsType = 'men' | 'women';
+export type UpdateRankingsType =
+  | 'menPDC'
+  | 'womenPDC'
+  | 'menWDF'
+  | 'womenWDF'
+  | 'elo';
 
 export type TourCardHolder = Omit<UpdatedRanking, 'ranking'>;
 

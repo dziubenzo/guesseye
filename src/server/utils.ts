@@ -4,11 +4,15 @@ import { auth } from '@/lib/auth';
 import type {
   ErrorObject,
   TourCardHolder,
-  UpdateRankingsOrganisation,
   UpdateRankingsType,
   UpdatedRanking,
 } from '@/lib/types';
-import { handleDifferentSpellings, normaliseString } from '@/lib/utils';
+import {
+  getPlayerCondition,
+  getRankingType,
+  handleDifferentSpellings,
+  normaliseString,
+} from '@/lib/utils';
 import { db } from '@/server/db';
 import { lower, player as playerSchema, user } from '@/server/db/schema';
 import { and, eq, isNotNull } from 'drizzle-orm';
@@ -54,8 +58,8 @@ export async function isNameTaken(newName: string) {
   return nameTaken ? true : false;
 }
 
-// Get PDC Order of Merits
-export async function getPDCOoM(
+// Get PDC Order of Merits or Elo rankings
+export async function getPDCOrEloRankings(
   url: string,
   rankingsSelector: string,
   fullNamesSelector: string
@@ -121,7 +125,7 @@ export async function getPDCOoM(
 }
 
 // Get WDF Order of Merits
-export async function getWDFOoM(
+export async function getWDFRankings(
   url: string,
   rankingsSelector: string,
   fullNamesSelector: string,
@@ -203,30 +207,24 @@ export async function getWDFOoM(
 }
 
 export async function updateDBRankings(
-  organisation: UpdateRankingsOrganisation,
   type: UpdateRankingsType,
   updatedRankings: UpdatedRanking[]
 ) {
-  // Get male/female darts players
+  const playerCondition = getPlayerCondition(type);
+
+  // Get darts players
   const players = await db.query.player.findMany({
-    where: eq(playerSchema.gender, type === 'men' ? 'male' : 'female'),
+    where: playerCondition,
     columns: { firstName: true, lastName: true },
   });
 
-  // Set ranking value to null for male/female darts players
+  const rankingType = getRankingType(type);
+
+  // Set ranking value to null for darts players
   await db
     .update(playerSchema)
-    .set(organisation === 'PDC' ? { rankingPDC: null } : { rankingWDF: null })
-    .where(
-      and(
-        isNotNull(
-          organisation === 'PDC'
-            ? playerSchema.rankingPDC
-            : playerSchema.rankingWDF
-        ),
-        eq(playerSchema.gender, type === 'men' ? 'male' : 'female')
-      )
-    );
+    .set({ [rankingType]: null })
+    .where(and(isNotNull(playerSchema[rankingType]), playerCondition));
 
   let updateCount = 0;
   const missingPlayers: string[] = [];
@@ -250,11 +248,7 @@ export async function updateDBRankings(
 
       await db
         .update(playerSchema)
-        .set(
-          organisation === 'PDC'
-            ? { rankingPDC: updatedRanking.ranking }
-            : { rankingWDF: updatedRanking.ranking }
-        )
+        .set({ [rankingType]: updatedRanking.ranking })
         .where(
           and(
             eq(playerSchema.firstName, player.firstName),

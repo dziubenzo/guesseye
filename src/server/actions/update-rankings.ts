@@ -1,18 +1,12 @@
 'use server';
 
-import type {
-  UpdateAction,
-  UpdateRankingsOrganisation,
-  UpdateRankingsType,
-} from '@/lib/types';
+import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
+import { getUpdateMessage } from '@/lib/utils';
 import getUpdatedRankings from '@/server/scripts/get-updated-rankings';
 import { checkForAdmin, updateDBRankings } from '@/server/utils';
 import { revalidateTag } from 'next/cache';
 
-export default async function updateRankings(
-  organisation: UpdateRankingsOrganisation,
-  type: UpdateRankingsType
-) {
+export default async function updateRankings(type: UpdateRankingsType) {
   let result: UpdateAction;
 
   const isAdmin = await checkForAdmin();
@@ -25,7 +19,7 @@ export default async function updateRankings(
     return result;
   }
 
-  const updatedRankings = await getUpdatedRankings(organisation, type);
+  const updatedRankings = await getUpdatedRankings(type);
 
   if ('error' in updatedRankings) {
     result = {
@@ -36,7 +30,6 @@ export default async function updateRankings(
   }
 
   const { updateCount, playersDB, missingPlayers } = await updateDBRankings(
-    organisation,
     type,
     updatedRankings
   );
@@ -45,18 +38,18 @@ export default async function updateRankings(
   revalidateTag('players');
   revalidateTag('lastDatabaseUpdate');
 
-  const gender = type === 'men' ? 'male' : 'female';
+  const updateMessage = getUpdateMessage(type);
 
-  // List PDC World Rankings players that are missing in the DB
+  // List PDC World Rankings and Elo rankings players that are missing in the DB
   const missingPlayersString =
-    organisation === 'PDC' && type === 'men' && missingPlayers.length > 0
+    (type === 'menPDC' || type === 'elo') && missingPlayers.length > 0
       ? ` Missing players: ${missingPlayers.toString()}.`
       : '';
 
   result = {
     type: 'success',
     message:
-      `${organisation} rankings for ${type} updated successfully. ${updateCount} ${gender} players out of ${playersDB} ${gender} players in the DB were updated.` +
+      `${updateMessage} updated successfully. ${updateCount} players out of ${playersDB} players in the DB were updated.` +
       missingPlayersString,
   };
 

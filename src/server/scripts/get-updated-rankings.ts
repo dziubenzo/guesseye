@@ -2,11 +2,10 @@
 
 import type {
   ErrorObject,
-  UpdateRankingsOrganisation,
   UpdateRankingsType,
   UpdatedRanking,
 } from '@/lib/types';
-import { getPDCOoM, getWDFOoM } from '@/server/utils';
+import { getPDCOrEloRankings, getWDFRankings } from '@/server/utils';
 
 // PDC rankings
 const urlMenPDC = 'https://www.dartsrankings.com/';
@@ -26,37 +25,45 @@ const urlWomenWDF = 'https://dartswdf.com/rankings/wdf-main-ranking-women';
 const rankingsSelectorWomenWDF = 'div.text-sm a.inline-flex span:first-child';
 const fullNamesSelectorWomenWDF = 'div.text-sm a.inline-flex span.truncate';
 
-export default async function getUpdatedRankings(
-  organisation: UpdateRankingsOrganisation,
-  type: UpdateRankingsType
-) {
+// Elo rankings
+const urlElo = 'https://www.dartsrec.com/power-rankings';
+const rankingsSelectorElo = 'tr td:first-child';
+const fullNamesSelectorElo = 'tr td:nth-child(2)';
+
+export default async function getUpdatedRankings(type: UpdateRankingsType) {
   let updatedRankings: UpdatedRanking[] | ErrorObject;
 
-  if (organisation === 'PDC' && type === 'men') {
-    updatedRankings = await getPDCOoM(
+  if (type === 'menPDC') {
+    updatedRankings = await getPDCOrEloRankings(
       urlMenPDC,
       rankingsSelectorMenPDC,
       fullNamesSelectorMenPDC
     );
-  } else if (organisation === 'PDC' && type === 'women') {
-    updatedRankings = await getPDCOoM(
+  } else if (type === 'womenPDC') {
+    updatedRankings = await getPDCOrEloRankings(
       urlWomenPDC,
       rankingsSelectorWomenPDC,
       fullNamesSelectorWomenPDC
     );
-  } else if (organisation === 'WDF' && type === 'men') {
-    updatedRankings = await getWDFOoM(
+  } else if (type === 'menWDF') {
+    updatedRankings = await getWDFRankings(
       urlMenWDF,
       rankingsSelectorMenWDF,
       fullNamesSelectorMenWDF,
       500
     );
-  } else {
-    updatedRankings = await getWDFOoM(
+  } else if (type === 'womenWDF') {
+    updatedRankings = await getWDFRankings(
       urlWomenWDF,
       rankingsSelectorWomenWDF,
       fullNamesSelectorWomenWDF,
       500
+    );
+  } else {
+    updatedRankings = await getPDCOrEloRankings(
+      urlElo,
+      rankingsSelectorElo,
+      fullNamesSelectorElo
     );
   }
 

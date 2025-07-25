@@ -18,26 +18,29 @@ export default async function updateAllRankings() {
     return result;
   }
 
-  const [PDCMen, PDCWomen, WDFMen, WDFWomen] = await Promise.all([
-    updateRankings('PDC', 'men'),
-    updateRankings('PDC', 'women'),
-    updateRankings('WDF', 'men'),
-    updateRankings('WDF', 'women'),
+  const [menPDC, womenPDC, menWDF, womenWDF, elo] = await Promise.all([
+    updateRankings('menPDC'),
+    updateRankings('womenPDC'),
+    updateRankings('menWDF'),
+    updateRankings('womenWDF'),
+    updateRankings('elo'),
   ]);
 
   if (
-    PDCMen.type === 'error' ||
-    PDCWomen.type === 'error' ||
-    WDFMen.type === 'error' ||
-    WDFWomen.type === 'error'
+    menPDC.type === 'error' ||
+    womenPDC.type === 'error' ||
+    menWDF.type === 'error' ||
+    womenWDF.type === 'error' ||
+    elo.type === 'error'
   ) {
     result = {
       type: 'error',
       message: `At least one of the update operations failed.
-      PDC Men: ${PDCMen.message}
-      PDC Women: ${PDCWomen.message}
-      WDF Men: ${WDFMen.message}
-      WDF Women: ${WDFWomen.message}
+      PDC Men: ${menPDC.message}
+      PDC Women: ${womenPDC.message}
+      WDF Men: ${menWDF.message}
+      WDF Women: ${womenWDF.message}
+      Elo: ${elo.message}
     `,
     };
     return result;
@@ -50,10 +53,11 @@ export default async function updateAllRankings() {
   result = {
     type: 'success',
     message: `All rankings updated successfully.
-    PDC Men: ${PDCMen.message}
-    PDC Women: ${PDCWomen.message}
-    WDF Men: ${WDFMen.message}
-    WDF Women: ${WDFWomen.message}
+    PDC Men: ${menPDC.message}
+    PDC Women: ${womenPDC.message}
+    WDF Men: ${menWDF.message}
+    WDF Women: ${womenWDF.message}
+    Elo: ${elo.message}
     `,
   };
 

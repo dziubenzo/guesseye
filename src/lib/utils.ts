@@ -21,6 +21,7 @@ import type {
   RangedMatchKeys,
   Schedule,
   SpecialRangedMatchKeys,
+  UpdateRankingsType,
   UserStats,
   UserStatsGame,
 } from '@/lib/types';
@@ -36,7 +37,7 @@ import {
   millisecondsToMinutes,
   millisecondsToSeconds,
 } from 'date-fns';
-import { getTableColumns } from 'drizzle-orm';
+import { eq, getTableColumns } from 'drizzle-orm';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -1765,6 +1766,10 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Linda Hindmarch-Ithurralde';
     case 'Linda Hindmarch':
       return 'Linda Hindmarch-Ithurralde';
+    case 'Danny Lauby II':
+      return 'Danny Lauby';
+    case 'Thomas Sykes':
+      return 'Tom Sykes'
   }
 
   return fullName;
@@ -1778,4 +1783,47 @@ export function getMidnightUTC() {
   const midnightUTC = new Date(Date.UTC(year, month, day, 0, 0, 0));
 
   return midnightUTC;
+}
+
+export function getPlayerCondition(type: UpdateRankingsType) {
+  let playerCondition;
+
+  if (type === 'menPDC' || type === 'menWDF') {
+    playerCondition = eq(player.gender, 'male');
+  } else if (type === 'womenPDC' || type === 'womenWDF') {
+    playerCondition = eq(player.gender, 'female');
+  } else {
+    playerCondition = undefined;
+  }
+
+  return playerCondition;
+}
+
+export function getRankingType(type: UpdateRankingsType) {
+  let rankingType: 'rankingPDC' | 'rankingWDF' | 'rankingElo';
+
+  if (type === 'menPDC' || type === 'womenPDC') {
+    rankingType = 'rankingPDC';
+  } else if (type === 'menWDF' || type === 'womenWDF') {
+    rankingType = 'rankingWDF';
+  } else {
+    rankingType = 'rankingElo';
+  }
+
+  return rankingType;
+}
+
+export function getUpdateMessage(type: UpdateRankingsType) {
+  switch (type) {
+    case 'menPDC':
+      return 'PDC rankings for men';
+    case 'womenPDC':
+      return 'PDC rankings for women';
+    case 'menWDF':
+      return 'WDF rankings for men';
+    case 'womenWDF':
+      return 'WDF rankings for women';
+    case 'elo':
+      return 'Elo rankings';
+  }
 }
