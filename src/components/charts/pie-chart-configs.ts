@@ -26,21 +26,6 @@ export const LATERALITY_CHART_CONFIG = {
   },
 } satisfies ChartConfig;
 
-export const ORGANISATION_CHART_CONFIG = {
-  count: {
-    label: 'Organisation',
-  },
-  PDC: {
-    label: 'PDC',
-  },
-  WDF: {
-    label: 'WDF',
-  },
-  BDO: {
-    label: 'BDO',
-  },
-} satisfies ChartConfig;
-
 export const DIFFICULTY_CHART_CONFIG = {
   count: {
     label: 'Difficulty',
@@ -64,12 +49,6 @@ export const DIFFICULTY_CHART_CONFIG = {
 export const GENDER_COLOURS = ['var(--chart-male)', 'var(--chart-female)'];
 
 export const LATERALITY_COLOURS = ['var(--chart-2)', 'var(--chart-3)'];
-
-export const ORGANISATION_COLOURS = [
-  'var(--chart-PDC)',
-  'var(--chart-WDF)',
-  'var(--chart-BDO)',
-];
 
 export const DIFFICULTY_COLOURS = [
   'var(--chart-easy)',

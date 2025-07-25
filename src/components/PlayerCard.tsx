@@ -6,6 +6,7 @@ import {
 } from '@/components/PlayerCardField';
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ExternalLink from '@/components/ExternalLink';
 import { Separator } from '@/components/ui/separator';
 import type {
   ComparisonResults,
@@ -16,7 +17,6 @@ import type {
 import { capitalise, getAge, getDifficultyColour } from '@/lib/utils';
 import { format } from 'date-fns';
 import {
-  Building,
   Cake,
   Calendar1,
   Gauge,
@@ -27,6 +27,7 @@ import {
   ScrollText,
   Star,
   Target,
+  TrendingUp,
   Trophy,
   VenusAndMars,
   Weight,
@@ -207,36 +208,26 @@ export default function PlayerCard(props: PlayerCardProps) {
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
-                  <Building size={18} />
-                  Organisation
+                  <TrendingUp size={18} />
+                  Elo Ranking
                   <Tooltip>
-                    A darts player can belong to one of the following three
-                    organisations:
-                    <ul>
-                      <br />
-                      <li className="list-disc list-inside">
-                        <span className="font-medium">PDC</span> (reserved only
-                        for Tour Card Holders for database maintenance reasons);
-                      </li>
-                      <li className="list-disc list-inside">
-                        <span className="font-medium">WDF</span> (pretty much
-                        all others - Challenge/Development Tour participants,
-                        Women&apos;s Series participants, players listed in
-                        WDF/WSD rankings, etc.); or
-                      </li>
-                      <li className="list-disc list-inside">
-                        <span className="font-medium">BDO</span> (reserved for
-                        players who{' '}
-                        <span className="font-medium">exclusively</span> played
-                        in BDO events before its dissolution or before the WDC,
-                        later renamed to PDC, was formed. Leighton Rees, for
-                        example, is in this category.).
-                      </li>
-                    </ul>
+                    Put in simple terms, the Elo ranking of a darts player
+                    developed by{' '}
+                    <ExternalLink href="https://www.dartsrec.com/power-rankings">
+                      DartsRec
+                    </ExternalLink>{' '}
+                    reflects their current skill level. It may differ
+                    considerably from the PDC or WDF ranking.
                   </Tooltip>
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
-                  {player.organisation === undefined ? '' : player.organisation}
+                <FieldValue
+                  type={'guess'}
+                  comparisonResult={player.rankingElo?.type}
+                  fieldName="Elo ranking"
+                >
+                  {formatPlayerToFindField<Player['rankingElo']>(
+                    player.rankingElo
+                  )}
                 </FieldValue>
               </Field>
               <Field>
@@ -624,15 +615,15 @@ export default function PlayerCard(props: PlayerCardProps) {
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-6 xl:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
-                  <Building size={18} />
-                  Organisation
+                  <TrendingUp size={18} />
+                  Elo Ranking
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Organisation'}
-                  comparisonResult={comparisonResults.organisation}
+                  fieldName={'Elo ranking'}
+                  comparisonResult={comparisonResults.rankingElo}
                 >
-                  {player.organisation}
+                  {player.rankingElo ? player.rankingElo : 'N/A'}
                 </FieldValue>
               </Field>
               <Field>

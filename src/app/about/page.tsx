@@ -2,7 +2,7 @@ import Bold from '@/components/Bold';
 import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
 import { Card, CardContent } from '@/components/ui/card';
-import ExternalLink from '@/components/ui/ExternalLink';
+import ExternalLink from '@/components/ExternalLink';
 import { auth } from '@/lib/auth';
 import { getMidnightUTC } from '@/lib/utils';
 import { format } from 'date-fns';

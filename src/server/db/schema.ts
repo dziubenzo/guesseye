@@ -184,9 +184,6 @@ export const lateralityEnum = pgEnum('laterality', [
 ]);
 export const lateralityEnumValues = lateralityEnum.enumValues;
 
-export const organisationEnum = pgEnum('organisation', ['PDC', 'WDF', 'BDO']);
-export const organisationEnumValues = organisationEnum.enumValues;
-
 export const bestResultPDCEnum = pgEnum('best_pdc_result', [
   'Last 96',
   'Last 72',
@@ -280,7 +277,6 @@ export const player = pgTable(
     dartsBrand: dartsBrandEnum('darts_brand'),
     dartsWeight: dartsWeightEnum('darts_weight'),
     laterality: lateralityEnum('laterality').notNull(),
-    organisation: organisationEnum('organisation').notNull(),
     tourCard: boolean('tour_card').notNull(),
     rankingElo: integer('ranking_elo'),
     rankingPDC: integer('ranking_pdc'),

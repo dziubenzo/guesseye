@@ -1,5 +1,5 @@
 import Bold from '@/components/Bold';
-import ExternalLink from '@/components/ui/ExternalLink';
+import ExternalLink from '@/components/ExternalLink';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Metadata } from 'next';
 

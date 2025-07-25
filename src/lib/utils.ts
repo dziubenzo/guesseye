@@ -141,9 +141,6 @@ export function fillAllMatches(
       case 'laterality':
         currentMatches[key] = playerToFind[key];
         break;
-      case 'organisation':
-        currentMatches[key] = playerToFind[key];
-        break;
       // Ranged match cases
       case 'nineDartersPDC':
         currentMatches[key] = {
@@ -152,10 +149,12 @@ export function fillAllMatches(
         };
         break;
       case 'playingSince':
+      case 'rankingElo':
       case 'rankingPDC':
       case 'rankingWDF':
       case 'yearOfBestResultPDC':
       case 'yearOfBestResultWDF':
+      case 'yearOfBestResultUKOpen':
         currentMatches[key] = {
           type: 'match',
           value: playerToFind[key],
@@ -175,6 +174,12 @@ export function fillAllMatches(
         };
         break;
       case 'bestResultWDF':
+        currentMatches[key] = {
+          type: 'match',
+          value: playerToFind[key],
+        };
+        break;
+      case 'bestResultUKOpen':
         currentMatches[key] = {
           type: 'match',
           value: playerToFind[key],
@@ -255,9 +260,6 @@ export function comparePlayers(
         case 'laterality':
           currentMatches[key] = playerToFind[key];
           break;
-        case 'organisation':
-          currentMatches[key] = playerToFind[key];
-          break;
       }
     }
   }
@@ -276,6 +278,7 @@ export function comparePlayers(
           };
           break;
         case 'playingSince':
+        case 'rankingElo':
         case 'rankingPDC':
         case 'rankingWDF':
         case 'yearOfBestResultPDC':
@@ -532,7 +535,6 @@ export function comparePlayers(
       case 'country':
       case 'dartsBrand':
       case 'laterality':
-      case 'organisation':
       case 'tourCard':
       case 'playedInWCOD':
       case 'status':
@@ -540,6 +542,7 @@ export function comparePlayers(
         break;
       // Ranged match cases
       case 'playingSince':
+      case 'rankingElo':
       case 'rankingPDC':
       case 'rankingWDF':
       case 'nineDartersPDC':
@@ -1496,9 +1499,6 @@ export function countPlayersBy(
     case 'playingSince':
       field = player.playingSince ? player.playingSince : null;
       break;
-    case 'organisation':
-      field = player.organisation;
-      break;
     case 'laterality':
       field = player.laterality;
       break;
@@ -1632,25 +1632,6 @@ export function sortPlayerStats(stats: DatabaseStats) {
         });
         break;
       }
-      case 'organisation': {
-        // Sort organisation from PDC through WDF to BDO
-        stats[key].sort((a, b) => {
-          const dayMap = new Map<string, number>();
-          dayMap.set('PDC', 1);
-          dayMap.set('WDF', 2);
-          dayMap.set('BDO', 3);
-
-          const aValue = dayMap.get(a.value);
-          const bValue = dayMap.get(b.value);
-
-          if (!aValue || !bValue) {
-            return b.count - a.count;
-          }
-
-          return aValue - bValue;
-        });
-        break;
-      }
       case 'difficulty': {
         // Sort difficulty from easy to very hard
         stats[key].sort((a, b) => {
@@ -1769,7 +1750,7 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Danny Lauby II':
       return 'Danny Lauby';
     case 'Thomas Sykes':
-      return 'Tom Sykes'
+      return 'Tom Sykes';
   }
 
   return fullName;

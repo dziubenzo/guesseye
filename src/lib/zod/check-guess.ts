@@ -6,8 +6,7 @@ import {
   dartsWeightEnumValues,
   genderEnumValues,
   lateralityEnumValues,
-  organisationEnumValues,
-  playerStatusEnumValues,
+  playerStatusEnumValues
 } from '@/server/db/schema';
 import { z } from 'zod';
 
@@ -52,8 +51,17 @@ export const guessSchema = z.object({
       })
       .optional(),
     laterality: z.enum(lateralityEnumValues).optional(),
-    organisation: z.enum(organisationEnumValues).optional(),
     tourCard: z.boolean().optional(),
+    rankingElo: z
+      .object({
+        type: z.union([
+          z.literal('higher'),
+          z.literal('lower'),
+          z.literal('match'),
+        ]),
+        value: z.union([z.number(), z.null()]),
+      })
+      .optional(),
     rankingPDC: z
       .object({
         type: z.union([

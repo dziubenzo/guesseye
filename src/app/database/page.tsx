@@ -20,8 +20,6 @@ import {
   GENDER_COLOURS,
   LATERALITY_CHART_CONFIG,
   LATERALITY_COLOURS,
-  ORGANISATION_CHART_CONFIG,
-  ORGANISATION_COLOURS,
 } from '@/components/charts/pie-chart-configs';
 import PlayingSinceChart from '@/components/charts/PlayingSinceChart';
 import {
@@ -32,8 +30,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getDatabaseStats } from '@/server/db/get-database-stats';
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = { title: 'Database Stats' };
 
@@ -52,7 +50,6 @@ export default async function DatabaseStats() {
     birthDay,
     country,
     playingSince,
-    organisation,
     laterality,
     dartsBrand,
     dartsWeight,
@@ -99,16 +96,6 @@ export default async function DatabaseStats() {
                   data={laterality}
                   config={LATERALITY_CHART_CONFIG}
                   colours={LATERALITY_COLOURS}
-                />
-              </div>
-              <div className="flex flex-col justify-center items-center gap-4">
-                <h2 className="font-medium text-center">
-                  Darts Players By Organisation
-                </h2>
-                <GeneralPieChart
-                  data={organisation}
-                  config={ORGANISATION_CHART_CONFIG}
-                  colours={ORGANISATION_COLOURS}
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">

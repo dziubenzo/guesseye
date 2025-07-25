@@ -69,8 +69,8 @@ export type ComparisonResults = {
   dartsBrand: Match;
   dartsWeight: RangedMatch;
   laterality: Match;
-  organisation: Match;
   tourCard: Match;
+  rankingElo: RangedMatch;
   rankingPDC: RangedMatch;
   rankingWDF: RangedMatch;
   nineDartersPDC: RangedMatch;
@@ -94,7 +94,6 @@ export type MatchKeys = keyof Pick<
   | 'country'
   | 'dartsBrand'
   | 'laterality'
-  | 'organisation'
   | 'tourCard'
   | 'playedInWCOD'
   | 'status'
@@ -104,6 +103,7 @@ export type RangedMatchKeys = keyof Pick<
   Player,
   | 'nineDartersPDC'
   | 'playingSince'
+  | 'rankingElo'
   | 'rankingPDC'
   | 'rankingWDF'
   | 'yearOfBestResultPDC'
@@ -365,7 +365,6 @@ export type DatabaseStatsType =
   | 'birthDay'
   | 'country'
   | 'playingSince'
-  | 'organisation'
   | 'laterality'
   | 'dartsBrand'
   | 'dartsWeight'

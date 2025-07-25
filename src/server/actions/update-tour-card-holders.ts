@@ -39,16 +39,16 @@ export default async function updateTourCardHolders() {
     },
   });
 
-  // Set tour card value to false and organisation to WDF for all darts players who currently have the tour card value of true
+  // Set tour card value to false for all darts players who currently have the tour card value of true
   await db
     .update(playerSchema)
-    .set({ tourCard: false, organisation: 'WDF' })
+    .set({ tourCard: false })
     .where(eq(playerSchema.tourCard, true));
 
   let updateCount = 0;
   const missingPlayers: string[] = [];
 
-  // Update the tour card value to true and organisation to PDC if player's first name and last name match the scraped data
+  // Update the tour card value to true player's first name and last name match the scraped data
   for (const tourCardHolder of tourCardHolders) {
     let playerFound = false;
 
@@ -67,7 +67,7 @@ export default async function updateTourCardHolders() {
 
       await db
         .update(playerSchema)
-        .set({ tourCard: true, organisation: 'PDC' })
+        .set({ tourCard: true })
         .where(
           and(
             eq(playerSchema.firstName, player.firstName),
