@@ -124,6 +124,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Puma',
   'Elkadart',
   'Quantum Darts',
+  'Elven Darts',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -281,6 +282,7 @@ export const player = pgTable(
     laterality: lateralityEnum('laterality').notNull(),
     organisation: organisationEnum('organisation').notNull(),
     tourCard: boolean('tour_card').notNull(),
+    rankingElo: integer('ranking_elo'),
     rankingPDC: integer('ranking_pdc'),
     rankingWDF: integer('ranking_wdf'),
     nineDartersPDC: integer('nine_darters_pdc').default(0).notNull(),
@@ -300,6 +302,7 @@ export const player = pgTable(
     yearOfBestResultPDC,
     yearOfBestResultWDF,
     yearOfBestResultUKOpen,
+    rankingElo,
     rankingPDC,
     rankingWDF,
   }) => [
@@ -321,11 +324,15 @@ export const player = pgTable(
       sql`${yearOfBestResultUKOpen} >= 1900 AND ${yearOfBestResultUKOpen} < 2100`
     ),
     check(
-      'is_proper_ranking_PDC',
-      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 300`
+      'is_proper_ranking_elo',
+      sql`${rankingElo} >= 1 AND ${rankingElo} <= 750`
     ),
     check(
-      'is_proper_ranking_WDF',
+      'is_proper_ranking_pdc',
+      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 500`
+    ),
+    check(
+      'is_proper_ranking_wdf',
       sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`
     ),
   ]
