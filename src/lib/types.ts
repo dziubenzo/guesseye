@@ -282,9 +282,13 @@ export type UserStats = {
   };
   players: {
     firstOfficialGuess?: string;
+    firstOfficialGuessTime?: Date;
     latestOfficialGuess?: string;
+    latestOfficialGuessTime?: Date;
     firstOfficialWin?: string;
+    firstOfficialWinTime?: Date;
     latestOfficialWin?: string;
+    latestOfficialWinTime?: Date;
   };
   guessFrequency: { fullName: string; count: number }[];
   gamesByDay: { date: string; count: number; won: number; givenUp: number }[];
@@ -343,8 +347,10 @@ export type GlobalStats = {
   players: {
     latestOfficialGuess?: string;
     latestOfficialGuessName?: string;
+    latestOfficialGuessTime?: Date;
     latestRandomGuess?: string;
     latestRandomGuessName?: string;
+    latestRandomGuessTime?: Date;
   };
   guessFrequency: UserStats['guessFrequency'];
   gamesByDay: UserStats['gamesByDay'];

@@ -906,16 +906,27 @@ export function findFirstAndLatestOfficialWin(
   game: UserStatsGame,
   stats: UserStats
 ) {
-  if (game.status === 'won' && game.mode === 'official') {
+  if (game.mode === 'official' && game.status === 'won') {
     const winningGuess = game.guesses[game.guesses.length - 1].player;
+    const winningTime = game.guesses[game.guesses.length - 1].time;
     const firstName = winningGuess.firstName;
     const lastName = winningGuess.lastName;
 
-    if (!stats.players.firstOfficialWin) {
+    if (
+      stats.players.firstOfficialWin === undefined ||
+      (stats.players.firstOfficialWinTime &&
+        winningTime.getTime() < stats.players.firstOfficialWinTime.getTime())
+    ) {
       stats.players.firstOfficialWin = firstName + ' ' + lastName;
+      stats.players.firstOfficialWinTime = winningTime;
+    } else if (
+      stats.players.latestOfficialWin === undefined ||
+      (stats.players.latestOfficialWinTime &&
+        winningTime.getTime() > stats.players.latestOfficialWinTime.getTime())
+    ) {
+      stats.players.latestOfficialWin = firstName + ' ' + lastName;
+      stats.players.latestOfficialWinTime = winningTime;
     }
-
-    stats.players.latestOfficialWin = firstName + ' ' + lastName;
   }
 
   return;
@@ -974,12 +985,22 @@ export function findFirstAndLatestOfficialGuess(
   const firstName = guess.player.firstName;
   const lastName = guess.player.lastName;
 
-  if (!stats.players.firstOfficialGuess && game.mode === 'official') {
-    stats.players.firstOfficialGuess = firstName + ' ' + lastName;
-  }
-
   if (game.mode === 'official') {
-    stats.players.latestOfficialGuess = firstName + ' ' + lastName;
+    if (
+      stats.players.firstOfficialGuess === undefined ||
+      (stats.players.firstOfficialGuessTime &&
+        guess.time.getTime() < stats.players.firstOfficialGuessTime.getTime())
+    ) {
+      stats.players.firstOfficialGuess = firstName + ' ' + lastName;
+      stats.players.firstOfficialGuessTime = guess.time;
+    } else if (
+      stats.players.latestOfficialGuess === undefined ||
+      (stats.players.latestOfficialGuessTime &&
+        guess.time.getTime() > stats.players.latestOfficialGuessTime.getTime())
+    ) {
+      stats.players.latestOfficialGuess = firstName + ' ' + lastName;
+      stats.players.latestOfficialGuessTime = guess.time;
+    }
   }
 
   return;
@@ -1217,14 +1238,33 @@ export function findLatestGuesses(
   const lastName = guess.player.lastName;
 
   if (game.mode === 'official') {
-    stats.players.latestOfficialGuess = firstName + ' ' + lastName;
-    stats.players.latestOfficialGuessName = game.user ? game.user.name : 'User';
+    // Guesses are by games, so they need to be time-compared
+    if (
+      stats.players.latestOfficialGuess === undefined ||
+      (stats.players.latestOfficialGuessTime &&
+        guess.time.getTime() > stats.players.latestOfficialGuessTime.getTime())
+    ) {
+      stats.players.latestOfficialGuess = firstName + ' ' + lastName;
+      stats.players.latestOfficialGuessName = game.user
+        ? game.user.name
+        : 'User';
+      stats.players.latestOfficialGuessTime = guess.time;
+    }
   } else if (game.mode === 'random') {
-    stats.players.latestRandomGuess = firstName + ' ' + lastName;
-    if (game.userId) {
-      stats.players.latestRandomGuessName = game.user ? game.user.name : 'User';
-    } else {
-      stats.players.latestRandomGuessName = 'Guest';
+    if (
+      stats.players.latestRandomGuess === undefined ||
+      (stats.players.latestRandomGuessTime &&
+        guess.time.getTime() > stats.players.latestRandomGuessTime.getTime())
+    ) {
+      stats.players.latestRandomGuess = firstName + ' ' + lastName;
+      if (game.userId) {
+        stats.players.latestRandomGuessName = game.user
+          ? game.user.name
+          : 'User';
+      } else {
+        stats.players.latestRandomGuessName = 'Guest';
+      }
+      stats.players.latestRandomGuessTime = guess.time;
     }
   }
 

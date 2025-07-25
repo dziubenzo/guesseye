@@ -96,8 +96,10 @@ export const getGlobalStats = async () => {
     players: {
       latestOfficialGuess: undefined,
       latestOfficialGuessName: undefined,
+      latestOfficialGuessTime: undefined,
       latestRandomGuess: undefined,
       latestRandomGuessName: undefined,
+      latestRandomGuessTime: undefined,
     },
     guessFrequency: [],
     gamesByDay: [],

@@ -97,9 +97,13 @@ export const getUserStats = async () => {
     },
     players: {
       firstOfficialGuess: undefined,
+      firstOfficialGuessTime: undefined,
       latestOfficialGuess: undefined,
+      latestOfficialGuessTime: undefined,
       firstOfficialWin: undefined,
+      firstOfficialWinTime: undefined,
       latestOfficialWin: undefined,
+      latestOfficialWinTime: undefined,
     },
     guessFrequency: [],
     gamesByDay: [],
