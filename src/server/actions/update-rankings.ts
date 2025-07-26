@@ -40,16 +40,15 @@ export default async function updateRankings(type: UpdateRankingsType) {
 
   const updateMessage = getUpdateMessage(type);
 
-  // List PDC World Rankings and Elo rankings players that are missing in the DB
   const missingPlayersString =
-    (type === 'menPDC' || type === 'elo') && missingPlayers.length > 0
-      ? ` Missing players: ${missingPlayers.toString()}.`
-      : '';
+    missingPlayers.length > 0
+      ? `Missing players: ${missingPlayers.join(', ')}.`
+      : 'No missing players.';
 
   result = {
     type: 'success',
     message:
-      `${updateMessage} updated successfully. ${updateCount} players out of ${playersDB} players in the DB were updated.` +
+      `${updateMessage} updated successfully. ${updateCount} players out of ${playersDB} players in the DB were updated. ` +
       missingPlayersString,
   };
 

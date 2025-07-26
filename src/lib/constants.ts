@@ -1,7 +1,10 @@
 import type { ComparisonResults } from '@/lib/types';
 
-// Corresponds to the number of properties in the ComparisonResults and the PlayerToFindMatches type
+// Corresponds to the number of properties in the ComparisonResults and the PlayerToFindMatches types
 export const ALL_MATCHES = 22;
+
+// Lowest ranking of a darts player to be added to reported missing players if they are not in the DB
+export const MISSING_PLAYERS_MAX_RANKING = 32;
 
 export const matchingComparisonResults: ComparisonResults = {
   firstName: 'match',

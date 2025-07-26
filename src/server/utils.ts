@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
+import { MISSING_PLAYERS_MAX_RANKING } from '@/lib/constants';
 import type {
   ErrorObject,
   TourCardHolder,
@@ -261,10 +262,20 @@ export async function updateDBRankings(
     }
 
     // Identify players who are not in the DB
+    // Return only players ranked up to and including MISSING_PLAYERS_MAX_RANKING for both WDF rankings and the PDC Women ranking
+    // Return all players for PDC Men and Elo rankings
     if (!playerFound) {
-      missingPlayers.push(
-        updatedRanking.firstName + ' ' + updatedRanking.lastName
-      );
+      const fullName = updatedRanking.firstName + ' ' + updatedRanking.lastName;
+      const ranking = updatedRanking.ranking;
+
+      if (
+        ((type === 'womenPDC' || type === 'menWDF' || type === 'womenWDF') &&
+          ranking <= MISSING_PLAYERS_MAX_RANKING) ||
+        type === 'menPDC' ||
+        type === 'elo'
+      ) {
+        missingPlayers.push(fullName + ` (${ranking})`);
+      }
     }
   }
 
