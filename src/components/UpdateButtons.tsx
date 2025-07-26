@@ -4,6 +4,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SuccessMessage from '@/components/SuccessMessage';
 import { Button } from '@/components/ui/button';
 import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
+import revalidateCache from '@/server/actions/revalidate-cache';
 import updateAllRankings from '@/server/actions/update-all-rankings';
 import updateRankings from '@/server/actions/update-rankings';
 import updateTourCardHolders from '@/server/actions/update-tour-card-holders';
@@ -17,16 +18,20 @@ export default function UpdateButtons() {
   const [updateTCHResult, setUpdateTCHResult] = useState<UpdateAction | null>(
     null
   );
+  const [revalidateCacheResult, setRevalidateCacheResult] =
+    useState<UpdateAction | null>(null);
+
   const [isDisabled, setIsDisabled] = useState(false);
 
-  function clearResults() {
+  function clearMessages() {
     setUpdateRankingsResult(null);
     setUpdateAllRankingsResult(null);
     setUpdateTCHResult(null);
+    setRevalidateCacheResult(null);
   }
 
   async function handleUpdateRankingsClick(type: UpdateRankingsType) {
-    clearResults();
+    clearMessages();
     setIsDisabled(true);
     const result = await updateRankings(type);
     setUpdateRankingsResult(result);
@@ -34,7 +39,7 @@ export default function UpdateButtons() {
   }
 
   async function handleUpdateAllRankingsClick() {
-    clearResults();
+    clearMessages();
     setIsDisabled(true);
     const result = await updateAllRankings();
     setUpdateAllRankingsResult(result);
@@ -42,10 +47,18 @@ export default function UpdateButtons() {
   }
 
   async function handleUpdateTCHClick() {
-    clearResults();
+    clearMessages();
     setIsDisabled(true);
     const result = await updateTourCardHolders();
     setUpdateTCHResult(result);
+    setIsDisabled(false);
+  }
+
+  async function handleRevalidateCacheClick() {
+    clearMessages();
+    setIsDisabled(true);
+    const result = await revalidateCache();
+    setRevalidateCacheResult(result);
     setIsDisabled(false);
   }
 
@@ -126,6 +139,19 @@ export default function UpdateButtons() {
         )}
         {updateTCHResult?.type === 'success' && (
           <SuccessMessage successMessage={updateTCHResult.message} />
+        )}
+      </div>
+      <h1 className="text-xl font-medium">Revalidate Cache</h1>
+      <div className="flex flex-col gap-4">
+        <Button
+          className="cursor-pointer"
+          onClick={handleRevalidateCacheClick}
+          disabled={isDisabled}
+        >
+          Revalidate Cache
+        </Button>
+        {revalidateCacheResult?.type === 'success' && (
+          <SuccessMessage successMessage={revalidateCacheResult.message} />
         )}
       </div>
     </div>
