@@ -12,7 +12,7 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 const chartConfig = {
   count: {
     label: 'Player Count',
-    color: 'var(--chart-WDF)',
+    color: 'var(--chart-UKOpen)',
   },
 } satisfies ChartConfig;
 

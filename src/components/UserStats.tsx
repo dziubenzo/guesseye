@@ -24,9 +24,13 @@ export default async function UserStats({ stats }: UserStatsProps) {
 
   const {
     firstOfficialGuess,
+    firstOfficialGuessTime,
     firstOfficialWin,
+    firstOfficialWinTime,
     latestOfficialGuess,
+    latestOfficialGuessTime,
     latestOfficialWin,
+    latestOfficialWinTime,
   } = stats.players;
 
   const {
@@ -107,44 +111,45 @@ export default async function UserStats({ stats }: UserStatsProps) {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
           <Stat title="Official Games Played" value={officialGamesPlayed}>
-            The number of games won/given up/in progress in the official mode.
+            The number of games you won/gave up on or have in progress in the
+            official mode.
           </Stat>
           <Stat
             title="Official Games Played %"
             value={`${officialGamesPlayedPercentage + '%'}`}
           >
-            The percentage of games won/given up/in progress in the official
-            mode compared to all official mode games.
+            The percentage of games you won/gave up on or have in progress in
+            the official mode compared to all official mode games.
           </Stat>
           <Stat title="Official Games Completed" value={officialGamesCompleted}>
-            The number of games won and given up in the official mode.
+            The number of games you won and gave up on in the official mode.
           </Stat>
           <Stat
             title="Official Games Completed %"
             value={`${officialGamesCompletedPercentage + '%'}`}
           >
-            The percentage of games won and given up in the official mode
+            The percentage of games you won and gave up on in the official mode
             compared to all official mode games.
           </Stat>
           <Stat title="Official Mode Wins" value={officialModeWins}>
-            The number of games won in the official mode.
+            The number of games you won in the official mode.
           </Stat>
           <Stat
             title="Official Mode Wins %"
             value={`${officialModeWinsPercentage + '%'}`}
           >
-            The percentage of games won in the official mode compared to all
+            The percentage of games you won in the official mode compared to all
             official mode games.
           </Stat>
           <Stat title="Official Mode Give Ups" value={officialModeGiveUps}>
-            The number of games given up in the official mode.
+            The number of games you gave up on in the official mode.
           </Stat>
           <Stat
             title="Official Mode Give Ups %"
             value={`${officialModeGiveUpsPercentage + '%'}`}
           >
-            The percentage of games given up in the official mode compared to
-            all official mode games.
+            The percentage of games you gave up on in the official mode compared
+            to all official mode games.
           </Stat>
         </div>
         <Separator />
@@ -157,8 +162,8 @@ export default async function UserStats({ stats }: UserStatsProps) {
             title="Random Games Played"
             value={randomGamesPlayed}
           >
-            The number of games you won/gave up on/in progress in the random
-            mode.
+            The number of games you won/gave up on or have in progress in the
+            random mode.
           </Stat>
           <Stat title="Random Mode Wins" value={randomModeWins}>
             The number of games you won in the random mode.
@@ -211,16 +216,32 @@ export default async function UserStats({ stats }: UserStatsProps) {
           First and Latest
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
-          <Stat title="First Official Guess" value={firstOfficialGuess}>
+          <Stat
+            title="First Official Guess"
+            value={firstOfficialGuess}
+            time={firstOfficialGuessTime}
+          >
             Your first guess in a game in the official mode.
           </Stat>
-          <Stat title="Latest Official Guess" value={latestOfficialGuess}>
+          <Stat
+            title="Latest Official Guess"
+            value={latestOfficialGuess}
+            time={latestOfficialGuessTime}
+          >
             Your latest guess in a game in the official mode.
           </Stat>
-          <Stat title="First Winning Official Guess" value={firstOfficialWin}>
+          <Stat
+            title="First Winning Official Guess"
+            value={firstOfficialWin}
+            time={firstOfficialWinTime}
+          >
             Your first guess that won you a game in the official mode.
           </Stat>
-          <Stat title="Latest Winning Official Guess" value={latestOfficialWin}>
+          <Stat
+            title="Latest Winning Official Guess"
+            value={latestOfficialWin}
+            time={latestOfficialWinTime}
+          >
             Your latest guess that won you a game in the official mode.
           </Stat>
         </div>

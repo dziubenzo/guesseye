@@ -1,7 +1,7 @@
 import ChartHeading from '@/components/ChartHeading';
 import GamesByDayChart from '@/components/charts/GamesByDayChart';
-import GuessFrequencyChart from '@/components/charts/GuessFrequencyChart';
 import GuessesByDayChart from '@/components/charts/GuessesByDayChart';
+import GuessFrequencyChart from '@/components/charts/GuessFrequencyChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { GlobalStats } from '@/lib/types';
@@ -32,8 +32,10 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
   const {
     latestOfficialGuess,
     latestOfficialGuessName,
+    latestOfficialGuessTime,
     latestRandomGuess,
     latestRandomGuessName,
+    latestRandomGuessTime,
   } = stats.players;
 
   const {
@@ -262,6 +264,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
                 ? `${latestOfficialGuess} by ${latestOfficialGuessName}`
                 : undefined
             }
+            time={latestOfficialGuessTime}
           >
             Latest guess in a game in the official mode.
           </Stat>
@@ -272,6 +275,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
                 ? `${latestRandomGuess} by ${latestRandomGuessName}`
                 : undefined
             }
+            time={latestRandomGuessTime}
           >
             Latest guess in a game in the random mode.
           </Stat>

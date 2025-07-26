@@ -919,7 +919,9 @@ export function findFirstAndLatestOfficialWin(
     ) {
       stats.players.firstOfficialWin = firstName + ' ' + lastName;
       stats.players.firstOfficialWinTime = winningTime;
-    } else if (
+    }
+
+    if (
       stats.players.latestOfficialWin === undefined ||
       (stats.players.latestOfficialWinTime &&
         winningTime.getTime() > stats.players.latestOfficialWinTime.getTime())
@@ -993,7 +995,9 @@ export function findFirstAndLatestOfficialGuess(
     ) {
       stats.players.firstOfficialGuess = firstName + ' ' + lastName;
       stats.players.firstOfficialGuessTime = guess.time;
-    } else if (
+    }
+
+    if (
       stats.players.latestOfficialGuess === undefined ||
       (stats.players.latestOfficialGuessTime &&
         guess.time.getTime() > stats.players.latestOfficialGuessTime.getTime())
