@@ -51,7 +51,10 @@
   --color-chart-female: var(--chart-female);
   --color-chart-PDC: var(--chart-PDC);
   --color-chart-WDF: var(--chart-WDF);
-  --color-chart-UKOpen: var(--chart-BDO);
+  --color-chart-UKOpen: var(--chart-UKOpen);
+  --color-chart-active: var(--chart-active);
+  --color-chart-retired: var(--chart-retired);
+  --color-chart-deceased: var(--chart-deceased);
   --color-chart-easy: var(--chart-easy);
   --color-chart-medium: var(--chart-medium);
   --color-chart-hard: var(--chart-hard);
@@ -113,6 +116,9 @@
   --chart-PDC: oklch(0.2991 0.1098 258.58);
   --chart-WDF: oklch(0.6565 0.2315 17.97);
   --chart-UKOpen: oklch(0.6935 0.1854 46.45);
+  --chart-active: oklch(52.428% 0.26041 308.665);
+  --chart-retired: oklch(67.532% 0.13515 231.866);
+  --chart-deceased: oklch(19.787% 0.10332 265.227);
   --chart-easy: oklch(0.7941 0.1543 145.87);
   --chart-medium: oklch(76.03% 0.1523 102.628);
   --chart-hard: oklch(0.6328 0.2306 28.07);
@@ -171,6 +177,9 @@
   --chart-PDC: oklch(0.7016 0.1098 258.58);
   --chart-WDF: oklch(0.6565 0.2315 17.97);
   --chart-UKOpen: oklch(0.6935 0.1854 46.45);
+  --chart-active: oklch(59.168% 0.2443 311.527);
+  --chart-retired: oklch(67.532% 0.13515 231.866);
+  --chart-deceased: oklch(80.152% 0.00009 271.152);
   --chart-easy: oklch(0.7941 0.1543 145.87);
   --chart-medium: oklch(0.828 0.189 84.429);
   --chart-hard: oklch(0.6328 0.2306 28.07);

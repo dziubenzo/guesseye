@@ -62,6 +62,7 @@ const getCachedDatabaseStats = unstable_cache(
       yearOfBestResultPDC: {},
       yearOfBestResultWDF: {},
       yearOfBestResultUKOpen: {},
+      status: {},
       difficulty: {},
     };
 
@@ -83,6 +84,7 @@ const getCachedDatabaseStats = unstable_cache(
       yearOfBestResultPDC: [],
       yearOfBestResultWDF: [],
       yearOfBestResultUKOpen: [],
+      status: [],
       difficulty: [],
     };
 

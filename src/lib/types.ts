@@ -381,6 +381,7 @@ export type DatabaseStatsType =
   | 'yearOfBestResultPDC'
   | 'yearOfBestResultWDF'
   | 'yearOfBestResultUKOpen'
+  | 'status'
   | 'difficulty';
 
 export type DatabaseStatsResult = {

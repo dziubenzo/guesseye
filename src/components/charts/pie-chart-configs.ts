@@ -26,6 +26,21 @@ export const LATERALITY_CHART_CONFIG = {
   },
 } satisfies ChartConfig;
 
+export const STATUS_CHART_CONFIG = {
+  count: {
+    label: 'Status',
+  },
+  active: {
+    label: 'Active',
+  },
+  retired: {
+    label: 'Retired',
+  },
+  deceased: {
+    label: 'Deceased',
+  },
+} satisfies ChartConfig;
+
 export const DIFFICULTY_CHART_CONFIG = {
   count: {
     label: 'Difficulty',
@@ -49,6 +64,12 @@ export const DIFFICULTY_CHART_CONFIG = {
 export const GENDER_COLOURS = ['var(--chart-male)', 'var(--chart-female)'];
 
 export const LATERALITY_COLOURS = ['var(--chart-2)', 'var(--chart-3)'];
+
+export const STATUS_COLOURS = [
+  'var(--chart-active)',
+  'var(--chart-retired)',
+  'var(--chart-deceased)',
+];
 
 export const DIFFICULTY_COLOURS = [
   'var(--chart-easy)',

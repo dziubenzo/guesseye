@@ -1577,6 +1577,9 @@ export function countPlayersBy(
         ? player.yearOfBestResultUKOpen
         : null;
       break;
+    case 'status':
+      field = player.status;
+      break;
     case 'difficulty':
       field = player.difficulty;
       break;
@@ -1643,12 +1646,12 @@ export function sortPlayerStats(stats: DatabaseStats) {
       case 'gender': {
         // Sort gender from male to female
         stats[key].sort((a, b) => {
-          const dayMap = new Map<string, number>();
-          dayMap.set('male', 1);
-          dayMap.set('female', 2);
+          const genderMap = new Map<string, number>();
+          genderMap.set('male', 1);
+          genderMap.set('female', 2);
 
-          const aValue = dayMap.get(a.value);
-          const bValue = dayMap.get(b.value);
+          const aValue = genderMap.get(a.value);
+          const bValue = genderMap.get(b.value);
 
           if (!aValue || !bValue) {
             return b.count - a.count;
@@ -1661,12 +1664,31 @@ export function sortPlayerStats(stats: DatabaseStats) {
       case 'laterality': {
         // Sort laterality from right-handed to left-handed
         stats[key].sort((a, b) => {
-          const dayMap = new Map<string, number>();
-          dayMap.set('right-handed', 1);
-          dayMap.set('left-handed', 2);
+          const lateralityMap = new Map<string, number>();
+          lateralityMap.set('right-handed', 1);
+          lateralityMap.set('left-handed', 2);
 
-          const aValue = dayMap.get(a.value);
-          const bValue = dayMap.get(b.value);
+          const aValue = lateralityMap.get(a.value);
+          const bValue = lateralityMap.get(b.value);
+
+          if (!aValue || !bValue) {
+            return b.count - a.count;
+          }
+
+          return aValue - bValue;
+        });
+        break;
+      }
+      case 'status': {
+        // Sort status from active to deceased
+        stats[key].sort((a, b) => {
+          const statusMap = new Map<string, number>();
+          statusMap.set('active', 1);
+          statusMap.set('retired', 2);
+          statusMap.set('deceased', 3);
+
+          const aValue = statusMap.get(a.value);
+          const bValue = statusMap.get(b.value);
 
           if (!aValue || !bValue) {
             return b.count - a.count;
@@ -1679,14 +1701,14 @@ export function sortPlayerStats(stats: DatabaseStats) {
       case 'difficulty': {
         // Sort difficulty from easy to very hard
         stats[key].sort((a, b) => {
-          const dayMap = new Map<string, number>();
-          dayMap.set('easy', 1);
-          dayMap.set('medium', 2);
-          dayMap.set('hard', 3);
-          dayMap.set('very hard', 4);
+          const difficultyMap = new Map<string, number>();
+          difficultyMap.set('easy', 1);
+          difficultyMap.set('medium', 2);
+          difficultyMap.set('hard', 3);
+          difficultyMap.set('very hard', 4);
 
-          const aValue = dayMap.get(a.value);
-          const bValue = dayMap.get(b.value);
+          const aValue = difficultyMap.get(a.value);
+          const bValue = difficultyMap.get(b.value);
 
           if (!aValue || !bValue) {
             return b.count - a.count;

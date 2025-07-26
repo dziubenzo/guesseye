@@ -20,6 +20,8 @@ import {
   GENDER_COLOURS,
   LATERALITY_CHART_CONFIG,
   LATERALITY_COLOURS,
+  STATUS_CHART_CONFIG,
+  STATUS_COLOURS,
 } from '@/components/charts/pie-chart-configs';
 import PlayingSinceChart from '@/components/charts/PlayingSinceChart';
 import {
@@ -60,6 +62,7 @@ export default async function DatabaseStats() {
     yearOfBestResultPDC,
     yearOfBestResultWDF,
     yearOfBestResultUKOpen,
+    status,
     difficulty,
   } = stats;
 
@@ -96,6 +99,16 @@ export default async function DatabaseStats() {
                   data={laterality}
                   config={LATERALITY_CHART_CONFIG}
                   colours={LATERALITY_COLOURS}
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-4">
+                <h2 className="font-medium text-center">
+                  Darts Players By Status
+                </h2>
+                <GeneralPieChart
+                  data={status}
+                  config={STATUS_CHART_CONFIG}
+                  colours={STATUS_COLOURS}
                 />
               </div>
               <div className="flex flex-col justify-center items-center gap-4">
