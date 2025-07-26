@@ -185,6 +185,7 @@ export const lateralityEnum = pgEnum('laterality', [
 export const lateralityEnumValues = lateralityEnum.enumValues;
 
 export const bestResultPDCEnum = pgEnum('best_pdc_result', [
+  'Last 128', // 2026 onwards
   'Last 96',
   'Last 72',
   'Last 70', // 2009
