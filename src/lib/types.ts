@@ -289,6 +289,10 @@ export type UserStats = {
     firstOfficialWinTime?: Date;
     latestOfficialWin?: string;
     latestOfficialWinTime?: Date;
+    firstRandomGuess?: string;
+    firstRandomGuessTime?: Date;
+    latestRandomGuess?: string;
+    latestRandomGuessTime?: Date;
   };
   guessFrequency: { fullName: string; count: number }[];
   gamesByDay: { date: string; count: number; won: number; givenUp: number }[];

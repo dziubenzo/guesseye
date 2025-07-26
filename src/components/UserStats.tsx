@@ -31,6 +31,10 @@ export default async function UserStats({ stats }: UserStatsProps) {
     latestOfficialGuessTime,
     latestOfficialWin,
     latestOfficialWinTime,
+    firstRandomGuess,
+    firstRandomGuessTime,
+    latestRandomGuess,
+    latestRandomGuessTime,
   } = stats.players;
 
   const {
@@ -213,7 +217,7 @@ export default async function UserStats({ stats }: UserStatsProps) {
         </div>
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
-          First and Latest
+          First and Latest Guesses
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center p-2">
           <Stat
@@ -243,6 +247,20 @@ export default async function UserStats({ stats }: UserStatsProps) {
             time={latestOfficialWinTime}
           >
             Your latest guess that won you a game in the official mode.
+          </Stat>
+          <Stat
+            title="First Random Guess"
+            value={firstRandomGuess}
+            time={firstRandomGuessTime}
+          >
+            Your first guess in a game in the random mode.
+          </Stat>
+          <Stat
+            title="Latest Random Guess"
+            value={latestRandomGuess}
+            time={latestRandomGuessTime}
+          >
+            Your latest guess in a game in the random mode.
           </Stat>
         </div>
       </div>

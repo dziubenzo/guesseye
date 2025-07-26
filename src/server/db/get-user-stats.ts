@@ -11,7 +11,7 @@ import {
   countRandomPlayers,
   findFastestWin,
   findFewestAndMostGuesses,
-  findFirstAndLatestOfficialGuess,
+  findFirstAndLatestOfficialGuess as findFirstAndLatestGuesses,
   findFirstAndLatestOfficialWin,
   findSlowestWin,
   findUserGuessesToWinAndGiveUp,
@@ -104,6 +104,10 @@ export const getUserStats = async () => {
       firstOfficialWinTime: undefined,
       latestOfficialWin: undefined,
       latestOfficialWinTime: undefined,
+      firstRandomGuess: undefined,
+      firstRandomGuessTime: undefined,
+      latestRandomGuess: undefined,
+      latestRandomGuessTime: undefined,
     },
     guessFrequency: [],
     gamesByDay: [],
@@ -143,7 +147,7 @@ export const getUserStats = async () => {
 
     if (game.guesses.length > 0) {
       game.guesses.forEach((guess) => {
-        findFirstAndLatestOfficialGuess(game, guess, stats);
+        findFirstAndLatestGuesses(game, guess, stats);
         countGuessedPlayers(guess, guessFrequency);
         countGuessesByDay(guess, guessesByDay);
       });

@@ -1005,6 +1005,24 @@ export function findFirstAndLatestOfficialGuess(
       stats.players.latestOfficialGuess = firstName + ' ' + lastName;
       stats.players.latestOfficialGuessTime = guess.time;
     }
+  } else if (game.mode === 'random') {
+    if (
+      stats.players.firstRandomGuess === undefined ||
+      (stats.players.firstRandomGuessTime &&
+        guess.time.getTime() < stats.players.firstRandomGuessTime.getTime())
+    ) {
+      stats.players.firstRandomGuess = firstName + ' ' + lastName;
+      stats.players.firstRandomGuessTime = guess.time;
+    }
+
+    if (
+      stats.players.latestRandomGuess === undefined ||
+      (stats.players.latestRandomGuessTime &&
+        guess.time.getTime() > stats.players.latestRandomGuessTime.getTime())
+    ) {
+      stats.players.latestRandomGuess = firstName + ' ' + lastName;
+      stats.players.latestRandomGuessTime = guess.time;
+    }
   }
 
   return;
