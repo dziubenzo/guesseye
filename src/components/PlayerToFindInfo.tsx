@@ -17,7 +17,7 @@ export default function PlayerToFindInfo({
     <div
       className={`flex ${nextPlayerStartDate ? 'justify-between' : 'justify-end'} p-2`}
     >
-      <div className="flex flex-col items-center p-2 dark:bg-primary-foreground rounded-md">
+      <div className="flex flex-col items-center p-2 rounded-md">
         <p>Guessed by</p>
         <p className="font-bold">
           {winnersCount} {winnersCount === 1 ? 'user' : 'users'}
@@ -38,7 +38,7 @@ function NextPlayerIn({ nextPlayerStartDate }: NextPlayerInProps) {
   const { timeLeft } = useUpdateTimeLeft(nextPlayerStartDate);
 
   return (
-    <div className="flex flex-col items-center p-2 dark:bg-primary-foreground rounded-md">
+    <div className="flex flex-col items-center p-2 rounded-md">
       <p>Next player in</p>
       <div className="relative">
         <p className="font-bold">{timeLeft}</p>

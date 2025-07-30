@@ -8,6 +8,7 @@ type StatProps = {
   className?: string;
   title: string;
   value?: number | string;
+  name?: string;
   time?: Date;
 };
 
@@ -16,6 +17,7 @@ export default function Stat({
   className,
   title,
   value,
+  name,
   time,
 }: StatProps) {
   return (
@@ -30,6 +32,7 @@ export default function Stat({
             {value}
           </p>
           <p className="text-xs">
+            {name ? `by ${name}, ` : undefined}
             {formatDistanceToNowStrict(time, { addSuffix: true })}
           </p>
         </div>

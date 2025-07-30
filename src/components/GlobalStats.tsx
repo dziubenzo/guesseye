@@ -259,22 +259,16 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
         <div className="grid grid-cols-1 gap-8 text-center p-2">
           <Stat
             title="Latest Official Guess"
-            value={
-              latestOfficialGuess
-                ? `${latestOfficialGuess} by ${latestOfficialGuessName}`
-                : undefined
-            }
+            value={latestOfficialGuess}
+            name={latestOfficialGuessName}
             time={latestOfficialGuessTime}
           >
             Latest guess in a game in the official mode.
           </Stat>
           <Stat
             title="Latest Random Guess"
-            value={
-              latestRandomGuess
-                ? `${latestRandomGuess} by ${latestRandomGuessName}`
-                : undefined
-            }
+            value={latestRandomGuess}
+            name={latestRandomGuessName}
             time={latestRandomGuessTime}
           >
             Latest guess in a game in the random mode.
