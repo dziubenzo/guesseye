@@ -474,8 +474,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <Tooltip>
                     If a darts player achieved their best result more than once,
                     the year is the latest one. Also, this field does{' '}
-                    <span className="font-medium">not</span> include the best
-                    BDO/WDF World Youth Championship result.
+                    <span className="font-medium">not</span> include either the
+                    best BDO/WDF World Youth Championship result or the best
+                    News of the World Darts Championship result.
                   </Tooltip>
                 </FieldName>
                 {player.bestResultWDF?.value &&

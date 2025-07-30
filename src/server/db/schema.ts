@@ -125,6 +125,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Elkadart',
   'Quantum Darts',
   'Elven Darts',
+  'Accudart'
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -277,8 +278,8 @@ export const player = pgTable(
     playingSince: integer('playing_since'),
     dartsBrand: dartsBrandEnum('darts_brand'),
     dartsWeight: dartsWeightEnum('darts_weight'),
-    laterality: lateralityEnum('laterality').notNull(),
-    tourCard: boolean('tour_card').notNull(),
+    laterality: lateralityEnum('laterality').default('right-handed').notNull(),
+    tourCard: boolean('tour_card').default(false).notNull(),
     rankingElo: integer('ranking_elo'),
     rankingPDC: integer('ranking_pdc'),
     rankingWDF: integer('ranking_wdf'),
@@ -289,7 +290,7 @@ export const player = pgTable(
     yearOfBestResultWDF: integer('year_of_best_wdf_result'),
     bestResultUKOpen: bestResultUKOpenEnum('best_uk_open_result'),
     yearOfBestResultUKOpen: integer('year_of_best_uk_open_result'),
-    playedInWCOD: boolean('played_in_wcod').notNull(),
+    playedInWCOD: boolean('played_in_wcod').default(false).notNull(),
     status: playerStatusEnum('status').default('active').notNull(),
     difficulty: difficultyEnum('difficulty').notNull(),
   },

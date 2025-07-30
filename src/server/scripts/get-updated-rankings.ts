@@ -17,7 +17,7 @@ const rankingsSelectorWomenPDC = 'tr td:first-child';
 const fullNamesSelectorWomenPDC = 'tr td:nth-child(2)';
 
 // WDF rankings
-const urlMenWDF = 'https://dartswdf.com/rankings/wdf-main-ranking-men';
+const urlMenWDF = 'https://dartswdf.com/rankings/wdf-main-ranking-open';
 const rankingsSelectorMenWDF = 'div.text-sm a.inline-flex span:first-child';
 const fullNamesSelectorMenWDF = 'div.text-sm a.inline-flex span.truncate';
 

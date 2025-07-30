@@ -48,7 +48,12 @@ export function FieldValue(props: FieldValueProps) {
   if (type === 'playerToFind') {
     return (
       <p
-        className={`${children ? 'bg-good-guess' : 'bg-muted-foreground'} ${children ? 'text-good-guess-foreground' : 'text-muted'} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={cn(
+          children
+            ? 'bg-good-guess text-good-guess-foreground'
+            : 'bg-muted-foreground text-muted',
+          'p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center'
+        )}
       >
         {children}
       </p>
@@ -64,13 +69,16 @@ export function FieldValue(props: FieldValueProps) {
       } else if (comparisonResult === 'match') {
         return 'bg-good-guess text-good-guess-foreground';
       } else {
-        return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
+        return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
       }
     }
 
     return (
       <p
-        className={`${getRightFieldColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
+        className={cn(
+          getRightFieldColour(),
+          'flex justify-center items-center p-2 rounded-md w-full text-center min-h-[40px]'
+        )}
       >
         {children}
         {comparisonResult === 'higher' ? (
@@ -112,7 +120,7 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
     } else if (comparisonBestResult === 'match') {
       return 'bg-good-guess text-good-guess-foreground';
     } else {
-      return 'bg-wrong-guess opacity-80 dark:opacity-100 text-wrong-guess-foreground';
+      return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
     }
   }
 
@@ -122,26 +130,34 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
     } else if (comparisonYearBestResult === 'match') {
       return 'bg-good-guess text-good-guess-foreground';
     } else {
-      return 'bg-wrong-guess text-wrong-guess-foreground';
+      return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
     }
   }
 
   return (
-    <p
-      className={`${getRightResultColour()} p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center gap-1`}
-    >
-      {bestResult}
-      {comparisonBestResult === 'higher' ? (
-        <Arrow type="higher" bestResult="better">
-          {fieldNameBestResult}
-        </Arrow>
-      ) : comparisonBestResult === 'lower' ? (
-        <Arrow type="lower" bestResult="worse">
-          {fieldNameBestResult}
-        </Arrow>
-      ) : undefined}
-      <span
-        className={`${getRightYearColour()} text-center flex justify-center items-center gap-1 rounded-sm`}
+    <div className="grid grid-cols-2 w-full text-center min-h-[40px]">
+      <p
+        className={cn(
+          getRightResultColour(),
+          'flex justify-end items-center rounded-l-md py-2 px-0.75'
+        )}
+      >
+        {bestResult}
+        {comparisonBestResult === 'higher' ? (
+          <Arrow type="higher" bestResult="better">
+            {fieldNameBestResult}
+          </Arrow>
+        ) : comparisonBestResult === 'lower' ? (
+          <Arrow type="lower" bestResult="worse">
+            {fieldNameBestResult}
+          </Arrow>
+        ) : undefined}
+      </p>
+      <p
+        className={cn(
+          getRightYearColour(),
+          'flex justify-start items-center rounded-r-md py-2 px-0.75'
+        )}
       >
         ({yearBestResult}
         {comparisonYearBestResult === 'higher' ? (
@@ -150,7 +166,7 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
           <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
         ) : undefined}
         )
-      </span>
-    </p>
+      </p>
+    </div>
   );
 }

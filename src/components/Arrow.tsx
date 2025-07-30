@@ -17,9 +17,17 @@ export default function Arrow({ children, type, bestResult }: ArrowProps) {
     <Popover>
       <PopoverTrigger>
         {type === 'higher' ? (
-          <ArrowUp size={16} strokeWidth={2.5} className="cursor-pointer" />
+          <ArrowUp
+            size={16}
+            strokeWidth={2.5}
+            className="cursor-pointer ml-0.75"
+          />
         ) : (
-          <ArrowDown size={16} strokeWidth={2.5} className="cursor-pointer" />
+          <ArrowDown
+            size={16}
+            strokeWidth={2.5}
+            className="cursor-pointer ml-0.75"
+          />
         )}
       </PopoverTrigger>
       <PopoverContent className="text-xs p-2 w-max">
