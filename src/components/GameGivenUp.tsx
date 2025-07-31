@@ -24,7 +24,8 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
       <h2 className="text-2xl">You missed out on...</h2>
       <PlayerCard
         type="playerToFind"
-        player={previousPlayer}
+        previousMatches={previousPlayer}
+        currentMatches={previousPlayer}
         difficulty={previousPlayerDifficulty}
       />
       {attempts > 0 ? (

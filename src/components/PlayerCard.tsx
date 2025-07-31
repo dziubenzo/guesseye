@@ -1,3 +1,4 @@
+import ExternalLink from '@/components/ExternalLink';
 import {
   Field,
   FieldName,
@@ -6,7 +7,6 @@ import {
 } from '@/components/PlayerCardField';
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ExternalLink from '@/components/ExternalLink';
 import { Separator } from '@/components/ui/separator';
 import type {
   ComparisonResults,
@@ -43,12 +43,13 @@ type PlayerCardProps =
     }
   | {
       type: 'playerToFind';
-      player: PlayerToFindMatches;
+      previousMatches: PlayerToFindMatches;
+      currentMatches: PlayerToFindMatches;
       difficulty: Player['difficulty'];
     };
 
 export default function PlayerCard(props: PlayerCardProps) {
-  const { type, player } = props;
+  const { type } = props;
 
   function formatPlayerToFindField<T>(
     field: PlayerToFindRangedMatch<T> | undefined,
@@ -69,7 +70,7 @@ export default function PlayerCard(props: PlayerCardProps) {
   }
 
   if (type === 'playerToFind') {
-    const { difficulty } = props;
+    const { difficulty, previousMatches, currentMatches } = props;
 
     return (
       <Card className="bg-secondary w-full">
@@ -77,14 +78,14 @@ export default function PlayerCard(props: PlayerCardProps) {
           <CardTitle className="flex flex-col justify-center sm:justify-start items-center gap-4 sm:flex-row">
             <div className="flex items-center gap-3 w-[250px] sm:w-[300px]">
               <p
-                className={`${player.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
+                className={`${currentMatches.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full `}
               >
-                {player.firstName ? player.firstName : ''}
+                {currentMatches.firstName ? currentMatches.firstName : ''}
               </p>
               <p
-                className={`${player.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
+                className={`${currentMatches.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
               >
-                {player.lastName ? player.lastName : ''}
+                {currentMatches.lastName ? currentMatches.lastName : ''}
               </p>
             </div>
             {difficulty && (
@@ -110,31 +111,33 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Gender
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.gender === undefined ? '' : capitalise(player.gender)}
+                  {currentMatches.gender === undefined
+                    ? ''
+                    : capitalise(currentMatches.gender)}
                 </FieldValue>
               </Field>
               <Field>
                 <FieldName>
                   <Cake size={18} />
-                  {player.status === 'deceased' ? 'Born In' : 'Age'}
+                  {currentMatches.status === 'deceased' ? 'Born In' : 'Age'}
                 </FieldName>
-                {player.status === 'deceased' ? (
+                {currentMatches.status === 'deceased' ? (
                   <FieldValue type={'guess'} fieldName="Born In">
-                    {player.dateOfBirth === undefined ||
-                    player.dateOfBirth.type !== 'match'
+                    {currentMatches.dateOfBirth === undefined ||
+                    currentMatches.dateOfBirth.type !== 'match'
                       ? ''
-                      : player.dateOfBirth.value !== null
-                        ? format(player.dateOfBirth.value, 'y')
+                      : currentMatches.dateOfBirth.value !== null
+                        ? format(currentMatches.dateOfBirth.value, 'y')
                         : 'N/A'}
                   </FieldValue>
                 ) : (
                   <FieldValue
                     type={'guess'}
-                    comparisonResult={player.dateOfBirth?.type}
+                    comparisonResult={currentMatches.dateOfBirth?.type}
                     fieldName="Age"
                   >
                     {formatPlayerToFindField<Player['dateOfBirth']>(
-                      player.dateOfBirth,
+                      currentMatches.dateOfBirth,
                       true
                     )}
                   </FieldValue>
@@ -151,7 +154,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   </Tooltip>
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.country === undefined ? '' : player.country}
+                  {currentMatches.country === undefined
+                    ? ''
+                    : currentMatches.country}
                 </FieldValue>
               </Field>
               <Field>
@@ -179,27 +184,31 @@ export default function PlayerCard(props: PlayerCardProps) {
                   </Tooltip>
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.status === undefined ? '' : capitalise(player.status)}
+                  {currentMatches.status === undefined
+                    ? ''
+                    : capitalise(currentMatches.status)}
                 </FieldValue>
               </Field>
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
-                  {player.status === 'retired' || player.status == 'deceased'
+                  {currentMatches.status === 'retired' ||
+                  currentMatches.status == 'deceased'
                     ? 'Played Since'
                     : 'Playing Since'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.playingSince?.type}
+                  comparisonResult={currentMatches.playingSince?.type}
                   fieldName={
-                    player.status === 'retired' || player.status == 'deceased'
+                    currentMatches.status === 'retired' ||
+                    currentMatches.status == 'deceased'
                       ? 'Played Since'
                       : 'Playing Since'
                   }
                 >
                   {formatPlayerToFindField<Player['playingSince']>(
-                    player.playingSince
+                    currentMatches.playingSince
                   )}
                 </FieldValue>
               </Field>
@@ -222,11 +231,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.rankingElo?.type}
+                  comparisonResult={currentMatches.rankingElo?.type}
                   fieldName="Elo ranking"
                 >
                   {formatPlayerToFindField<Player['rankingElo']>(
-                    player.rankingElo
+                    currentMatches.rankingElo
                   )}
                 </FieldValue>
               </Field>
@@ -236,9 +245,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Laterality
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.laterality === undefined
+                  {currentMatches.laterality === undefined
                     ? ''
-                    : capitalise(player.laterality)}
+                    : capitalise(currentMatches.laterality)}
                 </FieldValue>
               </Field>
               <Field>
@@ -247,10 +256,10 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Darts Brand
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.dartsBrand === undefined
+                  {currentMatches.dartsBrand === undefined
                     ? ''
-                    : player.dartsBrand
-                      ? player.dartsBrand
+                    : currentMatches.dartsBrand
+                      ? currentMatches.dartsBrand
                       : 'N/A'}
                 </FieldValue>
               </Field>
@@ -261,11 +270,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.dartsWeight?.type}
+                  comparisonResult={currentMatches.dartsWeight?.type}
                   fieldName="Darts weight"
                 >
                   {formatPlayerToFindField<Player['dartsWeight']>(
-                    player.dartsWeight
+                    currentMatches.dartsWeight
                   )}
                 </FieldValue>
               </Field>
@@ -276,11 +285,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.nineDartersPDC?.type}
+                  comparisonResult={currentMatches.nineDartersPDC?.type}
                   fieldName="Nine-darters"
                 >
                   {formatPlayerToFindField<Player['nineDartersPDC']>(
-                    player.nineDartersPDC
+                    currentMatches.nineDartersPDC
                   )}
                 </FieldValue>
               </Field>
@@ -290,7 +299,9 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName className="md:text-xs lg:text-sm">
                   <Calendar1 size={18} />
-                  {player.gender === 'female' ? 'WS Ranking' : 'PDC Ranking'}
+                  {currentMatches.gender === 'female'
+                    ? 'WS Ranking'
+                    : 'PDC Ranking'}
                   <Tooltip>
                     It refers to:
                     <ul>
@@ -310,11 +321,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.rankingPDC?.type}
+                  comparisonResult={currentMatches.rankingPDC?.type}
                   fieldName={'PDC ranking'}
                 >
                   {formatPlayerToFindField<Player['rankingPDC']>(
-                    player.rankingPDC
+                    currentMatches.rankingPDC
                   )}
                 </FieldValue>
               </Field>
@@ -327,23 +338,23 @@ export default function PlayerCard(props: PlayerCardProps) {
                     the year is the latest one.
                   </Tooltip>
                 </FieldName>
-                {player.bestResultUKOpen?.value &&
-                player.yearOfBestResultUKOpen?.value ? (
+                {currentMatches.bestResultUKOpen?.value &&
+                currentMatches.yearOfBestResultUKOpen?.value ? (
                   <FieldValueBestResult
                     fieldNameBestResult={'Best UK Open result'}
                     fieldNameYearBestResult={'Year of best UK Open result'}
-                    bestResult={player.bestResultUKOpen.value}
-                    yearBestResult={player.yearOfBestResultUKOpen.value}
-                    comparisonBestResult={player.bestResultUKOpen.type}
+                    bestResult={currentMatches.bestResultUKOpen.value}
+                    yearBestResult={currentMatches.yearOfBestResultUKOpen.value}
+                    comparisonBestResult={currentMatches.bestResultUKOpen.type}
                     comparisonYearBestResult={
-                      player.yearOfBestResultUKOpen.type
+                      currentMatches.yearOfBestResultUKOpen.type
                     }
                   />
-                ) : player.bestResultUKOpen?.value === null ? (
+                ) : currentMatches.bestResultUKOpen?.value === null ? (
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best UK Open result'}
-                    comparisonResult={player.bestResultUKOpen?.type}
+                    comparisonResult={currentMatches.bestResultUKOpen?.type}
                   >
                     Did Not Play
                   </FieldValue>
@@ -351,7 +362,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best UK Open result'}
-                    comparisonResult={player.bestResultUKOpen?.type}
+                    comparisonResult={currentMatches.bestResultUKOpen?.type}
                   >
                     {' '}
                   </FieldValue>
@@ -368,23 +379,25 @@ export default function PlayerCard(props: PlayerCardProps) {
                     PDC World Youth Championship result.
                   </Tooltip>
                 </FieldName>
-                {player.bestResultPDC?.value &&
-                player.yearOfBestResultPDC?.value ? (
+                {currentMatches.bestResultPDC?.value &&
+                currentMatches.yearOfBestResultPDC?.value ? (
                   <FieldValueBestResult
                     fieldNameBestResult={'Best PDC World Championship result'}
                     fieldNameYearBestResult={
                       'Year of best PDC World Championship result'
                     }
-                    bestResult={player.bestResultPDC.value}
-                    yearBestResult={player.yearOfBestResultPDC.value}
-                    comparisonBestResult={player.bestResultPDC.type}
-                    comparisonYearBestResult={player.yearOfBestResultPDC.type}
+                    bestResult={currentMatches.bestResultPDC.value}
+                    yearBestResult={currentMatches.yearOfBestResultPDC.value}
+                    comparisonBestResult={currentMatches.bestResultPDC.type}
+                    comparisonYearBestResult={
+                      currentMatches.yearOfBestResultPDC.type
+                    }
                   />
-                ) : player.bestResultPDC?.value === null ? (
+                ) : currentMatches.bestResultPDC?.value === null ? (
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
-                    comparisonResult={player.bestResultPDC?.type}
+                    comparisonResult={currentMatches.bestResultPDC?.type}
                   >
                     Did Not Play
                   </FieldValue>
@@ -392,7 +405,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
-                    comparisonResult={player.bestResultPDC?.type}
+                    comparisonResult={currentMatches.bestResultPDC?.type}
                   >
                     {' '}
                   </FieldValue>
@@ -433,11 +446,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  comparisonResult={player.rankingWDF?.type}
+                  comparisonResult={currentMatches.rankingWDF?.type}
                   fieldName="WDF ranking"
                 >
                   {formatPlayerToFindField<Player['rankingWDF']>(
-                    player.rankingWDF
+                    currentMatches.rankingWDF
                   )}
                 </FieldValue>
               </Field>
@@ -447,9 +460,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Tour Card
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.tourCard === undefined
+                  {currentMatches.tourCard === undefined
                     ? ''
-                    : player.tourCard
+                    : currentMatches.tourCard
                       ? 'Yes'
                       : 'No'}
                 </FieldValue>
@@ -460,9 +473,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Played in WCoD
                 </FieldName>
                 <FieldValue type={'playerToFind'}>
-                  {player.playedInWCOD === undefined
+                  {currentMatches.playedInWCOD === undefined
                     ? ''
-                    : player.playedInWCOD
+                    : currentMatches.playedInWCOD
                       ? 'Yes'
                       : 'No'}
                 </FieldValue>
@@ -479,23 +492,25 @@ export default function PlayerCard(props: PlayerCardProps) {
                     News of the World Darts Championship result.
                   </Tooltip>
                 </FieldName>
-                {player.bestResultWDF?.value &&
-                player.yearOfBestResultWDF?.value ? (
+                {currentMatches.bestResultWDF?.value &&
+                currentMatches.yearOfBestResultWDF?.value ? (
                   <FieldValueBestResult
                     fieldNameBestResult={'Best PDC World Championship result'}
                     fieldNameYearBestResult={
                       'Year of best PDC World Championship result'
                     }
-                    bestResult={player.bestResultWDF.value}
-                    yearBestResult={player.yearOfBestResultWDF.value}
-                    comparisonBestResult={player.bestResultWDF.type}
-                    comparisonYearBestResult={player.yearOfBestResultWDF.type}
+                    bestResult={currentMatches.bestResultWDF.value}
+                    yearBestResult={currentMatches.yearOfBestResultWDF.value}
+                    comparisonBestResult={currentMatches.bestResultWDF.type}
+                    comparisonYearBestResult={
+                      currentMatches.yearOfBestResultWDF.type
+                    }
                   />
-                ) : player.bestResultWDF?.value === null ? (
+                ) : currentMatches.bestResultWDF?.value === null ? (
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
-                    comparisonResult={player.bestResultWDF?.type}
+                    comparisonResult={currentMatches.bestResultWDF?.type}
                   >
                     Did Not Play
                   </FieldValue>
@@ -503,7 +518,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
-                    comparisonResult={player.bestResultWDF?.type}
+                    comparisonResult={currentMatches.bestResultWDF?.type}
                   >
                     {' '}
                   </FieldValue>
@@ -517,7 +532,7 @@ export default function PlayerCard(props: PlayerCardProps) {
   }
 
   if (type === 'guess') {
-    const { comparisonResults, guessNumber } = props;
+    const { player, comparisonResults, guessNumber } = props;
 
     return (
       <Card className="bg-secondary w-full">

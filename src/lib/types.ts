@@ -84,7 +84,7 @@ export type ComparisonResults = {
   status: Match;
 };
 
-export type PlayerToFindMatches = GuessSchemaType['playerToFindMatches'];
+export type PlayerToFindMatches = GuessSchemaType['currentMatches'];
 
 export type MatchKeys = keyof Pick<
   Player,
@@ -155,13 +155,13 @@ type CheckGuessSuccess = {
         type: 'correctGuess';
         playerToFind: Player;
         comparisonResults: ComparisonResults;
-        playerToFindMatches: PlayerToFindMatches;
+        newMatches: PlayerToFindMatches;
       }
     | {
         type: 'incorrectGuess';
         guessedPlayer: Player;
         comparisonResults: ComparisonResults;
-        playerToFindMatches: PlayerToFindMatches;
+        newMatches: PlayerToFindMatches;
       };
 };
 

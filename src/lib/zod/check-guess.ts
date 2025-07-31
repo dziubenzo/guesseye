@@ -6,7 +6,7 @@ import {
   dartsWeightEnumValues,
   genderEnumValues,
   lateralityEnumValues,
-  playerStatusEnumValues
+  playerStatusEnumValues,
 } from '@/server/db/schema';
 import { z } from 'zod';
 
@@ -14,7 +14,7 @@ export const guessSchema = z.object({
   guess: z.string().min(3).max(64).trim(),
   scheduleId: z.string().optional(),
   mode: z.union([z.literal('official'), z.literal('random')]),
-  playerToFindMatches: z.object({
+  currentMatches: z.object({
     firstName: z.string().optional(),
     lastName: z.string().optional(),
     gender: z.enum(genderEnumValues).optional(),

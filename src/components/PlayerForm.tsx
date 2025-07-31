@@ -23,11 +23,12 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   const {
     finishGame,
     updateGuesses,
-    updateMatches,
+    updatePreviousMatches,
+    updateCurrentMatches,
+    resetState,
     guesses,
     gameOver,
-    resetState,
-    playerToFindMatches,
+    currentMatches,
     mode,
   } = useGameStore();
 
@@ -36,7 +37,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     defaultValues: {
       guess: '',
       scheduleId,
-      playerToFindMatches,
+      currentMatches,
       mode,
     },
     mode: 'onSubmit',
@@ -57,7 +58,8 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.playerToFind,
             data.success.comparisonResults
           );
-          updateMatches(data.success.playerToFindMatches);
+          updatePreviousMatches(currentMatches);
+          updateCurrentMatches(data.success.newMatches);
           finishGame(data.success.playerToFind);
           return;
         }
@@ -66,7 +68,8 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.guessedPlayer,
             data.success.comparisonResults
           );
-          updateMatches(data.success.playerToFindMatches);
+          updatePreviousMatches(currentMatches);
+          updateCurrentMatches(data.success.newMatches);
           return;
         }
       }
@@ -80,7 +83,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       setError('You have already guessed this player.');
       return;
     }
-    execute({ ...values, playerToFindMatches, mode });
+    execute({ ...values, currentMatches, mode });
   }
 
   useEffect(() => {

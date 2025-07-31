@@ -21,9 +21,7 @@ import { getPlayers } from '@/server/db/get-players';
 export const checkGuess = actionClient
   .schema(guessSchema)
   .action(
-    async ({
-      parsedInput: { guess, scheduleId, playerToFindMatches, mode },
-    }) => {
+    async ({ parsedInput: { guess, scheduleId, currentMatches, mode } }) => {
       const normalisedGuess = normaliseArray(guess);
 
       const validationResult = validateScheduleId(scheduleId);
@@ -89,7 +87,7 @@ export const checkGuess = actionClient
           return error;
         }
 
-        fillAllMatches(playerToFind, playerToFindMatches);
+        fillAllMatches(playerToFind, currentMatches);
 
         const data: CheckGuessAction = {
           type: 'success',
@@ -97,7 +95,7 @@ export const checkGuess = actionClient
             type: 'correctGuess',
             playerToFind,
             comparisonResults: matchingComparisonResults,
-            playerToFindMatches,
+            newMatches: currentMatches,
           },
         };
 
@@ -108,7 +106,7 @@ export const checkGuess = actionClient
       const { comparisonResults } = comparePlayers(
         guessedPlayer,
         playerToFind,
-        playerToFindMatches
+        currentMatches
       );
 
       const data: CheckGuessAction = {
@@ -117,7 +115,7 @@ export const checkGuess = actionClient
           type: 'incorrectGuess',
           guessedPlayer,
           comparisonResults,
-          playerToFindMatches,
+          newMatches: currentMatches,
         },
       };
 

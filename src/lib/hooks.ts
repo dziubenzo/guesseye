@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export const useUpdateProgressBar = () => {
-  const { playerToFindMatches, gameOver } = useGameStore();
+  const { previousMatches: playerToFindMatches, gameOver } = useGameStore();
   const [fieldsFound, setFieldsFound] = useState(
     Object.keys(playerToFindMatches).length
   );

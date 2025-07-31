@@ -23,14 +23,21 @@ type GuessesProps = {
 };
 
 export default function Guesses({ existingGame, mode }: GuessesProps) {
-  const { guesses, setInitialGuesses, updateMatches, setMode } = useGameStore();
+  const {
+    guesses,
+    setInitialGuesses,
+    updatePreviousMatches,
+    updateCurrentMatches,
+    setMode,
+  } = useGameStore();
   const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
     setMode(mode);
     if (existingGame) {
       setInitialGuesses(existingGame.guesses);
-      updateMatches(existingGame.playerToFindMatches);
+      updatePreviousMatches(existingGame.playerToFindMatches);
+      updateCurrentMatches(existingGame.playerToFindMatches);
     }
   }, [existingGame, mode]);
 

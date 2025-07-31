@@ -4,7 +4,8 @@ import { create } from 'zustand';
 type GameStore = {
   playerToFind: Player | null;
   guesses: Guess[];
-  playerToFindMatches: PlayerToFindMatches;
+  previousMatches: PlayerToFindMatches;
+  currentMatches: PlayerToFindMatches;
   gameOver: boolean;
   mode: GameMode;
   finishGame: (playerToFind: Player) => void;
@@ -13,20 +14,27 @@ type GameStore = {
     guessedPlayer: Guess['guessedPlayer'],
     comparisonResults: Guess['comparisonResults']
   ) => void;
-  updateMatches: (newMatches: PlayerToFindMatches) => void;
+  updatePreviousMatches: (previousMatches: PlayerToFindMatches) => void;
+  updateCurrentMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
   setMode: (mode: GameMode) => void;
 };
 
 type InitialState = Pick<
   GameStore,
-  'playerToFind' | 'guesses' | 'playerToFindMatches' | 'gameOver' | 'mode'
+  | 'playerToFind'
+  | 'guesses'
+  | 'previousMatches'
+  | 'currentMatches'
+  | 'gameOver'
+  | 'mode'
 >;
 
 const initialState: InitialState = {
   playerToFind: null,
   guesses: [],
-  playerToFindMatches: {},
+  previousMatches: {},
+  currentMatches: {},
   gameOver: false,
   mode: 'official',
 };
@@ -34,7 +42,8 @@ const initialState: InitialState = {
 export const useGameStore = create<GameStore>()((set) => ({
   playerToFind: null,
   guesses: [],
-  playerToFindMatches: {},
+  previousMatches: {},
+  currentMatches: {},
   gameOver: false,
   mode: 'official',
   finishGame: (playerToFind) =>
@@ -50,9 +59,13 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => ({
       guesses: [...state.guesses, { guessedPlayer, comparisonResults }],
     })),
-  updateMatches: (newMatches) =>
+  updatePreviousMatches: (previousMatches) =>
     set((state) => ({
-      playerToFindMatches: { ...state.playerToFindMatches, ...newMatches },
+      previousMatches: { ...state.previousMatches, ...previousMatches },
+    })),
+  updateCurrentMatches: (newMatches) =>
+    set((state) => ({
+      currentMatches: { ...state.currentMatches, ...newMatches },
     })),
   resetState: () => {
     set(initialState);
