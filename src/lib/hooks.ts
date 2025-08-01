@@ -6,16 +6,16 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export const useUpdateProgressBar = () => {
-  const { previousMatches: playerToFindMatches, gameOver } = useGameStore();
+  const { currentMatches, gameOver } = useGameStore();
   const [fieldsFound, setFieldsFound] = useState(
-    Object.keys(playerToFindMatches).length
+    Object.keys(currentMatches).length
   );
 
   useEffect(() => {
     function calculateFieldsFound() {
       let count = 0;
 
-      const array = Object.entries(playerToFindMatches);
+      const array = Object.entries(currentMatches);
 
       for (const pair of array) {
         const value = pair[1];
@@ -38,7 +38,7 @@ export const useUpdateProgressBar = () => {
 
     const currentFields = calculateFieldsFound();
     setFieldsFound(currentFields);
-  }, [playerToFindMatches, gameOver]);
+  }, [currentMatches, gameOver]);
 
   return fieldsFound;
 };

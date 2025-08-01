@@ -22,12 +22,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
   return (
     <div className="flex flex-col grow-1 text-center justify-center items-center gap-4">
       <h2 className="text-2xl">You missed out on...</h2>
-      <PlayerCard
-        type="playerToFind"
-        previousMatches={previousPlayer}
-        currentMatches={previousPlayer}
-        difficulty={previousPlayerDifficulty}
-      />
+      <PlayerCard type="playerToFind" difficulty={previousPlayerDifficulty} />
       {attempts > 0 ? (
         <>
           <p>

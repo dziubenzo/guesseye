@@ -14,7 +14,7 @@ type GameStore = {
     guessedPlayer: Guess['guessedPlayer'],
     comparisonResults: Guess['comparisonResults']
   ) => void;
-  updatePreviousMatches: (previousMatches: PlayerToFindMatches) => void;
+  updatePreviousMatches: (lastMatches: PlayerToFindMatches) => void;
   updateCurrentMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
   setMode: (mode: GameMode) => void;
@@ -59,9 +59,9 @@ export const useGameStore = create<GameStore>()((set) => ({
     set((state) => ({
       guesses: [...state.guesses, { guessedPlayer, comparisonResults }],
     })),
-  updatePreviousMatches: (previousMatches) =>
+  updatePreviousMatches: (lastMatches) =>
     set((state) => ({
-      previousMatches: { ...state.previousMatches, ...previousMatches },
+      previousMatches: { ...state.previousMatches, ...lastMatches },
     })),
   updateCurrentMatches: (newMatches) =>
     set((state) => ({

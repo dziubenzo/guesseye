@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
+import { PlayerToFindMatches } from '@/lib/types';
 import { checkForDuplicateGuess } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/check-guess';
 import { checkGuess } from '@/server/actions/check-guess';
@@ -44,6 +45,9 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   });
 
   const [error, setError] = useState('');
+  const [newMatches, setNewMatches] = useState<PlayerToFindMatches | null>(
+    null
+  );
 
   const { execute, isPending } = useAction(checkGuess, {
     onSuccess({ data }) {
@@ -58,8 +62,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.playerToFind,
             data.success.comparisonResults
           );
-          updatePreviousMatches(currentMatches);
-          updateCurrentMatches(data.success.newMatches);
+          setNewMatches(data.success.newMatches);
           finishGame(data.success.playerToFind);
           return;
         }
@@ -68,8 +71,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.guessedPlayer,
             data.success.comparisonResults
           );
-          updatePreviousMatches(currentMatches);
-          updateCurrentMatches(data.success.newMatches);
+          setNewMatches(data.success.newMatches);
           return;
         }
       }
@@ -94,6 +96,16 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   useEffect(() => {
     resetState();
   }, [scheduleId]);
+
+  // For some reason, the currentMatches object, when used inside the onSuccess callback, is not up-to-date despite it being a piece of state that is always up-to-date outside the callback
+  // I originally planned to use the onSuccess callback to update both current and previous matches
+  useEffect(() => {
+    if (newMatches) {
+      updatePreviousMatches(currentMatches);
+      updateCurrentMatches(newMatches);
+      setNewMatches(null);
+    }
+  }, [newMatches, currentMatches]);
 
   return (
     <div className="sm:flex sm:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">

@@ -1,19 +1,39 @@
 import Arrow from '@/components/Arrow';
-import type { Match, Player, RangedMatch } from '@/lib/types';
+import GuessIndicator from '@/components/GuessIndicator';
+import type {
+  Match,
+  Player,
+  PlayerToFindMatch,
+  RangedMatch,
+} from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 
-type FieldProps = { children: ReactNode; className?: string };
+type FieldProps = {
+  children: ReactNode;
+  className?: string;
+  previousMatch?: PlayerToFindMatch;
+  currentMatch?: PlayerToFindMatch;
+};
 
-export function Field({ children, className }: FieldProps) {
+export function Field({
+  children,
+  className,
+  previousMatch,
+  currentMatch,
+}: FieldProps) {
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 items-center justify-center',
+        'flex flex-col gap-2 items-center justify-center relative',
         className
       )}
     >
       {children}
+      <GuessIndicator
+        previousMatch={previousMatch}
+        currentMatch={currentMatch}
+      />
     </div>
   );
 }
@@ -92,42 +112,39 @@ export function FieldValue(props: FieldValueProps) {
   }
 }
 
-type FieldValueBestResult = {
-  fieldNameBestResult: string;
-  fieldNameYearBestResult: string;
+type FieldValueBestResultContainerProps = {
+  children: ReactNode;
+};
+
+export function FieldValueBestResultContainer({
+  children,
+}: FieldValueBestResultContainerProps) {
+  return (
+    <div className="grid grid-cols-2 w-full text-center min-h-[40px]">
+      {children}
+    </div>
+  );
+}
+
+type FieldValueBestResultProps = {
+  fieldName: string;
   bestResult:
     | Player['bestResultPDC']
     | Player['bestResultWDF']
     | Player['bestResultUKOpen'];
-  yearBestResult: Player['yearOfBestResultPDC'] | Player['yearOfBestResultWDF'];
-  comparisonBestResult?: RangedMatch;
-  comparisonYearBestResult?: RangedMatch;
+  comparison: RangedMatch;
+  previousMatch?: PlayerToFindMatch;
+  currentMatch?: PlayerToFindMatch;
 };
 
-export function FieldValueBestResult(props: FieldValueBestResult) {
-  const {
-    bestResult,
-    yearBestResult,
-    fieldNameBestResult,
-    fieldNameYearBestResult,
-    comparisonBestResult,
-    comparisonYearBestResult,
-  } = props;
+export function FieldValueBestResult(props: FieldValueBestResultProps) {
+  const { fieldName, bestResult, comparison, previousMatch, currentMatch } =
+    props;
 
   function getRightResultColour() {
-    if (comparisonBestResult === undefined) {
+    if (comparison === undefined) {
       return 'bg-muted-foreground text-muted';
-    } else if (comparisonBestResult === 'match') {
-      return 'bg-good-guess text-good-guess-foreground';
-    } else {
-      return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
-    }
-  }
-
-  function getRightYearColour() {
-    if (comparisonYearBestResult === undefined) {
-      return 'bg-muted-foreground text-muted';
-    } else if (comparisonYearBestResult === 'match') {
+    } else if (comparison === 'match') {
       return 'bg-good-guess text-good-guess-foreground';
     } else {
       return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
@@ -135,38 +152,70 @@ export function FieldValueBestResult(props: FieldValueBestResult) {
   }
 
   return (
-    <div className="grid grid-cols-2 w-full text-center min-h-[40px]">
-      <p
-        className={cn(
-          getRightResultColour(),
-          'flex justify-end items-center rounded-l-md py-2 px-0.75'
-        )}
-      >
-        {bestResult}
-        {comparisonBestResult === 'higher' ? (
-          <Arrow type="higher" bestResult="better">
-            {fieldNameBestResult}
-          </Arrow>
-        ) : comparisonBestResult === 'lower' ? (
-          <Arrow type="lower" bestResult="worse">
-            {fieldNameBestResult}
-          </Arrow>
-        ) : undefined}
-      </p>
-      <p
-        className={cn(
-          getRightYearColour(),
-          'flex justify-start items-center rounded-r-md py-2 px-0.75'
-        )}
-      >
-        ({yearBestResult}
-        {comparisonYearBestResult === 'higher' ? (
-          <Arrow type="higher">{fieldNameYearBestResult}</Arrow>
-        ) : comparisonYearBestResult === 'lower' ? (
-          <Arrow type="lower">{fieldNameYearBestResult}</Arrow>
-        ) : undefined}
-        )
-      </p>
-    </div>
+    <p
+      className={cn(
+        getRightResultColour(),
+        'flex justify-end items-center rounded-l-md py-2 px-0.75 relative'
+      )}
+    >
+      {bestResult}
+      {comparison === 'higher' ? (
+        <Arrow type="higher" bestResult="better">
+          {fieldName}
+        </Arrow>
+      ) : comparison === 'lower' ? (
+        <Arrow type="lower" bestResult="worse">
+          {fieldName}
+        </Arrow>
+      ) : undefined}
+      <GuessIndicator
+        previousMatch={previousMatch}
+        currentMatch={currentMatch}
+      />
+    </p>
+  );
+}
+
+type FieldValueYearBestResultProps = {
+  fieldName: string;
+  yearBestResult: Player['yearOfBestResultPDC'] | Player['yearOfBestResultWDF'];
+  comparison: RangedMatch;
+  previousMatch?: PlayerToFindMatch;
+  currentMatch?: PlayerToFindMatch;
+};
+
+export function FieldValueYearBestResult(props: FieldValueYearBestResultProps) {
+  const { fieldName, yearBestResult, comparison, previousMatch, currentMatch } =
+    props;
+
+  function getRightYearColour() {
+    if (comparison === undefined) {
+      return 'bg-muted-foreground text-muted';
+    } else if (comparison === 'match') {
+      return 'bg-good-guess text-good-guess-foreground';
+    } else {
+      return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
+    }
+  }
+
+  return (
+    <p
+      className={cn(
+        getRightYearColour(),
+        'flex justify-start items-center rounded-r-md py-2 px-0.75 relative'
+      )}
+    >
+      ({yearBestResult}
+      {comparison === 'higher' ? (
+        <Arrow type="higher">{fieldName}</Arrow>
+      ) : comparison === 'lower' ? (
+        <Arrow type="lower">{fieldName}</Arrow>
+      ) : undefined}
+      )
+      <GuessIndicator
+        previousMatch={previousMatch}
+        currentMatch={currentMatch}
+      />
+    </p>
   );
 }

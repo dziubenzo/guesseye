@@ -85,6 +85,7 @@ export type ComparisonResults = {
 };
 
 export type PlayerToFindMatches = GuessSchemaType['currentMatches'];
+export type PlayerToFindMatch = PlayerToFindMatches[keyof PlayerToFindMatches];
 
 export type MatchKeys = keyof Pick<
   Player,
