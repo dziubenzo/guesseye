@@ -12,28 +12,17 @@ import { ReactNode } from 'react';
 type FieldProps = {
   children: ReactNode;
   className?: string;
-  previousMatch?: PlayerToFindMatch;
-  currentMatch?: PlayerToFindMatch;
 };
 
-export function Field({
-  children,
-  className,
-  previousMatch,
-  currentMatch,
-}: FieldProps) {
+export function Field({ children, className }: FieldProps) {
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 items-center justify-center relative',
+        'flex flex-col gap-2 items-center justify-center',
         className
       )}
     >
       {children}
-      <GuessIndicator
-        previousMatch={previousMatch}
-        currentMatch={currentMatch}
-      />
     </div>
   );
 }
@@ -59,11 +48,18 @@ type FieldValueProps =
       children: ReactNode;
       fieldName: string;
       comparisonResult?: Match | RangedMatch;
+      previousMatch?: PlayerToFindMatch;
+      currentMatch?: PlayerToFindMatch;
     }
-  | { type: 'playerToFind'; children?: ReactNode };
+  | {
+      type: 'playerToFind';
+      children?: ReactNode;
+      previousMatch?: PlayerToFindMatch;
+      currentMatch?: PlayerToFindMatch;
+    };
 
 export function FieldValue(props: FieldValueProps) {
-  const { children, type } = props;
+  const { children, type, previousMatch, currentMatch } = props;
 
   if (type === 'playerToFind') {
     return (
@@ -72,10 +68,14 @@ export function FieldValue(props: FieldValueProps) {
           children
             ? 'bg-good-guess text-good-guess-foreground'
             : 'bg-muted-foreground text-muted',
-          'p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center'
+          'p-2 rounded-md w-full text-center min-h-[40px] flex justify-center items-center relative'
         )}
       >
         {children}
+        <GuessIndicator
+          previousMatch={previousMatch}
+          currentMatch={currentMatch}
+        />
       </p>
     );
   }
@@ -97,7 +97,7 @@ export function FieldValue(props: FieldValueProps) {
       <p
         className={cn(
           getRightFieldColour(),
-          'flex justify-center items-center p-2 rounded-md w-full text-center min-h-[40px]'
+          'flex justify-center items-center p-2 rounded-md w-full text-center min-h-[40px] relative'
         )}
       >
         {children}
@@ -107,6 +107,10 @@ export function FieldValue(props: FieldValueProps) {
         {comparisonResult === 'lower' ? (
           <Arrow type="lower">{fieldName}</Arrow>
         ) : null}
+        <GuessIndicator
+          previousMatch={previousMatch}
+          currentMatch={currentMatch}
+        />
       </p>
     );
   }

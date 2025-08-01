@@ -1,4 +1,5 @@
 import ExternalLink from '@/components/ExternalLink';
+import GuessIndicator from '@/components/GuessIndicator';
 import {
   Field,
   FieldName,
@@ -79,14 +80,22 @@ export default function PlayerCard(props: PlayerCardProps) {
           <CardTitle className="flex flex-col justify-center sm:justify-start items-center gap-4 sm:flex-row">
             <div className="flex items-center gap-3 w-[250px] sm:w-[300px]">
               <p
-                className={`${currentMatches.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full `}
+                className={`${currentMatches.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full relative`}
               >
                 {currentMatches.firstName ? currentMatches.firstName : ''}
+                <GuessIndicator
+                  previousMatch={previousMatches.firstName}
+                  currentMatch={currentMatches.firstName}
+                />
               </p>
               <p
-                className={`${currentMatches.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full`}
+                className={`${currentMatches.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full relative`}
               >
                 {currentMatches.lastName ? currentMatches.lastName : ''}
+                <GuessIndicator
+                  previousMatch={previousMatches.lastName}
+                  currentMatch={currentMatches.lastName}
+                />
               </p>
             </div>
             {difficulty && (
@@ -106,30 +115,33 @@ export default function PlayerCard(props: PlayerCardProps) {
         <CardContent>
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field
-                previousMatch={previousMatches.gender}
-                currentMatch={currentMatches.gender}
-              >
+              <Field>
                 <FieldName>
                   <VenusAndMars size={18} />
                   Gender
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.gender}
+                  currentMatch={currentMatches.gender}
+                >
                   {currentMatches.gender === undefined
                     ? ''
                     : capitalise(currentMatches.gender)}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.dateOfBirth}
-                currentMatch={currentMatches.dateOfBirth}
-              >
+              <Field>
                 <FieldName>
                   <Cake size={18} />
                   {currentMatches.status === 'deceased' ? 'Born In' : 'Age'}
                 </FieldName>
                 {currentMatches.status === 'deceased' ? (
-                  <FieldValue type={'guess'} fieldName="Born In">
+                  <FieldValue
+                    type={'guess'}
+                    fieldName="Born In"
+                    previousMatch={previousMatches.dateOfBirth}
+                    currentMatch={currentMatches.dateOfBirth}
+                  >
                     {currentMatches.dateOfBirth === undefined ||
                     currentMatches.dateOfBirth.type !== 'match'
                       ? ''
@@ -142,6 +154,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                     type={'guess'}
                     comparisonResult={currentMatches.dateOfBirth?.type}
                     fieldName="Age"
+                    previousMatch={previousMatches.dateOfBirth}
+                    currentMatch={currentMatches.dateOfBirth}
                   >
                     {formatPlayerToFindField<Player['dateOfBirth']>(
                       currentMatches.dateOfBirth,
@@ -150,10 +164,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   </FieldValue>
                 )}
               </Field>
-              <Field
-                previousMatch={previousMatches.country}
-                currentMatch={currentMatches.country}
-              >
+              <Field>
                 <FieldName>
                   <Map size={18} />
                   Country
@@ -163,16 +174,17 @@ export default function PlayerCard(props: PlayerCardProps) {
                     Netherlands.
                   </Tooltip>
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.country}
+                  currentMatch={currentMatches.country}
+                >
                   {currentMatches.country === undefined
                     ? ''
                     : currentMatches.country}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.status}
-                currentMatch={currentMatches.status}
-              >
+              <Field>
                 <FieldName>
                   <Star size={18} />
                   Status
@@ -196,17 +208,17 @@ export default function PlayerCard(props: PlayerCardProps) {
                     </ul>
                   </Tooltip>
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.status}
+                  currentMatch={currentMatches.status}
+                >
                   {currentMatches.status === undefined
                     ? ''
                     : capitalise(currentMatches.status)}
                 </FieldValue>
               </Field>
-              <Field
-                className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1"
-                previousMatch={previousMatches.playingSince}
-                currentMatch={currentMatches.playingSince}
-              >
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName>
                   <History size={18} />
                   {currentMatches.status === 'retired' ||
@@ -220,9 +232,11 @@ export default function PlayerCard(props: PlayerCardProps) {
                   fieldName={
                     currentMatches.status === 'retired' ||
                     currentMatches.status == 'deceased'
-                      ? 'Played Since'
-                      : 'Playing Since'
+                      ? 'Played since'
+                      : 'Playing since'
                   }
+                  previousMatch={previousMatches.playingSince}
+                  currentMatch={currentMatches.playingSince}
                 >
                   {formatPlayerToFindField<Player['playingSince']>(
                     currentMatches.playingSince
@@ -232,10 +246,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field
-                previousMatch={previousMatches.rankingElo}
-                currentMatch={currentMatches.rankingElo}
-              >
+              <Field>
                 <FieldName>
                   <TrendingUp size={18} />
                   Elo Ranking
@@ -253,35 +264,39 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.rankingElo?.type}
                   fieldName="Elo ranking"
+                  previousMatch={previousMatches.rankingElo}
+                  currentMatch={currentMatches.rankingElo}
                 >
                   {formatPlayerToFindField<Player['rankingElo']>(
                     currentMatches.rankingElo
                   )}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.laterality}
-                currentMatch={currentMatches.laterality}
-              >
+              <Field>
                 <FieldName>
                   <Hand size={18} />
                   Laterality
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.laterality}
+                  currentMatch={currentMatches.laterality}
+                >
                   {currentMatches.laterality === undefined
                     ? ''
                     : capitalise(currentMatches.laterality)}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.dartsBrand}
-                currentMatch={currentMatches.dartsBrand}
-              >
+              <Field>
                 <FieldName>
                   <Target size={18} />
                   Darts Brand
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.dartsBrand}
+                  currentMatch={currentMatches.dartsBrand}
+                >
                   {currentMatches.dartsBrand === undefined
                     ? ''
                     : currentMatches.dartsBrand
@@ -289,10 +304,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       : 'N/A'}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.dartsWeight}
-                currentMatch={currentMatches.dartsWeight}
-              >
+              <Field>
                 <FieldName>
                   <Weight size={18} />
                   Darts Weight
@@ -301,17 +313,15 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.dartsWeight?.type}
                   fieldName="Darts weight"
+                  previousMatch={previousMatches.dartsWeight}
+                  currentMatch={currentMatches.dartsWeight}
                 >
                   {formatPlayerToFindField<Player['dartsWeight']>(
                     currentMatches.dartsWeight
                   )}
                 </FieldValue>
               </Field>
-              <Field
-                className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1"
-                previousMatch={previousMatches.nineDartersPDC}
-                currentMatch={currentMatches.nineDartersPDC}
-              >
+              <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
                 <FieldName className="sm:text-sm md:text-xs lg:text-sm">
                   <PiNumberCircleNine size={18} />
                   PDC Nine-Darters
@@ -320,6 +330,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.nineDartersPDC?.type}
                   fieldName="Nine-darters"
+                  previousMatch={previousMatches.nineDartersPDC}
+                  currentMatch={currentMatches.nineDartersPDC}
                 >
                   {formatPlayerToFindField<Player['nineDartersPDC']>(
                     currentMatches.nineDartersPDC
@@ -329,11 +341,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field
-                className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2"
-                previousMatch={previousMatches.rankingPDC}
-                currentMatch={currentMatches.rankingPDC}
-              >
+              <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName className="md:text-xs lg:text-sm">
                   <Calendar1 size={18} />
                   {currentMatches.gender === 'female'
@@ -360,6 +368,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.rankingPDC?.type}
                   fieldName={'PDC ranking'}
+                  previousMatch={previousMatches.rankingPDC}
+                  currentMatch={currentMatches.rankingPDC}
                 >
                   {formatPlayerToFindField<Player['rankingPDC']>(
                     currentMatches.rankingPDC
@@ -400,6 +410,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                     type={'guess'}
                     fieldName={'Best UK Open result'}
                     comparisonResult={currentMatches.bestResultUKOpen?.type}
+                    previousMatch={previousMatches.bestResultUKOpen}
+                    currentMatch={currentMatches.bestResultUKOpen}
                   >
                     Did Not Play
                   </FieldValue>
@@ -447,6 +459,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
                     comparisonResult={currentMatches.bestResultPDC?.type}
+                    previousMatch={previousMatches.bestResultPDC}
+                    currentMatch={currentMatches.bestResultPDC}
                   >
                     Did Not Play
                   </FieldValue>
@@ -463,11 +477,7 @@ export default function PlayerCard(props: PlayerCardProps) {
             </div>
             <Separator />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
-              <Field
-                className="col-span-2 sm:col-span-1"
-                previousMatch={previousMatches.rankingWDF}
-                currentMatch={currentMatches.rankingWDF}
-              >
+              <Field className="col-span-2 sm:col-span-1">
                 <FieldName className="md:text-xs lg:text-sm">
                   <Calendar1 size={18} />
                   WDF Ranking
@@ -501,21 +511,24 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.rankingWDF?.type}
                   fieldName="WDF ranking"
+                  previousMatch={previousMatches.rankingWDF}
+                  currentMatch={currentMatches.rankingWDF}
                 >
                   {formatPlayerToFindField<Player['rankingWDF']>(
                     currentMatches.rankingWDF
                   )}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.tourCard}
-                currentMatch={currentMatches.tourCard}
-              >
+              <Field>
                 <FieldName>
                   <ScrollText size={18} />
                   Tour Card
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.tourCard}
+                  currentMatch={currentMatches.tourCard}
+                >
                   {currentMatches.tourCard === undefined
                     ? ''
                     : currentMatches.tourCard
@@ -523,15 +536,16 @@ export default function PlayerCard(props: PlayerCardProps) {
                       : 'No'}
                 </FieldValue>
               </Field>
-              <Field
-                previousMatch={previousMatches.playedInWCOD}
-                currentMatch={currentMatches.playedInWCOD}
-              >
+              <Field>
                 <FieldName>
                   <Globe size={18} />
                   Played in WCoD
                 </FieldName>
-                <FieldValue type={'playerToFind'}>
+                <FieldValue
+                  type={'playerToFind'}
+                  previousMatch={previousMatches.playedInWCOD}
+                  currentMatch={currentMatches.playedInWCOD}
+                >
                   {currentMatches.playedInWCOD === undefined
                     ? ''
                     : currentMatches.playedInWCOD
@@ -576,6 +590,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
                     comparisonResult={currentMatches.bestResultWDF?.type}
+                    previousMatch={previousMatches.bestResultWDF}
+                    currentMatch={currentMatches.bestResultWDF}
                   >
                     Did Not Play
                   </FieldValue>
