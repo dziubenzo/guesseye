@@ -1,6 +1,7 @@
 import type { PlayerToFindMatch } from '@/lib/types';
-import { Check, CircleX } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Check, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
 type GuessIndicatorProps = {
@@ -12,6 +13,7 @@ export default function GuessIndicator({
   previousMatch,
   currentMatch,
 }: GuessIndicatorProps) {
+  const { theme } = useTheme();
   const [match, setMatch] = useState<'good' | 'wrong' | null>(null);
 
   useEffect(() => {
@@ -51,33 +53,57 @@ export default function GuessIndicator({
     }
   }, [previousMatch, currentMatch]);
 
-  if (match === 'good') {
-    return (
-      <motion.span
-        className="absolute z-5 bg-good-guess rounded-full p-1"
-        initial={{ top: 0, right: 0, scale: 1 }}
-        animate={{ top: -25, right: -25, scale: 0.75, rotate: '360deg' }}
-        transition={{ duration: 1.5 }}
-        onAnimationComplete={() => setMatch(null)}
-      >
-        <Check size={24} />
-      </motion.span>
-    );
-  }
-
-  if (match === 'wrong') {
-    return (
-      <motion.span
-        className="absolute z-5 bg-wrong-guess rounded-full p-1"
-        initial={{ top: 0, right: 0, scale: 1 }}
-        animate={{ top: -25, right: -25, scale: 0.75, rotate: '360deg' }}
-        transition={{ duration: 1.5 }}
-        onAnimationComplete={() => setMatch(null)}
-      >
-        <CircleX size={24} />
-      </motion.span>
-    );
-  }
-
-  return null;
+  return (
+    <AnimatePresence>
+      {match === 'good' ? (
+        <motion.span
+          className="absolute block z-5 bg-good-guess rounded-full p-1"
+          initial={{
+            top: 8,
+            right: 8,
+            scale: 1,
+            opacity: 0,
+          }}
+          animate={{
+            top: -35,
+            right: -5,
+            scale: 0.8,
+            rotate: 360 * 2,
+            opacity: 1,
+          }}
+          exit={{ scale: 1, opacity: 0 }}
+          transition={{
+            duration: 0.6,
+          }}
+          onAnimationComplete={() => setMatch(null)}
+        >
+          <Check size={24} color={theme === 'dark' ? 'black' : 'white'} />
+        </motion.span>
+      ) : match === 'wrong' ? (
+        <motion.span
+          className="absolute block bg-wrong-guess rounded-full p-1"
+          initial={{
+            top: 8,
+            right: 8,
+            scale: 1,
+            opacity: 0,
+          }}
+          animate={{
+            top: -35,
+            right: -5,
+            scale: 0.8,
+            rotate: 360 * 2,
+            opacity: 1,
+          }}
+          transition={{
+            duration: 0.6,
+          }}
+          exit={{ scale: 1, opacity: 0 }}
+          onAnimationComplete={() => setMatch(null)}
+        >
+          <X size={24} color={theme === 'dark' ? 'black' : 'white'} />
+        </motion.span>
+      ) : null}
+    </AnimatePresence>
+  );
 }
