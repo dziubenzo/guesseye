@@ -22,7 +22,12 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
   return (
     <div className="flex flex-col grow-1 text-center justify-center items-center gap-4">
       <h2 className="text-2xl">You missed out on...</h2>
-      <PlayerCard type="playerToFind" difficulty={previousPlayerDifficulty} />
+      <PlayerCard
+        type="playerToFind"
+        previousMatches={previousPlayer}
+        currentMatches={previousPlayer}
+        difficulty={previousPlayerDifficulty}
+      />
       {attempts > 0 ? (
         <>
           <p>
@@ -37,11 +42,11 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
           {previousPlayer.gender === 'male' ? 'him' : 'her'}...
         </p>
       )}
-      <div className="p-8 flex flex-col justify-center items-center gap-4 w-full dark:bg-primary-foreground rounded-3xl">
+      <div className="p-8 flex flex-col justify-center items-center gap-4 w-full rounded-3xl">
         <p className="text-sm">
           The next darts player (
-          <span className="font-bold">{nextPlayerDifficulty}</span> difficulty)
-          unlocks in
+          <span className="font-medium">{nextPlayerDifficulty}</span>{' '}
+          difficulty) unlocks in
         </p>
         <div className="relative">
           <p className="text-2xl" suppressHydrationWarning>
