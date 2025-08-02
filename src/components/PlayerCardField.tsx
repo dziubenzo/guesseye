@@ -1,5 +1,6 @@
 import Arrow from '@/components/Arrow';
 import GuessIndicator from '@/components/GuessIndicator';
+import { fieldVariant } from '@/lib/motion-variants';
 import type {
   Match,
   Player,
@@ -7,6 +8,7 @@ import type {
   RangedMatch,
 } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { motion } from 'motion/react';
 import { ReactNode } from 'react';
 
 type FieldProps = {
@@ -16,14 +18,15 @@ type FieldProps = {
 
 export function Field({ children, className }: FieldProps) {
   return (
-    <div
+    <motion.div
       className={cn(
         'flex flex-col gap-2 items-center justify-center',
         className
       )}
+      variants={fieldVariant}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
 

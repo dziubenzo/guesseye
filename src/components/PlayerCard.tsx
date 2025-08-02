@@ -11,6 +11,7 @@ import {
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { cardTopDuration, fieldsContainerVariant } from '@/lib/motion-variants';
 import type {
   ComparisonResults,
   Player,
@@ -35,6 +36,7 @@ import {
   VenusAndMars,
   Weight,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { PiNumberCircleNine } from 'react-icons/pi';
 
 type PlayerCardProps =
@@ -79,7 +81,12 @@ export default function PlayerCard(props: PlayerCardProps) {
       <Card className="bg-secondary w-full">
         <CardHeader>
           <CardTitle className="flex flex-col justify-center sm:justify-start items-center gap-4 sm:flex-row">
-            <div className="flex items-center gap-3 w-[250px] sm:w-[300px]">
+            <motion.div
+              className="flex items-center gap-3 w-[250px] sm:w-[300px]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: cardTopDuration }}
+            >
               <p
                 className={`${currentMatches.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full relative`}
               >
@@ -98,10 +105,13 @@ export default function PlayerCard(props: PlayerCardProps) {
                   currentMatch={currentMatches.lastName}
                 />
               </p>
-            </div>
+            </motion.div>
             {difficulty && (
-              <div
+              <motion.div
                 className={`sm:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(difficulty)} dark:text-secondary`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: cardTopDuration }}
               >
                 <Gauge size={24} />
                 <span>{difficulty.toUpperCase()}</span>
@@ -109,12 +119,17 @@ export default function PlayerCard(props: PlayerCardProps) {
                   How difficult the darts player is to find in the
                   developer&apos;s opinion.
                 </Tooltip>
-              </div>
+              </motion.div>
             )}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-4">
+          <motion.div
+            className="flex flex-col gap-4"
+            initial="hidden"
+            animate="visible"
+            variants={fieldsContainerVariant}
+          >
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
               <Field>
                 <FieldName>
@@ -618,7 +633,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 )}
               </Field>
             </div>
-          </div>
+          </motion.div>
         </CardContent>
       </Card>
     );
