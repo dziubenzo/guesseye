@@ -22,7 +22,7 @@ type BestResultPDCChartProps = {
 
 export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[400px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[500px] w-full">
       <BarChart
         accessibilityLayer
         data={data}

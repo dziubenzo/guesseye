@@ -69,11 +69,11 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center p-2">
           <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-8">
             <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
-              The minimum number of guesses needed to win a game in any mode by
+              The lowest number of guesses needed to win a game in any mode by
               either a user or a guest.
             </Stat>
             <Stat title="Most Guesses To Win" value={mostGuesses}>
-              The maximum number of guesses needed to win a game in any mode by
+              The highest number of guesses needed to win a game in any mode by
               either a user or a guest.
             </Stat>
           </div>
@@ -263,7 +263,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             name={latestOfficialGuessName}
             time={latestOfficialGuessTime}
           >
-            Latest guess in a game in the official mode.
+            The latest guess in a game in the official mode.
           </Stat>
           <Stat
             title="Latest Random Guess"
@@ -271,7 +271,7 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             name={latestRandomGuessName}
             time={latestRandomGuessTime}
           >
-            Latest guess in a game in the random mode.
+            The latest guess in a game in the random mode.
           </Stat>
         </div>
       </div>

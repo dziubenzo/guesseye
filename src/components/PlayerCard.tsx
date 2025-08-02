@@ -195,12 +195,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                       <br />
                       <li className="list-disc list-inside">
                         <span className="font-medium">active</span> (playing in
-                        PDC/WDF/WSD/other competitive events);
+                        PDC/WDF/WSD/Modus or local/national events);
                       </li>
                       <li className="list-disc list-inside">
                         <span className="font-medium">retired</span> (no longer
                         taking part in events apart from exhibitions, the
-                        example being Phil Taylor); or
+                        example being Phil Taylor or Keith Deller); or
                       </li>
                       <li className="list-disc list-inside">
                         <span className="font-medium">deceased</span> (no longer
@@ -220,12 +220,17 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldValue>
               </Field>
               <Field className="col-span-2 col-start-1 sm:col-span-2 sm:col-start-2 md:col-span-1">
-                <FieldName>
+                <FieldName className="sm:text-sm md:text-xs lg:text-sm">
                   <History size={18} />
                   {currentMatches.status === 'retired' ||
                   currentMatches.status == 'deceased'
                     ? 'Played Since'
                     : 'Playing Since'}
+                  <Tooltip>
+                    It is the year when a darts player started playing darts
+                    rather than when they became good enough to compete in
+                    larger events.
+                  </Tooltip>
                 </FieldName>
                 <FieldValue
                   type={'guess'}
@@ -258,7 +263,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       DartsRec
                     </ExternalLink>{' '}
                     reflects their current skill level. It may differ
-                    considerably from the PDC or WDF ranking.
+                    considerably from their PDC or WDF ranking.
                   </Tooltip>
                 </FieldName>
                 <FieldValue
@@ -432,9 +437,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best PDC World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one. Also, this field does{' '}
-                    <span className="font-medium">not</span> include the best
-                    PDC World Youth Championship result.
+                    the year is the latest one.{' '}
+                    <p>
+                      Also, this field does{' '}
+                      <span className="font-medium">not</span> include the best
+                      PDC World Youth Championship result.
+                    </p>
                   </Tooltip>
                 </FieldName>
                 {currentMatches.bestResultPDC?.value &&
@@ -560,10 +568,13 @@ export default function PlayerCard(props: PlayerCardProps) {
                   Best BDO/WDF World Championship Result
                   <Tooltip>
                     If a darts player achieved their best result more than once,
-                    the year is the latest one. Also, this field does{' '}
-                    <span className="font-medium">not</span> include either the
-                    best BDO/WDF World Youth Championship result or the best
-                    News of the World Darts Championship result.
+                    the year is the latest one.{' '}
+                    <p>
+                      Also, this field does{' '}
+                      <span className="font-medium">not</span> include either
+                      the best BDO/WDF World Youth Championship result or the
+                      best News of the World Darts Championship result.
+                    </p>
                   </Tooltip>
                 </FieldName>
                 {currentMatches.bestResultWDF?.value &&

@@ -45,7 +45,7 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          width={125}
+          width={140}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

@@ -32,7 +32,7 @@ export default function Arrow({ children, type, bestResult }: ArrowProps) {
       </PopoverTrigger>
       <PopoverContent className="text-xs p-2 w-max">
         {children} should be{' '}
-        <span className="font-bold">{bestResult ? bestResult : type}</span>
+        <span className="font-bold">{bestResult ? bestResult : type}</span>.
       </PopoverContent>
     </Popover>
   );

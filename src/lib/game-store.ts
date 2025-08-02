@@ -36,7 +36,7 @@ const initialState: InitialState = {
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  mode: 'official',
+  mode: 'random',
 };
 
 export const useGameStore = create<GameStore>()((set) => ({
@@ -45,7 +45,7 @@ export const useGameStore = create<GameStore>()((set) => ({
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  mode: 'official',
+  mode: 'random',
   finishGame: (playerToFind) =>
     set(() => ({
       playerToFind,

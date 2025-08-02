@@ -72,11 +72,10 @@ export default async function UserStats({ stats }: UserStatsProps) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 md:col-span-3 gap-8">
             <Stat title="Fewest Guesses To Win" value={fewestGuesses}>
-              The minimum number of guesses you needed to win a game in any
-              mode.
+              The lowest number of guesses you needed to win a game in any mode.
             </Stat>
             <Stat title="Most Guesses To Win" value={mostGuesses}>
-              The maximum number of guesses you needed to win a game in any
+              The highest number of guesses you needed to win a game in any
               mode.
             </Stat>
           </div>
