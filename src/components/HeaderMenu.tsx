@@ -11,7 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import { signOut, useSession } from '@/lib/auth-client';
+import { signOut } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
 import {
   ArrowBigLeft,
@@ -38,12 +38,12 @@ const CUSTOM_MENU_CLASS = 'grid w-full sm:w-[420px] gap-2 sm:gap-4';
 
 type HeaderMenuProps = {
   username: string;
+  role: string;
 };
 
-export default function HeaderMenu({ username }: HeaderMenuProps) {
+export default function HeaderMenu({ username, role }: HeaderMenuProps) {
   const router = useRouter();
   const { resetState } = useGameStore();
-  const { data } = useSession();
 
   async function logOut() {
     await signOut({
@@ -51,6 +51,7 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
         onSuccess: () => {
           resetState();
           router.push('/');
+          router.refresh();
         },
       },
     });
@@ -232,7 +233,7 @@ export default function HeaderMenu({ username }: HeaderMenuProps) {
                       </div>
                     </Link>
                   </NavigationMenuLink>
-                  {data?.user.role === 'admin' && (
+                  {role === 'admin' && (
                     <NavigationMenuLink asChild>
                       <Link href="/admin">
                         <div className="flex gap-4 items-center">

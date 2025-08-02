@@ -496,7 +496,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                       <br />
                       <li className="list-disc list-inside">
                         <span className="font-medium">
-                          WDF Main Ranking Men
+                          WDF Main Ranking Open
                         </span>{' '}
                         for male darts players, and;
                       </li>

@@ -1,17 +1,20 @@
-'use client';
-
 import AuthModal from '@/components/AuthModal';
 import HeaderMenu from '@/components/HeaderMenu';
 import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
-import { useSession } from '@/lib/auth-client';
+import { auth } from '@/lib/auth';
 import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
+import { headers } from 'next/headers';
 
-export default function Header() {
-  const { data } = useSession();
+export default async function Header() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if (data) return <HeaderMenu username={data.user.name} />;
+  if (session) {
+    return <HeaderMenu username={session.user.name} role={session.user.role} />;
+  }
 
   return (
     <header className="grid grid-flow-col grid-cols-3 text-center items-center justify-center relative">
