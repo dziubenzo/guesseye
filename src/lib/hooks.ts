@@ -7,9 +7,7 @@ import { useEffect, useState } from 'react';
 
 export const useUpdateProgressBar = () => {
   const { currentMatches, gameOver } = useGameStore();
-  const [fieldsFound, setFieldsFound] = useState(
-    Object.keys(currentMatches).length
-  );
+  const [fieldsFound, setFieldsFound] = useState(0);
 
   useEffect(() => {
     function calculateFieldsFound() {

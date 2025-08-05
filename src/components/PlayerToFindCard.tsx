@@ -23,8 +23,11 @@ export default function PlayerToFindCard({
       <div className="flex justify-center items-center gap-2">
         <span>{fieldsFound}</span>
         <Progress
-          className="w-[75vw] md:w-xl h-4"
+          className="w-[75vw] md:w-xl h-4 [&>*]:bg-good-guess bg-wrong-guess"
           value={(fieldsFound / ALL_MATCHES) * 100}
+          getValueLabel={() =>
+            `${fieldsFound} out of ${ALL_MATCHES} fields found`
+          }
         />
         <span>{ALL_MATCHES}</span>
       </div>
