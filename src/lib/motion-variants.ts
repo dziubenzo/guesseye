@@ -18,3 +18,17 @@ export const fieldVariant = {
 };
 
 export const cardTopDuration = NAMED_FIELDS * delayChildren;
+
+export const gameWonGivenUpParentVariant = {
+  visible: {
+    transition: {
+      when: 'beforeChildren',
+      delayChildren: stagger(0.15),
+    },
+  },
+};
+
+export const gameWonGivenUpChildVariant = {
+  hidden: { scale: 0 },
+  visible: { scale: 1 },
+};
