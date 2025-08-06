@@ -1835,6 +1835,10 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Danny Lauby';
     case 'Thomas Sykes':
       return 'Tom Sykes';
+    case 'Douglas Boehm':
+      return 'Doug Boehm';
+    case 'Franz Roetzsch':
+      return 'Franz Rötzsch';
   }
 
   return fullName;

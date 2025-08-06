@@ -87,17 +87,19 @@ export default function GiveUpForm({
           </AlertDialogTrigger>
           {playerToFind ? (
             <AlertDialogContent
+              className="flex flex-col gap-0"
               onEscapeKeyDown={(event) => {
                 event.preventDefault();
               }}
             >
               <AlertDialogHeader>
                 <AlertDialogTitle>Game Given Up</AlertDialogTitle>
-                <AlertDialogDescription>
-                  <span>The darts player to find was... </span>
-                  <span className="uppercase font-medium text-primary text-xl">
-                    {playerToFind}!
+                <AlertDialogDescription className="flex flex-col gap-2">
+                  <span className="block">The darts player to find was...</span>
+                  <span className="block uppercase font-medium text-primary text-2xl">
+                    {playerToFind}
                   </span>
+                  <span className="block">Good luck next time!</span>
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -105,7 +107,7 @@ export default function GiveUpForm({
                   className="cursor-pointer"
                   onClick={handleButtonClick}
                 >
-                  Good to know!
+                  Close
                 </AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>

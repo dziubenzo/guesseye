@@ -42,6 +42,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       mode,
     },
     mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
   });
 
   const [error, setError] = useState('');
@@ -88,10 +89,6 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     execute({ ...values, currentMatches, mode });
   }
 
-  useEffect(() => {
-    if (!isPending || !gameOver) playerForm.setFocus('guess');
-  }, [playerForm, isPending, gameOver]);
-
   // Make sure state is reset on scheduleId change
   useEffect(() => {
     resetState();
@@ -122,6 +119,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                       <Input
                         className="text-lg md:text-lg h-auto p-3 text-center placeholder:text-center"
                         disabled={isPending || gameOver}
+                        onInput={() => setError('')}
                         autoFocus
                         {...field}
                       />
