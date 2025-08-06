@@ -192,7 +192,8 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                         <div>
                           <div className="font-medium">Database Stats</div>
                           <div className="text-muted-foreground">
-                            Take a look at database stats.
+                            Take a look at database stats and find out which
+                            darts players have their birthday today.
                           </div>
                         </div>
                       </div>

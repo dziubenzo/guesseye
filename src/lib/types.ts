@@ -426,3 +426,8 @@ export type PlayerWithCount = {
   difficulty: Player['difficulty'];
   officialModeCount: number;
 };
+
+export type BirthdayPlayer = {
+  fullName: string;
+  age: number;
+};

@@ -1,3 +1,4 @@
+import BirthdayPlayers from '@/components/BirthdayPlayers';
 import AgeChart from '@/components/charts/AgeChart';
 import BestResultPDCChart from '@/components/charts/BestResultPDCChart';
 import BestResultPDCYearChart from '@/components/charts/BestResultPDCYearChart';
@@ -24,13 +25,7 @@ import {
   STATUS_COLOURS,
 } from '@/components/charts/pie-chart-configs';
 import PlayingSinceChart from '@/components/charts/PlayingSinceChart';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { getDatabaseStats } from '@/server/db/get-database-stats';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -69,17 +64,12 @@ export default async function DatabaseStats() {
   return (
     <div className="flex flex-col grow-1 justify-center">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Database Stats</CardTitle>
-          <CardDescription>
-            <p>
-              Here you can find miscellaneous charts related to the database of
-              darts players that powers this app.
-            </p>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="mt-4">
-          <div className="flex flex-col gap-4 md:gap-8">
+        <CardContent>
+          <div className="flex flex-col gap-4 sm:gap-8">
+            <BirthdayPlayers />
+            <CardTitle className="text-2xl text-center md:text-start -mt-0 md:-mt-4">
+              Database Stats
+            </CardTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2 className="font-medium text-center">
