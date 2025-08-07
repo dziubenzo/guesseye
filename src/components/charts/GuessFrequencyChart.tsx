@@ -53,7 +53,7 @@ export default function GuessFrequencyChart({
           tickMargin={10}
           axisLine={false}
           minTickGap={0}
-          width={140}
+          width={130}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

@@ -66,7 +66,7 @@ export function capitalise(string: string) {
 }
 
 // Get rid of all special characters in player's name
-export function normaliseArray(name: string) {
+export function normaliseToArray(name: string) {
   return name
     .toLowerCase()
     .normalize('NFD')
@@ -75,7 +75,7 @@ export function normaliseArray(name: string) {
     .split(' ');
 }
 
-export function normaliseString(name: string) {
+export function normaliseToString(name: string) {
   return name
     .toLowerCase()
     .normalize('NFD')
@@ -592,9 +592,9 @@ export function checkForDuplicateGuess(
   prevGuesses: Guess[]
 ) {
   const isDuplicateGuess = prevGuesses.some((prevGuess) => {
-    const splitGuess = normaliseArray(guess);
-    const firstName = normaliseString(prevGuess.guessedPlayer.firstName);
-    const lastName = normaliseString(prevGuess.guessedPlayer.lastName);
+    const splitGuess = normaliseToArray(guess);
+    const firstName = normaliseToString(prevGuess.guessedPlayer.firstName);
+    const lastName = normaliseToString(prevGuess.guessedPlayer.lastName);
     const lastWordIndex = splitGuess.length - 1;
 
     if (splitGuess.length === 1) {
@@ -644,8 +644,8 @@ export const validateScheduleId = (scheduleId: string | undefined) => {
 
 export function filterPlayers(players: Player[], guess: string[]): Player[] {
   const searchResults = players.filter((player) => {
-    const firstName = normaliseString(player.firstName);
-    const lastName = normaliseString(player.lastName);
+    const firstName = normaliseToString(player.firstName);
+    const lastName = normaliseToString(player.lastName);
     const lastWordIndex = guess.length - 1;
 
     if (guess.length === 1) {
@@ -1839,9 +1839,38 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Doug Boehm';
     case 'Franz Roetzsch':
       return 'Franz Rötzsch';
+    case 'Lok-Yin Lee':
+      return 'Lok Yin Lee';
   }
 
   return fullName;
+}
+
+// Change the guess of an English-spelled German-speaking darts player (e.g. Gruellich) to the German spelling (i.e. Grüllich)
+export function changeToGermanSpelling(guess: GuessSchemaType['guess']) {
+  const splitGuess = normaliseToArray(guess);
+
+  splitGuess.forEach((guessItem, index) => {
+    switch (guessItem) {
+      case 'gruellich':
+        splitGuess[index] = 'Grüllich';
+        break;
+      case 'goedl':
+        splitGuess[index] = 'Gödl';
+        break;
+      case 'klingelhoefer':
+        splitGuess[index] = 'Klingelhöfer';
+        break;
+      case 'lueck':
+        splitGuess[index] = 'Lück';
+        break;
+      case 'roetzsch':
+        splitGuess[index] = 'Rötzsch';
+        break;
+    }
+  });
+
+  return splitGuess.join(' ');
 }
 
 export function getMidnightUTC() {

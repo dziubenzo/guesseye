@@ -12,7 +12,7 @@ import {
   getPlayerCondition,
   getRankingType,
   handleDifferentSpellings,
-  normaliseString,
+  normaliseToString,
 } from '@/lib/utils';
 import { db } from '@/server/db';
 import { lower, player as playerSchema, user } from '@/server/db/schema';
@@ -235,10 +235,12 @@ export async function updateDBRankings(
     let playerFound = false;
 
     for (const player of players) {
-      const playerFirstName = normaliseString(player.firstName);
-      const playerLastName = normaliseString(player.lastName);
-      const updatedPlayerFirstName = normaliseString(updatedRanking.firstName);
-      const updatedPlayerLastName = normaliseString(updatedRanking.lastName);
+      const playerFirstName = normaliseToString(player.firstName);
+      const playerLastName = normaliseToString(player.lastName);
+      const updatedPlayerFirstName = normaliseToString(
+        updatedRanking.firstName
+      );
+      const updatedPlayerLastName = normaliseToString(updatedRanking.lastName);
 
       if (
         playerFirstName !== updatedPlayerFirstName ||

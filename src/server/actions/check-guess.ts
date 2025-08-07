@@ -9,7 +9,7 @@ import {
   comparePlayers,
   fillAllMatches,
   filterPlayers,
-  normaliseArray,
+  normaliseToArray,
   validateScheduleId,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/check-guess';
@@ -22,7 +22,7 @@ export const checkGuess = actionClient
   .schema(guessSchema)
   .action(
     async ({ parsedInput: { guess, scheduleId, currentMatches, mode } }) => {
-      const normalisedGuess = normaliseArray(guess);
+      const normalisedGuess = normaliseToArray(guess);
 
       const validationResult = validateScheduleId(scheduleId);
 

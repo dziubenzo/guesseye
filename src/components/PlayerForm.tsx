@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
 import { PlayerToFindMatches } from '@/lib/types';
-import { checkForDuplicateGuess } from '@/lib/utils';
+import { changeToGermanSpelling, checkForDuplicateGuess } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/check-guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -81,12 +81,13 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
 
   function onSubmit(values: GuessSchemaType) {
     setError('');
-    const isDuplicateGuess = checkForDuplicateGuess(values.guess, guesses);
+    const guess = changeToGermanSpelling(values.guess);
+    const isDuplicateGuess = checkForDuplicateGuess(guess, guesses);
     if (isDuplicateGuess) {
       setError('You have already guessed this player.');
       return;
     }
-    execute({ ...values, currentMatches, mode });
+    execute({ ...values, currentMatches, mode, guess });
   }
 
   // Make sure state is reset on scheduleId change

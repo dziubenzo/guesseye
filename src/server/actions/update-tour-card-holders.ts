@@ -1,7 +1,7 @@
 'use server';
 
 import type { UpdateAction } from '@/lib/types';
-import { normaliseString } from '@/lib/utils';
+import { normaliseToString } from '@/lib/utils';
 import { db } from '@/server/db';
 import { player as playerSchema } from '@/server/db/schema';
 import { checkForAdmin, getTourCardHolders } from '@/server/utils';
@@ -53,10 +53,12 @@ export default async function updateTourCardHolders() {
     let playerFound = false;
 
     for (const player of players) {
-      const playerFirstName = normaliseString(player.firstName);
-      const playerLastName = normaliseString(player.lastName);
-      const tourCardHolderFirstName = normaliseString(tourCardHolder.firstName);
-      const tourCardHolderLastName = normaliseString(tourCardHolder.lastName);
+      const playerFirstName = normaliseToString(player.firstName);
+      const playerLastName = normaliseToString(player.lastName);
+      const tourCardHolderFirstName = normaliseToString(
+        tourCardHolder.firstName
+      );
+      const tourCardHolderLastName = normaliseToString(tourCardHolder.lastName);
 
       if (
         playerFirstName !== tourCardHolderFirstName ||
