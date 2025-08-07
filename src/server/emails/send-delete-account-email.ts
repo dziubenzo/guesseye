@@ -1,10 +1,9 @@
 'use server';
 
 import DeleteAccountEmail from '@/components/DeleteAccountEmail';
-import * as dotenvx from '@dotenvx/dotenvx';
 import { Resend } from 'resend';
 
-const resend = new Resend(dotenvx.get('RESEND_API_KEY'));
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendDeleteAccountEmail = async (
   email: string,

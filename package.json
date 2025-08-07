@@ -3,16 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "dotenvx run -- next dev",
-    "build": "dotenvx run -- next build",
-    "start": "dotenvx run -- next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "type-check": "tsc --noEmit --watch",
     "db:push": "npx drizzle-kit push",
-    "db:studio": "npx drizzle-kit studio",
-    "dotenvx": "dotenvx"
+    "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.45.1",
     "@hookform/resolvers": "^5.0.1",
     "@neondatabase/serverless": "^1.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.13",
