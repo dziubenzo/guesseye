@@ -86,14 +86,18 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
     },
     mode: 'onSubmit',
   });
+  const router = useRouter();
   const { resetState } = useGameStore();
 
   const [error, setError] = useState('');
 
   const { execute, isPending } = useAction(logInWithEmail, {
     onSuccess({ data }) {
-      if (data?.error) setError(data.error);
+      if (data?.error) {
+        setError(data.error);
+      }
       resetState();
+      router.refresh();
     },
   });
 

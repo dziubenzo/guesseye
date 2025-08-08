@@ -11,7 +11,7 @@ export const sendResetPasswordEmail = async (
   url: string
 ) => {
   const { data, error } = await resend.emails.send({
-    from: 'GuessEye <noreply@guesseye.com>',
+    from: 'GuessEye <oche@guesseye.com>',
     to: email,
     subject: 'GuessEye - Reset Password',
     react: ResetPasswordEmail({ name, url }),
