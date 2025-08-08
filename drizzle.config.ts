@@ -5,7 +5,10 @@ export default defineConfig({
   schema: './src/server/db/schema.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url:
+      process.env.NODE_ENV === 'development'
+        ? process.env.DATABASE_DEV_URL!
+        : process.env.DATABASE_URL!,
   },
   verbose: true,
   strict: true,

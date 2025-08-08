@@ -9,6 +9,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg',
   }),
+  appName: 'GuessEye',
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -51,5 +52,9 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: 'guesseye',
   },
-  trustedOrigins: ['http://192.168.0.13:3000'],
+  trustedOrigins: [
+    'http://localhost:3000',
+    'http://192.168.0.16:3000',
+    'https://guesseye.com/',
+  ],
 });

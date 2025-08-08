@@ -1841,6 +1841,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Franz Rötzsch';
     case 'Lok-Yin Lee':
       return 'Lok Yin Lee';
+    case 'Alex Fehlmann':
+      return 'Alexander Fehlmann';
   }
 
   return fullName;
