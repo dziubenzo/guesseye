@@ -52,9 +52,14 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: 'guesseye',
   },
+  rateLimit: {
+    enabled: true,
+    window: 10,
+    max: 100,
+  },
   trustedOrigins: [
     'http://localhost:3000',
     'http://192.168.0.16:3000',
-    'https://guesseye.com/',
+    'https://www.guesseye.com',
   ],
 });
