@@ -11,7 +11,7 @@ export const sendDeleteAccountEmail = async (
   url: string
 ) => {
   const { data, error } = await resend.emails.send({
-    from: 'GuessEye <onboarding@resend.dev>',
+    from: 'GuessEye <noreply@guesseye.com>',
     to: email,
     subject: 'GuessEye - Delete Account',
     react: DeleteAccountEmail({ name, url }),

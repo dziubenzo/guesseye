@@ -11,7 +11,7 @@ export const sendConfirmationEmail = async (
   url: string
 ) => {
   const { data, error } = await resend.emails.send({
-    from: 'GuessEye <onboarding@resend.dev>',
+    from: 'GuessEye <noreply@guesseye.com>',
     to: email,
     subject: 'GuessEye - Confirmation Link',
     react: ConfirmationEmail({ name, url }),
