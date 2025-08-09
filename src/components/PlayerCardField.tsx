@@ -1,4 +1,5 @@
 import Arrow from '@/components/Arrow';
+import Bold from '@/components/Bold';
 import GuessIndicator from '@/components/GuessIndicator';
 import { fieldVariant } from '@/lib/motion-variants';
 import type {
@@ -45,11 +46,19 @@ export function FieldName({ children, className }: FieldNameProps) {
   );
 }
 
+type ValueType =
+  | 'age'
+  | 'playingSince'
+  | 'ranking'
+  | 'dartsWeight'
+  | 'nineDartersPDC';
+
 type FieldValueProps =
   | {
       type: 'guess';
       children: ReactNode;
       fieldName: string;
+      valueType?: ValueType;
       comparisonResult?: Match | RangedMatch;
       previousMatch?: PlayerToFindMatch;
       currentMatch?: PlayerToFindMatch;
@@ -84,7 +93,7 @@ export function FieldValue(props: FieldValueProps) {
   }
 
   if (type === 'guess') {
-    const { fieldName, comparisonResult } = props;
+    const { fieldName, comparisonResult, valueType } = props;
 
     function getRightFieldColour() {
       if (comparisonResult === undefined) {
@@ -93,6 +102,40 @@ export function FieldValue(props: FieldValueProps) {
         return 'bg-good-guess text-good-guess-foreground';
       } else {
         return 'bg-wrong-guess text-wrong-guess-foreground opacity-80 dark:opacity-100';
+      }
+    }
+
+    function getLowerDescription(valueType: ValueType | undefined) {
+      switch (valueType) {
+        case 'age':
+          return 'younger';
+        case 'playingSince':
+          return 'earlier';
+        case 'ranking':
+          return 'worse (number should be higher)';
+        case 'dartsWeight':
+          return 'lighter';
+        case 'nineDartersPDC':
+          return 'lower';
+        default:
+          return 'lower';
+      }
+    }
+
+    function getHigherDescription(valueType: ValueType | undefined) {
+      switch (valueType) {
+        case 'age':
+          return 'older';
+        case 'playingSince':
+          return 'later';
+        case 'ranking':
+          return 'better (number should be lower)';
+        case 'dartsWeight':
+          return 'heavier';
+        case 'nineDartersPDC':
+          return 'higher';
+        default:
+          return 'higher';
       }
     }
 
@@ -105,10 +148,15 @@ export function FieldValue(props: FieldValueProps) {
       >
         {children}
         {comparisonResult === 'higher' ? (
-          <Arrow type="higher">{fieldName}</Arrow>
+          <Arrow type="higher">
+            {fieldName} should be <Bold>{getHigherDescription(valueType)}</Bold>
+            .
+          </Arrow>
         ) : null}
         {comparisonResult === 'lower' ? (
-          <Arrow type="lower">{fieldName}</Arrow>
+          <Arrow type="lower">
+            {fieldName} should be <Bold>{getLowerDescription(valueType)}</Bold>.
+          </Arrow>
         ) : null}
         <GuessIndicator
           previousMatch={previousMatch}
@@ -167,12 +215,12 @@ export function FieldValueBestResult(props: FieldValueBestResultProps) {
     >
       {bestResult}
       {comparison === 'higher' ? (
-        <Arrow type="higher" bestResult="better">
-          {fieldName}
+        <Arrow type="higher">
+          {fieldName} should be <Bold>better</Bold>.
         </Arrow>
       ) : comparison === 'lower' ? (
-        <Arrow type="lower" bestResult="worse">
-          {fieldName}
+        <Arrow type="lower">
+          {fieldName} should be <Bold>worse</Bold>.
         </Arrow>
       ) : undefined}
       <GuessIndicator
@@ -214,9 +262,13 @@ export function FieldValueYearBestResult(props: FieldValueYearBestResultProps) {
     >
       ({yearBestResult}
       {comparison === 'higher' ? (
-        <Arrow type="higher">{fieldName}</Arrow>
+        <Arrow type="higher">
+          {fieldName} should be <Bold>later</Bold>.
+        </Arrow>
       ) : comparison === 'lower' ? (
-        <Arrow type="lower">{fieldName}</Arrow>
+        <Arrow type="lower">
+          {fieldName} should be <Bold>earlier</Bold>.
+        </Arrow>
       ) : undefined}
       )
       <GuessIndicator

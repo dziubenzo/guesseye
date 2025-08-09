@@ -168,7 +168,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 {currentMatches.status === 'deceased' ? (
                   <FieldValue
                     type={'guess'}
-                    fieldName="Born In"
+                    fieldName="Darts player"
+                    valueType="age"
                     previousMatch={previousMatches.dateOfBirth}
                     currentMatch={currentMatches.dateOfBirth}
                   >
@@ -183,7 +184,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     comparisonResult={currentMatches.dateOfBirth?.type}
-                    fieldName="Age"
+                    fieldName="Darts player"
+                    valueType="age"
                     previousMatch={previousMatches.dateOfBirth}
                     currentMatch={currentMatches.dateOfBirth}
                   >
@@ -268,8 +270,9 @@ export default function PlayerCard(props: PlayerCardProps) {
                     currentMatches.status === 'retired' ||
                     currentMatches.status == 'deceased'
                       ? 'Played since'
-                      : 'Playing since'
+                      : 'The year when the darts player started playing darts'
                   }
+                  valueType="playingSince"
                   previousMatch={previousMatches.playingSince}
                   currentMatch={currentMatches.playingSince}
                 >
@@ -299,6 +302,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.rankingElo?.type}
                   fieldName="Elo ranking"
+                  valueType="ranking"
                   previousMatch={previousMatches.rankingElo}
                   currentMatch={currentMatches.rankingElo}
                 >
@@ -347,7 +351,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldValue
                   type={'guess'}
                   comparisonResult={currentMatches.dartsWeight?.type}
-                  fieldName="Darts weight"
+                  fieldName="Darts"
+                  valueType="dartsWeight"
                   previousMatch={previousMatches.dartsWeight}
                   currentMatch={currentMatches.dartsWeight}
                 >
@@ -365,6 +370,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.nineDartersPDC?.type}
                   fieldName="Nine-darters"
+                  valueType="nineDartersPDC"
                   previousMatch={previousMatches.nineDartersPDC}
                   currentMatch={currentMatches.nineDartersPDC}
                 >
@@ -402,7 +408,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 <FieldValue
                   type={'guess'}
                   comparisonResult={currentMatches.rankingPDC?.type}
-                  fieldName={'PDC ranking'}
+                  fieldName={
+                    currentMatches.gender === 'female'
+                      ? 'WS ranking'
+                      : 'PDC ranking'
+                  }
+                  valueType="ranking"
                   previousMatch={previousMatches.rankingPDC}
                   currentMatch={currentMatches.rankingPDC}
                 >
@@ -444,6 +455,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best UK Open result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultUKOpen?.type}
                     previousMatch={previousMatches.bestResultUKOpen}
                     currentMatch={currentMatches.bestResultUKOpen}
@@ -454,6 +466,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best UK Open result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultUKOpen?.type}
                   >
                     {' '}
@@ -496,6 +509,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultPDC?.type}
                     previousMatch={previousMatches.bestResultPDC}
                     currentMatch={currentMatches.bestResultPDC}
@@ -506,6 +520,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultPDC?.type}
                   >
                     {' '}
@@ -549,6 +564,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   comparisonResult={currentMatches.rankingWDF?.type}
                   fieldName="WDF ranking"
+                  valueType="ranking"
                   previousMatch={previousMatches.rankingWDF}
                   currentMatch={currentMatches.rankingWDF}
                 >
@@ -630,6 +646,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultWDF?.type}
                     previousMatch={previousMatches.bestResultWDF}
                     currentMatch={currentMatches.bestResultWDF}
@@ -640,6 +657,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   <FieldValue
                     type={'guess'}
                     fieldName={'Best PDC World Championship result'}
+                    valueType="ranking"
                     comparisonResult={currentMatches.bestResultWDF?.type}
                   >
                     {' '}
@@ -676,7 +694,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Gender'}
+                  fieldName="Gender"
                   comparisonResult={comparisonResults.gender}
                 >
                   {capitalise(player.gender)}
@@ -688,7 +706,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                   {player.status === 'deceased' ? 'Born In' : 'Age'}
                 </FieldName>
                 {player.status === 'deceased' ? (
-                  <FieldValue type={'guess'} fieldName={'Born In'}>
+                  <FieldValue type={'guess'} fieldName="Born In">
                     {player.dateOfBirth !== null
                       ? format(player.dateOfBirth, 'y')
                       : 'N/A'}
@@ -696,7 +714,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 ) : (
                   <FieldValue
                     type={'guess'}
-                    fieldName={'Age'}
+                    fieldName="Darts player"
+                    valueType="age"
                     comparisonResult={comparisonResults.dateOfBirth}
                   >
                     {player.dateOfBirth ? getAge(player.dateOfBirth) : 'N/A'}
@@ -710,7 +729,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Country'}
+                  fieldName="Country"
                   comparisonResult={comparisonResults.country}
                 >
                   {player.country}
@@ -723,7 +742,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Status'}
+                  fieldName="Status"
                   comparisonResult={comparisonResults.status}
                 >
                   {capitalise(player.status)}
@@ -740,9 +759,10 @@ export default function PlayerCard(props: PlayerCardProps) {
                   type={'guess'}
                   fieldName={
                     player.status === 'retired' || player.status == 'deceased'
-                      ? 'Played Since'
-                      : 'Playing Since'
+                      ? 'Played since'
+                      : 'The year when the darts player started playing darts'
                   }
+                  valueType="playingSince"
                   comparisonResult={comparisonResults.playingSince}
                 >
                   {player.playingSince ? player.playingSince : 'N/A'}
@@ -758,7 +778,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Elo ranking'}
+                  fieldName="Elo ranking"
+                  valueType="ranking"
                   comparisonResult={comparisonResults.rankingElo}
                 >
                   {player.rankingElo ? player.rankingElo : 'N/A'}
@@ -771,7 +792,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Laterality'}
+                  fieldName="Laterality"
                   comparisonResult={comparisonResults.laterality}
                 >
                   {capitalise(player.laterality)}
@@ -784,7 +805,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Darts brand'}
+                  fieldName="Darts brand"
                   comparisonResult={comparisonResults.dartsBrand}
                 >
                   {player.dartsBrand ? player.dartsBrand : 'N/A'}
@@ -797,7 +818,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Darts weight'}
+                  fieldName="Darts"
+                  valueType="dartsWeight"
                   comparisonResult={comparisonResults.dartsWeight}
                 >
                   {player.dartsWeight ? player.dartsWeight : 'N/A'}
@@ -810,7 +832,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Nine-darters'}
+                  fieldName="Nine-darters"
+                  valueType="nineDartersPDC"
                   comparisonResult={comparisonResults.nineDartersPDC}
                 >
                   {player.nineDartersPDC}
@@ -822,11 +845,14 @@ export default function PlayerCard(props: PlayerCardProps) {
               <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
                 <FieldName>
                   <Calendar1 size={18} />
-                  {player.gender === 'male' ? 'PDC Ranking' : 'WS Ranking'}
+                  {player.gender === 'female' ? 'WS Ranking' : 'PDC Ranking'}
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'PDC ranking'}
+                  fieldName={
+                    player.gender === 'female' ? 'WS ranking' : 'PDC ranking'
+                  }
+                  valueType="ranking"
                   comparisonResult={comparisonResults.rankingPDC}
                 >
                   {player.rankingPDC ? player.rankingPDC : 'N/A'}
@@ -840,12 +866,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 {player.bestResultUKOpen && player.yearOfBestResultUKOpen ? (
                   <FieldValueBestResultContainer>
                     <FieldValueBestResult
-                      fieldName={'Best UK Open result'}
+                      fieldName="Best UK Open result"
                       bestResult={player.bestResultUKOpen}
                       comparison={comparisonResults.bestResultUKOpen}
                     />
                     <FieldValueYearBestResult
-                      fieldName={'Year of best UK Open result'}
+                      fieldName="Year of best UK Open result"
                       yearBestResult={player.yearOfBestResultUKOpen}
                       comparison={comparisonResults.yearOfBestResultUKOpen}
                     />
@@ -853,7 +879,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 ) : (
                   <FieldValue
                     type={'guess'}
-                    fieldName={'Best UK Open result'}
+                    fieldName="Best UK Open result"
                     comparisonResult={comparisonResults.bestResultUKOpen}
                   >
                     Did Not Play
@@ -868,12 +894,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 {player.bestResultPDC && player.yearOfBestResultPDC ? (
                   <FieldValueBestResultContainer>
                     <FieldValueBestResult
-                      fieldName={'Best PDC World Championship result'}
+                      fieldName="Best PDC World Championship result"
                       bestResult={player.bestResultPDC}
                       comparison={comparisonResults.bestResultPDC}
                     />
                     <FieldValueYearBestResult
-                      fieldName={'Year of best PDC World Championship result'}
+                      fieldName="Year of best PDC World Championship result"
                       yearBestResult={player.yearOfBestResultPDC}
                       comparison={comparisonResults.yearOfBestResultPDC}
                     />
@@ -881,7 +907,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 ) : (
                   <FieldValue
                     type={'guess'}
-                    fieldName={'Best PDC World Championship result'}
+                    fieldName="Best PDC World Championship result"
                     comparisonResult={comparisonResults.bestResultPDC}
                   >
                     Did Not Play
@@ -898,7 +924,8 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'WDF ranking'}
+                  fieldName="WDF ranking"
+                  valueType="ranking"
                   comparisonResult={comparisonResults.rankingWDF}
                 >
                   {player.rankingWDF ? player.rankingWDF : 'N/A'}
@@ -911,7 +938,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Tour card'}
+                  fieldName="Tour card"
                   comparisonResult={comparisonResults.tourCard}
                 >
                   {player.tourCard ? 'Yes' : 'No'}
@@ -924,7 +951,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 </FieldName>
                 <FieldValue
                   type={'guess'}
-                  fieldName={'Played in WCoD'}
+                  fieldName="Played in WCoD"
                   comparisonResult={comparisonResults.playedInWCOD}
                 >
                   {player.playedInWCOD ? 'Yes' : 'No'}
@@ -938,14 +965,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 {player.bestResultWDF && player.yearOfBestResultWDF ? (
                   <FieldValueBestResultContainer>
                     <FieldValueBestResult
-                      fieldName={'Best BDO/WDF World Championship result'}
+                      fieldName="Best BDO/WDF World Championship result"
                       bestResult={player.bestResultWDF}
                       comparison={comparisonResults.bestResultWDF}
                     />
                     <FieldValueYearBestResult
-                      fieldName={
-                        'Year of best BDO/WDF World Championship result'
-                      }
+                      fieldName="Year of best BDO/WDF World Championship result"
                       yearBestResult={player.yearOfBestResultWDF}
                       comparison={comparisonResults.yearOfBestResultWDF}
                     />
@@ -953,7 +978,7 @@ export default function PlayerCard(props: PlayerCardProps) {
                 ) : (
                   <FieldValue
                     type={'guess'}
-                    fieldName={'Best BDO/WDF World Championship result'}
+                    fieldName="Best BDO/WDF World Championship result"
                     comparisonResult={comparisonResults.bestResultWDF}
                   >
                     Did Not Play

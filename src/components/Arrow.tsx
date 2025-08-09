@@ -9,10 +9,9 @@ import { ReactNode } from 'react';
 type ArrowProps = {
   children: ReactNode;
   type: 'higher' | 'lower';
-  bestResult?: 'better' | 'worse';
 };
 
-export default function Arrow({ children, type, bestResult }: ArrowProps) {
+export default function Arrow({ children, type }: ArrowProps) {
   return (
     <Popover>
       <PopoverTrigger>
@@ -30,10 +29,7 @@ export default function Arrow({ children, type, bestResult }: ArrowProps) {
           />
         )}
       </PopoverTrigger>
-      <PopoverContent className="text-xs p-2 w-max">
-        {children} should be{' '}
-        <span className="font-bold">{bestResult ? bestResult : type}</span>.
-      </PopoverContent>
+      <PopoverContent className="text-xs p-2 w-max">{children}</PopoverContent>
     </Popover>
   );
 }

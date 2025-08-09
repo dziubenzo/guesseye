@@ -294,9 +294,29 @@ export function comparePlayers(
     } else if (guessedPlayer[key] === null || playerToFind[key] === null) {
       comparisonResults[key] = 'noMatch';
     } else if (guessedPlayer[key] > playerToFind[key]) {
+      // Revert logic for rankings (a better/lower ranking should be represented with an up arrow)
+      if (
+        key === 'rankingElo' ||
+        key === 'rankingPDC' ||
+        key === 'rankingWDF'
+      ) {
+        comparisonResults[key] = 'higher';
+        updateRangedMatch(key, 'higher');
+        return;
+      }
       comparisonResults[key] = 'lower';
       updateRangedMatch(key, 'lower');
     } else if (guessedPlayer[key] < playerToFind[key]) {
+      // Revert logic for rankings (a worse/higher ranking should be represented with a down arrow)
+      if (
+        key === 'rankingElo' ||
+        key === 'rankingPDC' ||
+        key === 'rankingWDF'
+      ) {
+        comparisonResults[key] = 'lower';
+        updateRangedMatch(key, 'lower');
+        return;
+      }
       comparisonResults[key] = 'higher';
       updateRangedMatch(key, 'higher');
     }
