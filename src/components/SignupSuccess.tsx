@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import {
   DialogClose,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -15,6 +16,9 @@ export default function SignupSuccess({ email }: SignupSuccessProps) {
     <div className="flex flex-col gap-3 justify-center items-center min-h-[400px]">
       <DialogHeader>
         <DialogTitle className="text-2xl">Account Created!</DialogTitle>
+        <DialogDescription className="sr-only">
+          Account created successfully.
+        </DialogDescription>
       </DialogHeader>
       <div className="py-4 text-center">
         <p>Your account has been created.</p>

@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -112,6 +113,9 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
         <DialogTitle className="text-xl mb-4">
           Log in to <Logo />
         </DialogTitle>
+        <DialogDescription className="sr-only">
+          In this tab, you can log in to GuessEye.
+        </DialogDescription>
       </DialogHeader>
       <GoogleLogin />
       <Separator className="my-3" />
@@ -252,6 +256,9 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
         <DialogTitle className="text-xl mb-4">
           Create <Logo /> Account
         </DialogTitle>
+        <DialogDescription className="sr-only">
+          In this tab, you can create your GuessEye account.
+        </DialogDescription>
       </DialogHeader>
       <Form {...signupForm}>
         <form

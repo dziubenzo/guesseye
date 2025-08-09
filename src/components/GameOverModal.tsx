@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -35,6 +36,9 @@ export default function GameOverModal() {
               YOU DID IT
               <Award />
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              You&apos;ve won the game!
+            </DialogDescription>
           </DialogHeader>
           <Image
             className="rounded-md shadow-md"
