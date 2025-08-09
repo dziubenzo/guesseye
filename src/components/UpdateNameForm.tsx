@@ -45,7 +45,6 @@ export default function UpdateNameForm() {
       }
       if (data?.type === 'success') {
         setSuccess(data.message);
-        // Make sure the session state is updated
         refetch();
         return;
       }

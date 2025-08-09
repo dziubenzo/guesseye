@@ -5,6 +5,7 @@ import { actionClient } from '@/lib/safe-action-client';
 import type { UpdateAction } from '@/lib/types';
 import { updateNameSchema } from '@/lib/zod/update-name';
 import { isNameTaken } from '@/server/utils';
+import { revalidatePath } from 'next/cache';
 import { headers } from 'next/headers';
 
 export const updateName = actionClient
@@ -34,6 +35,7 @@ export const updateName = actionClient
         type: 'success',
         message: 'Name updated successfully!',
       };
+      revalidatePath('/settings');
     } else {
       result = {
         type: 'error',

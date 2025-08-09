@@ -4,10 +4,10 @@ import ErrorMessage from '@/components/ErrorMessage';
 import SuccessMessage from '@/components/SuccessMessage';
 import { Button } from '@/components/ui/button';
 import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
-import revalidateCache from '@/server/actions/revalidate-cache';
 import updateAllRankings from '@/server/actions/update-all-rankings';
 import updateRankings from '@/server/actions/update-rankings';
 import updateTourCardHolders from '@/server/actions/update-tour-card-holders';
+import revalidatePlayerCache from '@/server/revalidators/revalidate-player-cache';
 import { useState } from 'react';
 
 export default function UpdateButtons() {
@@ -57,7 +57,7 @@ export default function UpdateButtons() {
   async function handleRevalidateCacheClick() {
     clearMessages();
     setIsDisabled(true);
-    const result = await revalidateCache();
+    const result = await revalidatePlayerCache();
     setRevalidateCacheResult(result);
     setIsDisabled(false);
   }

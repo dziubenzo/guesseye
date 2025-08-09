@@ -17,6 +17,7 @@ import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
 import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
 import { getPlayers } from '@/server/db/get-players';
+import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -100,6 +101,8 @@ export const checkGuess = actionClient
           },
         };
 
+        revalidateGameCache(mode, scheduleId);
+
         return data;
       }
 
@@ -120,6 +123,8 @@ export const checkGuess = actionClient
           playerDifficulty: playerToFind.difficulty,
         },
       };
+
+      revalidateGameCache(mode, scheduleId);
 
       return data;
     }
