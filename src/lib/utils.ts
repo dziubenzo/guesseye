@@ -17,6 +17,7 @@ import type {
   MatchKeys,
   OfficialGamesHistory,
   Player,
+  PlayerDifficultyField,
   PlayerToFindMatches,
   RangedMatchKeys,
   Schedule,
@@ -616,12 +617,14 @@ export function checkForDuplicateGuess(
   return isDuplicateGuess;
 }
 
-export function getDifficultyColour(difficulty: Player['difficulty']) {
+export function getDifficultyColour(difficulty: PlayerDifficultyField) {
   switch (difficulty) {
     case 'easy':
       return 'text-good-guess';
     case 'medium':
       return 'text-medium-difficulty';
+    case '???':
+      return 'text-secondary';
     default:
       return 'text-wrong-guess';
   }

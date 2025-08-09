@@ -31,19 +31,26 @@ export default async function PreviousOfficialGame({
   }
 
   if (game) {
-    const { playerDifficulty, winnersCount, mode } = game;
+    const {
+      guesses,
+      playerToFindMatches,
+      winnersCount,
+      mode,
+      playerDifficulty,
+    } = game;
 
     return (
       <div className="flex flex-col gap-4">
         <PlayerForm scheduleId={scheduleId} />
         <ModeIndicator />
         <PlayerToFindInfo winnersCount={winnersCount} />
-        <PlayerToFindCard difficulty={playerDifficulty} />
-        {game.status === 'inProgress' ? (
-          <Guesses existingGame={game} mode={mode} />
-        ) : (
-          <Guesses mode={mode} />
-        )}
+        <PlayerToFindCard />
+        <Guesses
+          initialGuesses={guesses}
+          playerToFindMatches={playerToFindMatches}
+          mode={mode}
+          playerDifficulty={playerDifficulty}
+        />
         <GameOverConfetti />
         <GameOverModal />
       </div>

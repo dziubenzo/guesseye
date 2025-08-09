@@ -28,14 +28,19 @@ export default async function RandomGame() {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { playerDifficulty, mode } = game;
+  const { guesses, playerToFindMatches, mode, playerDifficulty } = game;
 
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
       <ModeIndicator />
-      <PlayerToFindCard difficulty={playerDifficulty} />
-      <Guesses existingGame={game} mode={mode} />
+      <PlayerToFindCard />
+      <Guesses
+        initialGuesses={guesses}
+        playerToFindMatches={playerToFindMatches}
+        mode={mode}
+        playerDifficulty={playerDifficulty}
+      />
       <GameOverConfetti />
       <GameOverModal />
     </div>

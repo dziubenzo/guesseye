@@ -38,11 +38,12 @@ export default async function CurrentGame() {
 
     if (game) {
       const {
-        playerDifficulty,
+        guesses,
+        playerToFindMatches,
         winnersCount,
         nextPlayerStartDate,
         mode,
-        status,
+        playerDifficulty,
       } = game;
 
       return (
@@ -53,12 +54,13 @@ export default async function CurrentGame() {
             winnersCount={winnersCount}
             nextPlayerStartDate={nextPlayerStartDate}
           />
-          <PlayerToFindCard difficulty={playerDifficulty} />
-          {status === 'inProgress' ? (
-            <Guesses existingGame={game} mode={mode} />
-          ) : (
-            <Guesses mode={mode} />
-          )}
+          <PlayerToFindCard />
+          <Guesses
+            initialGuesses={guesses}
+            playerToFindMatches={playerToFindMatches}
+            mode={mode}
+            playerDifficulty={playerDifficulty}
+          />
           <GameOverConfetti />
           <GameOverModal />
         </div>
@@ -66,20 +68,25 @@ export default async function CurrentGame() {
     }
   }
 
-  const game = await getRandomGame();
+  const game = await getRandomGame({ isGuest: true });
 
   if ('error' in game) {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { playerDifficulty, mode } = game;
+  const { guesses, playerToFindMatches, mode, playerDifficulty } = game;
 
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
       <ModeIndicator />
-      <PlayerToFindCard difficulty={playerDifficulty} />
-      <Guesses existingGame={game} mode={mode} />
+      <PlayerToFindCard />
+      <Guesses
+        initialGuesses={guesses}
+        playerToFindMatches={playerToFindMatches}
+        mode={mode}
+        playerDifficulty={playerDifficulty}
+      />
       <GameOverConfetti />
       <GameOverModal />
     </div>

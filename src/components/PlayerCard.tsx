@@ -11,6 +11,7 @@ import {
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useGameStore } from '@/lib/game-store';
 import { cardTopDuration, fieldsContainerVariant } from '@/lib/motion-variants';
 import type {
   ComparisonResults,
@@ -18,7 +19,7 @@ import type {
   PlayerToFindMatches,
   PlayerToFindRangedMatch,
 } from '@/lib/types';
-import { capitalise, getAge, getDifficultyColour } from '@/lib/utils';
+import { capitalise, cn, getAge, getDifficultyColour } from '@/lib/utils';
 import { format } from 'date-fns';
 import {
   Cake,
@@ -48,13 +49,13 @@ type PlayerCardProps =
     }
   | {
       type: 'playerToFind';
-      difficulty: Player['difficulty'];
       previousMatches: PlayerToFindMatches;
       currentMatches: PlayerToFindMatches;
     };
 
 export default function PlayerCard(props: PlayerCardProps) {
   const { type } = props;
+  const { playerDifficulty } = useGameStore();
 
   function formatPlayerToFindField<T>(
     field: PlayerToFindRangedMatch<T> | undefined,
@@ -75,7 +76,7 @@ export default function PlayerCard(props: PlayerCardProps) {
   }
 
   if (type === 'playerToFind') {
-    const { difficulty, previousMatches, currentMatches } = props;
+    const { previousMatches, currentMatches } = props;
 
     return (
       <Card className="bg-secondary w-full">
@@ -88,7 +89,12 @@ export default function PlayerCard(props: PlayerCardProps) {
               transition={{ duration: cardTopDuration }}
             >
               <p
-                className={`${currentMatches.firstName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full relative`}
+                className={cn(
+                  currentMatches.firstName
+                    ? 'bg-good-guess text-good-guess-foreground'
+                    : 'bg-muted-foreground text-muted',
+                  'p-2 rounded-md text-center min-h-[32px] w-full relative'
+                )}
               >
                 {currentMatches.firstName ? currentMatches.firstName : ''}
                 <GuessIndicator
@@ -97,7 +103,12 @@ export default function PlayerCard(props: PlayerCardProps) {
                 />
               </p>
               <p
-                className={`${currentMatches.lastName ? 'bg-good-guess text-good-guess-foreground' : 'bg-muted-foreground text-muted'} p-2 rounded-md text-center min-h-[32px] w-full relative`}
+                className={cn(
+                  currentMatches.lastName
+                    ? 'bg-good-guess text-good-guess-foreground'
+                    : 'bg-muted-foreground text-muted',
+                  'p-2 rounded-md text-center min-h-[32px] w-full relative'
+                )}
               >
                 {currentMatches.lastName ? currentMatches.lastName : ''}
                 <GuessIndicator
@@ -106,21 +117,24 @@ export default function PlayerCard(props: PlayerCardProps) {
                 />
               </p>
             </motion.div>
-            {difficulty && (
-              <motion.div
-                className={`sm:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 ${getDifficultyColour(difficulty)} dark:text-secondary`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: cardTopDuration }}
-              >
-                <Gauge size={24} />
-                <span>{difficulty.toUpperCase()}</span>
+            <motion.div
+              className={cn(
+                getDifficultyColour(playerDifficulty),
+                'sm:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 dark:text-secondary'
+              )}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: cardTopDuration }}
+            >
+              <Gauge size={24} />
+              <span>{playerDifficulty.toUpperCase()}</span>
+              {playerDifficulty !== '???' && (
                 <Tooltip>
                   How difficult the darts player is to find in the
                   developer&apos;s opinion.
                 </Tooltip>
-              </motion.div>
-            )}
+              )}
+            </motion.div>
           </CardTitle>
         </CardHeader>
         <CardContent>

@@ -68,6 +68,7 @@ export default function GiveUpForm({
       router.push('/official');
     } else {
       setOpen(false);
+      setPlayerToFind('');
       router.refresh();
     }
     return;

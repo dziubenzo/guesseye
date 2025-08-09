@@ -4,13 +4,27 @@ import type {
   ErrorObject,
   ExistingRandomGame,
   GuessWithPlayer,
+  NoRandomGame,
 } from '@/lib/types';
 import { comparePlayers } from '@/lib/utils';
 import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 
-export const getRandomGame = async () => {
+export const getRandomGame = async (options?: { isGuest: boolean }) => {
   const existingGame = await findRandomGame();
+
+  // Do not create a random game automatically for guests
+  if (options?.isGuest && !existingGame) {
+    const noGame: NoRandomGame = {
+      status: 'noGame',
+      mode: 'random',
+      guesses: [],
+      playerToFindMatches: {},
+      playerDifficulty: '???',
+    };
+
+    return noGame;
+  }
 
   const game = existingGame ? existingGame : await createRandomGame();
 
@@ -25,6 +39,7 @@ export const getRandomGame = async () => {
   }
 
   const gameDetails: ExistingRandomGame = {
+    status: 'inProgress',
     mode: 'random',
     guesses: [],
     playerToFindMatches: {},

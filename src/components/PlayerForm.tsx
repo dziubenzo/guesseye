@@ -27,6 +27,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     updatePreviousMatches,
     updateCurrentMatches,
     resetState,
+    updateDifficulty,
     guesses,
     gameOver,
     currentMatches,
@@ -64,6 +65,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.comparisonResults
           );
           setNewMatches(data.success.newMatches);
+          updateDifficulty(data.success.playerDifficulty);
           finishGame(data.success.playerToFind);
           return;
         }
@@ -73,6 +75,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
             data.success.comparisonResults
           );
           setNewMatches(data.success.newMatches);
+          updateDifficulty(data.success.playerDifficulty);
           return;
         }
       }

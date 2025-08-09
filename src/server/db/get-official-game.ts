@@ -1,10 +1,9 @@
 'use server';
 
 import type {
+  AnyOfficialGame,
   ErrorObject,
-  ExistingOfficialGame,
   GuessWithPlayer,
-  GameNotPlayed,
 } from '@/lib/types';
 import { comparePlayers, validateScheduleId } from '@/lib/utils';
 import { findOfficialGame } from '@/server/db/find-official-game';
@@ -53,15 +52,18 @@ export const getOfficialGame = async (scheduleId?: string) => {
     return error;
   }
 
+  const gameDetails: AnyOfficialGame = {
+    status: 'inProgress',
+    mode: 'official',
+    guesses: [],
+    playerToFindMatches: {},
+    playerDifficulty: scheduledPlayer.playerToFind.difficulty,
+    winnersCount,
+    nextPlayerStartDate: nextScheduledPlayer.startDate,
+  };
+
   if (!existingGame) {
-    const playerDifficulty: GameNotPlayed = {
-      status: 'notPlayed',
-      mode: 'official',
-      playerDifficulty: scheduledPlayer.playerToFind.difficulty,
-      winnersCount,
-      nextPlayerStartDate: nextScheduledPlayer.startDate,
-    };
-    return playerDifficulty;
+    return gameDetails;
   }
 
   if (existingGame.status === 'won') {
@@ -73,16 +75,6 @@ export const getOfficialGame = async (scheduleId?: string) => {
     const data = await handleGameGivenUp(scheduledPlayer, existingGame);
     return data;
   }
-
-  const gameDetails: ExistingOfficialGame = {
-    status: existingGame.status,
-    mode: 'official',
-    guesses: [],
-    playerToFindMatches: {},
-    playerDifficulty: scheduledPlayer.playerToFind.difficulty,
-    winnersCount,
-    nextPlayerStartDate: nextScheduledPlayer.startDate,
-  };
 
   existingGame.guesses.forEach((guess: GuessWithPlayer) => {
     const { comparisonResults } = comparePlayers(

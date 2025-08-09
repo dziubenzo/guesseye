@@ -126,7 +126,7 @@ export type PlayerToFindRangedMatch<T> = {
   value: T;
 };
 
-export type ExistingOfficialGame = {
+export type AnyOfficialGame = {
   status: 'inProgress';
   mode: 'official';
   guesses: Guess[];
@@ -137,9 +137,19 @@ export type ExistingOfficialGame = {
 };
 
 export type ExistingRandomGame = Pick<
-  ExistingOfficialGame,
-  'guesses' | 'playerToFindMatches' | 'playerDifficulty'
+  AnyOfficialGame,
+  'status' | 'guesses' | 'playerToFindMatches' | 'playerDifficulty'
 > & { mode: 'random' };
+
+export type NoRandomGame = Pick<
+  ExistingRandomGame,
+  'mode' | 'guesses' | 'playerToFindMatches'
+> & {
+  status: 'noGame';
+  playerDifficulty: PlayerDifficultyField;
+};
+
+export type PlayerDifficultyField = Player['difficulty'] | '???';
 
 export type GameMode = 'official' | 'random';
 
@@ -151,19 +161,21 @@ export type Guess = {
 type CheckGuessError = { type: 'error'; error: string };
 type CheckGuessSuccess = {
   type: 'success';
-  success:
+  success: (
     | {
         type: 'correctGuess';
         playerToFind: Player;
         comparisonResults: ComparisonResults;
-        newMatches: PlayerToFindMatches;
       }
     | {
         type: 'incorrectGuess';
         guessedPlayer: Player;
         comparisonResults: ComparisonResults;
-        newMatches: PlayerToFindMatches;
-      };
+      }
+  ) & {
+    newMatches: PlayerToFindMatches;
+    playerDifficulty: Player['difficulty'];
+  };
 };
 
 export type CheckGuessAction = CheckGuessError | CheckGuessSuccess;
@@ -183,14 +195,6 @@ export type UpdateAction = {
 export type NextScheduledPlayer = {
   startDate: Schedule['startDate'];
   playerToFind: { difficulty: Player['difficulty'] };
-};
-
-export type GameNotPlayed = {
-  status: 'notPlayed';
-  mode: 'official';
-  playerDifficulty: Player['difficulty'];
-  winnersCount: number;
-  nextPlayerStartDate: Schedule['startDate'];
 };
 
 export type GameWon = {

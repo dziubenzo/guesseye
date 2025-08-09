@@ -9,6 +9,7 @@ import type {
   RandomGame,
 } from '@/lib/types';
 import { createOfficialGame } from '@/server/db/create-official-game';
+import { createRandomGame } from '@/server/db/create-random-game';
 import { findOfficialGame } from '@/server/db/find-official-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
@@ -45,12 +46,7 @@ export const getGameAndPlayerToFind = async (
   } else {
     const existingGame = await findRandomGame();
 
-    if (!existingGame) {
-      const error: ErrorObject = { error: 'Failed to find random game.' };
-      return error;
-    }
-
-    game = existingGame;
+    game = existingGame ? existingGame : await createRandomGame();
 
     if ('randomPlayer' in game && game.randomPlayer) {
       playerToFind = game.randomPlayer;

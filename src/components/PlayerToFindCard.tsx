@@ -5,15 +5,8 @@ import { Progress } from '@/components/ui/progress';
 import { ALL_MATCHES } from '@/lib/constants';
 import { useGameStore } from '@/lib/game-store';
 import { useUpdateProgressBar } from '@/lib/hooks';
-import type { Player } from '@/lib/types';
 
-type PlayerToFindCardProps = {
-  difficulty: Player['difficulty'];
-};
-
-export default function PlayerToFindCard({
-  difficulty,
-}: PlayerToFindCardProps) {
+export default function PlayerToFindCard() {
   const { previousMatches, currentMatches } = useGameStore();
   const fieldsFound = useUpdateProgressBar();
 
@@ -35,7 +28,6 @@ export default function PlayerToFindCard({
         type={'playerToFind'}
         previousMatches={previousMatches}
         currentMatches={currentMatches}
-        difficulty={difficulty}
       />
     </div>
   );
