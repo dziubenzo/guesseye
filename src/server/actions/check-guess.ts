@@ -101,8 +101,6 @@ export const checkGuess = actionClient
           },
         };
 
-        revalidateGameCache(mode, scheduleId);
-
         return data;
       }
 

@@ -41,14 +41,14 @@ export default function Guesses({
   } = useGameStore();
   const [api, setApi] = useState<CarouselApi>();
 
-  // Set initial state when a game is fetched
+  // Set initial state when a game is fetched and a random game is won/given up
   useEffect(() => {
     updateMode(mode);
     updateDifficulty(playerDifficulty);
     setInitialGuesses(initialGuesses);
     updatePreviousMatches(playerToFindMatches);
     updateCurrentMatches(playerToFindMatches);
-  }, []);
+  }, [mode, playerDifficulty, initialGuesses, playerToFindMatches]);
 
   const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
 

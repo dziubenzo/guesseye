@@ -47,7 +47,6 @@ export default function GameOverModal() {
             priority={true}
             width={500}
             height={500}
-            unoptimized
           />
           <div className="flex flex-col justify-center items-center gap-2">
             <p>

@@ -17,7 +17,6 @@ export default function NotFound() {
         priority={true}
         width={500}
         height={500}
-        unoptimized
       />
       <Button variant={'link'} asChild>
         <Link href="/">Back to Home page</Link>
