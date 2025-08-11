@@ -19,6 +19,7 @@ import { lower, player as playerSchema, user } from '@/server/db/schema';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium-min';
 
 export async function getIPAndUserAgent() {
   const headersList = await headers();
@@ -59,13 +60,33 @@ export async function isNameTaken(newName: string) {
   return nameTaken ? true : false;
 }
 
+export async function launchBrowser() {
+  const viewport = {
+    deviceScaleFactor: 1,
+    hasTouch: false,
+    height: 1080,
+    isLandscape: true,
+    isMobile: false,
+    width: 1920,
+  };
+
+  return puppeteer.launch({
+    args: puppeteer.defaultArgs({ args: chromium.args, headless: 'shell' }),
+    defaultViewport: viewport,
+    executablePath: await chromium.executablePath(
+      `https://github.com/Sparticuz/chromium/releases/download/v138.0.0/chromium-v138.0.0-pack.x64.tar`
+    ),
+    headless: 'shell',
+  });
+}
+
 // Get PDC Order of Merits or Elo rankings
 export async function getPDCOrEloRankings(
   url: string,
   rankingsSelector: string,
   fullNamesSelector: string
 ) {
-  const browser = await puppeteer.launch();
+  const browser = await launchBrowser();
   const page = await browser.newPage();
 
   await page.goto(url);
@@ -132,7 +153,7 @@ export async function getWDFRankings(
   fullNamesSelector: string,
   limit: number
 ) {
-  const browser = await puppeteer.launch();
+  const browser = await launchBrowser();
   const page = await browser.newPage();
 
   await page.goto(url);
@@ -286,7 +307,7 @@ export async function updateDBRankings(
 
 // Get current Tour Card Holders
 export async function getTourCardHolders() {
-  const browser = await puppeteer.launch();
+  const browser = await launchBrowser();
   const page = await browser.newPage();
 
   await page.goto('https://pdpa.co.uk/event-entry/tour-cards/');

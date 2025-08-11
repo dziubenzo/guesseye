@@ -1866,6 +1866,12 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Lok Yin Lee';
     case 'Alex Fehlmann':
       return 'Alexander Fehlmann';
+    case 'Joseph Comito':
+      return 'Joe Comito';
+    case 'Christopher Wickenden':
+      return 'Chris Wickenden';
+    case 'Sandro-Eric Sosing':
+      return 'Sandro Eric Sosing';
   }
 
   return fullName;
