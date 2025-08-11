@@ -8,6 +8,7 @@ import { player, schedule } from '@/server/db/schema';
 import { checkForAdmin } from '@/server/utils';
 import { format } from 'date-fns';
 import { eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 
 export const schedulePlayer = actionClient
   .schema(schedulePlayerSchema)
@@ -46,6 +47,8 @@ export const schedulePlayer = actionClient
       type: 'success',
       message: `${fullName} successfully scheduled for ${format(startDate, 'dd MMMM y')}.`,
     };
+
+    revalidatePath('/admin');
 
     return result;
   });

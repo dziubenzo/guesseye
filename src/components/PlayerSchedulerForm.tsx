@@ -22,7 +22,6 @@ import {
 import { schedulePlayer } from '@/server/actions/schedule-player';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -39,8 +38,6 @@ export default function PlayerSchedulerForm({
     resolver: zodResolver(schedulePlayerSchema),
     defaultValues: { startDate },
   });
-
-  const router = useRouter();
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -59,7 +56,6 @@ export default function PlayerSchedulerForm({
         setSuccess(data.message);
         schedulePlayerForm.resetField('playerId');
         setSelectKey(new Date().toString());
-        router.refresh();
         return;
       }
     },

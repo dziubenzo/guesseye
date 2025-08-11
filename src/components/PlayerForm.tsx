@@ -93,10 +93,12 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     execute({ ...values, currentMatches, mode, guess });
   }
 
-  // Make sure state is reset on scheduleId change
+  // Make sure state is reset on unmount
   useEffect(() => {
-    resetState();
-  }, [scheduleId]);
+    return () => {
+      resetState();
+    };
+  }, []);
 
   // For some reason, the currentMatches object, when used inside the onSuccess callback, is not up-to-date despite it being a piece of state that is always up-to-date outside the callback
   // I originally planned to use the onSuccess callback to update both current and previous matches
