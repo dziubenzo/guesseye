@@ -1204,7 +1204,7 @@ export function formatGameDuration(duration: number) {
   const minutes = millisecondsToMinutes(duration);
   const seconds = millisecondsToSeconds(duration) % 60;
 
-  if (minutes > 60) return '>1 hour';
+  if (minutes > 59 && seconds > 0) return '>1 hour';
 
   if (duration <= 1000) return 'First try!';
 
