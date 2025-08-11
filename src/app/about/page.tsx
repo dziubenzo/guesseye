@@ -182,7 +182,8 @@ export default async function About() {
                     ;
                   </li>
                   <li>
-                    playing <Italic>truly</Italic> random mode games;
+                    playing random mode games where you can additionally
+                    encounter darts players of hard difficulty;
                   </li>
                   <li>
                     competing on the <Bold>leaderboard</Bold>, which ranks users

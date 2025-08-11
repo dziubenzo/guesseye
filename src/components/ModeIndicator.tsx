@@ -1,9 +1,13 @@
 'use client';
 
+import Bold from '@/components/Bold';
 import Tooltip from '@/components/Tooltip';
+import { useSession } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
+import Link from 'next/link';
 
 export default function ModeIndicator() {
+  const session = useSession();
   const { mode } = useGameStore();
 
   return (
@@ -12,16 +16,23 @@ export default function ModeIndicator() {
       <Tooltip>
         {mode === 'official' ? (
           <p>
-            In the <span className="font-medium">official</span> mode, a
-            hand-picked darts player is available for you to find every day. You
-            can also play previous official mode darts players on the Previous
-            Official Games page.
+            In the <Bold>official</Bold> mode, a hand-picked darts player is
+            available for you to find every day. You can also play previous
+            official mode darts players on the{' '}
+            <Link
+              href="/official"
+              className="font-medium underline underline-offset-2"
+            >
+              Previous Official Games page
+            </Link>
+            .
           </p>
         ) : (
           <p>
-            In the <span className="font-medium">random</span> mode, a random
-            darts player is assigned for you to guess. The darts player changes
-            when you either guess it correctly or give up on your game.
+            In the <Bold>random</Bold> mode, a random darts player of{' '}
+            {session ? 'easy, medium, or hard' : 'easy or medium'} difficulty is
+            assigned for you to guess. The darts player changes when you either
+            guess it correctly or give up on your game.
           </p>
         )}
       </Tooltip>

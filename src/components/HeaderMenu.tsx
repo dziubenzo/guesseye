@@ -96,7 +96,7 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                             Previous Official Games
                           </div>
                           <div className="text-muted-foreground">
-                            Browse, play or resume all previous official games.
+                            Browse, play, or resume all previous official games.
                           </div>
                         </div>
                       </div>

@@ -10,7 +10,11 @@ import { comparePlayers } from '@/lib/utils';
 import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 
-export const getRandomGame = async (options?: { isGuest: boolean }) => {
+type GetRandomGameOptions = {
+  isGuest: boolean;
+};
+
+export const getRandomGame = async (options?: GetRandomGameOptions) => {
   const existingGame = await findRandomGame();
 
   // Do not create a random game automatically for guests
