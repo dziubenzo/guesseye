@@ -61,7 +61,7 @@ export default function BestResultWDFYearChart({
             dataKey="count"
             position="right"
             offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
+            className="fill-foreground text-xs sm:hidden"
           />
         </Bar>
       </BarChart>

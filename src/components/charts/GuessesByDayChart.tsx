@@ -43,7 +43,7 @@ export default function GuessesByDayChart({ data }: GuessesByDayChartProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={32}
+          minTickGap={0}
           tickFormatter={(value) => {
             const date = new Date(value);
             return date.toLocaleDateString('en-GB', {
@@ -64,14 +64,14 @@ export default function GuessesByDayChart({ data }: GuessesByDayChartProps) {
           <LabelList
             dataKey="count"
             position="top"
-            offset={12}
+            offset={9}
             className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
             position="top"
             offset={3}
-            className="fill-foreground text-[0.5rem] sm:hidden"
+            className="fill-foreground text-[0.6rem] sm:hidden"
           />
         </Bar>
       </BarChart>

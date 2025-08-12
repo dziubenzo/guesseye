@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { DatabaseStats, DatabaseStatsResult } from '@/lib/types';
+import type { DatabaseStats } from '@/lib/types';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
 
 const chartConfig = {
@@ -34,7 +34,7 @@ export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={8}
+          minTickGap={0}
           tickFormatter={(value) => value}
         />
         <ChartTooltip
@@ -49,24 +49,14 @@ export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
           <LabelList
             dataKey="count"
             position="top"
-            offset={12}
+            offset={9}
             className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
             position="top"
             offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="center"
-            angle={-90}
-            offset={12}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white hidden sm:text-[0.6rem] sm:block"
+            className="fill-foreground text-[0.5rem] sm:hidden"
           />
         </Bar>
       </BarChart>

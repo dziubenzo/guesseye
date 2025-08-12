@@ -50,24 +50,14 @@ export default function AgeChart({ data }: AgeChartProps) {
           <LabelList
             dataKey="count"
             position="top"
-            offset={12}
+            offset={9}
             className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
             position="top"
             offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
-          />
-          <LabelList
-            dataKey="percentage"
-            position="center"
-            angle={-90}
-            offset={12}
-            formatter={(value: DatabaseStatsResult['percentage']) =>
-              value + '%'
-            }
-            className="fill-white hidden sm:text-[0.6rem] sm:block"
+            className="fill-foreground text-[0.4rem] sm:hidden"
           />
         </Bar>
       </BarChart>

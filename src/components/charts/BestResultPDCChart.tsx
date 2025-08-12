@@ -59,7 +59,7 @@ export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
             dataKey="count"
             position="right"
             offset={3}
-            className="fill-foreground text-[0.7rem] sm:hidden"
+            className="fill-foreground text-sm sm:hidden"
           />
         </Bar>
       </BarChart>

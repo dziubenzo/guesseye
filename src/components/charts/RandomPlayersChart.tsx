@@ -34,7 +34,7 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 5, right: 25, bottom: 5, left: 0 }}
+        margin={{ top: 5, right: 40, bottom: 5, left: 0 }}
         layout="vertical"
       >
         <XAxis type="number" hide />
@@ -60,14 +60,14 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
           <LabelList
             dataKey="count"
             position="insideRight"
-            offset={3}
+            offset={2}
             className="fill-white hidden sm:text-sm sm:block"
           />
           <LabelList
             dataKey="count"
             position="right"
-            offset={4}
-            className="fill-foreground text-[0.7rem] sm:hidden"
+            offset={3}
+            className="fill-foreground text-sm sm:hidden"
           />
         </Bar>
       </BarChart>

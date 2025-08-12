@@ -23,7 +23,7 @@ type BirthMonthChartProps = {
 
 export default function BirthMonthChart({ data }: BirthMonthChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
@@ -63,7 +63,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             dataKey="count"
             position="right"
             offset={3}
-            className="fill-foreground text-[0.7rem] sm:hidden"
+            className="fill-foreground text-sm sm:hidden"
           />
           <LabelList
             dataKey="percentage"
@@ -81,7 +81,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
             formatter={(value: DatabaseStatsResult['percentage']) =>
               value + '%'
             }
-            className="fill-white text-[0.6rem] sm:hidden"
+            className="fill-white text-xs sm:hidden"
           />
         </Bar>
       </BarChart>

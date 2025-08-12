@@ -34,7 +34,7 @@ export default function DartsWeightChart({ data }: DartsWeightChartProps) {
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          minTickGap={8}
+          minTickGap={0}
           tickFormatter={(value) => `${value}g`}
         />
         <ChartTooltip
@@ -49,14 +49,14 @@ export default function DartsWeightChart({ data }: DartsWeightChartProps) {
           <LabelList
             dataKey="count"
             position="top"
-            offset={12}
+            offset={9}
             className="fill-foreground hidden sm:text-base sm:block"
           />
           <LabelList
             dataKey="count"
             position="top"
             offset={6}
-            className="fill-foreground text-sm sm:hidden"
+            className="fill-foreground text-xs sm:hidden"
           />
         </Bar>
       </BarChart>
