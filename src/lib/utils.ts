@@ -1831,11 +1831,8 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Cameron Crabtree':
       return 'Cam Crabtree';
     case 'Stefanie Lueck':
-      return 'Stefanie Lück';
     case 'Steffi Lueck':
-      return 'Stefanie Lück';
     case 'Steffi Luck':
-      return 'Stefanie Lück';
     case 'Steffi Lück':
       return 'Stefanie Lück';
     case 'Maria Carli-Mason':
@@ -1847,11 +1844,9 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Karin van Leeuwen-Krappen':
       return 'Karin Krappen';
     case 'Rilana Honsbeek':
-      return 'Rilana Honsbeek-Erades';
     case 'Rilana Erades':
       return 'Rilana Honsbeek-Erades';
     case 'Linda Ithurralde':
-      return 'Linda Hindmarch-Ithurralde';
     case 'Linda Hindmarch':
       return 'Linda Hindmarch-Ithurralde';
     case 'Danny Lauby II':
@@ -1872,6 +1867,9 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Chris Wickenden';
     case 'Sandro-Eric Sosing':
       return 'Sandro Eric Sosing';
+    case 'Xiao-Chen Zong':
+    case 'Xiao Chen Zong':
+      return 'Xiaochen Zong';
   }
 
   return fullName;

@@ -186,8 +186,9 @@ export default async function About() {
                     encounter darts players of hard difficulty;
                   </li>
                   <li>
-                    competing on the <Bold>leaderboard</Bold>, which ranks users
-                    based on their official and random mode wins, in that order;
+                    competing on the <Bold>leaderboard</Bold> where users are
+                    ranked based on their official and random mode wins and give
+                    ups;
                   </li>
                   <li>
                     discovering the <Bold>official mode history</Bold>, which
