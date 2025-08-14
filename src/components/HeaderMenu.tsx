@@ -12,7 +12,6 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import { signOut } from '@/lib/auth-client';
-import { useGameStore } from '@/lib/game-store';
 import {
   ArrowBigLeft,
   ArrowBigUp,
@@ -43,13 +42,11 @@ type HeaderMenuProps = {
 
 export default function HeaderMenu({ username, role }: HeaderMenuProps) {
   const router = useRouter();
-  const { resetState } = useGameStore();
 
   async function logOut() {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          resetState();
           router.push('/');
           router.refresh();
         },

@@ -12,9 +12,11 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { useSession, deleteUser, signOut } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function DeleteAccount() {
+  const router = useRouter();
   const { data } = useSession();
 
   const [open, setOpen] = useState(false);
@@ -23,7 +25,17 @@ export default function DeleteAccount() {
   async function handleDeleteAccountButtonClick() {
     setButtonClicked(true);
     await deleteUser({ callbackURL: '/' });
-    await signOut();
+  }
+
+  async function logOut() {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push('/');
+          router.refresh();
+        },
+      },
+    });
   }
 
   return (
@@ -64,7 +76,7 @@ export default function DeleteAccount() {
             </AlertDialogHeader>
             {buttonClicked ? (
               <AlertDialogFooter>
-                <AlertDialogCancel className="cursor-pointer">
+                <AlertDialogCancel className="cursor-pointer" onClick={logOut}>
                   OK
                 </AlertDialogCancel>
               </AlertDialogFooter>
