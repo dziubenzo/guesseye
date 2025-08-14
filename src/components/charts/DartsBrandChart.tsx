@@ -22,7 +22,7 @@ type DartsBrandChartProps = {
 
 export default function DartsBrandChart({ data }: DartsBrandChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[800px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[900px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
