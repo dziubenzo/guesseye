@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useSession, deleteUser } from '@/lib/auth-client';
+import { useSession, deleteUser, signOut } from '@/lib/auth-client';
 import { useState } from 'react';
 
 export default function DeleteAccount() {
@@ -23,6 +23,7 @@ export default function DeleteAccount() {
   async function handleDeleteAccountButtonClick() {
     setButtonClicked(true);
     await deleteUser({ callbackURL: '/' });
+    await signOut();
   }
 
   return (
