@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useSession, deleteUser, signOut } from '@/lib/auth-client';
+import { deleteUser, useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -27,15 +27,9 @@ export default function DeleteAccount() {
     await deleteUser({ callbackURL: '/' });
   }
 
-  async function logOut() {
-    await signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push('/');
-          router.refresh();
-        },
-      },
-    });
+  function navigateToRoot() {
+    router.push('/');
+    router.refresh();
   }
 
   return (
@@ -76,7 +70,10 @@ export default function DeleteAccount() {
             </AlertDialogHeader>
             {buttonClicked ? (
               <AlertDialogFooter>
-                <AlertDialogCancel className="cursor-pointer" onClick={logOut}>
+                <AlertDialogCancel
+                  className="cursor-pointer"
+                  onClick={navigateToRoot}
+                >
                   OK
                 </AlertDialogCancel>
               </AlertDialogFooter>
