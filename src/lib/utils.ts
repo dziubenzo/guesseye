@@ -1870,6 +1870,8 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Xiao-Chen Zong':
     case 'Xiao Chen Zong':
       return 'Xiaochen Zong';
+    case 'Man-Lok Leung':
+      return 'Man Lok Leung';
   }
 
   return fullName;

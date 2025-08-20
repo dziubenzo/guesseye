@@ -9,6 +9,7 @@ import {
   serial,
   text,
   timestamp,
+  unique,
   type AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 
@@ -305,6 +306,8 @@ export const player = pgTable(
     rankingElo,
     rankingPDC,
     rankingWDF,
+    firstName,
+    lastName,
   }) => [
     check(
       'is_year_playing_since',
@@ -335,6 +338,7 @@ export const player = pgTable(
       'is_proper_ranking_wdf',
       sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`
     ),
+    unique('no_duplicate_players').on(firstName, lastName),
   ]
 );
 
