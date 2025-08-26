@@ -1872,6 +1872,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Xiaochen Zong';
     case 'Man-Lok Leung':
       return 'Man Lok Leung';
+    case 'Alan Warriner':
+      return 'Alan Warriner-Little';
   }
 
   return fullName;
