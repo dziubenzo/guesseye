@@ -1874,6 +1874,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Man Lok Leung';
     case 'Alan Warriner':
       return 'Alan Warriner-Little';
+    case 'Alexandr Oreshkin':
+      return 'Aleksandr Oreshkin';
   }
 
   return fullName;
