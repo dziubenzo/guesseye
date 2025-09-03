@@ -1876,6 +1876,12 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Alan Warriner-Little';
     case 'Alexandr Oreshkin':
       return 'Aleksandr Oreshkin';
+    case 'Pupo Teng-Lieh':
+    case 'Teng-Lieh Pupo':
+    case 'Teng Lieh Pupo':
+      return 'Pupo Teng Lieh';
+    case 'Abdulnaser Yusuf':
+      return 'Abdulnasser Yusuf';
   }
 
   return fullName;
