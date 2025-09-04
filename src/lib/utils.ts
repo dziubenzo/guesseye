@@ -1882,6 +1882,9 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Pupo Teng Lieh';
     case 'Abdulnaser Yusuf':
       return 'Abdulnasser Yusuf';
+    case 'Tengku-Hadzali Shah':
+    case 'Tengku Hadzali Shah':
+      return 'Tengku Shah';
   }
 
   return fullName;
