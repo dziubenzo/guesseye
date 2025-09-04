@@ -22,7 +22,7 @@ type CountryChartProps = {
 
 export default function CountryChart({ data }: CountryChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[900px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[1100px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
