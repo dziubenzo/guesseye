@@ -134,6 +134,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'Formula Sports',
   'B&W',
   'SilverTrim',
+  'Hard Luck Darts',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
