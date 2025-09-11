@@ -1885,6 +1885,8 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Tengku-Hadzali Shah':
     case 'Tengku Hadzali Shah':
       return 'Tengku Shah';
+    case 'Martin C. Thomas':
+      return 'Martin Thomas';
   }
 
   return fullName;
