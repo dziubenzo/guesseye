@@ -1887,6 +1887,10 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Tengku Shah';
     case 'Martin C. Thomas':
       return 'Martin Thomas';
+    case 'Andreas Toft-Jørgensen':
+    case 'Andreas Toft-Jorgensen':
+    case 'Andreas Toft Jorgensen':
+      return 'Andreas Toft Jørgensen';
   }
 
   return fullName;
