@@ -57,9 +57,8 @@ export const auth = betterAuth({
     cookiePrefix: 'guesseye',
   },
   rateLimit: {
-    enabled: true,
     window: 10,
-    max: 100,
+    max: 25,
   },
   trustedOrigins: [
     'http://localhost:3000',
