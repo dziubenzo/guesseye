@@ -16,14 +16,14 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url }) => {
       await sendResetPasswordEmail(user.email, user.name, url);
     },
-    resetPasswordTokenExpiresIn: 15 * 60,
+    resetPasswordTokenExpiresIn: 15 * 60, // 15 minutes
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       await sendConfirmationEmail(user.email, user.name, url);
     },
     autoSignInAfterVerification: true,
-    expiresIn: 60 * 60,
+    expiresIn: 60 * 60, // 1 hour
   },
   socialProviders: {
     google: {
@@ -46,8 +46,12 @@ export const auth = betterAuth({
       sendDeleteAccountVerification: async ({ user, url }) => {
         await sendDeleteAccountEmail(user.email, user.name, url);
       },
-      deleteTokenExpiresIn: 15 * 60,
+      deleteTokenExpiresIn: 15 * 60, // 15 minutes
     },
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 * 14, // 14 days
+    updateAge: 60 * 60 * 24 * 3, // 3 days
   },
   advanced: {
     cookiePrefix: 'guesseye',
