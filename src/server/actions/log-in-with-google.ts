@@ -1,4 +1,4 @@
-'use server';
+// signIn.social must be executed client-side, otherwise the session cookie is not saved
 
 import { signIn } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
