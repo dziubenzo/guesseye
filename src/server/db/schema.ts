@@ -221,6 +221,7 @@ export const bestResultWDFEnum = pgEnum('best_wdf_result', [
   'Last 40', // since 2015
   'Last 33', // 1999, 1986, 1983, 1981
   'Last 32',
+  'Last 25', // 2025 women's prelims
   'Last 24', // Women
   'Last 16',
   'Quarter-Finals',
