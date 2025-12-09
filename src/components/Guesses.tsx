@@ -69,7 +69,10 @@ export default function Guesses({
             : `(${guesses.length} players)`}
         </h1>
       )}
-      <Carousel className="max-w-full lg:max-w-4xl" setApi={setApi}>
+      <Carousel
+        className="min-w-full hover:cursor-grab select-none"
+        setApi={setApi}
+      >
         <CarouselContent>
           {reversedGuesses.map((guess) => (
             <CarouselItem
@@ -87,8 +90,8 @@ export default function Guesses({
         </CarouselContent>
         {guesses.length > 0 && (
           <>
-            <CarouselPrevious className="cursor-pointer hidden lg:flex" />
-            <CarouselNext className="cursor-pointer hidden lg:flex" />
+            <CarouselPrevious className="cursor-pointer hidden xl:flex" />
+            <CarouselNext className="cursor-pointer hidden xl:flex" />
           </>
         )}
       </Carousel>
