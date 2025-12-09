@@ -1,10 +1,10 @@
 import Bold from '@/components/Bold';
+import ExternalLink from '@/components/ExternalLink';
 import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
 import { Card, CardContent } from '@/components/ui/card';
-import ExternalLink from '@/components/ExternalLink';
 import { auth } from '@/lib/auth';
-import { getMidnightUTC } from '@/lib/utils';
+import { getLocalMidnightUTC } from '@/lib/utils';
 import { format } from 'date-fns';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -150,7 +150,8 @@ export default async function About() {
             <li>
               <Bold>official mode</Bold>, where a hand-picked darts player is
               available for you to find. It changes every single day at midnight
-              UTC (which is {format(getMidnightUTC(), 'hh:mm a')} for you);
+              UTC (which is{' '}
+              <Bold>{format(getLocalMidnightUTC(), 'hh:mm a')}</Bold> for you);
             </li>
             <li>
               <Bold>random mode</Bold>, where a darts player is selected for you

@@ -28,9 +28,11 @@ import type {
 } from '@/lib/types';
 import type { GuessSchemaType } from '@/lib/zod/check-guess';
 import { player } from '@/server/db/schema';
+import { UTCDate } from '@date-fns/utc';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import {
+  addDays,
   differenceInYears,
   getDate,
   getDay,
@@ -1923,14 +1925,16 @@ export function changeToGermanSpelling(guess: GuessSchemaType['guess']) {
   return splitGuess.join(' ');
 }
 
-export function getMidnightUTC() {
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
-  const day = new Date().getDate();
+export function getLocalMidnightUTC() {
+  const tomorrow = addDays(new Date(), 1);
+  const year = tomorrow.getFullYear();
+  const month = tomorrow.getMonth();
+  const day = tomorrow.getDate();
 
-  const midnightUTC = new Date(Date.UTC(year, month, day, 0, 0, 0));
+  const midnightUTC = new UTCDate(year, month, day);
+  const localMidnightUTC = new Date(midnightUTC);
 
-  return midnightUTC;
+  return localMidnightUTC;
 }
 
 export function getPlayerCondition(type: UpdateRankingsType) {

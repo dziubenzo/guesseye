@@ -11,6 +11,7 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@date-fns/utc": "^2.1.1",
     "@hookform/resolvers": "^5.0.1",
     "@neondatabase/serverless": "^1.0.0",
     "@radix-ui/react-alert-dialog": "^1.1.13",
