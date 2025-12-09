@@ -111,19 +111,20 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
   }, [newMatches, currentMatches]);
 
   return (
-    <div className="sm:flex sm:justify-center bg-background sticky top-0 p-4 z-1 rounded-md">
+    <div className="sticky bg-secondary top-0 p-2 sm:p-4 z-1 rounded-md">
       <Form {...playerForm}>
         <form onSubmit={playerForm.handleSubmit(onSubmit)}>
           <FormField
             control={playerForm.control}
             name="guess"
             render={({ field }) => (
-              <FormItem>
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-center">
-                  <div className="flex gap-2">
+              <FormItem className="gap-2 sm:gap-3">
+                <div className="flex flex-col md:flex-row gap-2 sm:gap-3 md:justify-center">
+                  <div className="hidden md:block md:h-full md:w-24"></div>
+                  <div className="flex gap-2 sm:gap-3 md:w-[50%]">
                     <FormControl>
                       <Input
-                        className="text-lg md:text-lg h-auto p-3 text-center placeholder:text-center"
+                        className="md:text-lg h-auto p-3 text-center placeholder:text-center"
                         disabled={isPending || gameOver}
                         onInput={() => setError('')}
                         autoFocus
@@ -139,16 +140,22 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                     type="submit"
                     variant="default"
                     disabled={isPending || gameOver}
-                    className={`cursor-pointer text-lg px-4 py-4 sm:h-full sm:w-24`}
+                    className={`cursor-pointer text-lg px-4 py-4 md:h-full md:w-24`}
                   >
                     {isPending ? (
                       <Loader2 className="animate-spin size-7 h-full" />
                     ) : (
-                      'Check'
+                      'Guess'
                     )}
                   </Button>
                 </div>
-                {error && <ErrorMessage errorMessage={error} />}
+                {error && (
+                  <div className="flex justify-center">
+                    <div className="w-full md:w-[50%]">
+                      <ErrorMessage errorMessage={error} />
+                    </div>
+                  </div>
+                )}
               </FormItem>
             )}
           />
