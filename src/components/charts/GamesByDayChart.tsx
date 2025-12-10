@@ -70,20 +70,7 @@ export default function GamesByDayChart({ data }: GamesByDayChartProps) {
           }
         />
         <ChartLegend content={<ChartLegendContent />} />
-        <Bar dataKey="givenUp" stackId="a" fill="var(--color-givenUp)">
-          <LabelList
-            dataKey="count"
-            position="top"
-            offset={9}
-            className="fill-foreground hidden sm:text-base sm:block"
-          />
-          <LabelList
-            dataKey="count"
-            position="top"
-            offset={3}
-            className="fill-foreground text-[0.6rem] sm:hidden"
-          />
-        </Bar>
+        <Bar dataKey="givenUp" stackId="a" fill="var(--color-givenUp)" />
         <Bar dataKey="won" stackId="a" fill="var(--color-won)">
           <LabelList
             dataKey="count"
