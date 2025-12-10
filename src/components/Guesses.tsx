@@ -16,7 +16,7 @@ import type {
   PlayerDifficultyField,
   PlayerToFindMatches,
 } from '@/lib/types';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type GuessesProps = {
   initialGuesses: Guess[];
@@ -50,14 +50,12 @@ export default function Guesses({
     updateCurrentMatches(playerToFindMatches);
   }, [mode, playerDifficulty, initialGuesses, playerToFindMatches]);
 
-  const reversedGuesses = useMemo(() => guesses.toReversed(), [guesses]);
-
   // Scroll to the latest guess when a guess has been made
   useEffect(() => {
     if (!api) return;
 
     api.scrollTo(0);
-  }, [api, reversedGuesses]);
+  }, [api, guesses]);
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -74,7 +72,7 @@ export default function Guesses({
         setApi={setApi}
       >
         <CarouselContent>
-          {reversedGuesses.map((guess) => (
+          {guesses.map((guess, index) => (
             <CarouselItem
               key={guess.guessedPlayer.id}
               className="flex justify-center items-center"
@@ -83,7 +81,7 @@ export default function Guesses({
                 type={'guess'}
                 player={guess.guessedPlayer}
                 comparisonResults={guess.comparisonResults}
-                guessNumber={guesses.indexOf(guess) + 1}
+                guessNumber={guesses.length - index}
               />
             </CarouselItem>
           ))}

@@ -68,7 +68,7 @@ export const useGameStore = create<GameStore>()((set) => ({
     })),
   updateGuesses: (guessedPlayer, comparisonResults) =>
     set((state) => ({
-      guesses: [...state.guesses, { guessedPlayer, comparisonResults }],
+      guesses: [{ guessedPlayer, comparisonResults }, ...state.guesses],
     })),
   updatePreviousMatches: (lastMatches) =>
     set((state) => ({

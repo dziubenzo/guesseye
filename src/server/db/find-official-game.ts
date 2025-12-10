@@ -6,9 +6,9 @@ import type {
   ScheduleWithPlayer,
 } from '@/lib/types';
 import { db } from '@/server/db/index';
-import { game } from '@/server/db/schema';
+import { game, guess } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 export const findOfficialGame = async (scheduledPlayer: ScheduleWithPlayer) => {
   const { session } = await getUserOrGuest();
@@ -27,6 +27,7 @@ export const findOfficialGame = async (scheduledPlayer: ScheduleWithPlayer) => {
     with: {
       guesses: {
         with: { player: true },
+        orderBy: desc(guess.time),
       },
     },
   });

@@ -59,25 +59,21 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
       }
       if (data?.type === 'success') {
         playerForm.resetField('guess');
+        setNewMatches(data.success.newMatches);
+        updateDifficulty(data.success.playerDifficulty);
         if (data.success.type === 'correctGuess') {
           updateGuesses(
             data.success.playerToFind,
             data.success.comparisonResults
           );
-          setNewMatches(data.success.newMatches);
-          updateDifficulty(data.success.playerDifficulty);
           finishGame(data.success.playerToFind);
-          return;
-        }
-        if (data.success.type === 'incorrectGuess') {
+        } else if (data.success.type === 'incorrectGuess') {
           updateGuesses(
             data.success.guessedPlayer,
             data.success.comparisonResults
           );
-          setNewMatches(data.success.newMatches);
-          updateDifficulty(data.success.playerDifficulty);
-          return;
         }
+        return;
       }
     },
   });
