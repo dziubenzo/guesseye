@@ -2,12 +2,14 @@
 
 import Bold from '@/components/Bold';
 import Tooltip from '@/components/Tooltip';
-import { useSession } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
 import Link from 'next/link';
 
-export default function ModeIndicator() {
-  const { data } = useSession();
+type ModeIndicatorProps = {
+  allowVeryHard?: boolean;
+};
+
+export default function ModeIndicator({ allowVeryHard }: ModeIndicatorProps) {
   const { mode } = useGameStore();
 
   return (
@@ -30,9 +32,15 @@ export default function ModeIndicator() {
         ) : (
           <p>
             In the <Bold>random</Bold> mode, a random darts player of{' '}
-            {data ? 'easy, medium, or hard' : 'easy or medium'} difficulty is
-            assigned for you to guess. The darts player changes when you either
-            guess it correctly or give up on your game.
+            <Bold>
+              {allowVeryHard
+                ? 'any'
+                : allowVeryHard === false
+                  ? 'easy, medium, or hard'
+                  : 'easy or medium'}
+            </Bold>{' '}
+            difficulty is assigned for you to guess. The darts player changes
+            when you either guess it correctly or give up on your game.
           </p>
         )}
       </Tooltip>

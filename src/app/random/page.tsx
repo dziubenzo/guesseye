@@ -33,7 +33,7 @@ export default async function RandomGame() {
   return (
     <div className="flex flex-col gap-4">
       <PlayerForm />
-      <ModeIndicator />
+      <ModeIndicator allowVeryHard={session.user.allowVeryHard} />
       <PlayerToFindCard />
       <Guesses
         initialGuesses={guesses}
