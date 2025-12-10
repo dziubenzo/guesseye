@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import UpdateNameForm from '@/components/UpdateNameForm';
+import UpdateVeryHardForm from '@/components/UpdateVeryHardForm';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -30,13 +31,15 @@ export default async function Settings() {
           <CardTitle className="text-2xl">Account Settings</CardTitle>
           <CardDescription>
             <p>
-              Here you can change your name or delete your account altogether.
+              Here you can change your name, add extra darts players to the
+              random mode pool, or delete your account.
             </p>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 grow-1">
-          <UpdateNameForm />
-          <DeleteAccount />
+        <CardContent className="flex flex-col gap-4 grow-1">
+          <UpdateNameForm currentName={session.user.name} />
+          <UpdateVeryHardForm currentSetting={session.user.allowVeryHard} />
+          <DeleteAccount email={session.user.email} />
         </CardContent>
       </Card>
     </div>

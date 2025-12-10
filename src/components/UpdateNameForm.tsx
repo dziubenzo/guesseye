@@ -11,7 +11,6 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useSession } from '@/lib/auth-client';
 import {
   updateNameSchema,
   type UpdateNameSchemaType,
@@ -23,13 +22,15 @@ import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-export default function UpdateNameForm() {
-  const { data, refetch } = useSession();
+type UpdateNameFormProps = {
+  currentName: string;
+};
 
+export default function UpdateNameForm({ currentName }: UpdateNameFormProps) {
   const updateNameForm = useForm({
     resolver: zodResolver(updateNameSchema),
     defaultValues: {
-      newName: data?.user.name || '',
+      newName: currentName,
     },
     mode: 'onSubmit',
   });
@@ -45,13 +46,13 @@ export default function UpdateNameForm() {
       }
       if (data?.type === 'success') {
         setSuccess(data.message);
-        refetch();
         return;
       }
     },
   });
 
   function onSubmit(values: UpdateNameSchemaType) {
+    if (values.newName === currentName) return;
     setError('');
     setSuccess('');
     execute(values);
@@ -67,7 +68,7 @@ export default function UpdateNameForm() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex flex-col gap-2">
-                  <div className="flex flex-col gap-2 md:w-[300px]">
+                  <div className="flex flex-col gap-2 md:w-[400px]">
                     <FormLabel className="cursor-pointer text-accent-foreground flex flex-col gap-1 items-start">
                       <span>New Name</span>
                       <span className="text-[0.65rem] text-muted-foreground">

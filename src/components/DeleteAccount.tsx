@@ -11,13 +11,16 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { deleteUser, useSession } from '@/lib/auth-client';
+import { deleteUser } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function DeleteAccount() {
+type DeleteAccountProps = {
+  email: string;
+};
+
+export default function DeleteAccount({ email }: DeleteAccountProps) {
   const router = useRouter();
-  const { data } = useSession();
 
   const [open, setOpen] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
@@ -51,9 +54,8 @@ export default function DeleteAccount() {
                   <AlertDialogTitle>Delete Account Link Sent</AlertDialogTitle>
                   <AlertDialogDescription>
                     A delete account email has been sent to{' '}
-                    <span className="font-bold">{data?.user.email}</span>. Click
-                    the link in the email to confirm the deletion of your
-                    account.
+                    <span className="font-bold">{email}</span>. Click the link
+                    in the email to confirm the deletion of your account.
                   </AlertDialogDescription>
                 </>
               ) : (

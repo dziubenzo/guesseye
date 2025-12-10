@@ -6,14 +6,19 @@ import { player } from '@/server/db/schema';
 import { eq, ne, or, sql } from 'drizzle-orm';
 
 type GetRandomPlayerOptions = {
-  easierForGuests: boolean;
+  easierForGuests?: boolean;
+  allowVeryHard?: boolean;
 };
 
-export const getRandomPlayer = async (options?: GetRandomPlayerOptions) => {
+export const getRandomPlayer = async (options: GetRandomPlayerOptions) => {
+  const { easierForGuests, allowVeryHard } = options;
+
   const randomPlayer: Player | undefined = await db.query.player.findFirst({
-    where: options?.easierForGuests
+    where: easierForGuests
       ? or(eq(player.difficulty, 'easy'), eq(player.difficulty, 'medium'))
-      : ne(player.difficulty, 'very hard'),
+      : allowVeryHard
+        ? undefined
+        : ne(player.difficulty, 'very hard'),
     orderBy: sql`RANDOM()`,
   });
 

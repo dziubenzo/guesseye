@@ -225,7 +225,7 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                         <div>
                           <div className="font-medium">Settings</div>
                           <div className="text-muted-foreground">
-                            Change your name or delete the account.
+                            Access various account settings.
                           </div>
                         </div>
                       </div>

@@ -34,11 +34,16 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        fieldName: 'role',
         type: 'string',
         required: true,
         defaultValue: 'user',
         input: false,
+      },
+      allowVeryHard: {
+        type: 'boolean',
+        required: true,
+        defaultValue: false,
+        input: true,
       },
     },
     deleteUser: {
@@ -66,3 +71,5 @@ export const auth = betterAuth({
     'https://www.guesseye.com',
   ],
 });
+
+export type Session = typeof auth.$Infer.Session;

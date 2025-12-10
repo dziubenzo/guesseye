@@ -11,7 +11,9 @@ export const createRandomGame = async () => {
   const { session, clientIP, clientUserAgent } = await getUserOrGuest();
 
   const randomPlayer = await getRandomPlayer(
-    session ? undefined : { easierForGuests: true }
+    session
+      ? { allowVeryHard: session.user.allowVeryHard }
+      : { easierForGuests: true }
   );
 
   if (!randomPlayer) {
