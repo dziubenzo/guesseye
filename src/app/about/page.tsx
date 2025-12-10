@@ -4,8 +4,6 @@ import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
 import { Card, CardContent } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
-import { getLocalMidnightUTC } from '@/lib/utils';
-import { format } from 'date-fns';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
@@ -149,9 +147,8 @@ export default async function About() {
           <ul className="list-disc list-inside">
             <li>
               <Bold>official mode</Bold>, where a hand-picked darts player is
-              available for you to find. It changes every single day at midnight
-              UTC (which is{' '}
-              <Bold>{format(getLocalMidnightUTC(), 'hh:mm a')}</Bold> for you);
+              available for you to find. It changes every single day at{' '}
+              <Bold>midnight UTC</Bold>;
             </li>
             <li>
               <Bold>random mode</Bold>, where a darts player is selected for you
