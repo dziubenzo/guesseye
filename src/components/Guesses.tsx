@@ -70,7 +70,7 @@ export default function Guesses({
         </h1>
       )}
       <Carousel
-        className="min-w-full hover:cursor-grab select-none"
+        className="min-w-full max-w-full hover:cursor-grab select-none"
         setApi={setApi}
       >
         <CarouselContent>
