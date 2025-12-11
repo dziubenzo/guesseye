@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { PlayerWithCount } from '@/lib/types';
+import type { GroupedPlayersWithCount, PlayerWithCount } from '@/lib/types';
 import {
   schedulePlayerSchema,
   type SchedulePlayerSchemaType,
@@ -22,7 +22,7 @@ import {
 import { schedulePlayer } from '@/server/actions/schedule-player';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type PlayerSchedulerFormProps = {
@@ -43,6 +43,16 @@ export default function PlayerSchedulerForm({
   const [success, setSuccess] = useState('');
   // Make sure Select shows the placeholder text back after submission
   const [selectKey, setSelectKey] = useState(new Date().toString());
+
+  // Group darts players by gender
+  const playersByGender = useMemo(
+    () =>
+      Object.groupBy(
+        players,
+        ({ gender }) => gender
+      ) as GroupedPlayersWithCount,
+    [players]
+  );
 
   const hookErrors = schedulePlayerForm.formState.errors;
 
@@ -101,12 +111,22 @@ export default function PlayerSchedulerForm({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Men</SelectLabel>
-                    {players.map((player) => {
-                      if (player.gender === 'male') {
-                        return (
+                    <SelectLabel className="text-base text-blue-500">
+                      MEN
+                    </SelectLabel>
+                    {playersByGender.male.map((player, index) => {
+                      const prevDifficulty =
+                        playersByGender.male[index > 0 ? index - 1 : index]
+                          .difficulty;
+                      return (
+                        <Fragment key={player.id}>
+                          {(index === 0 ||
+                            player.difficulty !== prevDifficulty) && (
+                            <SelectLabel className="text-base">
+                              {player.difficulty.toUpperCase()}
+                            </SelectLabel>
+                          )}
                           <SelectItem
-                            key={player.id}
                             value={player.id.toString()}
                             className="cursor-pointer"
                           >
@@ -114,18 +134,28 @@ export default function PlayerSchedulerForm({
                             {player.officialModeCount}) -{' '}
                             {player.difficulty.toUpperCase()}
                           </SelectItem>
-                        );
-                      }
+                        </Fragment>
+                      );
                     })}
                   </SelectGroup>
                   <SelectSeparator />
                   <SelectGroup>
-                    <SelectLabel>Women</SelectLabel>
-                    {players.map((player) => {
-                      if (player.gender === 'female') {
-                        return (
+                    <SelectLabel className="text-base text-pink-400">
+                      WOMEN
+                    </SelectLabel>
+                    {playersByGender.female.map((player, index) => {
+                      const prevDifficulty =
+                        playersByGender.female[index > 0 ? index - 1 : index]
+                          .difficulty;
+                      return (
+                        <Fragment key={player.id}>
+                          {(index === 0 ||
+                            player.difficulty !== prevDifficulty) && (
+                            <SelectLabel className="text-base">
+                              {player.difficulty.toUpperCase()}
+                            </SelectLabel>
+                          )}
                           <SelectItem
-                            key={player.id}
                             value={player.id.toString()}
                             className="cursor-pointer"
                           >
@@ -133,8 +163,8 @@ export default function PlayerSchedulerForm({
                             {player.officialModeCount}) -{' '}
                             {player.difficulty.toUpperCase()}
                           </SelectItem>
-                        );
-                      }
+                        </Fragment>
+                      );
                     })}
                   </SelectGroup>
                 </SelectContent>

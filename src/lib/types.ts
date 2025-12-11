@@ -431,6 +431,11 @@ export type PlayerWithCount = {
   officialModeCount: number;
 };
 
+export type GroupedPlayersWithCount = {
+  male: PlayerWithCount[];
+  female: PlayerWithCount[];
+};
+
 export type BirthdayPlayer = {
   fullName: string;
   age: number;

@@ -20,7 +20,7 @@ export const getPlayersWithCount = async () => {
       ),
     })
     .from(player)
-    .orderBy(player.firstName);
+    .orderBy(player.difficulty, player.firstName);
 
   return playersWithCount;
 };

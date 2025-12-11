@@ -20,6 +20,7 @@ export default function ErrorPage({ errorMessage }: ErrorPageProps) {
         priority={true}
         width={400}
         height={400}
+        unoptimized
       />
       <Button variant={'link'} asChild>
         <Link href="/">Back to Home page</Link>
