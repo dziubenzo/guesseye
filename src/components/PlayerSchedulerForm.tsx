@@ -1,7 +1,6 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import SuccessMessage from '@/components/SuccessMessage';
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import {
@@ -175,8 +174,10 @@ export default function PlayerSchedulerForm({
         <Button type="submit" disabled={isPending} className="cursor-pointer">
           Schedule Player
         </Button>
-        {error && <ErrorMessage errorMessage={error} />}
-        {success && <SuccessMessage successMessage={success} />}
+        {error && <Message type="error" message={error} />}
+        {success && (
+          <Message type="success" message={success} autoDismissible />
+        )}
       </form>
     </Form>
   );

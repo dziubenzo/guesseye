@@ -1,7 +1,6 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import SuccessMessage from '@/components/SuccessMessage';
+import Message from '@/components/Message';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
@@ -92,13 +91,15 @@ export default function UpdateVeryHardForm({
                           easy, medium, or hard difficulty in random mode.
                         </p>
                         <p className="text-muted-foreground text-sm">
-                          If checked, you can additionally encounter darts players of
-                          very hard difficulty in random mode.
+                          If checked, you can additionally encounter darts
+                          players of very hard difficulty in random mode.
                         </p>
                       </div>
                     </FormControl>
-                    {error && <ErrorMessage errorMessage={error} />}
-                    {success && <SuccessMessage successMessage={success} />}
+                    {error && (
+                      <Message type="error" message={error} autoDismissible />
+                    )}
+                    {success && <Message type="success" message={success} />}
                   </div>
                 </div>
               </FormItem>

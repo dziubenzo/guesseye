@@ -1,15 +1,15 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
 import ForgotPassword from '@/components/ForgotPassword';
 import Logo from '@/components/Logo';
+import Message from '@/components/Message';
 import SignupSuccess from '@/components/SignupSuccess';
 import { Button } from '@/components/ui/button';
 import {
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -151,7 +151,7 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
               </FormItem>
             )}
           />
-          {error && <ErrorMessage errorMessage={error} />}
+          {error && <Message type="error" message={error} />}
           <Button
             type="submit"
             variant="secondary"
@@ -208,7 +208,7 @@ function GoogleLogin() {
         {isPending ? 'Redirecting to Google...' : `Log In With Google`}
         <FcGoogle />
       </Button>
-      {error && <ErrorMessage errorMessage={error} />}
+      {error && <Message type="error" message={error} />}
     </>
   );
 }
@@ -333,7 +333,7 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
               </FormItem>
             )}
           />
-          {error && <ErrorMessage errorMessage={error} />}
+          {error && <Message type="error" message={error} />}
           <Button
             type="submit"
             className="cursor-pointer mt-3 text-lg w-full"

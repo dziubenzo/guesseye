@@ -1,7 +1,6 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import SuccessMessage from '@/components/SuccessMessage';
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -115,8 +114,8 @@ export default function ResetPasswordForm() {
                     </FormItem>
                   )}
                 />
-                {error && <ErrorMessage errorMessage={error} />}
-                {success && <SuccessMessage successMessage={success} />}
+                {error && <Message type="error" message={error} />}
+                {success && <Message type="success" message={success} />}
                 {!success && !error && (
                   <Button
                     type="submit"

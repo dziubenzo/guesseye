@@ -1,7 +1,6 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import SuccessMessage from '@/components/SuccessMessage';
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
 import updateAllRankings from '@/server/actions/update-all-rankings';
@@ -103,10 +102,10 @@ export default function UpdateButtons() {
         </Button>
       </div>
       {updateRankingsResult?.type === 'error' && (
-        <ErrorMessage errorMessage={updateRankingsResult.message} />
+        <Message type="error" message={updateRankingsResult.message} />
       )}
       {updateRankingsResult?.type === 'success' && (
-        <SuccessMessage successMessage={updateRankingsResult.message} />
+        <Message type="success" message={updateRankingsResult.message} />
       )}
       <h1 className="text-xl font-medium">Update All Rankings</h1>
       <div className="flex flex-col gap-4">
@@ -119,10 +118,10 @@ export default function UpdateButtons() {
           Update All Rankings
         </Button>
         {updateAllRankingsResult?.type === 'error' && (
-          <ErrorMessage errorMessage={updateAllRankingsResult.message} />
+          <Message type="error" message={updateAllRankingsResult.message} />
         )}
         {updateAllRankingsResult?.type === 'success' && (
-          <SuccessMessage successMessage={updateAllRankingsResult.message} />
+          <Message type="success" message={updateAllRankingsResult.message} />
         )}
       </div>
       <h1 className="text-xl font-medium">Update Tour Card Holders</h1>
@@ -135,10 +134,10 @@ export default function UpdateButtons() {
           Update Tour Card Holders
         </Button>
         {updateTCHResult?.type === 'error' && (
-          <ErrorMessage errorMessage={updateTCHResult.message} />
+          <Message type="error" message={updateTCHResult.message} />
         )}
         {updateTCHResult?.type === 'success' && (
-          <SuccessMessage successMessage={updateTCHResult.message} />
+          <Message type="success" message={updateTCHResult.message} />
         )}
       </div>
       <h1 className="text-xl font-medium">Revalidate Cache</h1>
@@ -151,7 +150,11 @@ export default function UpdateButtons() {
           Revalidate Cache
         </Button>
         {revalidateCacheResult?.type === 'success' && (
-          <SuccessMessage successMessage={revalidateCacheResult.message} />
+          <Message
+            type="success"
+            message={revalidateCacheResult.message}
+            autoDismissible
+          />
         )}
       </div>
     </div>

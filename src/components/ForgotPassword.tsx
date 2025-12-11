@@ -1,3 +1,4 @@
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import {
   DialogDescription,
@@ -23,8 +24,6 @@ import { Loader2, MoveLeft } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import ErrorMessage from './ErrorMessage';
-import SuccessMessage from './SuccessMessage';
 
 type ForgotPasswordProps = {
   setShowForgotPassword: Dispatch<SetStateAction<boolean>>;
@@ -94,8 +93,8 @@ export default function ForgotPassword({
               </FormItem>
             )}
           />
-          {error && <ErrorMessage errorMessage={error} />}
-          {success && <SuccessMessage successMessage={success} />}
+          {error && <Message type="error" message={error} />}
+          {success && <Message type="success" message={success} />}
           {!success && (
             <Button
               type="submit"

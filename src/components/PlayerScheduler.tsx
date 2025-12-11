@@ -1,6 +1,6 @@
 'use server';
 
-import ErrorMessage from '@/components/ErrorMessage';
+import Message from '@/components/Message';
 import PlayerSchedulerForm from '@/components/PlayerSchedulerForm';
 import { Separator } from '@/components/ui/separator';
 import { getLastScheduledPlayer } from '@/server/db/get-last-scheduled-player';
@@ -15,7 +15,7 @@ export default async function PlayerScheduler() {
     return (
       <div className="flex flex-col gap-4">
         <h1 className="text-xl font-medium">Schedule Players</h1>
-        <ErrorMessage errorMessage={lastScheduledPlayer.error} />
+        <Message type="error" message={lastScheduledPlayer.error} />
       </div>
     );
   }

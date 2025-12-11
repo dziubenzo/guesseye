@@ -1,7 +1,7 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
 import GiveUpForm from '@/components/GiveUpForm';
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -148,7 +148,7 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
                 {error && (
                   <div className="flex justify-center">
                     <div className="w-full md:w-[50%]">
-                      <ErrorMessage errorMessage={error} />
+                      <Message type="error" message={error} />
                     </div>
                   </div>
                 )}

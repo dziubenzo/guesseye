@@ -1,7 +1,6 @@
 'use client';
 
-import ErrorMessage from '@/components/ErrorMessage';
-import SuccessMessage from '@/components/SuccessMessage';
+import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -96,8 +95,14 @@ export default function UpdateNameForm({ currentName }: UpdateNameFormProps) {
                         'Update Name'
                       )}
                     </Button>
-                    {error && <ErrorMessage errorMessage={error} />}
-                    {success && <SuccessMessage successMessage={success} />}
+                    {error && <Message type="error" message={error} />}
+                    {success && (
+                      <Message
+                        type="success"
+                        message={success}
+                        autoDismissible
+                      />
+                    )}
                   </div>
                 </div>
               </FormItem>
