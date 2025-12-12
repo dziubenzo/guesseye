@@ -15,7 +15,9 @@ export default async function PlayerScheduler() {
     return (
       <div className="flex flex-col gap-4">
         <h1 className="text-xl font-medium">Schedule Players</h1>
-        <Message type="error" message={lastScheduledPlayer.error} />
+        <Message type="error">
+          <p>{lastScheduledPlayer.error}</p>
+        </Message>
       </div>
     );
   }

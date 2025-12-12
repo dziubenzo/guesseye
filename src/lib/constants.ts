@@ -9,6 +9,9 @@ export const NAMED_FIELDS = ALL_MATCHES - 5;
 // Lowest ranking of a darts player to be added to reported missing players if they are not in the DB
 export const MISSING_PLAYERS_MAX_RANKING = 32;
 
+// Maximum number of matches to show if no exact/very close match is found
+export const MAX_MATCH_SUGGESTIONS = 6;
+
 export const matchingComparisonResults: ComparisonResults = {
   firstName: 'match',
   lastName: 'match',

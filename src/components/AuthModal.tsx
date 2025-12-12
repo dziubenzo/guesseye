@@ -151,7 +151,11 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
               </FormItem>
             )}
           />
-          {error && <Message type="error" message={error} />}
+          {error && (
+            <Message type="error">
+              <p>{error}</p>
+            </Message>
+          )}
           <Button
             type="submit"
             variant="secondary"
@@ -208,7 +212,11 @@ function GoogleLogin() {
         {isPending ? 'Redirecting to Google...' : `Log In With Google`}
         <FcGoogle />
       </Button>
-      {error && <Message type="error" message={error} />}
+      {error && (
+        <Message type="error">
+          <p>{error}</p>
+        </Message>
+      )}
     </>
   );
 }
@@ -333,7 +341,11 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
               </FormItem>
             )}
           />
-          {error && <Message type="error" message={error} />}
+          {error && (
+            <Message type="error">
+              <p>{error}</p>
+            </Message>
+          )}
           <Button
             type="submit"
             className="cursor-pointer mt-3 text-lg w-full"

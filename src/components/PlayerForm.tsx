@@ -52,6 +52,7 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
   const [newMatches, setNewMatches] = useState<PlayerToFindMatches | null>(
     null
   );
+  const [matchSuggestions, setMatchSuggestions] = useState<string[]>([]);
 
   // Full names of previous guesses for duplicate guess checks
   const prevGuesses = useMemo(() => {
@@ -105,24 +106,27 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
 
   function onSubmit(values: GuessSchemaType) {
     setError('');
-    
+    setMatchSuggestions([]);
+
     const matches = fuzzyMatcher.search(values.guess);
-    const result = evaluateMatches(matches);
+    const result = evaluateMatches(matches, prevGuesses);
 
     if (result.type === 'error') {
       setError(result.message);
+      setMatchSuggestions(result.matches);
       return;
     }
 
     const guess = result.guess;
-    const isDuplicateGuess = prevGuesses.has(guess);
-
-    if (isDuplicateGuess) {
-      setError('You have already guessed this player.');
-      return;
-    }
 
     execute({ ...values, currentMatches, mode, guess });
+  }
+
+  function handleMatchSuggestionClick(matchSuggestion: string) {
+    playerForm.setValue('guess', matchSuggestion);
+    setError('');
+    setMatchSuggestions([]);
+    execute({ scheduleId, currentMatches, mode, guess: matchSuggestion });
   }
 
   // Make sure state is reset on unmount
@@ -158,7 +162,10 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
                       <Input
                         className="md:text-lg h-auto p-3 text-center placeholder:text-center"
                         disabled={isPending || gameOver}
-                        onInput={() => setError('')}
+                        onInput={() => {
+                          setError('');
+                          setMatchSuggestions([]);
+                        }}
                         autoFocus
                         {...field}
                       />
@@ -184,7 +191,27 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
                 {error && (
                   <div className="flex justify-center">
                     <div className="w-full md:w-[50%]">
-                      <Message type="error" message={error} />
+                      <Message
+                        type={matchSuggestions.length === 0 ? 'error' : 'info'}
+                      >
+                        <p>{error}</p>
+                        {matchSuggestions.length > 0 && (
+                          <div className="grid grid-cols-2 gap-x-4 grow-1">
+                            {matchSuggestions.map((matchSuggestion) => (
+                              <Button
+                                className="cursor-pointer p-0"
+                                variant={'ghost'}
+                                key={matchSuggestion}
+                                onClick={() =>
+                                  handleMatchSuggestionClick(matchSuggestion)
+                                }
+                              >
+                                {matchSuggestion}
+                              </Button>
+                            ))}
+                          </div>
+                        )}
+                      </Message>
                     </div>
                   </div>
                 )}

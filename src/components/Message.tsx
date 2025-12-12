@@ -1,18 +1,18 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { Flower2, TriangleAlert } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Flower2, TriangleAlert, UserRoundSearch } from 'lucide-react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 type MessageProps = {
-  type: 'success' | 'error';
-  message: string;
+  children: ReactNode;
+  type: 'success' | 'error' | 'info';
   autoDismissible?: boolean;
 };
 
 export default function Message({
+  children,
   type,
-  message,
   autoDismissible = false,
 }: MessageProps) {
   const [show, setShow] = useState(true);
@@ -37,28 +37,35 @@ export default function Message({
 
   if (!show) return null;
 
-  return <ChildMessage type={type} message={message} dismiss={dismiss} />;
+  return (
+    <ChildMessage type={type} dismiss={dismiss}>
+      {children}
+    </ChildMessage>
+  );
 }
 
 type ChildMessageProps = Omit<MessageProps, 'timed'> & { dismiss: () => void };
 
-function ChildMessage({ type, message, dismiss }: ChildMessageProps) {
+function ChildMessage({ children, type, dismiss }: ChildMessageProps) {
   return (
     <div
       className={cn(
-        'flex items-center justify-center md:justify-start gap-2 p-3 text-sm text-accent rounded-md m-0 font-bold cursor-pointer',
-        type === 'success' ? 'bg-primary' : 'bg-destructive'
+        'flex items-center justify-center md:justify-start gap-2 p-3 text-sm text-accent rounded-md m-0 font-bold',
+        type !== 'info' && 'cursor-pointer',
+        type === 'success'
+          ? 'bg-primary'
+          : type === 'error'
+            ? 'bg-destructive'
+            : 'bg-muted-foreground flex-col md:flex-row'
       )}
-      onClick={dismiss}
+      onClick={type !== 'info' ? dismiss : undefined}
     >
       <div>
-        {type === 'success' ? (
-          <Flower2 size={24} />
-        ) : (
-          <TriangleAlert size={24} />
-        )}
+        {type === 'success' && <Flower2 size={24} />}
+        {type === 'error' && <TriangleAlert size={24} />}
+        {type === 'info' && <UserRoundSearch size={24} />}
       </div>
-      <p>{message}</p>
+      {children}
     </div>
   );
 }

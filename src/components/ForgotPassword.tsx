@@ -93,8 +93,16 @@ export default function ForgotPassword({
               </FormItem>
             )}
           />
-          {error && <Message type="error" message={error} />}
-          {success && <Message type="success" message={success} />}
+          {error && (
+            <Message type="error">
+              <p>{error}</p>
+            </Message>
+          )}
+          {success && (
+            <Message type="success">
+              <p>{success}</p>
+            </Message>
+          )}
           {!success && (
             <Button
               type="submit"

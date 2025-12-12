@@ -95,13 +95,15 @@ export default function UpdateNameForm({ currentName }: UpdateNameFormProps) {
                         'Update Name'
                       )}
                     </Button>
-                    {error && <Message type="error" message={error} />}
+                    {error && (
+                      <Message type="error">
+                        <p>{error}</p>
+                      </Message>
+                    )}
                     {success && (
-                      <Message
-                        type="success"
-                        message={success}
-                        autoDismissible
-                      />
+                      <Message type="success" autoDismissible>
+                        <p>{success}</p>
+                      </Message>
                     )}
                   </div>
                 </div>

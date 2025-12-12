@@ -174,9 +174,15 @@ export default function PlayerSchedulerForm({
         <Button type="submit" disabled={isPending} className="cursor-pointer">
           Schedule Player
         </Button>
-        {error && <Message type="error" message={error} />}
+        {error && (
+          <Message type="error">
+            <p>{error}</p>
+          </Message>
+        )}
         {success && (
-          <Message type="success" message={success} autoDismissible />
+          <Message type="success" autoDismissible>
+            <p>{success}</p>
+          </Message>
         )}
       </form>
     </Form>

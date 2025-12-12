@@ -102,10 +102,14 @@ export default function UpdateButtons() {
         </Button>
       </div>
       {updateRankingsResult?.type === 'error' && (
-        <Message type="error" message={updateRankingsResult.message} />
+        <Message type="error">
+          <p>{updateRankingsResult.message}</p>
+        </Message>
       )}
       {updateRankingsResult?.type === 'success' && (
-        <Message type="success" message={updateRankingsResult.message} />
+        <Message type="success">
+          <p>{updateRankingsResult.message}</p>
+        </Message>
       )}
       <h1 className="text-xl font-medium">Update All Rankings</h1>
       <div className="flex flex-col gap-4">
@@ -118,10 +122,14 @@ export default function UpdateButtons() {
           Update All Rankings
         </Button>
         {updateAllRankingsResult?.type === 'error' && (
-          <Message type="error" message={updateAllRankingsResult.message} />
+          <Message type="error">
+            <p>{updateAllRankingsResult.message}</p>
+          </Message>
         )}
         {updateAllRankingsResult?.type === 'success' && (
-          <Message type="success" message={updateAllRankingsResult.message} />
+          <Message type="success">
+            <p>{updateAllRankingsResult.message}</p>
+          </Message>
         )}
       </div>
       <h1 className="text-xl font-medium">Update Tour Card Holders</h1>
@@ -134,10 +142,14 @@ export default function UpdateButtons() {
           Update Tour Card Holders
         </Button>
         {updateTCHResult?.type === 'error' && (
-          <Message type="error" message={updateTCHResult.message} />
+          <Message type="error">
+            <p>{updateTCHResult.message}</p>
+          </Message>
         )}
         {updateTCHResult?.type === 'success' && (
-          <Message type="success" message={updateTCHResult.message} />
+          <Message type="success">
+            <p>{updateTCHResult.message}</p>
+          </Message>
         )}
       </div>
       <h1 className="text-xl font-medium">Revalidate Cache</h1>
@@ -150,11 +162,9 @@ export default function UpdateButtons() {
           Revalidate Cache
         </Button>
         {revalidateCacheResult?.type === 'success' && (
-          <Message
-            type="success"
-            message={revalidateCacheResult.message}
-            autoDismissible
-          />
+          <Message type="success" autoDismissible>
+            <p>{revalidateCacheResult.message}</p>
+          </Message>
         )}
       </div>
     </div>

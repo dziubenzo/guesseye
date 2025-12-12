@@ -97,9 +97,15 @@ export default function UpdateVeryHardForm({
                       </div>
                     </FormControl>
                     {error && (
-                      <Message type="error" message={error} autoDismissible />
+                      <Message type="error">
+                        <p>{error}</p>
+                      </Message>
                     )}
-                    {success && <Message type="success" message={success} />}
+                    {success && (
+                      <Message type="success" autoDismissible>
+                        <p>{success}</p>
+                      </Message>
+                    )}
                   </div>
                 </div>
               </FormItem>

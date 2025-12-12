@@ -1,3 +1,4 @@
+import { MAX_MATCH_SUGGESTIONS } from '@/lib/constants';
 import type {
   BestResultColumnType,
   ComparisonResults,
@@ -599,19 +600,31 @@ export function findClosest(
     : { type: 'guess', value: guess };
 }
 
-export function evaluateMatches(matches: FuseResult<PlayerFullName>[]) {
+export function evaluateMatches(
+  matches: FuseResult<PlayerFullName>[],
+  prevGuesses: Set<string>
+) {
   let result: EvaluateMatchesResult;
 
   const veryCloseMatches: string[] = [];
   const closeMatches: string[] = [];
 
   for (const match of matches) {
+    const fullName = match.item.fullName;
     // Very close match
-    if (match.score! <= 0.1) {
-      veryCloseMatches.push(match.item.fullName);
+    if (
+      match.score! <= 0.1 &&
+      veryCloseMatches.length < MAX_MATCH_SUGGESTIONS &&
+      !prevGuesses.has(fullName)
+    ) {
+      veryCloseMatches.push(fullName);
       // Close match
-    } else if (match.score! <= 0.3) {
-      closeMatches.push(match.item.fullName);
+    } else if (
+      match.score! <= 0.3 &&
+      closeMatches.length < MAX_MATCH_SUGGESTIONS &&
+      !prevGuesses.has(fullName)
+    ) {
+      closeMatches.push(fullName);
     }
   }
 
@@ -620,15 +633,21 @@ export function evaluateMatches(matches: FuseResult<PlayerFullName>[]) {
   } else if (veryCloseMatches.length > 1) {
     result = {
       type: 'error',
-      message: `Found ${veryCloseMatches.length} very close matches: ${veryCloseMatches.join(', ')}. Please add more detail to your guess.`,
+      message: `Did you mean:`,
+      matches: veryCloseMatches,
     };
   } else if (closeMatches.length > 0) {
     result = {
       type: 'error',
-      message: `Found ${closeMatches.length} close ${closeMatches.length === 1 ? 'match' : 'matches'}: ${closeMatches.join(', ')}. Please add more detail to your guess.`,
+      message: `Did you mean:`,
+      matches: closeMatches,
     };
   } else {
-    result = { type: 'error', message: 'No darts player found. Try again.' };
+    result = {
+      type: 'error',
+      message: 'No darts player found or darts player already guessed.',
+      matches: [],
+    };
   }
 
   return result;
