@@ -10,8 +10,8 @@ export const getBirthdayPlayers = async () => {
 
   const birthdayPlayers: BirthdayPlayer[] = [];
 
-  for (const player of players) {
-    if (!player.dateOfBirth || player.status === 'deceased') continue;
+  players.forEach((player) => {
+    if (!player.dateOfBirth || player.status === 'deceased') return;
 
     const currentYearDate = setYear(
       player.dateOfBirth,
@@ -23,7 +23,7 @@ export const getBirthdayPlayers = async () => {
       const age = getAge(player.dateOfBirth);
       birthdayPlayers.push({ fullName, age });
     }
-  }
+  });
 
   return birthdayPlayers;
 };

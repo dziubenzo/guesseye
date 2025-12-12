@@ -6,18 +6,19 @@ import type {
   DatabaseStatsPlayer,
   DatabaseStatsType,
   ErrorObject,
+  EvaluateMatchesResult,
   GamesByDayObject,
   GameWithGuesses,
   GameWithGuessesAndUser,
   GlobalStats,
   GlobalStatsGame,
-  Guess,
   GuessWithPlayerName,
   Leaderboard,
   MatchKeys,
   OfficialGamesHistory,
   Player,
   PlayerDifficultyField,
+  PlayerFullName,
   PlayerToFindMatches,
   RangedMatchKeys,
   Schedule,
@@ -26,7 +27,6 @@ import type {
   UserStats,
   UserStatsGame,
 } from '@/lib/types';
-import type { GuessSchemaType } from '@/lib/zod/check-guess';
 import { player } from '@/server/db/schema';
 import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
@@ -39,6 +39,7 @@ import {
   millisecondsToSeconds,
 } from 'date-fns';
 import { eq, getTableColumns } from 'drizzle-orm';
+import type { FuseResult } from 'fuse.js';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -64,16 +65,6 @@ export function capitalise(string: string) {
   }
 
   return string[0].toUpperCase() + string.slice(1);
-}
-
-// Get rid of all special characters in player's name
-export function normaliseToArray(name: string) {
-  return name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replaceAll('ł', 'l')
-    .split(' ');
 }
 
 export function normaliseToString(name: string) {
@@ -608,33 +599,39 @@ export function findClosest(
     : { type: 'guess', value: guess };
 }
 
-export function checkForDuplicateGuess(
-  guess: GuessSchemaType['guess'],
-  prevGuesses: Guess[]
-) {
-  const isDuplicateGuess = prevGuesses.some((prevGuess) => {
-    const splitGuess = normaliseToArray(guess);
-    const firstName = normaliseToString(prevGuess.guessedPlayer.firstName);
-    const lastName = normaliseToString(prevGuess.guessedPlayer.lastName);
-    const lastWordIndex = splitGuess.length - 1;
+export function evaluateMatches(matches: FuseResult<PlayerFullName>[]) {
+  let result: EvaluateMatchesResult;
 
-    if (splitGuess.length === 1) {
-      return (
-        firstName.includes(splitGuess[0]) || lastName.includes(splitGuess[0])
-      );
+  const veryCloseMatches: string[] = [];
+  const closeMatches: string[] = [];
+
+  for (const match of matches) {
+    // Very close match
+    if (match.score! <= 0.1) {
+      veryCloseMatches.push(match.item.fullName);
+      // Close match
+    } else if (match.score! <= 0.3) {
+      closeMatches.push(match.item.fullName);
     }
+  }
 
-    return (
-      (firstName.includes(splitGuess[0]) &&
-        lastName.includes(splitGuess[lastWordIndex])) ||
-      (lastName.includes(splitGuess[0]) &&
-        firstName.includes(splitGuess[lastWordIndex])) ||
-      (lastName.includes(splitGuess[0]) &&
-        lastName.includes(splitGuess[lastWordIndex]))
-    );
-  });
+  if (veryCloseMatches.length === 1) {
+    result = { type: 'success', guess: veryCloseMatches[0] };
+  } else if (veryCloseMatches.length > 1) {
+    result = {
+      type: 'error',
+      message: `Found ${veryCloseMatches.length} very close matches: ${veryCloseMatches.join(', ')}. Please add more detail to your guess.`,
+    };
+  } else if (closeMatches.length > 0) {
+    result = {
+      type: 'error',
+      message: `Found ${closeMatches.length} close ${closeMatches.length === 1 ? 'match' : 'matches'}: ${closeMatches.join(', ')}. Please add more detail to your guess.`,
+    };
+  } else {
+    result = { type: 'error', message: 'No darts player found. Try again.' };
+  }
 
-  return isDuplicateGuess;
+  return result;
 }
 
 export function getDifficultyColour(difficulty: PlayerDifficultyField) {
@@ -664,58 +661,6 @@ export const validateScheduleId = (scheduleId: string | undefined) => {
 
   return { validScheduleId: scheduleId ? Number(scheduleId) : undefined };
 };
-
-export function filterPlayers(players: Player[], guess: string[]): Player[] {
-  const searchResults = players.filter((player) => {
-    const firstName = normaliseToString(player.firstName);
-    const lastName = normaliseToString(player.lastName);
-    const lastWordIndex = guess.length - 1;
-
-    if (guess.length === 1) {
-      return firstName.includes(guess[0]) || lastName.includes(guess[0]);
-    }
-
-    // Also allow search by lastName followed by firstName as well as searches for players using only multi-word surname such as van Gerwen or Van den Bergh
-    return (
-      (firstName.includes(guess[0]) &&
-        lastName.includes(guess[lastWordIndex])) ||
-      (lastName.includes(guess[0]) &&
-        firstName.includes(guess[lastWordIndex])) ||
-      (lastName.includes(guess[0]) && lastName.includes(guess[lastWordIndex]))
-    );
-  });
-
-  return searchResults;
-}
-
-export function checkSearchResults(searchResults: Player[]) {
-  let error: ErrorObject;
-
-  if (searchResults.length === 0) {
-    error = {
-      error: 'No darts player found. Try again.',
-    };
-    return error;
-  } else if (searchResults.length === 2) {
-    const playerNames = searchResults
-      .map((player) => {
-        return player.firstName + ' ' + player.lastName;
-      })
-      .join(' and ');
-    error = {
-      error: `Found two players: ${playerNames}. Please add more detail to your guess.`,
-    };
-    return error;
-  } else if (searchResults.length > 2) {
-    error = {
-      error:
-        'Found more than two darts players. Please add more detail to your guess.',
-    };
-    return error;
-  }
-
-  return searchResults[0];
-}
 
 export function findFirstWinner(
   currentGame: GameWithGuessesAndUser,
@@ -1894,33 +1839,6 @@ export function handleDifferentSpellings(fullName: string) {
   }
 
   return fullName;
-}
-
-// Change the guess of an English-spelled German-speaking darts player (e.g. Gruellich) to the German spelling (i.e. Grüllich)
-export function changeToGermanSpelling(guess: GuessSchemaType['guess']) {
-  const splitGuess = normaliseToArray(guess);
-
-  splitGuess.forEach((guessItem, index) => {
-    switch (guessItem) {
-      case 'gruellich':
-        splitGuess[index] = 'Grüllich';
-        break;
-      case 'goedl':
-        splitGuess[index] = 'Gödl';
-        break;
-      case 'klingelhoefer':
-        splitGuess[index] = 'Klingelhöfer';
-        break;
-      case 'lueck':
-        splitGuess[index] = 'Lück';
-        break;
-      case 'roetzsch':
-        splitGuess[index] = 'Rötzsch';
-        break;
-    }
-  });
-
-  return splitGuess.join(' ');
 }
 
 export function getPlayerCondition(type: UpdateRankingsType) {

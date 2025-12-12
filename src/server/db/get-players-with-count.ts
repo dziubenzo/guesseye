@@ -6,7 +6,7 @@ import { player, schedule } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export const getPlayersWithCount = async () => {
-  // Query API does not support aggregation
+  // Query API v1 does not support aggregation
   const playersWithCount: PlayerWithCount[] = await db
     .select({
       id: player.id,

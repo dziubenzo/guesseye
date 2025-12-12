@@ -8,6 +8,7 @@ export default async function revalidatePlayerCache() {
   revalidateTag('lastDatabaseUpdate');
   revalidateTag('playerCount');
   revalidateTag('databaseStats');
+  revalidateTag('names');
 
   return {
     type: 'success',

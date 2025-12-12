@@ -7,6 +7,7 @@ import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { getOfficialGame } from '@/server/db/get-official-game';
+import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -20,7 +21,10 @@ export default async function PreviousOfficialGame({
   params,
 }: PreviousOfficialGameProps) {
   const { scheduleId } = await params;
-  const game = await getOfficialGame(scheduleId);
+  const [game, names] = await Promise.all([
+    getOfficialGame(scheduleId),
+    getPlayerFullNames(),
+  ]);
 
   if ('error' in game) {
     return <ErrorPage errorMessage={game.error} />;
@@ -41,7 +45,7 @@ export default async function PreviousOfficialGame({
 
     return (
       <div className="flex flex-col gap-4">
-        <PlayerForm scheduleId={scheduleId} />
+        <PlayerForm names={names} scheduleId={scheduleId} />
         <ModeIndicator />
         <PlayerToFindInfo winnersCount={winnersCount} />
         <PlayerToFindCard />

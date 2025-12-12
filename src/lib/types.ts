@@ -4,6 +4,8 @@ import type { InferSelectModel } from 'drizzle-orm';
 
 export type Player = InferSelectModel<typeof player>;
 
+export type PlayersMap = Map<string, Player>
+
 export type Schedule = InferSelectModel<typeof schedule>;
 
 export type ScheduleWithPlayer = Schedule & { playerToFind: Player };
@@ -440,3 +442,14 @@ export type BirthdayPlayer = {
   fullName: string;
   age: number;
 };
+
+export type PlayerFullName = {
+  fullName: string;
+};
+
+export type EvaluateMatchesResult =
+  | {
+      type: 'error';
+      message: string;
+    }
+  | { type: 'success'; guess: string };

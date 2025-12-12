@@ -6,21 +6,23 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
-import { PlayerToFindMatches } from '@/lib/types';
-import { changeToGermanSpelling, checkForDuplicateGuess } from '@/lib/utils';
+import type { PlayerFullName, PlayerToFindMatches } from '@/lib/types';
+import { evaluateMatches } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/check-guess';
 import { checkGuess } from '@/server/actions/check-guess';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Fuse from 'fuse.js';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type PlayerFormProps = {
+  names: PlayerFullName[];
   scheduleId?: string;
 };
 
-export default function PlayerForm({ scheduleId }: PlayerFormProps) {
+export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
   const {
     finishGame,
     updateGuesses,
@@ -51,6 +53,29 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
     null
   );
 
+  // Full names of previous guesses for duplicate guess checks
+  const prevGuesses = useMemo(() => {
+    const set = new Set<string>();
+
+    for (const guess of guesses) {
+      const fullName =
+        guess.guessedPlayer.firstName + ' ' + guess.guessedPlayer.lastName;
+      set.add(fullName);
+    }
+
+    return set;
+  }, [guesses]);
+
+  const fuzzyMatcher = new Fuse(names, {
+    ignoreDiacritics: true,
+    ignoreLocation: true,
+    includeScore: true,
+    threshold: 0.3,
+    minMatchCharLength: 3,
+    findAllMatches: true,
+    keys: ['fullName'],
+  });
+
   const { execute, isPending } = useAction(checkGuess, {
     onSuccess({ data }) {
       if (data?.type === 'error') {
@@ -80,12 +105,23 @@ export default function PlayerForm({ scheduleId }: PlayerFormProps) {
 
   function onSubmit(values: GuessSchemaType) {
     setError('');
-    const guess = changeToGermanSpelling(values.guess);
-    const isDuplicateGuess = checkForDuplicateGuess(guess, guesses);
+    
+    const matches = fuzzyMatcher.search(values.guess);
+    const result = evaluateMatches(matches);
+
+    if (result.type === 'error') {
+      setError(result.message);
+      return;
+    }
+
+    const guess = result.guess;
+    const isDuplicateGuess = prevGuesses.has(guess);
+
     if (isDuplicateGuess) {
       setError('You have already guessed this player.');
       return;
     }
+
     execute({ ...values, currentMatches, mode, guess });
   }
 

@@ -10,6 +10,7 @@ import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
+import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import { getRandomGame } from '@/server/db/get-random-game';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -20,6 +21,7 @@ export default async function CurrentGame() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  const names = await getPlayerFullNames();
 
   if (session) {
     const game = await getOfficialGame();
@@ -48,7 +50,7 @@ export default async function CurrentGame() {
 
       return (
         <div className="flex flex-col gap-4">
-          <PlayerForm />
+          <PlayerForm names={names} />
           <ModeIndicator />
           <PlayerToFindInfo
             winnersCount={winnersCount}
@@ -78,7 +80,7 @@ export default async function CurrentGame() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PlayerForm />
+      <PlayerForm names={names} />
       <ModeIndicator />
       <PlayerToFindCard />
       <Guesses

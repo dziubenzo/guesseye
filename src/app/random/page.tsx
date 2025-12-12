@@ -6,6 +6,7 @@ import ModeIndicator from '@/components/ModeIndicator';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import { auth } from '@/lib/auth';
+import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import { getRandomGame } from '@/server/db/get-random-game';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
@@ -22,7 +23,10 @@ export default async function RandomGame() {
     return notFound();
   }
 
-  const game = await getRandomGame();
+  const [game, names] = await Promise.all([
+    getRandomGame(),
+    getPlayerFullNames(),
+  ]);
 
   if ('error' in game) {
     return <ErrorPage errorMessage={game.error} />;
@@ -32,7 +36,7 @@ export default async function RandomGame() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PlayerForm />
+      <PlayerForm names={names} />
       <ModeIndicator allowVeryHard={session.user.allowVeryHard} />
       <PlayerToFindCard />
       <Guesses

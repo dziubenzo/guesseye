@@ -5,26 +5,21 @@ import { actionClient } from '@/lib/safe-action-client';
 import type { CheckGuessAction } from '@/lib/types';
 import {
   checkIfGuessCorrect,
-  checkSearchResults,
   comparePlayers,
   fillAllMatches,
-  filterPlayers,
-  normaliseToArray,
   validateScheduleId,
 } from '@/lib/utils';
 import { guessSchema } from '@/lib/zod/check-guess';
 import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
 import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
-import { getPlayers } from '@/server/db/get-players';
+import { playersMap } from '@/server/db/get-players-map';
 import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
   .action(
     async ({ parsedInput: { guess, scheduleId, currentMatches, mode } }) => {
-      const normalisedGuess = normaliseToArray(guess);
-
       const validationResult = validateScheduleId(scheduleId);
 
       if ('error' in validationResult) {
@@ -37,7 +32,15 @@ export const checkGuess = actionClient
 
       const validScheduleId = validationResult.validScheduleId;
 
-      const players = await getPlayers();
+      const guessedPlayer = playersMap.get(guess);
+
+      if (!guessedPlayer) {
+        const error: CheckGuessAction = {
+          type: 'error',
+          error: 'No darts player found. Try again.',
+        };
+        return error;
+      }
 
       const gameAndPlayer = await getGameAndPlayerToFind(mode, validScheduleId);
 
@@ -50,18 +53,6 @@ export const checkGuess = actionClient
       }
 
       const { game, playerToFind } = gameAndPlayer;
-
-      const searchResults = filterPlayers(players, normalisedGuess);
-
-      const guessedPlayer = checkSearchResults(searchResults);
-
-      if ('error' in guessedPlayer) {
-        const error: CheckGuessAction = {
-          type: 'error',
-          error: guessedPlayer.error,
-        };
-        return error;
-      }
 
       // Add guess to DB
       const errorObject = await createGuess(game.id, guessedPlayer.id);
