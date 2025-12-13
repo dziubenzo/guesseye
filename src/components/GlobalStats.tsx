@@ -2,10 +2,10 @@ import ChartHeading from '@/components/ChartHeading';
 import GamesByDayChart from '@/components/charts/GamesByDayChart';
 import GuessesByDayChart from '@/components/charts/GuessesByDayChart';
 import GuessFrequencyChart from '@/components/charts/GuessFrequencyChart';
+import RandomPlayersChart from '@/components/charts/RandomPlayersChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { GlobalStats } from '@/lib/types';
-import RandomPlayersChart from './charts/RandomPlayersChart';
 
 type GlobalStatsProps = {
   stats: GlobalStats;

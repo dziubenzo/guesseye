@@ -24,11 +24,12 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGameStore } from '@/lib/game-store';
+import { logInWithEmail } from '@/lib/login/log-in-with-email';
+import { logInWithGoogle } from '@/lib/login/log-in-with-google';
+import { signUpWithEmail } from '@/lib/login/sign-up-with-email';
+import { cn } from '@/lib/utils';
 import { loginSchema, LoginSchemaType } from '@/lib/zod/login';
 import { signupSchema, SignupSchemaType } from '@/lib/zod/signup';
-import { logInWithEmail } from '@/server/actions/log-in-with-email';
-import { logInWithGoogle } from '@/server/actions/log-in-with-google';
-import { signUpWithEmail } from '@/server/actions/sign-up-with-email';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
@@ -91,12 +92,15 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
   const { resetState } = useGameStore();
 
   const [error, setError] = useState('');
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
 
   const { execute, isPending } = useAction(logInWithEmail, {
     onSuccess({ data }) {
       if (data?.error) {
         setError(data.error);
+        return;
       }
+      setLoginSuccessful(true);
       resetState();
       router.refresh();
     },
@@ -129,9 +133,9 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
                 <FormLabel className="cursor-pointer">Email</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
                     placeholder="example@example.com"
                     {...field}
-                    type="email"
                   />
                 </FormControl>
                 <FormMessage />
@@ -160,10 +164,12 @@ function LoginTab({ setShowForgotPassword }: LoginTabProps) {
             type="submit"
             variant="secondary"
             className="cursor-pointer mt-3 text-lg w-full hover:bg-primary hover:text-secondary"
-            disabled={isPending}
+            disabled={isPending || loginSuccessful}
           >
-            {isPending && <Loader2 className="animate-spin" />}
-            {isPending ? 'Logging In...' : 'Log In'}
+            {(isPending || loginSuccessful) && (
+              <Loader2 className="animate-spin" />
+            )}
+            {isPending || loginSuccessful ? 'Logging In...' : 'Log In'}
           </Button>
         </form>
       </Form>
@@ -182,6 +188,7 @@ function GoogleLogin() {
   const router = useRouter();
 
   const [error, setError] = useState('');
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
 
   const { execute, isPending } = useAction(logInWithGoogle, {
     onSuccess({ data }) {
@@ -190,6 +197,7 @@ function GoogleLogin() {
         return;
       }
       if (data?.success?.url) {
+        setLoginSuccessful(true);
         router.push(data.success.url);
       }
     },
@@ -204,12 +212,17 @@ function GoogleLogin() {
     <>
       <Button
         variant="default"
-        className={`cursor-pointer text-lg gap-2 py-6 w-full ${error ? 'mb-3' : undefined}`}
-        disabled={isPending}
+        className={cn(
+          'cursor-pointer text-lg gap-2 py-6 w-full',
+          error && 'mb-3'
+        )}
+        disabled={isPending || loginSuccessful}
         onClick={onGoogleLogin}
       >
-        {isPending && <Loader2 className="animate-spin" />}
-        {isPending ? 'Redirecting to Google...' : `Log In With Google`}
+        {(isPending || loginSuccessful) && <Loader2 className="animate-spin" />}
+        {isPending || loginSuccessful
+          ? 'Redirecting to Google...'
+          : `Log In With Google`}
         <FcGoogle />
       </Button>
       {error && (
@@ -234,7 +247,8 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
       password: '',
       confirmPassword: '',
     },
-    mode: 'onTouched',
+    mode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
 
   const [error, setError] = useState('');
@@ -280,7 +294,7 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
               <FormItem>
                 <FormLabel className="cursor-pointer">Name</FormLabel>
                 <FormControl>
-                  <Input {...field} maxLength={32} />
+                  <Input {...field} maxLength={16} />
                 </FormControl>
                 {!signupForm.formState.errors?.name && (
                   <FormDescription>
@@ -299,9 +313,9 @@ function SignupTab({ setSignupSuccess }: SignupTabProps) {
                 <FormLabel className="cursor-pointer">Email</FormLabel>
                 <FormControl>
                   <Input
+                    type="email"
                     placeholder="example@example.com"
                     {...field}
-                    type="email"
                   />
                 </FormControl>
                 {!signupForm.formState.errors?.email && (

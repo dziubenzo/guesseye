@@ -5,7 +5,7 @@ export const resetPasswordSchema = z
     newPassword: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long.' })
-      .max(32, { message: 'Password cannot exceed 32 characters.' }),
+      .max(128, { message: 'Password cannot exceed 128 characters.' }),
     confirmNewPassword: z.string(),
     token: z.string(),
   })

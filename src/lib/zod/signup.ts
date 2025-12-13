@@ -7,11 +7,11 @@ export const signupSchema = z
       .min(3, { message: 'Name must be at least 3 characters long.' })
       .max(16, { message: 'Name cannot exceed 16 characters.' })
       .trim(),
-    email: z.string().email({ message: 'Invalid email address.' }),
+    email: z.string().email({ message: 'Invalid email.' }).trim(),
     password: z
       .string()
       .min(8, { message: 'Password must be at least 8 characters long.' })
-      .max(32, { message: 'Password cannot exceed 32 characters.' }),
+      .max(128, { message: 'Password cannot exceed 128 characters.' }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

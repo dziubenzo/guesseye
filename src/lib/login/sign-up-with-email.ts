@@ -1,5 +1,3 @@
-'use server';
-
 import { signUp } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import { signupSchema } from '@/lib/zod/signup';

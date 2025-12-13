@@ -14,11 +14,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { sendResetEmail } from '@/lib/login/send-reset-email';
 import {
   sendResetEmailSchema,
   SendResetEmailSchemaType,
 } from '@/lib/zod/send-reset-email';
-import { sendResetEmail } from '@/server/actions/send-reset-email';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, MoveLeft } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
@@ -83,8 +83,8 @@ export default function ForgotPassword({
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="example@gmail.com"
                     type="email"
+                    placeholder="example@gmail.com"
                     disabled={success ? true : false}
                     {...field}
                   />

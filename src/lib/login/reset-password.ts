@@ -1,5 +1,3 @@
-'use server';
-
 import { resetPassword } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import { resetPasswordSchema } from '@/lib/zod/reset-password';

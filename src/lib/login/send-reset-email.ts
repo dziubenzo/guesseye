@@ -1,5 +1,3 @@
-'use server';
-
 import { requestPasswordReset } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import { sendResetEmailSchema } from '@/lib/zod/send-reset-email';

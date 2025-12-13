@@ -1,5 +1,3 @@
-// signIn.email must be executed client-side, otherwise the session cookie is not saved
-
 import { signIn } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import { loginSchema } from '@/lib/zod/login';
@@ -12,7 +10,9 @@ export const logInWithEmail = actionClient
       password,
     });
 
-    if (error) return { error: error.message };
+    if (error) {
+      return { error: error.message + '.' };
+    }
 
     return;
   });

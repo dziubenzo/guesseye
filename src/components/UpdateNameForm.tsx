@@ -32,6 +32,7 @@ export default function UpdateNameForm({ currentName }: UpdateNameFormProps) {
       newName: currentName,
     },
     mode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
 
   const [error, setError] = useState('');
@@ -69,10 +70,7 @@ export default function UpdateNameForm({ currentName }: UpdateNameFormProps) {
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col gap-2 md:w-[400px]">
                     <FormLabel className="cursor-pointer text-accent-foreground flex flex-col gap-1 items-start">
-                      <span>New Name</span>
-                      <span className="text-[0.65rem] text-muted-foreground">
-                        (max. 16 characters)
-                      </span>
+                      New Name
                     </FormLabel>
                     <FormControl>
                       <Input
