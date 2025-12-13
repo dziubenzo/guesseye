@@ -35,12 +35,12 @@ export default async function updateAllRankings() {
   ) {
     result = {
       type: 'error',
-      message: `At least one of the update operations failed.
-      PDC Men: ${menPDC.message}
-      PDC Women: ${womenPDC.message}
-      WDF Men: ${menWDF.message}
-      WDF Women: ${womenWDF.message}
-      Elo: ${elo.message}
+      message: `At least one ranking update failed.
+      1: PDC Men - ${menPDC.message}
+      2: PDC Women - ${womenPDC.message}
+      3: WDF Men - ${menWDF.message}
+      4: WDF Women - ${womenWDF.message}
+      5: Elo - ${elo.message}
     `,
     };
     return result;
@@ -53,11 +53,12 @@ export default async function updateAllRankings() {
   result = {
     type: 'success',
     message: `All rankings updated successfully.
-    PDC Men: ${menPDC.message}
-    PDC Women: ${womenPDC.message}
-    WDF Men: ${menWDF.message}
-    WDF Women: ${womenWDF.message}
-    Elo: ${elo.message}
+    1: PDC Men - ${menPDC.message}
+    2: PDC Women - ${womenPDC.message}
+    3: WDF Men - ${menWDF.message}
+    4: WDF Women - ${womenWDF.message}
+    5: Elo - ${elo.message}
+    Relevant cache revalidated successfully
     `,
   };
 

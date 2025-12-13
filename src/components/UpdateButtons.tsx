@@ -103,12 +103,20 @@ export default function UpdateButtons() {
       </div>
       {updateRankingsResult?.type === 'error' && (
         <Message type="error">
-          <p>{updateRankingsResult.message}</p>
+          <div className="flex flex-col">
+            {updateRankingsResult.message.split('. ').map((sentence) => {
+              return <p key={crypto.randomUUID()}>{sentence}.</p>;
+            })}
+          </div>
         </Message>
       )}
       {updateRankingsResult?.type === 'success' && (
         <Message type="success">
-          <p>{updateRankingsResult.message}</p>
+          <div className="flex flex-col">
+            {updateRankingsResult.message.split('. ').map((sentence) => {
+              return <p key={crypto.randomUUID()}>{sentence}.</p>;
+            })}
+          </div>
         </Message>
       )}
       <h1 className="text-xl font-medium">Update All Rankings</h1>
@@ -123,12 +131,20 @@ export default function UpdateButtons() {
         </Button>
         {updateAllRankingsResult?.type === 'error' && (
           <Message type="error">
-            <p>{updateAllRankingsResult.message}</p>
+            <div className="flex flex-col">
+              {updateAllRankingsResult.message.split('. ').map((sentence) => {
+                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              })}
+            </div>
           </Message>
         )}
         {updateAllRankingsResult?.type === 'success' && (
           <Message type="success">
-            <p>{updateAllRankingsResult.message}</p>
+            <div className="flex flex-col">
+              {updateAllRankingsResult.message.split('. ').map((sentence) => {
+                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              })}
+            </div>
           </Message>
         )}
       </div>
@@ -143,12 +159,20 @@ export default function UpdateButtons() {
         </Button>
         {updateTCHResult?.type === 'error' && (
           <Message type="error">
-            <p>{updateTCHResult.message}</p>
+            <div className="flex flex-col">
+              {updateTCHResult.message.split('. ').map((sentence) => {
+                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              })}
+            </div>
           </Message>
         )}
         {updateTCHResult?.type === 'success' && (
           <Message type="success">
-            <p>{updateTCHResult.message}</p>
+            <div className="flex flex-col">
+              {updateTCHResult.message.split('. ').map((sentence) => {
+                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              })}
+            </div>
           </Message>
         )}
       </div>

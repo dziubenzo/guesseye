@@ -93,9 +93,14 @@ export default async function updateTourCardHolders() {
   revalidateTag('players');
   revalidateTag('lastDatabaseUpdate');
 
+  const missingPlayersString =
+    missingPlayers.length > 0
+      ? `Missing TC Holders: ${missingPlayers.join(', ')}. `
+      : '';
+
   result = {
     type: 'success',
-    message: `${updateCount} players updated successfully. ${missingPlayers.length === 0 ? 'No missing Tour Card Holders.' : `Missing Tour Card Holders: ${missingPlayers.toString()}.`}`,
+    message: `${updateCount} players updated successfully. ${missingPlayersString}`,
   };
 
   return result;

@@ -1853,6 +1853,9 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Andreas Toft-Jorgensen':
     case 'Andreas Toft Jorgensen':
       return 'Andreas Toft Jørgensen';
+    // dartsrankings.com spelling, must be a typo
+    case 'Motomo Sakai':
+      return 'Motomu Sakai';
   }
 
   return fullName;

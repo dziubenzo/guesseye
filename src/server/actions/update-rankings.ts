@@ -42,14 +42,12 @@ export default async function updateRankings(type: UpdateRankingsType) {
 
   const missingPlayersString =
     missingPlayers.length > 0
-      ? `Missing players: ${missingPlayers.join(', ')}.`
-      : 'No missing players.';
+      ? `Missing players: ${missingPlayers.join(', ')}. `
+      : '';
 
   result = {
     type: 'success',
-    message:
-      `${updateMessage} updated successfully. ${updateCount} players out of ${playersDB} players in the DB were updated. ` +
-      missingPlayersString,
+    message: `${updateMessage} updated successfully [${updateCount}/${playersDB}]. ${missingPlayersString}`,
   };
 
   return result;
