@@ -17,14 +17,12 @@ export default async function Header() {
   }
 
   return (
-    <header className="grid grid-flow-col grid-cols-3 text-center items-center justify-center relative">
+    <header className="flex justify-between text-center">
       <Logo location="headerGuest" />
-      <div className="col-start-1">
+      <div className="flex gap-2 w-full justify-between sm:w-auto sm:justify-start">
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="cursor-pointer w-full sm:min-h-10 sm:h-10">
-              Log In/Sign Up
-            </Button>
+            <Button className="cursor-pointer">Log In/Sign Up</Button>
           </DialogTrigger>
           <AuthModal />
         </Dialog>

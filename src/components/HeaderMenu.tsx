@@ -33,7 +33,7 @@ import { useRouter } from 'next/navigation';
 const CUSTOM_TRIGGER_CLASS =
   'bg-primary text-primary-foreground data-[state=open]:bg-primary/90 data-[state=open]:text-primary-foreground data-[state=open]:hover:bg-primary/90 data-[state=open]:hover:text-primary-foreground data-[state=closed]:hover:bg-primary/90 data-[state=closed]:hover:text-primary-foreground data-[state=closed]:bg-primary data-[state=closed]:text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground focus-visible:bg-primary focus:bg-primary focus-visible:text-primary-foreground focus:text-primary-foreground data-[state=open]:focus:bg-primary min-w-full w-full sm:min-h-10 sm:h-10';
 
-const CUSTOM_MENU_CLASS = 'grid w-full sm:w-[420px] gap-2 sm:gap-4';
+const CUSTOM_MENU_CLASS = 'grid w-[280px] sm:w-[420px] gap-2 sm:gap-4';
 
 type HeaderMenuProps = {
   username: string;
@@ -262,7 +262,7 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <div className="hidden sm:block">
+      <div className="hidden sm:block sm:absolute sm:right-0 sm:top-0">
         <ThemeToggle type="header" />
       </div>
     </header>
