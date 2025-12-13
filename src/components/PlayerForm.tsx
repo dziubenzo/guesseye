@@ -196,11 +196,11 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
                       >
                         <p>{error}</p>
                         {matchSuggestions.length > 0 && (
-                          <div className="grid grid-cols-2 gap-x-4 grow-1">
+                          <div className="grid grid-cols-2 gap-y-2 gap-x-4 md:gap-x-2 grow-1">
                             {matchSuggestions.map((matchSuggestion) => (
                               <Button
-                                className="cursor-pointer p-0"
                                 variant={'ghost'}
+                                className="cursor-pointer px-4 md:px-0 ring-2 ring-accent/25 md:ring-0"
                                 key={matchSuggestion}
                                 onClick={() =>
                                   handleMatchSuggestionClick(matchSuggestion)
