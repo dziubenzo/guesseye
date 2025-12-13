@@ -335,10 +335,7 @@ export function comparePlayers(
   }
 
   function compareSpecialRangedMatch(key: SpecialRangedMatchKeys) {
-    if (
-      (guessedPlayer[key] === null && playerToFind[key] === null) ||
-      guessedPlayer[key] === playerToFind[key]
-    ) {
+    if (guessedPlayer[key] === null && playerToFind[key] === null) {
       comparisonResults[key] = 'match';
       switch (key) {
         case 'dateOfBirth':
@@ -368,6 +365,7 @@ export function comparePlayers(
       }
     } else if (guessedPlayer[key] === null || playerToFind[key] === null) {
       comparisonResults[key] = 'noMatch';
+      return;
     }
 
     let guessedValue: number;
