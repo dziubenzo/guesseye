@@ -26,9 +26,7 @@ export const user = pgTable('user', {
   createdAt: timestamp('created_at').notNull(),
   updatedAt: timestamp('updated_at').notNull(),
   role: roleEnum('role').notNull().default('user'),
-  allowVeryHard: boolean('allow_very_hard')
-    .notNull()
-    .default(false),
+  allowVeryHard: boolean('allow_very_hard').notNull().default(false),
 });
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -353,6 +351,10 @@ export const player = pgTable(
   ]
 );
 
+export const playerRelations = relations(player, ({ many }) => ({
+  hints: many(hint),
+}));
+
 export const schedule = pgTable('schedule', {
   id: serial('id').primaryKey(),
   playerToFindId: integer('player_to_find_id')
@@ -465,6 +467,28 @@ export const guessRelations = relations(guess, ({ one }) => ({
   player: one(player, {
     relationName: 'player',
     fields: [guess.playerId],
+    references: [player.id],
+  }),
+}));
+
+export const hint = pgTable('hint', {
+  id: serial('id').primaryKey(),
+  createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  playerId: integer('player_id')
+    .notNull()
+    .references(() => player.id, { onDelete: 'restrict' }),
+  hint: text('hint').notNull(),
+  isApproved: boolean('is_approved').default(false).notNull(),
+});
+
+export const hintRelations = relations(hint, ({ one }) => ({
+  player: one(player, {
+    relationName: 'player',
+    fields: [hint.playerId],
     references: [player.id],
   }),
 }));
