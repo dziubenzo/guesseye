@@ -1,5 +1,12 @@
 import type { GuessSchemaType } from '@/lib/zod/check-guess';
-import { game, guess, player, schedule, user } from '@/server/db/schema';
+import {
+  game,
+  guess,
+  player,
+  schedule,
+  user,
+  type hint,
+} from '@/server/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 
 export type Player = InferSelectModel<typeof player>;
@@ -13,6 +20,8 @@ export type ScheduleWithPlayer = Schedule & { playerToFind: Player };
 export type Game = InferSelectModel<typeof game>;
 
 export type User = InferSelectModel<typeof user>;
+
+export type Hint = InferSelectModel<typeof hint>;
 
 export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
@@ -424,18 +433,19 @@ export type UpdateRankingsType =
 
 export type TourCardHolder = Omit<UpdatedRanking, 'ranking'>;
 
-export type PlayerWithCount = {
+export type PlayerAdmin = {
   id: Player['id'];
   firstName: Player['firstName'];
   lastName: Player['lastName'];
   gender: Player['gender'];
   difficulty: Player['difficulty'];
   officialModeCount: number;
+  hints: number;
 };
 
-export type GroupedPlayersWithCount = {
-  male: PlayerWithCount[];
-  female: PlayerWithCount[];
+export type GroupedPlayersAdmin = {
+  male: PlayerAdmin[];
+  female: PlayerAdmin[];
 };
 
 export type BirthdayPlayer = {

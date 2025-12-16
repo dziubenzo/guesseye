@@ -3,18 +3,22 @@
 import Message from '@/components/Message';
 import PlayerSchedulerForm from '@/components/PlayerSchedulerForm';
 import { Separator } from '@/components/ui/separator';
-import { getLastScheduledPlayer } from '@/server/db/get-last-scheduled-player';
-import { getPlayersWithCount } from '@/server/db/get-players-with-count';
+import type { ErrorObject, PlayerAdmin, Schedule } from '@/lib/types';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 
-export default async function PlayerScheduler() {
-  const playersWithCount = await getPlayersWithCount();
-  const lastScheduledPlayer = await getLastScheduledPlayer();
+type PlayerSchedulerProps = {
+  players: PlayerAdmin[];
+  lastScheduledPlayer: ErrorObject | Schedule;
+};
 
+export default async function PlayerScheduler({
+  players,
+  lastScheduledPlayer,
+}: PlayerSchedulerProps) {
   if ('error' in lastScheduledPlayer) {
     return (
       <div className="flex flex-col gap-4">
-        <h1 className="text-xl font-medium">Schedule Players</h1>
+        <h1 className="text-xl font-medium">Schedule Player</h1>
         <Message type="error">
           <p>{lastScheduledPlayer.error}</p>
         </Message>
@@ -24,7 +28,7 @@ export default async function PlayerScheduler() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-medium">Schedule Players</h1>
+      <h1 className="text-xl font-medium">Schedule Player</h1>
       <p>Last official mode player is scheduled for:</p>
       <p className="text-md font-medium">
         {format(lastScheduledPlayer.startDate, 'dd MMMM y')} (
@@ -41,7 +45,7 @@ export default async function PlayerScheduler() {
         </span>
       </p>
       <PlayerSchedulerForm
-        players={playersWithCount}
+        players={players}
         startDate={lastScheduledPlayer.endDate}
       />
     </div>

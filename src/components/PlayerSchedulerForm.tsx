@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { GroupedPlayersWithCount, PlayerWithCount } from '@/lib/types';
+import type { GroupedPlayersAdmin, PlayerAdmin } from '@/lib/types';
 import {
   schedulePlayerSchema,
   type SchedulePlayerSchemaType,
@@ -25,7 +25,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type PlayerSchedulerFormProps = {
-  players: PlayerWithCount[];
+  players: PlayerAdmin[];
   startDate: Date;
 };
 
@@ -46,10 +46,7 @@ export default function PlayerSchedulerForm({
   // Group darts players by gender
   const playersByGender = useMemo(
     () =>
-      Object.groupBy(
-        players,
-        ({ gender }) => gender
-      ) as GroupedPlayersWithCount,
+      Object.groupBy(players, ({ gender }) => gender) as GroupedPlayersAdmin,
     [players]
   );
 
@@ -100,6 +97,7 @@ export default function PlayerSchedulerForm({
             <FormItem className="flex flex-col gap-4">
               <Select
                 key={selectKey}
+                name="playerId"
                 onValueChange={(value) => field.onChange(parseInt(value))}
               >
                 <SelectTrigger
@@ -118,7 +116,7 @@ export default function PlayerSchedulerForm({
                         playersByGender.male[index > 0 ? index - 1 : index]
                           .difficulty;
                       return (
-                        <Fragment key={player.id}>
+                        <Fragment key={player.id + 'schedulerForm'}>
                           {(index === 0 ||
                             player.difficulty !== prevDifficulty) && (
                             <SelectLabel className="text-base">

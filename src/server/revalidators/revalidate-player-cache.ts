@@ -5,6 +5,7 @@ import { revalidateTag } from 'next/cache';
 
 export default async function revalidatePlayerCache() {
   revalidateTag('players');
+  revalidateTag('playersAdmin');
   revalidateTag('lastDatabaseUpdate');
   revalidateTag('playerCount');
   revalidateTag('databaseStats');

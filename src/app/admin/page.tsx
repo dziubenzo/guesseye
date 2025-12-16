@@ -1,8 +1,11 @@
+import Hints from '@/components/Hints';
 import PlayerScheduler from '@/components/PlayerScheduler';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import UpdateButtons from '@/components/UpdateButtons';
 import { auth } from '@/lib/auth';
+import { getLastScheduledPlayer } from '@/server/db/get-last-scheduled-player';
+import { getPlayersAdmin } from '@/server/db/get-players-admin';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -18,6 +21,11 @@ export default async function Admin() {
     return notFound();
   }
 
+  const [players, lastScheduledPlayer] = await Promise.all([
+    getPlayersAdmin(),
+    getLastScheduledPlayer(),
+  ]);
+
   return (
     <div className="flex flex-col grow-1 justify-center">
       <Card className="grow-1">
@@ -27,7 +35,12 @@ export default async function Admin() {
         <CardContent className="flex flex-col gap-4 grow-1">
           <UpdateButtons />
           <Separator />
-          <PlayerScheduler />
+          <PlayerScheduler
+            players={players}
+            lastScheduledPlayer={lastScheduledPlayer}
+          />
+          <Separator />
+          <Hints players={players} />
         </CardContent>
       </Card>
     </div>
