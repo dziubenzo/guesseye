@@ -1,11 +1,13 @@
-import Hints from '@/components/Hints';
+import AddHint from '@/components/AddHint';
 import PlayerScheduler from '@/components/PlayerScheduler';
+import SuggestedHints from '@/components/SuggestedHints';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import UpdateButtons from '@/components/UpdateButtons';
 import { auth } from '@/lib/auth';
 import { getLastScheduledPlayer } from '@/server/db/get-last-scheduled-player';
 import { getPlayersAdmin } from '@/server/db/get-players-admin';
+import { getSuggestedHints } from '@/server/db/get-suggested-hints';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -21,9 +23,10 @@ export default async function Admin() {
     return notFound();
   }
 
-  const [players, lastScheduledPlayer] = await Promise.all([
+  const [players, lastScheduledPlayer, suggestedHints] = await Promise.all([
     getPlayersAdmin(),
     getLastScheduledPlayer(),
+    getSuggestedHints(),
   ]);
 
   return (
@@ -40,7 +43,9 @@ export default async function Admin() {
             lastScheduledPlayer={lastScheduledPlayer}
           />
           <Separator />
-          <Hints players={players} />
+          <AddHint players={players} />
+          <Separator />
+          <SuggestedHints hints={suggestedHints} />
         </CardContent>
       </Card>
     </div>

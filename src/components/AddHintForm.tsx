@@ -23,11 +23,11 @@ import { useAction } from 'next-safe-action/hooks';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-type HintsFormProps =
+type AddHintProps =
   | { players: Player[]; location: 'other' }
   | { players: PlayerAdmin[]; location: 'adminPage' };
 
-export default function HintsForm({ players, location }: HintsFormProps) {
+export default function AddHintForm({ players, location }: AddHintProps) {
   const addHintForm = useForm({
     resolver: zodResolver(addHintSchema),
     defaultValues: {
@@ -112,7 +112,9 @@ export default function HintsForm({ players, location }: HintsFormProps) {
                             className="cursor-pointer"
                           >
                             {player.firstName + ' ' + player.lastName}{' '}
-                            {'hints' in player ? `(${player.hints})` : null}
+                            {'approvedHintsCount' in player
+                              ? `(${player.approvedHintsCount})`
+                              : null}
                           </SelectItem>
                         </Fragment>
                       ) : (
