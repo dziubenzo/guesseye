@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import type { GroupedPlayersAdmin, PlayerAdmin } from '@/lib/types';
+import { getFullName } from '@/lib/utils';
 import {
   schedulePlayerSchema,
   type SchedulePlayerSchemaType,
@@ -59,7 +60,9 @@ export default function PlayerSchedulerForm({
         return;
       }
       if (data?.type === 'success') {
-        setSuccess(data.message);
+        const submittedPlayerId = schedulePlayerForm.getValues('playerId');
+        const fullName = getFullName(submittedPlayerId, players);
+        setSuccess(`${fullName} ${data.message}.`);
         schedulePlayerForm.resetField('playerId');
         setSelectKey(new Date().toString());
         return;
@@ -99,6 +102,7 @@ export default function PlayerSchedulerForm({
                 key={selectKey}
                 name="playerId"
                 onValueChange={(value) => field.onChange(parseInt(value))}
+                required
               >
                 <SelectTrigger
                   value={field.value}

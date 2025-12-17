@@ -4,10 +4,9 @@ import { actionClient } from '@/lib/safe-action-client';
 import type { UpdateAction } from '@/lib/types';
 import { schedulePlayerSchema } from '@/lib/zod/schedule-player';
 import { db } from '@/server/db';
-import { player, schedule } from '@/server/db/schema';
+import { schedule } from '@/server/db/schema';
 import { checkForAdmin } from '@/server/utils';
 import { format } from 'date-fns';
-import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 export const schedulePlayer = actionClient
@@ -25,27 +24,11 @@ export const schedulePlayer = actionClient
       return result;
     }
 
-    const [scheduledPlayer] = await Promise.all([
-      db.query.player.findFirst({
-        where: eq(player.id, playerId),
-        columns: { firstName: true, lastName: true },
-      }),
-      db.insert(schedule).values({ playerToFindId: playerId, startDate }),
-    ]);
-
-    if (!scheduledPlayer) {
-      result = {
-        type: 'error',
-        message: `Failed to retrieve player with the id of ${playerId}.`,
-      };
-      return result;
-    }
-
-    const fullName = scheduledPlayer.firstName + ' ' + scheduledPlayer.lastName;
+    await db.insert(schedule).values({ playerToFindId: playerId, startDate });
 
     result = {
       type: 'success',
-      message: `${fullName} successfully scheduled for ${format(startDate, 'dd MMMM y')}.`,
+      message: `successfully scheduled for ${format(startDate, 'dd MMMM y')}`,
     };
 
     revalidatePath('/admin');

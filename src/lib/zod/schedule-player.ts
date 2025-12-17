@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const schedulePlayerSchema = z.object({
-  playerId: z.number(),
+  playerId: z.number({ message: 'No darts player chosen.' }),
   startDate: z.date(),
 });
 
