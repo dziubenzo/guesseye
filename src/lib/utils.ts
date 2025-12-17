@@ -18,6 +18,7 @@ import type {
   MatchKeys,
   OfficialGamesHistory,
   Player,
+  PlayerAdmin,
   PlayerDifficultyField,
   PlayerFullName,
   PlayerToFindMatches,
@@ -1902,4 +1903,15 @@ export function getUpdateMessage(type: UpdateRankingsType) {
     case 'elo':
       return 'Elo rankings';
   }
+}
+
+export function getFullName(
+  submittedPlayerId: number,
+  players: Player[] | PlayerAdmin[]
+) {
+  const [submittedPlayer] = players.filter(
+    (player) => player.id === submittedPlayerId
+  );
+
+  return submittedPlayer.firstName + ' ' + submittedPlayer.lastName;
 }

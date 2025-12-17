@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import type { Player, PlayerAdmin } from '@/lib/types';
+import { getFullName } from '@/lib/utils';
 import { addHintSchema, type AddHintSchemaType } from '@/lib/zod/add-hint';
 import { addHint } from '@/server/actions/add-hint';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,7 +48,9 @@ export default function HintsForm({ players, location }: HintsFormProps) {
         return;
       }
       if (data?.type === 'success') {
-        setSuccess(data.message);
+        const submittedPlayerId = addHintForm.getValues('playerId');
+        const fullName = getFullName(submittedPlayerId, players);
+        setSuccess(`${data.message} ${fullName}.`);
         addHintForm.resetField('playerId');
         addHintForm.resetField('hint');
         setSelectKey(new Date().toString());
@@ -77,6 +80,7 @@ export default function HintsForm({ players, location }: HintsFormProps) {
                 key={selectKey}
                 name="playerId"
                 onValueChange={(value) => field.onChange(parseInt(value))}
+                required
               >
                 <SelectTrigger
                   value={field.value}
@@ -113,7 +117,7 @@ export default function HintsForm({ players, location }: HintsFormProps) {
                         </Fragment>
                       ) : (
                         <SelectItem
-                          key={player.id}
+                          key={player.id + 'hintForm'}
                           value={player.id.toString()}
                           className="cursor-pointer"
                         >
