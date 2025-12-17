@@ -6,7 +6,7 @@ import { addHintSchema } from '@/lib/zod/add-hint';
 import { db } from '@/server/db';
 import { hint as hintSchema } from '@/server/db/schema';
 import { checkForAdmin } from '@/server/utils';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export const addHint = actionClient
   .schema(addHintSchema)
@@ -40,6 +40,7 @@ export const addHint = actionClient
         type: 'success',
         message: `Hint successfully submitted for review for`,
       };
+      revalidateTag('suggestedHints');
     }
 
     return result;
