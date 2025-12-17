@@ -27,8 +27,8 @@ const fullNamesSelectorWomenWDF = 'div.text-sm a.inline-flex span.truncate';
 
 // Elo rankings
 const urlElo = 'https://www.dartsrec.com/power-rankings';
-const rankingsSelectorElo = 'tr td:first-child';
-const fullNamesSelectorElo = 'tr td:nth-child(2)';
+const rankingsSelectorElo = 'tr td:first-child div span';
+const fullNamesSelectorElo = 'tr td:first-child div a';
 
 export default async function getUpdatedRankings(type: UpdateRankingsType) {
   let updatedRankings: UpdatedRanking[] | ErrorObject;
