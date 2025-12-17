@@ -20,7 +20,7 @@ export const getPlayersAdmin = unstable_cache(
           schedule,
           eq(schedule.playerToFindId, player.id)
         ),
-        hints: db.$count(
+        approvedHintsCount: db.$count(
           hint,
           and(eq(hint.playerId, player.id), eq(hint.isApproved, true))
         ),

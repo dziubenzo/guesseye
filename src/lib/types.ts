@@ -440,7 +440,7 @@ export type PlayerAdmin = {
   gender: Player['gender'];
   difficulty: Player['difficulty'];
   officialModeCount: number;
-  hints: number;
+  approvedHintsCount: number;
 };
 
 export type GroupedPlayersAdmin = {
@@ -464,3 +464,8 @@ export type EvaluateMatchesResult =
       matches: string[];
     }
   | { type: 'success'; guess: string };
+
+export type SuggestedHint = Hint & {
+  fullName: string;
+  approvedHintsCount: number;
+};
