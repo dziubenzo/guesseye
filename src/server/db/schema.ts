@@ -415,8 +415,9 @@ export const game = pgTable(
     }),
     mode: modeEnum('mode').notNull(),
     status: gameStatusEnum('status').notNull().default('inProgress'),
+    hintsRevealed: integer('hints_revealed').notNull().default(0),
   },
-  ({ userId, guestIp, scheduledPlayerId, randomPlayerId }) => [
+  ({ userId, guestIp, scheduledPlayerId, randomPlayerId, hintsRevealed }) => [
     check(
       'is_either_guest_or_user',
       sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`
@@ -425,6 +426,7 @@ export const game = pgTable(
       'is_either_scheduled_or_random_player',
       sql`(${scheduledPlayerId} IS NULL) <> (${randomPlayerId} IS NULL)`
     ),
+    check('is_non_negative_hints_revealed', sql`${hintsRevealed} >= 0`),
   ]
 );
 
