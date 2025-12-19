@@ -57,6 +57,11 @@ export const getOfficialGame = async (scheduleId?: string) => {
     mode: 'official',
     guesses: [],
     playerToFindMatches: {},
+    hints: scheduledPlayer.playerToFind.hints.slice(
+      0,
+      existingGame?.hintsRevealed || 0
+    ),
+    availableHints: scheduledPlayer.playerToFind.hints.length,
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,
     winnersCount,
     nextPlayerStartDate: nextScheduledPlayer.startDate,

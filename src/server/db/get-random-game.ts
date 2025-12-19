@@ -24,6 +24,8 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
       mode: 'random',
       guesses: [],
       playerToFindMatches: {},
+      hints: [],
+      availableHints: 0,
       playerDifficulty: '???',
     };
 
@@ -37,8 +39,11 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
     return error;
   }
 
+  // This cannot happen, but the randomPlayerId field in game table can be null by design, so the check is necessary
   if (game.randomPlayer === null) {
-    const error: ErrorObject = { error: 'No player to find found.' };
+    const error: ErrorObject = {
+      error: 'No player to find found in random game.',
+    };
     return error;
   }
 
@@ -47,6 +52,8 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
     mode: 'random',
     guesses: [],
     playerToFindMatches: {},
+    hints: game.randomPlayer.hints.slice(0, game.hintsRevealed),
+    availableHints: game.randomPlayer.hints.length,
     playerDifficulty: game.randomPlayer.difficulty,
   };
 

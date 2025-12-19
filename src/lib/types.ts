@@ -1,12 +1,5 @@
 import type { GuessSchemaType } from '@/lib/zod/check-guess';
-import {
-  game,
-  guess,
-  player,
-  schedule,
-  user,
-  type hint,
-} from '@/server/db/schema';
+import { game, guess, hint, player, schedule, user } from '@/server/db/schema';
 import type { InferSelectModel } from 'drizzle-orm';
 
 export type Player = InferSelectModel<typeof player>;
@@ -15,13 +8,17 @@ export type PlayersMap = Map<string, Player>;
 
 export type Schedule = InferSelectModel<typeof schedule>;
 
-export type ScheduleWithPlayer = Schedule & { playerToFind: Player };
+export type ScheduleWithPlayer = Schedule & {
+  playerToFind: Player & { hints: GameHint[] };
+};
 
 export type Game = InferSelectModel<typeof game>;
 
 export type User = InferSelectModel<typeof user>;
 
 export type Hint = InferSelectModel<typeof hint>;
+
+export type GameHint = Pick<Hint, 'createdAt' | 'hint'>;
 
 export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
@@ -40,7 +37,7 @@ export type OfficialGame = Game & {
 };
 
 export type RandomGame = OfficialGame & {
-  randomPlayer: Player | null;
+  randomPlayer: (Player & { hints: GameHint[] }) | null;
 };
 
 export type UserStatsGame = Game & {
@@ -141,6 +138,8 @@ export type AnyOfficialGame = {
   status: 'inProgress';
   mode: 'official';
   guesses: Guess[];
+  hints: GameHint[];
+  availableHints: number;
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
   winnersCount: number;
@@ -149,12 +148,17 @@ export type AnyOfficialGame = {
 
 export type ExistingRandomGame = Pick<
   AnyOfficialGame,
-  'status' | 'guesses' | 'playerToFindMatches' | 'playerDifficulty'
+  | 'status'
+  | 'guesses'
+  | 'playerToFindMatches'
+  | 'hints'
+  | 'availableHints'
+  | 'playerDifficulty'
 > & { mode: 'random' };
 
 export type NoRandomGame = Pick<
   ExistingRandomGame,
-  'mode' | 'guesses' | 'playerToFindMatches'
+  'mode' | 'guesses' | 'playerToFindMatches' | 'hints' | 'availableHints'
 > & {
   status: 'noGame';
   playerDifficulty: PlayerDifficultyField;

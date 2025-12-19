@@ -16,7 +16,7 @@ export const getSuggestedHints = unstable_cache(
         // Single quotes for the space is a must, the Drizzle docs have it wrong
         fullName:
           sql<string>`concat(${player.firstName}, ' ', ${player.lastName})`.as(
-            'xD'
+            'full_name'
           ),
         approvedHintsCount: db.$count(
           hint,

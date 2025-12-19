@@ -2,8 +2,8 @@
 
 import type { ErrorObject, Schedule, ScheduleWithPlayer } from '@/lib/types';
 import { db } from '@/server/db/index';
-import { schedule } from '@/server/db/schema';
-import { and, eq, gte, lt } from 'drizzle-orm';
+import { hint, schedule } from '@/server/db/schema';
+import { and, asc, eq, gte, lt } from 'drizzle-orm';
 
 export const getScheduledPlayer = async (scheduleId?: Schedule['id']) => {
   const scheduledPlayer = await db.query.schedule.findFirst({
@@ -13,7 +13,20 @@ export const getScheduledPlayer = async (scheduleId?: Schedule['id']) => {
           lt(schedule.startDate, new Date()),
           gte(schedule.endDate, new Date())
         ),
-    with: { playerToFind: true },
+    with: {
+      playerToFind: {
+        with: {
+          hints: {
+            columns: {
+              createdAt: true,
+              hint: true,
+            },
+            where: eq(hint.isApproved, true),
+            orderBy: asc(hint.createdAt),
+          },
+        },
+      },
+    },
   });
 
   if (!scheduledPlayer) {

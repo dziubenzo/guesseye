@@ -2,9 +2,9 @@
 
 import type { RandomGame } from '@/lib/types';
 import { db } from '@/server/db/index';
-import { game, guess } from '@/server/db/schema';
+import { game, guess, hint } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq } from 'drizzle-orm';
 
 export const findRandomGame = async () => {
   const { session, clientIP, clientUserAgent } = await getUserOrGuest();
@@ -23,7 +23,18 @@ export const findRandomGame = async () => {
           eq(game.status, 'inProgress')
         ),
     with: {
-      randomPlayer: true,
+      randomPlayer: {
+        with: {
+          hints: {
+            columns: {
+              createdAt: true,
+              hint: true,
+            },
+            where: eq(hint.isApproved, true),
+            orderBy: asc(hint.createdAt),
+          },
+        },
+      },
       guesses: {
         with: { player: true },
         orderBy: desc(guess.time),

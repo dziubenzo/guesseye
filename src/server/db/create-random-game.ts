@@ -3,9 +3,9 @@
 import type { ErrorObject, Game, RandomGame } from '@/lib/types';
 import { getRandomPlayer } from '@/server/db/get-random-player';
 import { db } from '@/server/db/index';
-import { game } from '@/server/db/schema';
+import { game, hint } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 
 export const createRandomGame = async () => {
   const { session, clientIP, clientUserAgent } = await getUserOrGuest();
@@ -37,7 +37,18 @@ export const createRandomGame = async () => {
     await db.query.game.findFirst({
       where: eq(game.id, newGame[0].id),
       with: {
-        randomPlayer: true,
+        randomPlayer: {
+          with: {
+            hints: {
+              columns: {
+                createdAt: true,
+                hint: true,
+              },
+              where: eq(hint.isApproved, true),
+              orderBy: asc(hint.createdAt),
+            },
+          },
+        },
         guesses: {
           with: {
             player: true,
