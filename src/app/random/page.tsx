@@ -1,10 +1,13 @@
 import ErrorPage from '@/components/ErrorPage';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
+import GiveUpButton from '@/components/GiveUpButton';
 import Guesses from '@/components/Guesses';
+import GuessForm from '@/components/GuessForm';
+import HintsButton from '@/components/HintsButton';
 import ModeIndicator from '@/components/ModeIndicator';
-import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
+import TopBar from '@/components/TopBar';
 import { auth } from '@/lib/auth';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import { getRandomGame } from '@/server/db/get-random-game';
@@ -32,11 +35,24 @@ export default async function RandomGame() {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { guesses, playerToFindMatches, mode, playerDifficulty } = game;
+  const {
+    guesses,
+    playerToFindMatches,
+    mode,
+    playerDifficulty,
+    hints,
+    availableHints,
+  } = game;
 
   return (
     <div className="flex flex-col gap-4">
-      <PlayerForm names={names} />
+      <TopBar>
+        <div className="flex gap-2">
+          <HintsButton hints={hints} availableHints={availableHints} />
+          <GiveUpButton />
+        </div>
+        <GuessForm names={names} />
+      </TopBar>
       <ModeIndicator allowVeryHard={session.user.allowVeryHard} />
       <PlayerToFindCard />
       <Guesses

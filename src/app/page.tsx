@@ -3,11 +3,14 @@ import GameGivenUp from '@/components/GameGivenUp';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
 import GameWon from '@/components/GameWon';
+import GiveUpButton from '@/components/GiveUpButton';
 import Guesses from '@/components/Guesses';
+import GuessForm from '@/components/GuessForm';
+import HintsButton from '@/components/HintsButton';
 import ModeIndicator from '@/components/ModeIndicator';
-import PlayerForm from '@/components/PlayerForm';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
+import TopBar from '@/components/TopBar';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
@@ -46,11 +49,19 @@ export default async function CurrentGame() {
         nextPlayerStartDate,
         mode,
         playerDifficulty,
+        hints,
+        availableHints,
       } = game;
 
       return (
         <div className="flex flex-col gap-4">
-          <PlayerForm names={names} />
+          <TopBar>
+            <div className="flex gap-2">
+              <HintsButton hints={hints} availableHints={availableHints} />
+              <GiveUpButton />
+            </div>
+            <GuessForm names={names} />
+          </TopBar>
           <ModeIndicator />
           <PlayerToFindInfo
             winnersCount={winnersCount}
@@ -76,11 +87,24 @@ export default async function CurrentGame() {
     return <ErrorPage errorMessage={game.error} />;
   }
 
-  const { guesses, playerToFindMatches, mode, playerDifficulty } = game;
+  const {
+    guesses,
+    playerToFindMatches,
+    mode,
+    playerDifficulty,
+    hints,
+    availableHints,
+  } = game;
 
   return (
     <div className="flex flex-col gap-4">
-      <PlayerForm names={names} />
+      <TopBar>
+        <div className="flex gap-2">
+          <HintsButton hints={hints} availableHints={availableHints} />
+          <GiveUpButton />
+        </div>
+        <GuessForm names={names} />
+      </TopBar>
       <ModeIndicator />
       <PlayerToFindCard />
       <Guesses

@@ -1,6 +1,5 @@
 'use client';
 
-import GiveUpForm from '@/components/GiveUpForm';
 import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
@@ -17,12 +16,12 @@ import { useAction } from 'next-safe-action/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-type PlayerFormProps = {
+type GuessFormProps = {
   names: PlayerFullName[];
   scheduleId?: string;
 };
 
-export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
+export default function GuessForm({ names, scheduleId }: GuessFormProps) {
   const {
     finishGame,
     updateGuesses,
@@ -147,79 +146,73 @@ export default function PlayerForm({ names, scheduleId }: PlayerFormProps) {
   }, [newMatches, currentMatches]);
 
   return (
-    <div className="sticky bg-secondary top-0 p-2 sm:p-4 z-1 rounded-md">
-      <Form {...playerForm}>
-        <form onSubmit={playerForm.handleSubmit(onSubmit)}>
-          <FormField
-            control={playerForm.control}
-            name="guess"
-            render={({ field }) => (
-              <FormItem className="gap-2 sm:gap-3">
-                <div className="flex flex-col md:flex-row gap-2 sm:gap-3 md:justify-center">
-                  <div className="hidden md:block md:h-full md:w-24"></div>
-                  <div className="flex gap-2 sm:gap-3 md:w-[50%]">
-                    <FormControl>
-                      <Input
-                        className="md:text-lg h-auto p-3 text-center placeholder:text-center"
-                        disabled={isPending || gameOver}
-                        onInput={() => {
-                          setError('');
-                          setMatchSuggestions([]);
-                        }}
-                        autoFocus
-                        {...field}
-                      />
-                    </FormControl>
-                    <GiveUpForm
-                      setGiveUpError={setError}
-                      scheduleId={scheduleId}
+    <Form {...playerForm}>
+      <form onSubmit={playerForm.handleSubmit(onSubmit)} className="w-full">
+        <FormField
+          control={playerForm.control}
+          name="guess"
+          render={({ field }) => (
+            <FormItem className="gap-0">
+              <div className="flex gap-2 sm:gap-3 sm:justify-center sm:w-full">
+                <div className="hidden sm:block sm:w-24" />
+                <div className="flex w-full gap-2 sm:gap-3 sm:w-[50%]">
+                  <FormControl>
+                    <Input
+                      className="sm:text-lg md:text-lg h-auto p-3 text-center placeholder:text-center"
+                      disabled={isPending || gameOver}
+                      onInput={() => {
+                        setError('');
+                        setMatchSuggestions([]);
+                      }}
+                      autoFocus
+                      {...field}
                     />
-                  </div>
-                  <Button
-                    type="submit"
-                    variant="default"
-                    disabled={isPending || gameOver}
-                    className={`cursor-pointer text-lg px-4 py-4 md:h-full md:w-24`}
-                  >
-                    {isPending ? (
-                      <Loader2 className="animate-spin size-7 h-full" />
-                    ) : (
-                      'Guess'
-                    )}
-                  </Button>
+                  </FormControl>
                 </div>
-                {error && (
-                  <div className="flex justify-center">
-                    <div className="w-full md:w-[50%]">
-                      <Message
-                        type={matchSuggestions.length === 0 ? 'error' : 'info'}
-                      >
-                        <p>{error}</p>
-                        {matchSuggestions.length > 0 && (
-                          <div className="grid grid-cols-2 gap-y-2 gap-x-4 md:gap-x-2 grow-1">
-                            {matchSuggestions.map((matchSuggestion) => (
-                              <Button
-                                variant={'ghost'}
-                                className="cursor-pointer px-4 md:px-0 ring-2 ring-accent/25 md:ring-0"
-                                key={matchSuggestion}
-                                onClick={() =>
-                                  handleMatchSuggestionClick(matchSuggestion)
-                                }
-                              >
-                                {matchSuggestion}
-                              </Button>
-                            ))}
-                          </div>
-                        )}
-                      </Message>
-                    </div>
+                <Button
+                  type="submit"
+                  variant="default"
+                  disabled={isPending || gameOver}
+                  className="h-full right-0 cursor-pointer text-lg px-4 py-4 sm:w-24"
+                >
+                  {isPending ? (
+                    <Loader2 className="animate-spin size-7 h-full" />
+                  ) : (
+                    'Guess'
+                  )}
+                </Button>
+              </div>
+              {error && (
+                <div className="flex justify-center mt-2 sm:mt-3">
+                  <div className="w-full sm:w-[50%]">
+                    <Message
+                      type={matchSuggestions.length === 0 ? 'error' : 'info'}
+                    >
+                      <p>{error}</p>
+                      {matchSuggestions.length > 0 && (
+                        <div className="grid grid-cols-2 gap-y-2 gap-x-4 sm:gap-x-2 grow-1">
+                          {matchSuggestions.map((matchSuggestion) => (
+                            <Button
+                              variant={'ghost'}
+                              className="cursor-pointer px-4 sm:px-0 ring-2 ring-accent/25 sm:ring-0"
+                              key={matchSuggestion}
+                              onClick={() =>
+                                handleMatchSuggestionClick(matchSuggestion)
+                              }
+                            >
+                              {matchSuggestion}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
+                    </Message>
                   </div>
-                )}
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
-    </div>
+                </div>
+              )}
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
   );
 }
