@@ -1,4 +1,4 @@
-import { MAX_MATCH_SUGGESTIONS } from '@/lib/constants';
+import { DARTS_FACTS, MAX_MATCH_SUGGESTIONS } from '@/lib/constants';
 import type {
   BestResultColumnType,
   ComparisonResults,
@@ -1914,4 +1914,13 @@ export function getFullName(
   );
 
   return submittedPlayer.firstName + ' ' + submittedPlayer.lastName;
+}
+
+export function getRandomDartsFact() {
+  const min = Math.ceil(0);
+  const max = Math.floor(DARTS_FACTS.length);
+
+  const index = Math.floor(Math.random() * (max - min) + min);
+
+  return DARTS_FACTS[index];
 }
