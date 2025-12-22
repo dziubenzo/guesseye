@@ -54,6 +54,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
 
   const gameDetails: AnyOfficialGame = {
     status: 'inProgress',
+    gameId: existingGame?.id,
     mode: 'official',
     guesses: [],
     playerToFindMatches: {},

@@ -21,6 +21,7 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
   if (options?.isGuest && !existingGame) {
     const noGame: NoRandomGame = {
       status: 'noGame',
+      gameId: undefined,
       mode: 'random',
       guesses: [],
       playerToFindMatches: {},
@@ -49,6 +50,7 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
 
   const gameDetails: ExistingRandomGame = {
     status: 'inProgress',
+    gameId: existingGame?.id,
     mode: 'random',
     guesses: [],
     playerToFindMatches: {},

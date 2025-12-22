@@ -39,6 +39,7 @@ export default async function PreviousOfficialGame({
 
   if (game) {
     const {
+      gameId,
       guesses,
       playerToFindMatches,
       winnersCount,
@@ -52,7 +53,11 @@ export default async function PreviousOfficialGame({
       <div className="flex flex-col gap-4">
         <TopBar>
           <div className="flex gap-2">
-            <HintsButton hints={hints} availableHints={availableHints} />
+            <HintsButton
+              hints={hints}
+              availableHints={availableHints}
+              gameId={gameId}
+            />
             <GiveUpButton scheduleId={scheduleId} />
           </div>
           <GuessForm names={names} scheduleId={scheduleId} />

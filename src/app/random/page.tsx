@@ -36,6 +36,7 @@ export default async function RandomGame() {
   }
 
   const {
+    gameId,
     guesses,
     playerToFindMatches,
     mode,
@@ -48,7 +49,11 @@ export default async function RandomGame() {
     <div className="flex flex-col gap-4">
       <TopBar>
         <div className="flex gap-2">
-          <HintsButton hints={hints} availableHints={availableHints} />
+          <HintsButton
+            hints={hints}
+            availableHints={availableHints}
+            gameId={gameId}
+          />
           <GiveUpButton />
         </div>
         <GuessForm names={names} />
