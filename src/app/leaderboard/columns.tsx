@@ -1,12 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import type { Leaderboard } from '@/lib/types';
+import type { LeaderboardUser } from '@/lib/types';
 import { formatGameDuration } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
-export const columns: ColumnDef<Leaderboard>[] = [
+export const columns: ColumnDef<LeaderboardUser>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -42,7 +42,7 @@ export const columns: ColumnDef<Leaderboard>[] = [
     accessorKey: 'username',
     header: 'Username',
     cell: ({ cell, row }) => {
-      const username = cell.getValue<Leaderboard['username']>();
+      const username = cell.getValue<LeaderboardUser['username']>();
       const isCurrentUser = row.original.isCurrentUser;
 
       return (
@@ -65,7 +65,8 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
     cell: ({ cell }) => {
-      const officialModeWins = cell.getValue<Leaderboard['officialModeWins']>();
+      const officialModeWins =
+        cell.getValue<LeaderboardUser['officialModeWins']>();
       return officialModeWins;
     },
   },
@@ -80,8 +81,24 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
     cell: ({ cell }) => {
-      const randomModeWins = cell.getValue<Leaderboard['officialModeWins']>();
+      const randomModeWins =
+        cell.getValue<LeaderboardUser['officialModeWins']>();
       return randomModeWins;
+    },
+  },
+  {
+    accessorKey: 'hintsRevealed',
+    header: () => {
+      return (
+        <div>
+          <p>Hints</p>
+          <p className="text-xs">(Revealed)</p>
+        </div>
+      );
+    },
+    cell: ({ cell }) => {
+      const hintsRevealed = cell.getValue<LeaderboardUser['hintsRevealed']>();
+      return hintsRevealed;
     },
   },
   {
@@ -96,7 +113,7 @@ export const columns: ColumnDef<Leaderboard>[] = [
     },
     cell: ({ cell }) => {
       const officialModeGiveUps =
-        cell.getValue<Leaderboard['officialModeGiveUps']>();
+        cell.getValue<LeaderboardUser['officialModeGiveUps']>();
       return officialModeGiveUps;
     },
   },
@@ -112,7 +129,7 @@ export const columns: ColumnDef<Leaderboard>[] = [
     },
     cell: ({ cell }) => {
       const randomModeGiveUps =
-        cell.getValue<Leaderboard['randomModeGiveUps']>();
+        cell.getValue<LeaderboardUser['randomModeGiveUps']>();
       return randomModeGiveUps;
     },
   },
@@ -127,7 +144,8 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
     cell: ({ cell }) => {
-      const gamesInProgress = cell.getValue<Leaderboard['gamesInProgress']>();
+      const gamesInProgress =
+        cell.getValue<LeaderboardUser['gamesInProgress']>();
       return gamesInProgress;
     },
   },
@@ -142,7 +160,7 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
     cell: ({ cell }) => {
-      const fastestWin = cell.getValue<Leaderboard['fastestWin']>();
+      const fastestWin = cell.getValue<LeaderboardUser['fastestWin']>();
 
       if (!fastestWin) return;
 
@@ -164,7 +182,7 @@ export const columns: ColumnDef<Leaderboard>[] = [
       );
     },
     cell: ({ cell }) => {
-      const fewestGuesses = cell.getValue<Leaderboard['fewestGuesses']>();
+      const fewestGuesses = cell.getValue<LeaderboardUser['fewestGuesses']>();
 
       if (!fewestGuesses) return;
 

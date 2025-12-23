@@ -25,7 +25,7 @@ export default async function Settings() {
   }
 
   return (
-    <div className="flex flex-col grow-1 justify-center">
+    <div className="flex flex-col grow-1">
       <Card className="grow-1">
         <CardHeader>
           <CardTitle className="text-2xl">Account Settings</CardTitle>

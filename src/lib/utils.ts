@@ -14,7 +14,7 @@ import type {
   GlobalStats,
   GlobalStatsGame,
   GuessWithPlayerName,
-  Leaderboard,
+  LeaderboardUser,
   MatchKeys,
   OfficialGamesHistory,
   Player,
@@ -767,7 +767,7 @@ export function findWinnerWithFewestGuesses(
   return;
 }
 
-export function countGames(game: GameWithGuesses, user: Leaderboard) {
+export function countGames(game: GameWithGuesses, user: LeaderboardUser) {
   if (game.status === 'inProgress') {
     user.gamesInProgress++;
   } else if (game.status === 'won' && game.mode === 'official') {
@@ -823,7 +823,7 @@ export function findSlowestWin(game: GameWithGuesses, stat?: number) {
 
 export function findWinWithFewestGuesses(
   game: GameWithGuesses,
-  user: Leaderboard
+  user: LeaderboardUser
 ) {
   const currentGameGuesses = game.guesses.length;
 
@@ -841,8 +841,12 @@ export function findWinWithFewestGuesses(
   return;
 }
 
-// Order the leaderboard by official game wins, random mode wins, official mode giveups and, finally, random mode giveups
-export function sortByWinsAndGiveUps(userA: Leaderboard, userB: Leaderboard) {
+// Order the leaderboard by official game wins, random mode wins, hints revealed, official mode giveups and, finally, random mode giveups, in that order
+export function sortLeaderboardUsers(
+  userA: LeaderboardUser,
+  userB: LeaderboardUser
+) {
+  // More = better
   if (userA.officialModeWins > userB.officialModeWins) {
     return -1;
   } else if (userA.officialModeWins < userB.officialModeWins) {
@@ -850,6 +854,11 @@ export function sortByWinsAndGiveUps(userA: Leaderboard, userB: Leaderboard) {
   } else if (userA.randomModeWins > userB.randomModeWins) {
     return -1;
   } else if (userA.randomModeWins < userB.randomModeWins) {
+    return 1;
+    // Less = better
+  } else if (userA.hintsRevealed < userB.hintsRevealed) {
+    return -1;
+  } else if (userA.hintsRevealed > userB.hintsRevealed) {
     return 1;
   } else if (userA.officialModeGiveUps < userB.officialModeGiveUps) {
     return -1;

@@ -269,13 +269,14 @@ export type OfficialGamesHistory = Pick<
   winnerGuesses?: number;
 };
 
-export type Leaderboard = {
+export type LeaderboardUser = {
   username: string;
   isCurrentUser: boolean;
   officialModeWins: number;
   officialModeGiveUps: number;
   randomModeWins: number;
   randomModeGiveUps: number;
+  hintsRevealed: number;
   gamesInProgress: number;
   fastestWin?: number;
   fewestGuesses?: number;

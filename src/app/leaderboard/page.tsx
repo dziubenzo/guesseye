@@ -21,15 +21,20 @@ export default async function Leaderboard() {
   }
 
   return (
-    <div className="flex flex-col grow-1 justify-center">
-      <Card>
+    <div className="flex flex-col grow-1">
+      <Card className="grow-1">
         <CardHeader>
           <CardTitle className="text-2xl">Leaderboard</CardTitle>
-          <CardDescription>
-            <p>
-              Here you can find the rank of every user based on wins and give
-              ups.
-            </p>
+          <CardDescription className="text-sm/6">
+            <p>Here you can find the leaderboard.</p>
+            <p>Every user is ranked based on (in that order):</p>
+            <ul className="list-disc list-inside">
+              <li>Wins in official mode (descending);</li>
+              <li>Wins in random mode (descending);</li>
+              <li>Hints revealed (ascending);</li>
+              <li>Give ups in official mode (ascending);</li>
+              <li>Give ups in random mode (ascending).</li>
+            </ul>
           </CardDescription>
         </CardHeader>
         <CardContent>

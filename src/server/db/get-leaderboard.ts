@@ -1,12 +1,12 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import type { ErrorObject, Leaderboard } from '@/lib/types';
+import type { ErrorObject, LeaderboardUser } from '@/lib/types';
 import {
   countGames,
   findFastestWin,
   findWinWithFewestGuesses,
-  sortByWinsAndGiveUps,
+  sortLeaderboardUsers,
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
 import { headers } from 'next/headers';
@@ -31,9 +31,9 @@ export const getLeaderboard = async () => {
     },
   });
 
-  const data = users
+  const leaderboard = users
     .map((user) => {
-      const leaderboardUser: Leaderboard = {
+      const leaderboardUser: LeaderboardUser = {
         username: user.name,
         isCurrentUser: user.id === session.user.id ? true : false,
         officialModeWins: 0,
@@ -41,6 +41,7 @@ export const getLeaderboard = async () => {
         randomModeWins: 0,
         randomModeGiveUps: 0,
         gamesInProgress: 0,
+        hintsRevealed: 0,
         fastestWin: undefined,
         fewestGuesses: undefined,
       };
@@ -48,6 +49,7 @@ export const getLeaderboard = async () => {
       if (user.games.length > 0) {
         user.games.forEach((game) => {
           countGames(game, leaderboardUser);
+          leaderboardUser.hintsRevealed += game.hintsRevealed;
 
           if (game.mode === 'official' && game.status === 'won') {
             leaderboardUser.fastestWin = findFastestWin(
@@ -61,7 +63,7 @@ export const getLeaderboard = async () => {
 
       return leaderboardUser;
     })
-    .sort(sortByWinsAndGiveUps);
+    .sort(sortLeaderboardUsers);
 
-  return data;
+  return leaderboard;
 };

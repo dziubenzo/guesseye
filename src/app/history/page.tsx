@@ -21,8 +21,8 @@ export default async function History() {
   }
 
   return (
-    <div className="flex flex-col grow-1 justify-center">
-      <Card>
+    <div className="flex flex-col grow-1">
+      <Card className="grow-1">
         <CardHeader>
           <CardTitle className="text-2xl">Official Games History</CardTitle>
           <CardDescription>

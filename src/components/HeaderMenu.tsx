@@ -133,7 +133,7 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                         <div>
                           <div className="font-medium">Leaderboard</div>
                           <div className="text-muted-foreground">
-                            Browse the leaderboard.
+                            Take a look at the leaderboard.
                           </div>
                         </div>
                       </div>
