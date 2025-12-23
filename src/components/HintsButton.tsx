@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { useGameStore } from '@/lib/game-store';
 import type { GameHint } from '@/lib/types';
-import { cn, getRandomDartsFact } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { formatDistanceToNowStrict } from 'date-fns';
 
 type HintsButtonType = {
@@ -25,13 +25,9 @@ export default function HintsButton({
   availableHints,
   gameId,
 }: HintsButtonType) {
-  const { hints } = useGameStore();
-
-  const hintsLeft = availableHints - hints.length;
+  const { hints, obfuscatedHints } = useGameStore();
 
   if (availableHints === 0 || !gameId) return null;
-
-  const hintsLeftArray = new Array(hintsLeft).fill(undefined);
 
   return (
     <div className="sm:absolute sm:top-4 sm:left-0">
@@ -61,15 +57,16 @@ export default function HintsButton({
                 <Hint
                   key={hint.createdAt.toString()}
                   type="revealed"
-                  hintNo={index + 1}
                   hint={hint}
+                  hintNo={index + 1}
                 />
               ))}
-              {hintsLeftArray.map((_, index) => {
+              {obfuscatedHints.map((hint, index) => {
                 if (index === 0) {
                   return (
                     <RevealHintForm
-                      key={crypto.randomUUID()}
+                      key={hint[0] + index}
+                      hint={hint}
                       hintNo={index + 1 + hints.length}
                       gameId={gameId}
                     />
@@ -77,8 +74,9 @@ export default function HintsButton({
                 } else {
                   return (
                     <Hint
-                      key={crypto.randomUUID()}
+                      key={hint[0] + index}
                       type="notRevealed"
+                      hint={hint}
                       hintNo={index + 1 + hints.length}
                     />
                   );
@@ -98,11 +96,9 @@ type HintProps =
       hint: GameHint;
       hintNo: number;
     }
-  | { type: 'notRevealed'; hintNo: number };
+  | { type: 'notRevealed'; hint: string; hintNo: number };
 
-function Hint(props: HintProps) {
-  const { type, hintNo } = props;
-
+function Hint({ type, hint, hintNo }: HintProps) {
   return (
     <div
       className={cn(
@@ -123,18 +119,18 @@ function Hint(props: HintProps) {
       {type === 'revealed' && (
         <span className="absolute right-0.5 bottom-0 text-[0.6rem] text-accent-foreground">
           added{' '}
-          {formatDistanceToNowStrict(props.hint.createdAt, {
+          {formatDistanceToNowStrict(hint.createdAt, {
             addSuffix: true,
           })}
         </span>
       )}
       <p
         className={cn(
-          'text-sm sm:text-base',
+          'font-mono text-sm sm:text-base',
           type === 'revealed' ? null : 'blur-xs select-none'
         )}
       >
-        {type === 'revealed' ? props.hint.hint : getRandomDartsFact()}
+        {type === 'revealed' ? hint.hint : hint}
       </p>
     </div>
   );

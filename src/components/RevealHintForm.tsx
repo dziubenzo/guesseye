@@ -5,7 +5,7 @@ import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useGameStore } from '@/lib/game-store';
-import { cn, getRandomDartsFact } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import {
   revealHintSchema,
   type RevealHintSchemaType,
@@ -18,11 +18,13 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type RevealHintFormProps = {
+  hint: string;
   hintNo: number;
   gameId: number;
 };
 
 export default function RevealHintForm({
+  hint,
   hintNo,
   gameId,
 }: RevealHintFormProps) {
@@ -71,8 +73,13 @@ export default function RevealHintForm({
         >
           {hintNo}
         </span>
-        <p className={cn('text-sm sm:text-base', 'blur-xs select-none')}>
-          {getRandomDartsFact()}
+        <p
+          className={cn(
+            'font-mono text-sm sm:text-base',
+            'blur-xs select-none'
+          )}
+        >
+          {hint}
         </p>
         <Form {...revealHintForm}>
           <form onSubmit={revealHintForm.handleSubmit(onSubmit)}>

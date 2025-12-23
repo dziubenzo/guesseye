@@ -42,6 +42,7 @@ export default async function RandomGame() {
     mode,
     playerDifficulty,
     hints,
+    obfuscatedHints,
     availableHints,
   } = game;
 
@@ -58,6 +59,7 @@ export default async function RandomGame() {
       <PlayerToFindCard />
       <Guesses
         initialGuesses={guesses}
+        initialObfuscatedHints={obfuscatedHints}
         initialHints={hints}
         playerToFindMatches={playerToFindMatches}
         mode={mode}

@@ -51,6 +51,7 @@ export default async function CurrentGame() {
         mode,
         playerDifficulty,
         hints,
+        obfuscatedHints,
         availableHints,
       } = game;
 
@@ -72,6 +73,7 @@ export default async function CurrentGame() {
           <Guesses
             initialGuesses={guesses}
             initialHints={hints}
+            initialObfuscatedHints={obfuscatedHints}
             playerToFindMatches={playerToFindMatches}
             mode={mode}
             playerDifficulty={playerDifficulty}
@@ -95,6 +97,7 @@ export default async function CurrentGame() {
     mode,
     playerDifficulty,
     hints,
+    obfuscatedHints,
     availableHints,
   } = game;
 
@@ -112,6 +115,7 @@ export default async function CurrentGame() {
       <Guesses
         initialGuesses={guesses}
         initialHints={hints}
+        initialObfuscatedHints={obfuscatedHints}
         playerToFindMatches={playerToFindMatches}
         mode={mode}
         playerDifficulty={playerDifficulty}

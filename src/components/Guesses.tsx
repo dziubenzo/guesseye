@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react';
 type GuessesProps = {
   initialGuesses: Guess[];
   initialHints: GameHint[];
+  initialObfuscatedHints: string[];
   playerToFindMatches: PlayerToFindMatches;
   mode: GameMode;
   playerDifficulty: PlayerDifficultyField;
@@ -30,6 +31,7 @@ type GuessesProps = {
 export default function Guesses({
   initialGuesses,
   initialHints,
+  initialObfuscatedHints,
   playerToFindMatches,
   mode,
   playerDifficulty,
@@ -38,6 +40,7 @@ export default function Guesses({
     guesses,
     setInitialGuesses,
     setInitialHints,
+    setInitialObfuscatedHints,
     updatePreviousMatches,
     updateCurrentMatches,
     updateMode,
@@ -51,9 +54,16 @@ export default function Guesses({
     updateDifficulty(playerDifficulty);
     setInitialGuesses(initialGuesses);
     setInitialHints(initialHints);
+    setInitialObfuscatedHints(initialObfuscatedHints);
     updatePreviousMatches(playerToFindMatches);
     updateCurrentMatches(playerToFindMatches);
-  }, [mode, playerDifficulty, initialGuesses, playerToFindMatches]);
+  }, [
+    mode,
+    playerDifficulty,
+    initialGuesses,
+    initialObfuscatedHints,
+    playerToFindMatches,
+  ]);
 
   // Scroll to the latest guess when a guess has been made
   useEffect(() => {

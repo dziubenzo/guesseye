@@ -1,4 +1,4 @@
-import { DARTS_FACTS, MAX_MATCH_SUGGESTIONS } from '@/lib/constants';
+import { MAX_MATCH_SUGGESTIONS } from '@/lib/constants';
 import type {
   BestResultColumnType,
   ComparisonResults,
@@ -1916,11 +1916,38 @@ export function getFullName(
   return submittedPlayer.firstName + ' ' + submittedPlayer.lastName;
 }
 
-export function getRandomDartsFact() {
-  const min = Math.ceil(0);
-  const max = Math.floor(DARTS_FACTS.length);
+function getRandomIntInclusive(min: number, max: number) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
 
-  const index = Math.floor(Math.random() * (max - min) + min);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+}
 
-  return DARTS_FACTS[index];
+export function obfuscateHint(hint: string) {
+  const allowedChars = new Set([' ', '.', '?', '!', ',', ':', ';', '(', ')']);
+  let result = '';
+
+  for (const char of hint) {
+    if (allowedChars.has(char)) {
+      result += char;
+      continue;
+    }
+
+    let randomChar = 35; // #, makes TS happy
+
+    // Number
+    if (!Number.isNaN(Number(parseInt(char)))) {
+      randomChar = getRandomIntInclusive(48, 57);
+      // Lowercase / other
+    } else if (char === char.toLowerCase()) {
+      randomChar = getRandomIntInclusive(97, 122);
+      // Uppercase
+    } else if (char === char.toUpperCase()) {
+      randomChar = getRandomIntInclusive(65, 90);
+    }
+
+    result += String.fromCharCode(randomChar);
+  }
+
+  return result;
 }

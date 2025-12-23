@@ -12,6 +12,7 @@ type GameStore = {
   playerToFind: Player | null;
   guesses: Guess[];
   hints: GameHint[];
+  obfuscatedHints: string[];
   previousMatches: PlayerToFindMatches;
   currentMatches: PlayerToFindMatches;
   gameOver: boolean;
@@ -19,7 +20,8 @@ type GameStore = {
   playerDifficulty: PlayerDifficultyField;
   finishGame: (playerToFind: Player) => void;
   setInitialGuesses: (initialGuesses: Guess[]) => void;
-  setInitialHints: (hints: GameHint[]) => void;
+  setInitialHints: (initialHints: GameHint[]) => void;
+  setInitialObfuscatedHints: (initialObfuscatedHints: string[]) => void;
   updateGuesses: (
     guessedPlayer: Guess['guessedPlayer'],
     comparisonResults: Guess['comparisonResults']
@@ -36,6 +38,7 @@ type InitialState = Pick<
   GameStore,
   | 'playerToFind'
   | 'hints'
+  | 'obfuscatedHints'
   | 'guesses'
   | 'previousMatches'
   | 'currentMatches'
@@ -48,6 +51,7 @@ const initialState: InitialState = {
   playerToFind: null,
   guesses: [],
   hints: [],
+  obfuscatedHints: [],
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
@@ -59,6 +63,7 @@ export const useGameStore = create<GameStore>()((set) => ({
   playerToFind: null,
   guesses: [],
   hints: [],
+  obfuscatedHints: [],
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
@@ -77,6 +82,10 @@ export const useGameStore = create<GameStore>()((set) => ({
     set(() => ({
       hints: initialHints,
     })),
+  setInitialObfuscatedHints: (initialObfuscatedHints) =>
+    set(() => ({
+      obfuscatedHints: initialObfuscatedHints,
+    })),
   updateGuesses: (guessedPlayer, comparisonResults) =>
     set((state) => ({
       guesses: [{ guessedPlayer, comparisonResults }, ...state.guesses],
@@ -84,6 +93,7 @@ export const useGameStore = create<GameStore>()((set) => ({
   updateHints: (revealedHint) =>
     set((state) => ({
       hints: [...state.hints, revealedHint],
+      obfuscatedHints: state.obfuscatedHints.slice(1),
     })),
   updatePreviousMatches: (lastMatches) =>
     set((state) => ({

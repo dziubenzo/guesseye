@@ -6,7 +6,7 @@ import type {
   GuessWithPlayer,
   NoRandomGame,
 } from '@/lib/types';
-import { comparePlayers } from '@/lib/utils';
+import { comparePlayers, obfuscateHint } from '@/lib/utils';
 import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 
@@ -26,6 +26,7 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
       guesses: [],
       playerToFindMatches: {},
       hints: [],
+      obfuscatedHints: [],
       availableHints: 0,
       playerDifficulty: '???',
     };
@@ -50,11 +51,14 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
 
   const gameDetails: ExistingRandomGame = {
     status: 'inProgress',
-    gameId: existingGame?.id,
+    gameId: game.id,
     mode: 'random',
     guesses: [],
     playerToFindMatches: {},
     hints: game.randomPlayer.hints.slice(0, game.hintsRevealed),
+    obfuscatedHints: game.randomPlayer.hints
+      .slice(game.hintsRevealed)
+      .map((hint) => obfuscateHint(hint.hint)),
     availableHints: game.randomPlayer.hints.length,
     playerDifficulty: game.randomPlayer.difficulty,
   };

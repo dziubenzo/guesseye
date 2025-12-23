@@ -140,6 +140,7 @@ export type AnyOfficialGame = {
   mode: 'official';
   guesses: Guess[];
   hints: GameHint[];
+  obfuscatedHints: string[];
   availableHints: number;
   playerToFindMatches: PlayerToFindMatches;
   playerDifficulty: Player['difficulty'];
@@ -154,6 +155,7 @@ export type ExistingRandomGame = Pick<
   | 'guesses'
   | 'playerToFindMatches'
   | 'hints'
+  | 'obfuscatedHints'
   | 'availableHints'
   | 'playerDifficulty'
 > & { mode: 'random' };
@@ -165,6 +167,7 @@ export type NoRandomGame = Pick<
   | 'guesses'
   | 'playerToFindMatches'
   | 'hints'
+  | 'obfuscatedHints'
   | 'availableHints'
 > & {
   status: 'noGame';
