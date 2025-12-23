@@ -49,11 +49,7 @@ export default async function RandomGame() {
     <div className="flex flex-col gap-4">
       <TopBar>
         <div className="flex gap-2">
-          <HintsButton
-            hints={hints}
-            availableHints={availableHints}
-            gameId={gameId}
-          />
+          <HintsButton availableHints={availableHints} gameId={gameId} />
           <GiveUpButton />
         </div>
         <GuessForm names={names} />
@@ -62,6 +58,7 @@ export default async function RandomGame() {
       <PlayerToFindCard />
       <Guesses
         initialGuesses={guesses}
+        initialHints={hints}
         playerToFindMatches={playerToFindMatches}
         mode={mode}
         playerDifficulty={playerDifficulty}

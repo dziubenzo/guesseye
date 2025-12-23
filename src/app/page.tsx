@@ -58,11 +58,7 @@ export default async function CurrentGame() {
         <div className="flex flex-col gap-4">
           <TopBar>
             <div className="flex gap-2">
-              <HintsButton
-                hints={hints}
-                availableHints={availableHints}
-                gameId={gameId}
-              />
+              <HintsButton availableHints={availableHints} gameId={gameId} />
               <GiveUpButton />
             </div>
             <GuessForm names={names} />
@@ -75,6 +71,7 @@ export default async function CurrentGame() {
           <PlayerToFindCard />
           <Guesses
             initialGuesses={guesses}
+            initialHints={hints}
             playerToFindMatches={playerToFindMatches}
             mode={mode}
             playerDifficulty={playerDifficulty}
@@ -105,7 +102,7 @@ export default async function CurrentGame() {
     <div className="flex flex-col gap-4">
       <TopBar>
         <div className="flex gap-2">
-          <HintsButton hints={hints} availableHints={availableHints} />
+          <HintsButton availableHints={availableHints} />
           <GiveUpButton />
         </div>
         <GuessForm names={names} />
@@ -114,6 +111,7 @@ export default async function CurrentGame() {
       <PlayerToFindCard />
       <Guesses
         initialGuesses={guesses}
+        initialHints={hints}
         playerToFindMatches={playerToFindMatches}
         mode={mode}
         playerDifficulty={playerDifficulty}

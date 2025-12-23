@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/carousel';
 import { useGameStore } from '@/lib/game-store';
 import type {
+  GameHint,
   GameMode,
   Guess,
   PlayerDifficultyField,
@@ -20,6 +21,7 @@ import { useEffect, useState } from 'react';
 
 type GuessesProps = {
   initialGuesses: Guess[];
+  initialHints: GameHint[];
   playerToFindMatches: PlayerToFindMatches;
   mode: GameMode;
   playerDifficulty: PlayerDifficultyField;
@@ -27,6 +29,7 @@ type GuessesProps = {
 
 export default function Guesses({
   initialGuesses,
+  initialHints,
   playerToFindMatches,
   mode,
   playerDifficulty,
@@ -34,6 +37,7 @@ export default function Guesses({
   const {
     guesses,
     setInitialGuesses,
+    setInitialHints,
     updatePreviousMatches,
     updateCurrentMatches,
     updateMode,
@@ -46,6 +50,7 @@ export default function Guesses({
     updateMode(mode);
     updateDifficulty(playerDifficulty);
     setInitialGuesses(initialGuesses);
+    setInitialHints(initialHints);
     updatePreviousMatches(playerToFindMatches);
     updateCurrentMatches(playerToFindMatches);
   }, [mode, playerDifficulty, initialGuesses, playerToFindMatches]);

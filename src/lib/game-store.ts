@@ -1,4 +1,5 @@
 import type {
+  GameHint,
   GameMode,
   Guess,
   Player,
@@ -10,6 +11,7 @@ import { create } from 'zustand';
 type GameStore = {
   playerToFind: Player | null;
   guesses: Guess[];
+  hints: GameHint[];
   previousMatches: PlayerToFindMatches;
   currentMatches: PlayerToFindMatches;
   gameOver: boolean;
@@ -17,10 +19,12 @@ type GameStore = {
   playerDifficulty: PlayerDifficultyField;
   finishGame: (playerToFind: Player) => void;
   setInitialGuesses: (initialGuesses: Guess[]) => void;
+  setInitialHints: (hints: GameHint[]) => void;
   updateGuesses: (
     guessedPlayer: Guess['guessedPlayer'],
     comparisonResults: Guess['comparisonResults']
   ) => void;
+  updateHints: (revealedHint: GameHint) => void;
   updatePreviousMatches: (lastMatches: PlayerToFindMatches) => void;
   updateCurrentMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
@@ -31,6 +35,7 @@ type GameStore = {
 type InitialState = Pick<
   GameStore,
   | 'playerToFind'
+  | 'hints'
   | 'guesses'
   | 'previousMatches'
   | 'currentMatches'
@@ -42,6 +47,7 @@ type InitialState = Pick<
 const initialState: InitialState = {
   playerToFind: null,
   guesses: [],
+  hints: [],
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
@@ -52,6 +58,7 @@ const initialState: InitialState = {
 export const useGameStore = create<GameStore>()((set) => ({
   playerToFind: null,
   guesses: [],
+  hints: [],
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
@@ -66,9 +73,17 @@ export const useGameStore = create<GameStore>()((set) => ({
     set(() => ({
       guesses: initialGuesses,
     })),
+  setInitialHints: (initialHints) =>
+    set(() => ({
+      hints: initialHints,
+    })),
   updateGuesses: (guessedPlayer, comparisonResults) =>
     set((state) => ({
       guesses: [{ guessedPlayer, comparisonResults }, ...state.guesses],
+    })),
+  updateHints: (revealedHint) =>
+    set((state) => ({
+      hints: [...state.hints, revealedHint],
     })),
   updatePreviousMatches: (lastMatches) =>
     set((state) => ({

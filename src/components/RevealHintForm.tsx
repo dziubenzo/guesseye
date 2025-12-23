@@ -4,6 +4,7 @@ import Bold from '@/components/Bold';
 import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import { useGameStore } from '@/lib/game-store';
 import { cn, getRandomDartsFact } from '@/lib/utils';
 import {
   revealHintSchema,
@@ -25,6 +26,8 @@ export default function RevealHintForm({
   hintNo,
   gameId,
 }: RevealHintFormProps) {
+  const { updateHints } = useGameStore();
+
   const revealHintForm = useForm<RevealHintSchemaType>({
     resolver: zodResolver(revealHintSchema),
     defaultValues: {
@@ -38,6 +41,10 @@ export default function RevealHintForm({
     onSuccess({ data }) {
       if (data?.type === 'error') {
         setError(data.error);
+        return;
+      }
+      if (data?.type === 'success') {
+        updateHints(data.revealedHint);
         return;
       }
     },

@@ -54,7 +54,6 @@ export default async function PreviousOfficialGame({
         <TopBar>
           <div className="flex gap-2">
             <HintsButton
-              hints={hints}
               availableHints={availableHints}
               gameId={gameId}
             />
@@ -67,6 +66,7 @@ export default async function PreviousOfficialGame({
         <PlayerToFindCard />
         <Guesses
           initialGuesses={guesses}
+          initialHints={hints}
           playerToFindMatches={playerToFindMatches}
           mode={mode}
           playerDifficulty={playerDifficulty}

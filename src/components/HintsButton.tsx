@@ -1,3 +1,5 @@
+'use client';
+
 import Bold from '@/components/Bold';
 import RevealHintForm from '@/components/RevealHintForm';
 import { Button } from '@/components/ui/button';
@@ -9,29 +11,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useGameStore } from '@/lib/game-store';
 import type { GameHint } from '@/lib/types';
 import { cn, getRandomDartsFact } from '@/lib/utils';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { useMemo } from 'react';
 
 type HintsButtonType = {
-  hints: GameHint[];
   availableHints: number;
   gameId?: number;
 };
 
 export default function HintsButton({
-  hints,
   availableHints,
   gameId,
 }: HintsButtonType) {
+  const { hints } = useGameStore();
+
   const hintsLeft = availableHints - hints.length;
-  const hintsLeftArray = useMemo(
-    () => new Array(hintsLeft).fill(undefined),
-    [hintsLeft]
-  );
 
   if (availableHints === 0 || !gameId) return null;
+
+  const hintsLeftArray = new Array(hintsLeft).fill(undefined);
 
   return (
     <div className="sm:absolute sm:top-4 sm:left-0">
