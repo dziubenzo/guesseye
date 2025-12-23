@@ -180,7 +180,7 @@ export type Guess = {
   comparisonResults: ComparisonResults;
 };
 
-type CheckGuessError = { type: 'error'; error: string };
+type ActionError = { type: 'error'; error: string };
 type CheckGuessSuccess = {
   type: 'success';
   success: (
@@ -200,12 +200,15 @@ type CheckGuessSuccess = {
   };
 };
 
-export type CheckGuessAction = CheckGuessError | CheckGuessSuccess;
+export type CheckGuessAction = ActionError | CheckGuessSuccess;
 
-type GiveUpError = { type: 'error'; error: string };
 type GiveUpSuccess = { type: 'success'; playerToFind: string };
 
-export type GiveUpAction = GiveUpError | GiveUpSuccess;
+export type GiveUpAction = ActionError | GiveUpSuccess;
+
+type RevealHintSuccess = { type: 'success'; revealedHint: GameHint };
+
+export type RevealHintAction = ActionError | RevealHintSuccess;
 
 export type ErrorObject = { error: string };
 
