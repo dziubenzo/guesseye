@@ -18,7 +18,9 @@ export type User = InferSelectModel<typeof user>;
 
 export type Hint = InferSelectModel<typeof hint>;
 
-export type GameHint = Pick<Hint, 'createdAt' | 'hint'>;
+export type GameHint = Pick<Hint, 'createdAt' | 'hint'> & {
+  user: Pick<User, 'name'> | null;
+};
 
 export type GuessWithPlayer = InferSelectModel<typeof guess> & {
   player: Player;
@@ -500,5 +502,6 @@ export type EvaluateMatchesResult =
 
 export type SuggestedHint = Hint & {
   fullName: string;
+  addedBy: User['name'] | null;
   approvedHintsCount: number;
 };

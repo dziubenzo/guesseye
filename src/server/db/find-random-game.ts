@@ -30,6 +30,11 @@ export const findRandomGame = async () => {
               createdAt: true,
               hint: true,
             },
+            with: {
+              user: {
+                columns: { name: true },
+              },
+            },
             where: eq(hint.isApproved, true),
             orderBy: asc(hint.createdAt),
           },

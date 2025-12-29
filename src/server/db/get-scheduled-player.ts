@@ -21,6 +21,11 @@ export const getScheduledPlayer = async (scheduleId?: Schedule['id']) => {
               createdAt: true,
               hint: true,
             },
+            with: {
+              user: {
+                columns: { name: true },
+              },
+            },
             where: eq(hint.isApproved, true),
             orderBy: asc(hint.createdAt),
           },

@@ -51,6 +51,7 @@ export const revealHint = actionClient
     const [revealedHint] = await Promise.all([
       db.query.hint.findFirst({
         columns: { createdAt: true, hint: true },
+        with: { user: { columns: { name: true } } },
         where: and(eq(hint.playerId, playerId), eq(hint.isApproved, true)),
         offset: currentGame.hintsRevealed,
       }),
