@@ -43,6 +43,8 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
     officialGamesCompleted,
     officialModeWins,
     officialModeGiveUps,
+    officialModeHintsRevealed,
+    officialModeHintsRevealedPercentage,
   } = stats.games.official;
 
   const {
@@ -50,14 +52,20 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
     randomGamesCompleted,
     randomModeWins,
     randomModeGiveUps,
+    randomModeHintsRevealed,
+    randomModeHintsRevealedPercentage,
     randomGamesPlayedUser,
     randomGamesCompletedUser,
     randomModeWinsUser,
     randomModeGiveUpsUser,
+    randomModeHintsRevealedUser,
+    randomModeHintsRevealedPercentageUser,
     randomGamesPlayedGuest,
     randomGamesCompletedGuest,
     randomModeWinsGuest,
     randomModeGiveUpsGuest,
+    randomModeHintsRevealedGuest,
+    randomModeHintsRevealedPercentageGuest,
   } = stats.games.random;
 
   return (
@@ -167,6 +175,15 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
           <Stat title="Official Mode Give Ups" value={officialModeGiveUps}>
             The number of games given up in the official mode.
           </Stat>
+          <Stat title="Hints Revealed" value={officialModeHintsRevealed}>
+            The number of hints revealed in all official mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${officialModeHintsRevealedPercentage + '%'}`}
+          >
+            The percentage of hints revealed in all official mode games.
+          </Stat>
         </div>
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
@@ -187,6 +204,15 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
           <Stat title="Random Mode Give Ups" value={randomModeGiveUps}>
             The number of games given up by both users and guests in the random
             mode.
+          </Stat>
+          <Stat title="Hints Revealed" value={randomModeHintsRevealed}>
+            The number of hints revealed in all random mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${randomModeHintsRevealedPercentage + '%'}`}
+          >
+            The percentage of hints revealed in all random mode games.
           </Stat>
         </div>
         <Separator />
@@ -216,6 +242,15 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
           >
             The number of games given up by users in the random mode.
           </Stat>
+          <Stat title="Hints Revealed" value={randomModeHintsRevealedUser}>
+            The number of hints revealed by users in random mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${randomModeHintsRevealedPercentageUser + '%'}`}
+          >
+            The percentage of hints revealed by users in random mode games.
+          </Stat>
         </div>
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
@@ -243,6 +278,15 @@ export default async function GlobalStats({ stats }: GlobalStatsProps) {
             value={randomModeGiveUpsGuest}
           >
             The number of games given up by guests in the random mode.
+          </Stat>
+          <Stat title="Hints Revealed" value={randomModeHintsRevealedGuest}>
+            The number of hints revealed by guests in random mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${randomModeHintsRevealedPercentageGuest + '%'}`}
+          >
+            The percentage of hints revealed by guests in random mode games.
           </Stat>
         </div>
         <Separator />

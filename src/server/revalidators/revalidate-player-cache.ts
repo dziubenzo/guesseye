@@ -12,6 +12,7 @@ export default async function revalidatePlayerCache() {
     'databaseStats',
     'names',
     'suggestedHints',
+    'hintsCounts',
   ];
 
   for (const cache of cacheTypes) {

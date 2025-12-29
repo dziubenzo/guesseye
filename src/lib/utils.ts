@@ -897,7 +897,7 @@ export function countGamesForUserStats(game: UserStatsGame, stats: UserStats) {
   }
 }
 
-export function countHintsRevealed(
+export function countHintsRevealedForUserStats(
   game: UserStatsGame,
   hintsMap: Map<number, number>,
   stats: UserStats
@@ -908,8 +908,8 @@ export function countHintsRevealed(
     const playerToFindId = game.scheduledPlayer?.playerToFindId;
 
     if (playerToFindId && hintsMap.has(playerToFindId)) {
-      const count = hintsMap.get(playerToFindId)!;
-      stats.games.official.officialModeHintsRevealedPercentage += count;
+      const hintsCount = hintsMap.get(playerToFindId)!;
+      stats.games.official.officialModeHintsRevealedPercentage += hintsCount;
     }
   } else if (game.mode === 'random') {
     stats.games.random.randomModeHintsRevealed += game.hintsRevealed;
@@ -917,8 +917,8 @@ export function countHintsRevealed(
     const playerToFindId = game.randomPlayerId;
 
     if (playerToFindId && hintsMap.has(playerToFindId)) {
-      const count = hintsMap.get(playerToFindId)!;
-      stats.games.random.randomModeHintsRevealedPercentage += count;
+      const hintsCount = hintsMap.get(playerToFindId)!;
+      stats.games.random.randomModeHintsRevealedPercentage += hintsCount;
     }
   }
 }
@@ -1256,6 +1256,40 @@ export function countGamesForGlobalStats(
   return;
 }
 
+export function countHintsRevealedForGlobalStats(
+  game: UserStatsGame,
+  hintsMap: Map<number, number>,
+  stats: GlobalStats
+) {
+  if (game.mode === 'official') {
+    stats.games.official.officialModeHintsRevealed += game.hintsRevealed;
+
+    const playerToFindId = game.scheduledPlayer?.playerToFindId;
+
+    if (playerToFindId && hintsMap.has(playerToFindId)) {
+      const hintsCount = hintsMap.get(playerToFindId)!;
+      stats.games.official.officialModeHintsRevealedPercentage += hintsCount;
+    }
+  } else if (game.mode === 'random') {
+    stats.games.random.randomModeHintsRevealed += game.hintsRevealed;
+
+    const playerToFindId = game.randomPlayerId;
+
+    if (playerToFindId && hintsMap.has(playerToFindId)) {
+      const hintsCount = hintsMap.get(playerToFindId)!;
+      stats.games.random.randomModeHintsRevealedPercentage += hintsCount;
+
+      if (game.userId) {
+        stats.games.random.randomModeHintsRevealedUser += game.hintsRevealed;
+        stats.games.random.randomModeHintsRevealedPercentageUser += hintsCount;
+      } else {
+        stats.games.random.randomModeHintsRevealedGuest += game.hintsRevealed;
+        stats.games.random.randomModeHintsRevealedPercentageGuest += hintsCount;
+      }
+    }
+  }
+}
+
 export function countTotalGuesses(game: UserStatsGame, stats: GlobalStats) {
   if (game.guesses.length === 0) return;
 
@@ -1549,6 +1583,42 @@ export function calculateOtherStatsGlobal(
     stats.guesses.avgGuessesToGiveUpGuest = roundToNthDecimalPlace(
       avgGuessesToGiveUpGuest
     );
+  }
+
+  if (stats.games.official.officialModeHintsRevealedPercentage > 0) {
+    const officialModeHintsRevealedPercentage =
+      (stats.games.official.officialModeHintsRevealed /
+        stats.games.official.officialModeHintsRevealedPercentage) *
+      100;
+    stats.games.official.officialModeHintsRevealedPercentage =
+      roundToNthDecimalPlace(officialModeHintsRevealedPercentage);
+  }
+
+  if (stats.games.random.randomModeHintsRevealedPercentage > 0) {
+    const randomModeHintsRevealedPercentage =
+      (stats.games.random.randomModeHintsRevealed /
+        stats.games.random.randomModeHintsRevealedPercentage) *
+      100;
+    stats.games.random.randomModeHintsRevealedPercentage =
+      roundToNthDecimalPlace(randomModeHintsRevealedPercentage);
+  }
+
+  if (stats.games.random.randomModeHintsRevealedPercentageUser > 0) {
+    const randomModeHintsRevealedPercentageUser =
+      (stats.games.random.randomModeHintsRevealedUser /
+        stats.games.random.randomModeHintsRevealedPercentageUser) *
+      100;
+    stats.games.random.randomModeHintsRevealedPercentageUser =
+      roundToNthDecimalPlace(randomModeHintsRevealedPercentageUser);
+  }
+
+  if (stats.games.random.randomModeHintsRevealedPercentageGuest > 0) {
+    const randomModeHintsRevealedPercentageGuest =
+      (stats.games.random.randomModeHintsRevealedGuest /
+        stats.games.random.randomModeHintsRevealedPercentageGuest) *
+      100;
+    stats.games.random.randomModeHintsRevealedPercentageGuest =
+      roundToNthDecimalPlace(randomModeHintsRevealedPercentageGuest);
   }
 
   stats.games.random.randomGamesPlayed =

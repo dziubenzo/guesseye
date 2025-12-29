@@ -8,7 +8,7 @@ import {
   countGamesForUserStats,
   countGuessedPlayers,
   countGuessesByDay,
-  countHintsRevealed,
+  countHintsRevealedForUserStats,
   countRandomPlayers,
   findFastestWin,
   findFewestAndMostGuesses,
@@ -18,9 +18,10 @@ import {
   findUserGuessesToWinAndGiveUp,
   transformChartData,
 } from '@/lib/utils';
+import { getHintsCountsByPlayer } from '@/server/db/get-hints-counts-by-player';
 import { db } from '@/server/db/index';
-import { game, guess, hint, schedule } from '@/server/db/schema';
-import { asc, eq, lt, sql } from 'drizzle-orm';
+import { game, guess, schedule } from '@/server/db/schema';
+import { asc, eq, lt } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
 export const getUserStats = async () => {
@@ -63,14 +64,7 @@ export const getUserStats = async () => {
       where: eq(game.userId, session.user.id),
     }),
     db.$count(schedule, lt(schedule.startDate, new Date())),
-    db
-      .select({
-        playerId: hint.playerId,
-        hintsCount: sql<number>`cast(count(${hint.playerId}) as int)`,
-      })
-      .from(hint)
-      .where(eq(hint.isApproved, true))
-      .groupBy(hint.playerId),
+    getHintsCountsByPlayer(),
   ]);
 
   if (scheduledPlayersCount === 0) {
@@ -152,7 +146,7 @@ export const getUserStats = async () => {
   games.forEach((game) => {
     stats.guesses.totalGuesses += game.guesses.length;
     countGamesForUserStats(game, stats);
-    countHintsRevealed(game, hintsCountsMap, stats);
+    countHintsRevealedForUserStats(game, hintsCountsMap, stats);
     findFirstAndLatestOfficialWin(game, stats);
     findFewestAndMostGuesses(game, stats);
     findUserGuessesToWinAndGiveUp(game, stats);

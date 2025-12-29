@@ -373,20 +373,28 @@ export type GlobalStats = {
       officialGamesCompleted: number;
       officialModeWins: number;
       officialModeGiveUps: number;
+      officialModeHintsRevealed: number;
+      officialModeHintsRevealedPercentage: number;
     };
     random: {
       randomGamesPlayed: number;
       randomGamesCompleted: number;
       randomModeWins: number;
       randomModeGiveUps: number;
+      randomModeHintsRevealed: number;
+      randomModeHintsRevealedPercentage: number;
       randomGamesPlayedUser: number;
       randomGamesCompletedUser: number;
       randomModeWinsUser: number;
       randomModeGiveUpsUser: number;
+      randomModeHintsRevealedUser: number;
+      randomModeHintsRevealedPercentageUser: number;
       randomGamesPlayedGuest: number;
       randomGamesCompletedGuest: number;
       randomModeWinsGuest: number;
       randomModeGiveUpsGuest: number;
+      randomModeHintsRevealedGuest: number;
+      randomModeHintsRevealedPercentageGuest: number;
     };
   };
   players: {

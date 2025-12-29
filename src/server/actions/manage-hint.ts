@@ -7,7 +7,7 @@ import { db } from '@/server/db';
 import { hint as hintSchema } from '@/server/db/schema';
 import { checkForAdmin } from '@/server/utils';
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export const manageHint = actionClient
   .schema(manageHintSchema)
@@ -42,6 +42,7 @@ export const manageHint = actionClient
     }
 
     revalidatePath('/admin');
+    revalidateTag('hintsCounts');
 
     return result;
   });

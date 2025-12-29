@@ -8,6 +8,7 @@ import {
   countGamesForGlobalStats,
   countGuessedPlayers,
   countGuessesByDay,
+  countHintsRevealedForGlobalStats,
   countRandomPlayers,
   countTotalGuesses,
   findFewestAndMostGuesses,
@@ -15,6 +16,7 @@ import {
   findLatestGuesses,
   transformChartData,
 } from '@/lib/utils';
+import { getHintsCountsByPlayer } from '@/server/db/get-hints-counts-by-player';
 import { db } from '@/server/db/index';
 import { game, guess } from '@/server/db/schema';
 import { asc } from 'drizzle-orm';
@@ -31,28 +33,37 @@ export const getGlobalStats = async () => {
   }
 
   // Get all games (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name as well as the first and last name of the random player if it exists
-  const games = await db.query.game.findMany({
-    with: {
-      user: {
-        columns: { name: true },
-      },
-      guesses: {
-        with: {
-          player: {
-            columns: {
-              firstName: true,
-              lastName: true,
+  // Get counts of all approved hints by darts player
+  const [games, hintsCounts] = await Promise.all([
+    db.query.game.findMany({
+      with: {
+        user: {
+          columns: { name: true },
+        },
+        guesses: {
+          with: {
+            player: {
+              columns: {
+                firstName: true,
+                lastName: true,
+              },
             },
           },
+          orderBy: asc(guess.id),
         },
-        orderBy: asc(guess.id),
+        scheduledPlayer: {
+          columns: {
+            playerToFindId: true,
+          },
+        },
+        randomPlayer: {
+          columns: { firstName: true, lastName: true },
+        },
       },
-      randomPlayer: {
-        columns: { firstName: true, lastName: true },
-      },
-    },
-    orderBy: asc(game.startDate),
-  });
+      orderBy: asc(game.startDate),
+    }),
+    getHintsCountsByPlayer(),
+  ]);
 
   const stats: GlobalStats = {
     guesses: {
@@ -77,20 +88,28 @@ export const getGlobalStats = async () => {
         officialGamesCompleted: 0,
         officialModeWins: 0,
         officialModeGiveUps: 0,
+        officialModeHintsRevealed: 0,
+        officialModeHintsRevealedPercentage: 0,
       },
       random: {
         randomGamesPlayed: 0,
         randomGamesCompleted: 0,
         randomModeWins: 0,
         randomModeGiveUps: 0,
+        randomModeHintsRevealed: 0,
+        randomModeHintsRevealedPercentage: 0,
         randomGamesPlayedUser: 0,
         randomGamesCompletedUser: 0,
         randomModeWinsUser: 0,
         randomModeGiveUpsUser: 0,
+        randomModeHintsRevealedUser: 0,
+        randomModeHintsRevealedPercentageUser: 0,
         randomGamesPlayedGuest: 0,
         randomGamesCompletedGuest: 0,
         randomModeWinsGuest: 0,
         randomModeGiveUpsGuest: 0,
+        randomModeHintsRevealedGuest: 0,
+        randomModeHintsRevealedPercentageGuest: 0,
       },
     },
     players: {
@@ -114,9 +133,17 @@ export const getGlobalStats = async () => {
   const guessesByDay: Record<string, number> = {};
   const randomPlayers: Record<string, number> = {};
 
+  // Create a playerId to hintsCount map
+  const hintsCountsMap = new Map<number, number>();
+
+  for (const entry of hintsCounts) {
+    hintsCountsMap.set(entry.playerId, entry.hintsCount);
+  }
+
   // Calculate stats based on every game and guess
   games.forEach((game) => {
     countGamesForGlobalStats(game, stats);
+    countHintsRevealedForGlobalStats(game, hintsCountsMap, stats);
     countTotalGuesses(game, stats);
     findFewestAndMostGuesses(game, stats);
     findGlobalGuessesToWinAndGiveUp(game, stats);
