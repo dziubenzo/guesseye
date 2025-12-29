@@ -484,6 +484,7 @@ export const hint = pgTable('hint', {
     .notNull()
     .references(() => player.id, { onDelete: 'restrict' }),
   hint: text('hint').notNull(),
+  userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
   isApproved: boolean('is_approved').default(false).notNull(),
 });
 
@@ -492,6 +493,11 @@ export const hintRelations = relations(hint, ({ one }) => ({
     relationName: 'player',
     fields: [hint.playerId],
     references: [player.id],
+  }),
+  user: one(user, {
+    relationName: 'user',
+    fields: [hint.userId],
+    references: [user.id],
   }),
 }));
 
