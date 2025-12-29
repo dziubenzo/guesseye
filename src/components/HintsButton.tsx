@@ -1,6 +1,7 @@
 'use client';
 
 import Bold from '@/components/Bold';
+import DeletedUser from '@/components/DeletedUser';
 import RevealHintForm from '@/components/RevealHintForm';
 import { Button } from '@/components/ui/button';
 import {
@@ -118,10 +119,11 @@ function Hint({ type, hint, hintNo }: HintProps) {
       </span>
       {type === 'revealed' && (
         <span className="absolute right-0.5 bottom-0 text-[0.6rem] text-accent-foreground">
-          added{' '}
+          by {hint.user ? hint.user.name : <DeletedUser />} (
           {formatDistanceToNowStrict(hint.createdAt, {
             addSuffix: true,
           })}
+          )
         </span>
       )}
       <p

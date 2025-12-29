@@ -1,6 +1,7 @@
 'use client';
 
 import Bold from '@/components/Bold';
+import DeletedUser from '@/components/DeletedUser';
 import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem } from '@/components/ui/form';
@@ -12,7 +13,7 @@ import {
 } from '@/lib/zod/manage-hint';
 import { manageHint } from '@/server/actions/manage-hint';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 import { Check, X } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { useState } from 'react';
@@ -52,12 +53,15 @@ export default function ManageHintForm({ hint }: ManageHintFormProps) {
     <Form {...manageHintForm}>
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:p-4 sm:ring-1 sm:ring-secondary-foreground/10 sm:rounded-md">
         <div className="flex flex-col gap-2 grow-1">
-          <div className="flex justify-between items-center">
-            <Bold className="truncate">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+            <Bold>
               {hint.fullName} ({hint.approvedHintsCount})
             </Bold>
-            <span className="text-xs text-center">
-              {format(hint.createdAt, 'dd MMMM y')}
+            <span className="text-xs">
+              by {hint.addedBy ? hint.addedBy : <DeletedUser />},{' '}
+              {formatDistanceToNowStrict(hint.createdAt, {
+                addSuffix: true,
+              })}
             </span>
           </div>
           <form>
