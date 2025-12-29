@@ -4,7 +4,7 @@ import { actionClient } from '@/lib/safe-action-client';
 import type { RevealHintAction } from '@/lib/types';
 import { revealHintSchema } from '@/lib/zod/reveal-hint';
 import { db } from '@/server/db';
-import { game } from '@/server/db/schema';
+import { game, hint } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
 import { and, eq } from 'drizzle-orm';
 
@@ -51,6 +51,7 @@ export const revealHint = actionClient
     const [revealedHint] = await Promise.all([
       db.query.hint.findFirst({
         columns: { createdAt: true, hint: true },
+        where: and(eq(hint.playerId, playerId), eq(hint.isApproved, true)),
         offset: currentGame.hintsRevealed,
       }),
       db
