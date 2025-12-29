@@ -46,6 +46,8 @@ export default async function UserStats({ stats }: UserStatsProps) {
     officialModeWinsPercentage,
     officialModeGiveUps,
     officialModeGiveUpsPercentage,
+    officialModeHintsRevealed,
+    officialModeHintsRevealedPercentage,
   } = stats.games.official;
 
   const {
@@ -54,6 +56,8 @@ export default async function UserStats({ stats }: UserStatsProps) {
     randomModeWinsPercentage,
     randomModeGiveUps,
     randomModeGiveUpsPercentage,
+    randomModeHintsRevealed,
+    randomModeHintsRevealedPercentage,
   } = stats.games.random;
 
   const { fastestWin, slowestWin } = stats.games.duration;
@@ -154,6 +158,15 @@ export default async function UserStats({ stats }: UserStatsProps) {
             The percentage of games you gave up on in the official mode compared
             to all official mode games.
           </Stat>
+          <Stat title="Hints Revealed" value={officialModeHintsRevealed}>
+            The number of hints you revealed in official mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${officialModeHintsRevealedPercentage + '%'}`}
+          >
+            The percentage of hints you revealed in official mode games.
+          </Stat>
         </div>
         <Separator />
         <h1 className="text-xl md:text-4xl font-medium text-center p-2">
@@ -187,6 +200,15 @@ export default async function UserStats({ stats }: UserStatsProps) {
           >
             The percentage of games you gave up on in the random mode compared
             to all random mode games.
+          </Stat>
+          <Stat title="Hints Revealed" value={randomModeHintsRevealed}>
+            The number of hints you revealed in random mode games.
+          </Stat>
+          <Stat
+            title="Hints Revealed %"
+            value={`${randomModeHintsRevealedPercentage + '%'}`}
+          >
+            The percentage of hints you revealed in random mode games.
           </Stat>
         </div>
         <Separator />

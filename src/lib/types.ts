@@ -42,6 +42,9 @@ export type RandomGame = OfficialGame & {
 
 export type UserStatsGame = Game & {
   guesses: GuessWithPlayerName[];
+  scheduledPlayer: {
+    playerToFindId: Schedule['playerToFindId'];
+  } | null;
   randomPlayer: {
     firstName: Player['firstName'];
     lastName: Player['lastName'];
@@ -301,6 +304,8 @@ export type UserStats = {
       officialModeWinsPercentage: number;
       officialModeGiveUps: number;
       officialModeGiveUpsPercentage: number;
+      officialModeHintsRevealed: number;
+      officialModeHintsRevealedPercentage: number;
     };
     random: {
       randomGamesPlayed: number;
@@ -308,6 +313,8 @@ export type UserStats = {
       randomModeWinsPercentage: number;
       randomModeGiveUps: number;
       randomModeGiveUpsPercentage: number;
+      randomModeHintsRevealed: number;
+      randomModeHintsRevealedPercentage: number;
     };
     duration: {
       fastestWin?: number;

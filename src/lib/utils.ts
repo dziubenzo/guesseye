@@ -897,6 +897,32 @@ export function countGamesForUserStats(game: UserStatsGame, stats: UserStats) {
   }
 }
 
+export function countHintsRevealed(
+  game: UserStatsGame,
+  hintsMap: Map<number, number>,
+  stats: UserStats
+) {
+  if (game.mode === 'official') {
+    stats.games.official.officialModeHintsRevealed += game.hintsRevealed;
+
+    const playerToFindId = game.scheduledPlayer?.playerToFindId;
+
+    if (playerToFindId && hintsMap.has(playerToFindId)) {
+      const count = hintsMap.get(playerToFindId)!;
+      stats.games.official.officialModeHintsRevealedPercentage += count;
+    }
+  } else if (game.mode === 'random') {
+    stats.games.random.randomModeHintsRevealed += game.hintsRevealed;
+
+    const playerToFindId = game.randomPlayerId;
+
+    if (playerToFindId && hintsMap.has(playerToFindId)) {
+      const count = hintsMap.get(playerToFindId)!;
+      stats.games.random.randomModeHintsRevealedPercentage += count;
+    }
+  }
+}
+
 export function findFirstAndLatestOfficialWin(
   game: UserStatsGame,
   stats: UserStats
@@ -1427,6 +1453,24 @@ export function calculateOtherStatsUser(
     stats.games.random.randomModeGiveUpsPercentage = roundToNthDecimalPlace(
       randomModeGiveUpsPercentage
     );
+  }
+
+  if (stats.games.official.officialModeHintsRevealedPercentage > 0) {
+    const officialModeHintsRevealedPercentage =
+      (stats.games.official.officialModeHintsRevealed /
+        stats.games.official.officialModeHintsRevealedPercentage) *
+      100;
+    stats.games.official.officialModeHintsRevealedPercentage =
+      roundToNthDecimalPlace(officialModeHintsRevealedPercentage);
+  }
+
+  if (stats.games.random.randomModeHintsRevealedPercentage > 0) {
+    const randomModeHintsRevealedPercentage =
+      (stats.games.random.randomModeHintsRevealed /
+        stats.games.random.randomModeHintsRevealedPercentage) *
+      100;
+    stats.games.random.randomModeHintsRevealedPercentage =
+      roundToNthDecimalPlace(randomModeHintsRevealedPercentage);
   }
 }
 

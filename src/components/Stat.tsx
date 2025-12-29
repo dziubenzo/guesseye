@@ -28,7 +28,7 @@ export default function Stat({
       </div>
       {value !== undefined && time !== undefined ? (
         <div className="flex flex-col gap-1">
-          <p className="px-8 py-2 rounded-md bg-primary text-secondary font-medium text-xl sm:text-2xl">
+          <p className="px-8 py-2 rounded-md bg-primary text-secondary font-medium text-xl sm:text-2xl min-w-28">
             {value}
           </p>
           <p className="text-xs">
@@ -38,12 +38,14 @@ export default function Stat({
         </div>
       ) : value !== undefined && time === undefined ? (
         <>
-          <p className="px-8 py-2 rounded-md bg-primary text-secondary font-medium text-xl sm:text-2xl">
+          <p className="px-8 py-2 rounded-md bg-primary text-secondary font-medium text-xl sm:text-2xl min-w-28">
             {value}
           </p>
         </>
       ) : (
-        <p className="px-8 py-2 font-medium text-xl sm:text-2xl">N/A</p>
+        <p className="px-8 py-2 font-medium text-xl sm:text-2xl min-w-28">
+          N/A
+        </p>
       )}
     </div>
   );
