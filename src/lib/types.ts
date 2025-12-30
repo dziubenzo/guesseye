@@ -468,12 +468,10 @@ export type UpdateRankingsType =
 
 export type TourCardHolder = Omit<UpdatedRanking, 'ranking'>;
 
-export type PlayerAdmin = {
-  id: Player['id'];
-  firstName: Player['firstName'];
-  lastName: Player['lastName'];
-  gender: Player['gender'];
-  difficulty: Player['difficulty'];
+export type PlayerAdmin = Pick<
+  Player,
+  'id' | 'firstName' | 'lastName' | 'gender' | 'difficulty'
+> & {
   officialModeCount: number;
   approvedHintsCount: number;
 };
@@ -482,6 +480,11 @@ export type GroupedPlayersAdmin = {
   male: PlayerAdmin[];
   female: PlayerAdmin[];
 };
+
+export type PlayerSuggestHint = Pick<
+  PlayerAdmin,
+  'id' | 'firstName' | 'lastName'
+> & { difficulty: null };
 
 export type BirthdayPlayer = {
   fullName: string;

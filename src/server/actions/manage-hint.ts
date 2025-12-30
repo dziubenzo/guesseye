@@ -43,6 +43,7 @@ export const manageHint = actionClient
 
     revalidatePath('/admin');
     revalidateTag('hintsCounts');
+    revalidateTag('hintCount');
 
     return result;
   });

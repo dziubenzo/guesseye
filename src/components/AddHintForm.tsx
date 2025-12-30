@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import type { Player, PlayerAdmin } from '@/lib/types';
+import type { PlayerAdmin, PlayerSuggestHint } from '@/lib/types';
 import { getFullName } from '@/lib/utils';
 import { addHintSchema, type AddHintSchemaType } from '@/lib/zod/add-hint';
 import { addHint } from '@/server/actions/add-hint';
@@ -24,7 +24,7 @@ import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type AddHintProps =
-  | { players: Player[]; location: 'other' }
+  | { players: PlayerSuggestHint[]; location: 'suggestHintPage' }
   | { players: PlayerAdmin[]; location: 'adminPage' };
 
 export default function AddHintForm({ players, location }: AddHintProps) {
@@ -104,7 +104,7 @@ export default function AddHintForm({ players, location }: AddHintProps) {
                           {(index === 0 ||
                             player.difficulty !== prevDifficulty) && (
                             <SelectLabel className="text-base">
-                              {player.difficulty.toUpperCase()}
+                              {player.difficulty!.toUpperCase()}
                             </SelectLabel>
                           )}
                           <SelectItem

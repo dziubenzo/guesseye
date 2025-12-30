@@ -21,6 +21,7 @@ import type {
   PlayerAdmin,
   PlayerDifficultyField,
   PlayerFullName,
+  PlayerSuggestHint,
   PlayerToFindMatches,
   RangedMatchKeys,
   Schedule,
@@ -2030,7 +2031,7 @@ export function getUpdateMessage(type: UpdateRankingsType) {
 
 export function getFullName(
   submittedPlayerId: number,
-  players: Player[] | PlayerAdmin[]
+  players: PlayerSuggestHint[] | PlayerAdmin[]
 ) {
   const [submittedPlayer] = players.filter(
     (player) => player.id === submittedPlayerId

@@ -5,7 +5,7 @@ import type { UpdateAction } from '@/lib/types';
 import { addHintSchema } from '@/lib/zod/add-hint';
 import { db } from '@/server/db';
 import { hint as hintSchema } from '@/server/db/schema';
-import { checkForAdmin } from '@/server/utils';
+import { getUserOrGuest } from '@/server/utils';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
 export const addHint = actionClient
@@ -13,9 +13,9 @@ export const addHint = actionClient
   .action(async ({ parsedInput: { playerId, hint, isApproved } }) => {
     let result: UpdateAction;
 
-    const isAdmin = await checkForAdmin();
+    const { session } = await getUserOrGuest();
 
-    if (!isAdmin && isApproved) {
+    if (!session || (session.user.role !== 'admin' && isApproved)) {
       result = {
         type: 'error',
         message: 'You are not authorised to perform this operation.',
@@ -26,6 +26,7 @@ export const addHint = actionClient
     await db.insert(hintSchema).values({
       playerId,
       hint,
+      userId: session.user.id,
       isApproved,
     });
 
@@ -36,6 +37,7 @@ export const addHint = actionClient
       };
       revalidatePath('/admin');
       revalidateTag('hintsCounts');
+      revalidateTag('hintCount');
     } else {
       result = {
         type: 'success',

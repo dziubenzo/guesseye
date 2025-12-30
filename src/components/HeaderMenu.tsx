@@ -17,6 +17,7 @@ import {
   ArrowBigUp,
   ChartNoAxesCombined,
   ChartSpline,
+  CirclePlus,
   DatabaseZap,
   Dices,
   GalleryHorizontalEnd,
@@ -226,6 +227,19 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                           <div className="font-medium">Settings</div>
                           <div className="text-muted-foreground">
                             Access various account settings.
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink asChild>
+                    <Link href="/suggest-hint">
+                      <div className="flex gap-4 items-center">
+                        <CirclePlus className="min-w-4 max-w-4" />
+                        <div>
+                          <div className="font-medium">Suggest Hint</div>
+                          <div className="text-muted-foreground">
+                            Suggest a hint for a darts player.
                           </div>
                         </div>
                       </div>
