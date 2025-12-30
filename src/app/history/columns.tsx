@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { OfficialGamesHistory } from '@/lib/types';
-import { formatGameDuration } from '@/lib/utils';
+import { cn, formatGameDuration, getDifficultyColour } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
@@ -61,25 +61,25 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
 
       if (playerDifficulty === 'easy') {
         return (
-          <Badge className="w-[80px] dark:text-black" variant={'default'}>
+          <Badge className={cn('w-[80px]', getDifficultyColour('easy'))}>
             Easy
           </Badge>
         );
       } else if (playerDifficulty === 'medium') {
         return (
-          <Badge className="w-[80px] bg-amber-400 text-secondary-foreground dark:text-secondary">
+          <Badge className={cn('w-[80px]', getDifficultyColour('medium'))}>
             Medium
           </Badge>
         );
       } else if (playerDifficulty === 'hard') {
         return (
-          <Badge className="w-[80px] bg-red-500 text-secondary dark:text-secondary">
+          <Badge className={cn('w-[80px]', getDifficultyColour('hard'))}>
             Hard
           </Badge>
         );
       } else {
         return (
-          <Badge className="w-[80px] bg-gray-800 text-red-500 ">
+          <Badge className={cn('w-[80px]', getDifficultyColour('very hard'))}>
             Very Hard
           </Badge>
         );

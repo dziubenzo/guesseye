@@ -119,8 +119,8 @@ export default function PlayerCard(props: PlayerCardProps) {
             </motion.div>
             <motion.div
               className={cn(
-                getDifficultyColour(playerDifficulty),
-                'sm:ml-auto flex justify-center items-center gap-2 rounded-md bg-secondary-foreground py-1 px-2 dark:text-secondary'
+                'sm:ml-auto flex justify-center items-center gap-2 rounded-md py-1 px-2',
+                getDifficultyColour(playerDifficulty)
               )}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

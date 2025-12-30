@@ -656,13 +656,15 @@ export function evaluateMatches(
 export function getDifficultyColour(difficulty: PlayerDifficultyField) {
   switch (difficulty) {
     case 'easy':
-      return 'text-good-guess';
+      return 'bg-primary text-primary-foreground dark:text-black';
     case 'medium':
-      return 'text-medium-difficulty';
-    case '???':
-      return 'text-secondary';
+      return 'bg-amber-400 text-secondary-foreground dark:text-secondary';
+    case 'hard':
+      return 'bg-red-500 text-secondary dark:text-secondary';
+    case 'very hard':
+      return 'bg-gray-800 text-red-500';
     default:
-      return 'text-wrong-guess';
+      return undefined;
   }
 }
 
