@@ -1,12 +1,7 @@
+import Bold from '@/components/Bold';
 import GlobalStats from '@/components/GlobalStats';
 import UserStats from '@/components/UserStats';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getGlobalStats } from '@/server/db/get-global-stats';
 import { getUserStats } from '@/server/db/get-user-stats';
@@ -27,14 +22,15 @@ export default async function Stats() {
 
   return (
     <div className="flex flex-col grow-1 justify-center">
-      <Card>
+      <Card className="grow-1 gap-0">
         <CardHeader>
           <CardTitle className="text-2xl">Stats</CardTitle>
-          <CardDescription>
-            <p>Here you can find your game stats as well as global stats.</p>
-          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-3 text-sm/6 sm:text-base/6">
+          <p>
+            Here you can find <Bold>your</Bold> game stats as well as{' '}
+            <Bold>global</Bold> stats.
+          </p>
           <Tabs defaultValue="user">
             <TabsList className="bg-transparent w-full md:min-h-14">
               <TabsTrigger

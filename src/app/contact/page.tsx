@@ -8,9 +8,9 @@ export const metadata: Metadata = { title: 'Contact' };
 export default function Contact() {
   return (
     <Card>
-      <CardContent className="flex flex-col gap-4 text-pretty">
+      <CardContent className="flex flex-col gap-4 text-sm/6 sm:text-base/6 text-pretty">
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">Contact</h2>
+          <h2 className="text-2xl font-semibold">Contact</h2>
           <p>
             Feel free to send me an email at{' '}
             <ExternalLink href="mailto:michal@dziubany.dev">
@@ -20,9 +20,8 @@ export default function Contact() {
           </p>
           <ul className="list-disc list-inside">
             <li>
-              you are a darts player featured here and would like to be removed
-              from the database, or would like to provide any missing or
-              up-to-date details about yourself;
+              you are a darts player featured here and would like to provide any
+              missing or up-to-date details about yourself;
             </li>
             <li>
               you would like to provide any missing or up-to-date information
@@ -39,7 +38,7 @@ export default function Contact() {
             </li>
             <li>you simply would like to contact me for other reasons.</li>
           </ul>
-          <p>Any feedback will be appreciated.</p>
+          <p>Any feedback will be greatly appreciated.</p>
           <p>
             Alternatively, you can submit a GitHub issue{' '}
             <ExternalLink href="https://github.com/dziubenzo/guesseye/issues/new">
@@ -49,7 +48,7 @@ export default function Contact() {
           </p>
         </section>
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">Data Sources</h2>
+          <h2 className="text-2xl font-semibold">Data Sources</h2>
           <p>
             I used the following sources of data to collect information about
             darts players:
@@ -125,7 +124,7 @@ export default function Contact() {
           <p>You are encouraged to use them to help you in your guesses!</p>
         </section>
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">Acknowledgements</h2>
+          <h2 className="text-2xl font-semibold">Acknowledgements</h2>
           <p>
             I&apos;d like to thank my friend <Bold>Marcin Grupiński</Bold> (
             <ExternalLink href="https://x.com/marcingrupinski">

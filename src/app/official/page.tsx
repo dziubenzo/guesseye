@@ -1,12 +1,7 @@
 import { columns } from '@/app/official/columns';
 import DataTable from '@/app/official/data-table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import Bold from '@/components/Bold';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getOfficialGames } from '@/server/db/get-official-games';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -22,18 +17,18 @@ export default async function OfficialGames() {
 
   return (
     <div className="flex flex-col grow-1">
-      <Card className="grow-1">
+      <Card className="grow-1 gap-0">
         <CardHeader>
           <CardTitle className="text-2xl">Official Games</CardTitle>
-          <CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 text-sm/6 sm:text-base/6">
+          <div>
             <p>Here you can find all official games.</p>
             <p>
               If you haven&apos;t played or finished some of the games, you can
-              either start playing or resume them.
+              either <Bold>start playing</Bold> or <Bold>resume</Bold> them.
             </p>
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </div>
           <DataTable
             type="officialGames"
             columns={columns}

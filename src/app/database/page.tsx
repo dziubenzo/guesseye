@@ -25,7 +25,7 @@ import {
   STATUS_COLOURS,
 } from '@/components/charts/pie-chart-configs';
 import PlayingSinceChart from '@/components/charts/PlayingSinceChart';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getDatabaseStats } from '@/server/db/get-database-stats';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -63,13 +63,17 @@ export default async function DatabaseStats() {
 
   return (
     <div className="flex flex-col grow-1 justify-center">
-      <Card>
-        <CardContent>
+      <Card className="gap-0">
+        <CardHeader>
+          <CardTitle className="text-2xl">Database Stats</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 grow-1 text-sm/6 sm:text-base/6">
+          <p>
+            Here you can take a look at various database stats as well as find
+            out which darts players celebrate their birthday today.
+          </p>
           <div className="flex flex-col gap-4 sm:gap-8">
             <BirthdayPlayers />
-            <CardTitle className="text-2xl text-center md:text-start -mt-0 md:-mt-4">
-              Database Stats
-            </CardTitle>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-0">
               <div className="flex flex-col justify-center items-center gap-4">
                 <h2 className="font-medium text-center">

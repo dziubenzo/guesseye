@@ -1,4 +1,5 @@
 import Bold from '@/components/Bold';
+import ColouredWord from '@/components/ColouredWord';
 import ExternalLink from '@/components/ExternalLink';
 import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
@@ -17,9 +18,9 @@ export default async function About() {
 
   return (
     <Card>
-      <CardContent className="flex flex-col gap-4 text-pretty">
+      <CardContent className="flex flex-col gap-4 text-sm/6 sm:text-base/6 text-pretty">
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">About</h2>
+          <h2 className="text-2xl font-semibold">About</h2>
           <p>
             <Logo /> was inspired by{' '}
             <ExternalLink href="https://trackmadle.gearfive.org">
@@ -61,7 +62,7 @@ export default async function About() {
           </p>
         </section>
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">Game Mechanics</h2>
+          <h2 className="text-2xl font-semibold">Game Mechanics</h2>
           <p>
             Your goal is extremely simple:{' '}
             <Bold>guess the right darts player in as few tries as you can</Bold>
@@ -69,9 +70,9 @@ export default async function About() {
             be easy, though.
           </p>
           <p>
-            Every darts player is comprised of 22 fields containing information
-            about them. Most of the fields have tooltips explaining what they
-            mean.
+            Every darts player is presented as a card (<Bold>Player Card</Bold>)
+            with 22 information fields. Most of the fields have tooltips
+            explaining what they mean.
           </p>
           <p>
             All darts players are assigned a <Bold>difficulty level</Bold>, so
@@ -83,31 +84,21 @@ export default async function About() {
           </p>
           <ul className="list-disc list-inside">
             <li>
-              stay{' '}
-              <span className="p-1 bg-muted-foreground text-primary-foreground dark:text-black rounded-sm">
-                grey
-              </span>{' '}
-              if the guessed player&apos;s field is not the same as the darts
-              player to find&apos;s field, and <Bold>cannot be compared </Bold>
+              stay <ColouredWord colour="grey">grey</ColouredWord> if the
+              guessed player&apos;s field is not the same as the darts player to
+              find&apos;s field, and <Bold>cannot be compared </Bold>
               (fields such as Country or Status);
             </li>
             <li>
-              turn{' '}
-              <span className="p-1 bg-good-guess text-primary-foreground dark:text-black rounded-sm">
-                green
-              </span>{' '}
-              if the guessed player&apos;s field is the same as the darts player
-              to find&apos;s field;
+              turn <ColouredWord colour="green">green</ColouredWord> if the
+              guessed player&apos;s field is the same as the darts player to
+              find&apos;s field;
             </li>
             <li className="sm:mt-1.5">
-              turn{' '}
-              <span className="p-1 bg-wrong-guess text-primary-foreground dark:text-black rounded-sm">
-                red
-              </span>{' '}
-              if the guessed player&apos;s field is not the same as the darts
-              player to find&apos;s field, but <Bold>can be compared</Bold>{' '}
-              (fields such as Age or Best Result) (yes, Best Result fields are
-              comparable).
+              turn <ColouredWord colour="red">red</ColouredWord> if the guessed
+              player&apos;s field is not the same as the darts player to
+              find&apos;s field, but <Bold>can be compared</Bold> (fields such
+              as Age or Best Result) (yes, Best Result fields are comparable).
             </li>
           </ul>
           <p>
@@ -118,9 +109,7 @@ export default async function About() {
           <p>
             You will notice some <Bold>small arrows</Bold> next to values in
             comparable fields (turning{' '}
-            <span className="p-1 bg-wrong-guess text-primary-foreground dark:text-black rounded-sm">
-              red
-            </span>
+            <ColouredWord colour="red">red</ColouredWord>
             ). They are there to tell you that the value in a field to find
             should be <Bold>higher/lower</Bold> (or <Bold>better/worse</Bold>{' '}
             for Best Result fields) compared to the value in your guess. If you
@@ -129,8 +118,7 @@ export default async function About() {
             to tell you exactly what type of value is expected.
           </p>
           <p>
-            To make the game <Italic>slightly</Italic> easier, comparable fields
-            show the{' '}
+            To make the game a bit easier, comparable fields show the{' '}
             <Bold>closest value based on all of your previous guesses</Bold>.
             Let&apos;s say your darts player to find is 32 years old, and your
             previous guesses were darts players aged 57, 34, and 28. The closest
@@ -138,9 +126,17 @@ export default async function About() {
             your next guess happens to be a 33-year-old darts player, the field
             will be updated to this new closest value.
           </p>
+          <p>
+            The game also features a <Bold>hint system</Bold>. You can reveal
+            hints about darts players to get you on the right track if you are
+            stuck or out of ideas. There are just a handful of hints available
+            at the moment, but my intention is to continue adding them in my
+            spare time.
+            {!session && ' Logged-in users can also suggest new hints.'}
+          </p>
         </section>
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium">Game Modes</h2>
+          <h2 className="text-2xl font-semibold">Game Modes</h2>
           <p>
             <Logo /> features two game modes:
           </p>
@@ -166,7 +162,9 @@ export default async function About() {
                 auto-updates.
               </p>
               <section className="flex flex-col gap-4">
-                <h2 className="text-2xl font-medium">Why Should I Sign Up?</h2>
+                <h2 className="text-2xl font-semibold">
+                  Why Should I Sign Up?
+                </h2>
                 <p>
                   If you find <Logo /> fun, you might consider signing up for
                   extra and completely free features. They include:
@@ -181,12 +179,14 @@ export default async function About() {
                   </li>
                   <li>
                     playing random mode games where you can additionally
-                    encounter darts players of hard difficulty;
+                    encounter darts players of hard difficulty, with the
+                    possibility of enabling darts players of very hard
+                    difficulty for a <Italic>real</Italic> challenge;
                   </li>
                   <li>
                     competing on the <Bold>leaderboard</Bold> where users are
                     ranked based on their official and random mode wins and give
-                    ups;
+                    ups as well as hints revealed;
                   </li>
                   <li>
                     discovering the <Bold>official mode history</Bold>, which
@@ -199,6 +199,9 @@ export default async function About() {
                     showing, for example, most frequent guesses, games by day,
                     or darts players that others found/give up on in the random
                     mode;
+                  </li>
+                  <li>
+                    suggesting <Bold>new hints</Bold> for darts players;
                   </li>
                   <li>
                     access to various charts related to{' '}
