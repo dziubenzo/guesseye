@@ -2,28 +2,23 @@
 
 import type { PlayerFullName } from '@/lib/types';
 import { db } from '@/server/db/index';
+import { player } from '@/server/db/schema';
+import { sql } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 
 export const getPlayerFullNames = unstable_cache(
   async () => {
-    const namesDB = await db.query.player.findMany({
-      columns: {
-        firstName: true,
-        lastName: true,
-      },
-    });
-
-    const names: PlayerFullName[] = [];
-
-    // Aggregation to fullName with sql`` does not work for some reason
-    for (const player of namesDB) {
-      names.push({
-        fullName: player.firstName + ' ' + player.lastName,
-      });
-    }
+    const names: PlayerFullName[] = await db
+      .select({
+        fullName:
+          sql<string>`concat(${player.firstName}, ' ', ${player.lastName})`.as(
+            'full_name'
+          ),
+      })
+      .from(player);
 
     return names;
   },
-  ['names'],
-  { tags: ['names'] }
+  ['fullNames'],
+  { tags: ['fullNames'] }
 );

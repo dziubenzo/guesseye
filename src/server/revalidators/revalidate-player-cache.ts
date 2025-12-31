@@ -10,7 +10,7 @@ export default async function revalidatePlayerCache() {
     'lastDatabaseUpdate',
     'playerCount',
     'databaseStats',
-    'names',
+    'fullNames',
     'suggestedHints',
     'hintsCounts',
     'playersSuggestHint',
