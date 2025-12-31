@@ -3,6 +3,7 @@ import {
   boolean,
   check,
   date,
+  index,
   integer,
   pgEnum,
   pgTable,
@@ -17,61 +18,103 @@ import {
 
 export const roleEnum = pgEnum('role_enum', ['user', 'admin']);
 
-export const user = pgTable('user', {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-  emailVerified: boolean('email_verified').notNull(),
-  image: text('image'),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-  role: roleEnum('role').notNull().default('user'),
-  allowVeryHard: boolean('allow_very_hard').notNull().default(false),
-});
+export const user = pgTable(
+  'user',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    email: text('email').notNull().unique(),
+    emailVerified: boolean('email_verified').default(false).notNull(),
+    image: text('image'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    role: roleEnum('role').default('user').notNull(),
+    allowVeryHard: boolean('allow_very_hard').default(false).notNull(),
+  },
+  ({ name }) => [index('user_name_idx').on(name)]
+);
+
+export const session = pgTable(
+  'session',
+  {
+    id: text('id').primaryKey(),
+    expiresAt: timestamp('expires_at').notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+  },
+  (table) => [index('session_user_id_idx').on(table.userId)]
+);
+
+export const account = pgTable(
+  'account',
+  {
+    id: text('id').primaryKey(),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index('account_user_id_idx').on(table.userId)]
+);
+
+export const verification = pgTable(
+  'verification',
+  {
+    id: text('id').primaryKey(),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index('verification_identifier_idx').on(table.identifier)]
+);
 
 export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+  accounts: many(account),
   games: many(game),
 }));
 
-export const session = pgTable('session', {
-  id: text('id').primaryKey(),
-  expiresAt: timestamp('expires_at').notNull(),
-  token: text('token').notNull().unique(),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-  ipAddress: text('ip_address'),
-  userAgent: text('user_agent'),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-});
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}));
 
-export const account = pgTable('account', {
-  id: text('id').primaryKey(),
-  accountId: text('account_id').notNull(),
-  providerId: text('provider_id').notNull(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  accessToken: text('access_token'),
-  refreshToken: text('refresh_token'),
-  idToken: text('id_token'),
-  accessTokenExpiresAt: timestamp('access_token_expires_at'),
-  refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
-  scope: text('scope'),
-  password: text('password'),
-  createdAt: timestamp('created_at').notNull(),
-  updatedAt: timestamp('updated_at').notNull(),
-});
-
-export const verification = pgTable('verification', {
-  id: text('id').primaryKey(),
-  identifier: text('identifier').notNull(),
-  value: text('value').notNull(),
-  expiresAt: timestamp('expires_at').notNull(),
-  createdAt: timestamp('created_at'),
-  updatedAt: timestamp('updated_at'),
-});
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
+  }),
+}));
 
 // Darts players
 
@@ -317,6 +360,8 @@ export const player = pgTable(
     rankingWDF,
     firstName,
     lastName,
+    difficulty,
+    gender,
   }) => [
     check(
       'is_year_playing_since',
@@ -348,6 +393,9 @@ export const player = pgTable(
       sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`
     ),
     unique('no_duplicate_players').on(firstName, lastName),
+    index('player_first_name_idx').on(firstName),
+    index('player_difficulty_idx').on(difficulty),
+    index('player_gender_idx').on(gender),
   ]
 );
 
@@ -355,25 +403,33 @@ export const playerRelations = relations(player, ({ many }) => ({
   hints: many(hint),
 }));
 
-export const schedule = pgTable('schedule', {
-  id: serial('id').primaryKey(),
-  playerToFindId: integer('player_to_find_id')
-    .notNull()
-    .references(() => player.id, { onDelete: 'restrict' }),
-  startDate: timestamp('start_date', {
-    precision: 0,
-  })
-    .notNull()
-    .unique(),
-  endDate: timestamp('end_date', {
-    precision: 0,
-  })
-    .notNull()
-    .unique()
-    .generatedAlwaysAs(
-      (): SQL => sql`${schedule.startDate} + interval '1' day`
-    ),
-});
+export const schedule = pgTable(
+  'schedule',
+  {
+    id: serial('id').primaryKey(),
+    playerToFindId: integer('player_to_find_id')
+      .notNull()
+      .references(() => player.id, { onDelete: 'restrict' }),
+    startDate: timestamp('start_date', {
+      precision: 0,
+    })
+      .notNull()
+      .unique(),
+    endDate: timestamp('end_date', {
+      precision: 0,
+    })
+      .notNull()
+      .unique()
+      .generatedAlwaysAs(
+        (): SQL => sql`${schedule.startDate} + interval '1' day`
+      ),
+  },
+  ({ playerToFindId, startDate, endDate }) => [
+    index('schedule_player_id_idx').on(playerToFindId),
+    index('schedule_start_date_idx').on(startDate),
+    index('schedule_end_date_idx').on(endDate),
+  ]
+);
 
 export const scheduleRelations = relations(schedule, ({ one, many }) => ({
   playerToFind: one(player, {
@@ -417,7 +473,16 @@ export const game = pgTable(
     status: gameStatusEnum('status').notNull().default('inProgress'),
     hintsRevealed: integer('hints_revealed').notNull().default(0),
   },
-  ({ userId, guestIp, scheduledPlayerId, randomPlayerId, hintsRevealed }) => [
+  ({
+    userId,
+    guestIp,
+    scheduledPlayerId,
+    randomPlayerId,
+    hintsRevealed,
+    mode,
+    status,
+    startDate,
+  }) => [
     check(
       'is_either_guest_or_user',
       sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`
@@ -427,6 +492,12 @@ export const game = pgTable(
       sql`(${scheduledPlayerId} IS NULL) <> (${randomPlayerId} IS NULL)`
     ),
     check('is_non_negative_hints_revealed', sql`${hintsRevealed} >= 0`),
+    index('game_user_id_idx').on(userId),
+    index('game_schedule_id_idx').on(scheduledPlayerId),
+    index('game_player_id_idx').on(randomPlayerId),
+    index('game_mode_idx').on(mode),
+    index('game_status_idx').on(status),
+    index('game_start_date_idx').on(startDate),
   ]
 );
 
@@ -449,16 +520,24 @@ export const gameRelations = relations(game, ({ one, many }) => ({
   guesses: many(guess),
 }));
 
-export const guess = pgTable('guess', {
-  id: serial('id').primaryKey(),
-  gameId: integer('game_id')
-    .notNull()
-    .references(() => game.id, { onDelete: 'cascade' }),
-  playerId: integer('player_id')
-    .notNull()
-    .references(() => player.id, { onDelete: 'restrict' }),
-  time: timestamp('time', { mode: 'date' }).notNull().defaultNow(),
-});
+export const guess = pgTable(
+  'guess',
+  {
+    id: serial('id').primaryKey(),
+    gameId: integer('game_id')
+      .notNull()
+      .references(() => game.id, { onDelete: 'cascade' }),
+    playerId: integer('player_id')
+      .notNull()
+      .references(() => player.id, { onDelete: 'restrict' }),
+    time: timestamp('time', { mode: 'date' }).notNull().defaultNow(),
+  },
+  ({ gameId, playerId, time }) => [
+    index('guess_game_id_idx').on(gameId),
+    index('guess_player_id_idx').on(playerId),
+    index('guess_time_idx').on(time),
+  ]
+);
 
 export const guessRelations = relations(guess, ({ one }) => ({
   game: one(game, {
@@ -473,20 +552,29 @@ export const guessRelations = relations(guess, ({ one }) => ({
   }),
 }));
 
-export const hint = pgTable('hint', {
-  id: serial('id').primaryKey(),
-  createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-  playerId: integer('player_id')
-    .notNull()
-    .references(() => player.id, { onDelete: 'restrict' }),
-  hint: text('hint').notNull(),
-  userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
-  isApproved: boolean('is_approved').default(false).notNull(),
-});
+export const hint = pgTable(
+  'hint',
+  {
+    id: serial('id').primaryKey(),
+    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+    playerId: integer('player_id')
+      .notNull()
+      .references(() => player.id, { onDelete: 'restrict' }),
+    hint: text('hint').notNull(),
+    userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+    isApproved: boolean('is_approved').default(false).notNull(),
+  },
+  ({ playerId, userId, isApproved, createdAt }) => [
+    index('hint_player_id_idx').on(playerId),
+    index('hint_user_id_idx').on(userId),
+    index('hint_is_approved_idx').on(isApproved),
+    index('hint_created_at_idx').on(createdAt),
+  ]
+);
 
 export const hintRelations = relations(hint, ({ one }) => ({
   player: one(player, {

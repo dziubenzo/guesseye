@@ -65,6 +65,9 @@ export const auth = betterAuth({
     window: 10,
     max: 25,
   },
+  experimental: {
+    joins: true,
+  },
   trustedOrigins: [
     'http://localhost:3000',
     'http://192.168.0.16:3000',
