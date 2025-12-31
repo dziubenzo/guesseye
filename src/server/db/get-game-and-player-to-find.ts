@@ -10,9 +10,8 @@ import type {
 } from '@/lib/types';
 import { createOfficialGame } from '@/server/db/create-official-game';
 import { createRandomGame } from '@/server/db/create-random-game';
-import { findOfficialGame } from '@/server/db/find-official-game';
 import { findRandomGame } from '@/server/db/find-random-game';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
+import { getScheduleData } from '@/server/db/get-schedule-data';
 
 export const getGameAndPlayerToFind = async (
   mode: GameMode,
@@ -22,27 +21,19 @@ export const getGameAndPlayerToFind = async (
   let playerToFind: PlayerWithHints;
 
   if (mode === 'official') {
-    const scheduledPlayer = await getScheduledPlayer(
-      scheduleId ? scheduleId : undefined
-    );
+    const scheduleData = await getScheduleData(scheduleId);
 
-    if ('error' in scheduledPlayer) {
-      const error: ErrorObject = { error: scheduledPlayer.error };
+    if ('error' in scheduleData) {
+      const error: ErrorObject = { error: scheduleData.error };
       return error;
     }
 
-    const existingGame = await findOfficialGame(scheduledPlayer);
+    const existingGame =
+      scheduleData.games.length === 1 ? scheduleData.games[0] : undefined;
 
-    if (existingGame && 'error' in existingGame) {
-      const error: ErrorObject = { error: existingGame.error };
-      return error;
-    }
+    game = existingGame ? existingGame : await createOfficialGame(scheduleData);
 
-    game = existingGame
-      ? existingGame
-      : await createOfficialGame(scheduledPlayer);
-
-    playerToFind = scheduledPlayer.playerToFind;
+    playerToFind = scheduleData.playerToFind;
   } else {
     const existingGame = await findRandomGame();
 

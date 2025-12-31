@@ -6,12 +6,11 @@ import type {
   GuessWithPlayer,
 } from '@/lib/types';
 import { comparePlayers, obfuscate, validateScheduleId } from '@/lib/utils';
-import { findOfficialGame } from '@/server/db/find-official-game';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
-import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
 import { getWinnersCount } from '@/server/db/get-winners-count';
 import { handleGameGivenUp } from '@/server/db/handle-game-given-up';
 import { handleGameWon } from '@/server/db/handle-game-won';
+import { getScheduleData } from './get-schedule-data';
 
 export const getOfficialGame = async (scheduleId?: string) => {
   const validationResult = validateScheduleId(scheduleId);
@@ -23,28 +22,23 @@ export const getOfficialGame = async (scheduleId?: string) => {
 
   const validScheduleId = validationResult.validScheduleId;
 
-  // Get scheduled player
-  const scheduledPlayer = await getScheduledPlayer(
-    validScheduleId ? validScheduleId : undefined
-  );
+  // Get schedule data together with the player to find
+  // Get the existing game if it exists
+  const scheduleData = await getScheduleData(validScheduleId);
 
-  if ('error' in scheduledPlayer) {
-    const error: ErrorObject = { error: scheduledPlayer.error };
+  if ('error' in scheduleData) {
+    const error: ErrorObject = { error: scheduleData.error };
     return error;
   }
 
-  // Get game if it exists
-  const existingGame = await findOfficialGame(scheduledPlayer);
-
-  if (existingGame && 'error' in existingGame) {
-    const error: ErrorObject = { error: existingGame.error };
-    return error;
-  }
+  const existingGame =
+    scheduleData.games.length === 1 ? scheduleData.games[0] : undefined;
+  const playerToFind = scheduleData.playerToFind;
 
   // Get number of users who have found the scheduled player and the next scheduled player
   const [winnersCount, nextScheduledPlayer] = await Promise.all([
-    getWinnersCount(scheduledPlayer),
-    getNextScheduledPlayer(scheduledPlayer.endDate),
+    getWinnersCount(scheduleData),
+    getNextScheduledPlayer(scheduleData.endDate),
   ]);
 
   if ('error' in nextScheduledPlayer) {
@@ -58,18 +52,15 @@ export const getOfficialGame = async (scheduleId?: string) => {
     mode: 'official',
     guesses: [],
     playerToFindMatches: {
-      firstName: obfuscate('name', scheduledPlayer.playerToFind.firstName),
-      lastName: obfuscate('name', scheduledPlayer.playerToFind.lastName),
+      firstName: obfuscate('name', playerToFind.firstName),
+      lastName: obfuscate('name', playerToFind.lastName),
     },
-    hints: scheduledPlayer.playerToFind.hints.slice(
-      0,
-      existingGame?.hintsRevealed || 0
-    ),
-    obfuscatedHints: scheduledPlayer.playerToFind.hints
+    hints: playerToFind.hints.slice(0, existingGame?.hintsRevealed || 0),
+    obfuscatedHints: playerToFind.hints
       .slice(existingGame?.hintsRevealed || 0)
       .map((hint) => obfuscate('hint', hint.hint)),
-    availableHints: scheduledPlayer.playerToFind.hints.length,
-    playerDifficulty: scheduledPlayer.playerToFind.difficulty,
+    availableHints: playerToFind.hints.length,
+    playerDifficulty: playerToFind.difficulty,
     winnersCount,
     nextPlayerStartDate: nextScheduledPlayer.startDate,
   };
@@ -79,19 +70,19 @@ export const getOfficialGame = async (scheduleId?: string) => {
   }
 
   if (existingGame.status === 'won') {
-    const data = await handleGameWon(scheduledPlayer, existingGame);
+    const data = await handleGameWon(scheduleData, existingGame);
     return data;
   }
 
   if (existingGame.status === 'givenUp') {
-    const data = await handleGameGivenUp(scheduledPlayer, existingGame);
+    const data = await handleGameGivenUp(scheduleData, existingGame);
     return data;
   }
 
   existingGame.guesses.forEach((guess: GuessWithPlayer) => {
     const { comparisonResults } = comparePlayers(
       guess.player,
-      scheduledPlayer.playerToFind,
+      playerToFind,
       gameDetails.playerToFindMatches
     );
     gameDetails.guesses.push({

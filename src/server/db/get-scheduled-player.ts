@@ -1,6 +1,10 @@
 'use server';
 
-import type { ErrorObject, Schedule, ScheduleWithPlayer } from '@/lib/types';
+import type {
+  ErrorObject,
+  Schedule,
+  ScheduleWithPlayerAndGame,
+} from '@/lib/types';
 import { db } from '@/server/db/index';
 import { hint, schedule } from '@/server/db/schema';
 import { and, asc, eq, gte, lt } from 'drizzle-orm';
@@ -47,5 +51,5 @@ export const getScheduledPlayer = async (scheduleId?: Schedule['id']) => {
     return error;
   }
 
-  return scheduledPlayer as ScheduleWithPlayer;
+  return scheduledPlayer as ScheduleWithPlayerAndGame;
 };

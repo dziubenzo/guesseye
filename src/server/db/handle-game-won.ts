@@ -2,18 +2,18 @@
 
 import type {
   ErrorObject,
-  OfficialGame,
   GameWon,
-  ScheduleWithPlayer,
+  OfficialGame,
+  ScheduleWithPlayerAndGame,
 } from '@/lib/types';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 
 export const handleGameWon = async (
-  scheduledPlayer: ScheduleWithPlayer,
+  scheduleData: ScheduleWithPlayerAndGame,
   previousGame: OfficialGame
 ) => {
   const nextScheduledPlayer = await getNextScheduledPlayer(
-    scheduledPlayer.endDate
+    scheduleData.endDate
   );
 
   if ('error' in nextScheduledPlayer) {
@@ -23,8 +23,8 @@ export const handleGameWon = async (
 
   const { guesses } = previousGame;
   const attempts = guesses.length;
-  const firstName = scheduledPlayer.playerToFind.firstName;
-  const lastName = scheduledPlayer.playerToFind.lastName;
+  const firstName = scheduleData.playerToFind.firstName;
+  const lastName = scheduleData.playerToFind.lastName;
   const fullName = firstName + ' ' + lastName;
 
   const gameWon: GameWon = {

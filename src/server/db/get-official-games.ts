@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth';
 import type { ErrorObject, OfficialGames } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, schedule } from '@/server/db/schema';
-import { and, desc, eq, lt } from 'drizzle-orm';
+import { desc, eq, lt } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
 export const getOfficialGames = async () => {
@@ -23,7 +23,7 @@ export const getOfficialGames = async () => {
     with: {
       playerToFind: true,
       games: {
-        where: and(eq(game.userId, session.user.id), eq(game.mode, 'official')),
+        where: eq(game.userId, session.user.id),
       },
     },
     orderBy: desc(schedule.startDate),

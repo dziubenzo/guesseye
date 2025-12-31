@@ -10,8 +10,9 @@ export type PlayerWithHints = Player & { hints: GameHint[] };
 
 export type Schedule = InferSelectModel<typeof schedule>;
 
-export type ScheduleWithPlayer = Schedule & {
+export type ScheduleWithPlayerAndGame = Schedule & {
   playerToFind: PlayerWithHints;
+  games: OfficialGame[];
 };
 
 export type Game = InferSelectModel<typeof game>;

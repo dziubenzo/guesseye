@@ -8,8 +8,8 @@ import {
   findWinnerWithFewestGuesses,
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
-import { game, schedule } from '@/server/db/schema';
-import { desc, eq, lt } from 'drizzle-orm';
+import { schedule } from '@/server/db/schema';
+import { desc, lt } from 'drizzle-orm';
 import { headers } from 'next/headers';
 
 export const getOfficialGamesHistory = async () => {
@@ -22,13 +22,12 @@ export const getOfficialGamesHistory = async () => {
     return error;
   }
 
-  // Get all previous scheduled players up to the current one along with games with guesses and user if it exists
+  // Get all previous scheduled players up to the current one along with games with guesses and user
   const scheduleRows = await db.query.schedule.findMany({
     where: lt(schedule.startDate, new Date()),
     with: {
       playerToFind: true,
       games: {
-        where: eq(game.mode, 'official'),
         with: { guesses: true, user: true },
       },
     },
