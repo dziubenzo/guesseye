@@ -37,7 +37,7 @@ export function FieldName({ children, className }: FieldNameProps) {
   return (
     <p
       className={cn(
-        'flex gap-2 lg:gap-1 items-center text-sm min-h-[20px]',
+        'flex gap-2 items-center text-sm min-h-[20px]',
         className
       )}
     >

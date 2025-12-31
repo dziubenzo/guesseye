@@ -17,8 +17,16 @@ export default function GuessIndicator({
   const [match, setMatch] = useState<'good' | 'wrong' | null>(null);
 
   useEffect(() => {
-    // Non-comparable values, good guess
+    // First and last name, good guess
     if (
+      typeof previousMatch === 'string' &&
+      previousMatch[0] === '?' &&
+      typeof currentMatch === 'string' &&
+      currentMatch[0] !== '?'
+    ) {
+      setMatch('good');
+      // Non-comparable values, good guess
+    } else if (
       previousMatch === undefined &&
       currentMatch !== undefined &&
       typeof currentMatch !== 'object'

@@ -1,3 +1,4 @@
+import Bold from '@/components/Bold';
 import ExternalLink from '@/components/ExternalLink';
 import GuessIndicator from '@/components/GuessIndicator';
 import {
@@ -16,6 +17,7 @@ import { cardTopDuration, fieldsContainerVariant } from '@/lib/motion-variants';
 import type {
   ComparisonResults,
   Player,
+  PlayerDifficultyField,
   PlayerToFindMatches,
   PlayerToFindRangedMatch,
 } from '@/lib/types';
@@ -80,61 +82,15 @@ export default function PlayerCard(props: PlayerCardProps) {
 
     return (
       <Card className="bg-secondary w-full">
-        <CardHeader>
-          <CardTitle className="flex flex-col justify-center sm:justify-start items-center gap-4 sm:flex-row">
-            <motion.div
-              className="flex items-center gap-3 w-[250px] sm:w-[300px]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: cardTopDuration }}
-            >
-              <p
-                className={cn(
-                  currentMatches.firstName
-                    ? 'bg-good-guess text-good-guess-foreground'
-                    : 'bg-muted-foreground text-muted',
-                  'p-2 rounded-md text-center min-h-[32px] w-full relative'
-                )}
-              >
-                {currentMatches.firstName ? currentMatches.firstName : ''}
-                <GuessIndicator
-                  previousMatch={previousMatches.firstName}
-                  currentMatch={currentMatches.firstName}
-                />
-              </p>
-              <p
-                className={cn(
-                  currentMatches.lastName
-                    ? 'bg-good-guess text-good-guess-foreground'
-                    : 'bg-muted-foreground text-muted',
-                  'p-2 rounded-md text-center min-h-[32px] w-full relative'
-                )}
-              >
-                {currentMatches.lastName ? currentMatches.lastName : ''}
-                <GuessIndicator
-                  previousMatch={previousMatches.lastName}
-                  currentMatch={currentMatches.lastName}
-                />
-              </p>
-            </motion.div>
-            <motion.div
-              className={cn(
-                'sm:ml-auto flex justify-center items-center gap-2 rounded-md py-1 px-2',
-                getDifficultyColour(playerDifficulty)
-              )}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: cardTopDuration }}
-            >
-              <Gauge size={24} />
-              <span>{playerDifficulty.toUpperCase()}</span>
-              {playerDifficulty !== '???' && (
-                <Tooltip>
-                  How difficult the darts player is to find in the
-                  developer&apos;s opinion.
-                </Tooltip>
-              )}
-            </motion.div>
+        <CardHeader className="gap-0">
+          <CardTitle className="flex flex-col justify-center sm:justify-between items-center gap-3 sm:flex-row">
+            <PlayerToFindName
+              prevFirstName={previousMatches.firstName}
+              curFirstName={currentMatches.firstName}
+              prevLastName={previousMatches.lastName}
+              curLastName={currentMatches.lastName}
+            />
+            <PlayerToFindDifficulty playerDifficulty={playerDifficulty} />
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -676,10 +632,12 @@ export default function PlayerCard(props: PlayerCardProps) {
 
     return (
       <Card className="bg-secondary w-full">
-        <CardHeader>
-          <CardTitle className="text-xl flex">
-            <span>{player.firstName + ' ' + player.lastName}</span>
-            <span className="ml-auto bg-secondary-foreground text-secondary px-3 rounded-md">
+        <CardHeader className="gap-0">
+          <CardTitle className="flex justify-between items-center gap-2 truncate text-lg">
+            <span className="font-mono truncate">
+              {player.firstName + ' ' + player.lastName}
+            </span>
+            <span className="bg-secondary-foreground text-secondary px-3 rounded-md self-center">
               #{guessNumber}
             </span>
           </CardTitle>
@@ -991,4 +949,101 @@ export default function PlayerCard(props: PlayerCardProps) {
       </Card>
     );
   }
+}
+
+type PlayerToFindNameProps = {
+  prevFirstName?: string;
+  curFirstName?: string;
+  prevLastName?: string;
+  curLastName?: string;
+};
+
+function PlayerToFindName({
+  prevFirstName,
+  curFirstName,
+  prevLastName,
+  curLastName,
+}: PlayerToFindNameProps) {
+  return (
+    <motion.div
+      className="flex items-center gap-3 font-mono font-medium"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: cardTopDuration }}
+    >
+      <p
+        className={cn(
+          'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center',
+          curFirstName && curFirstName[0] !== '?'
+            ? 'bg-good-guess text-good-guess-foreground'
+            : 'bg-muted-foreground text-muted',
+          !curFirstName && 'min-w-16'
+        )}
+      >
+        {curFirstName ? curFirstName : ''}
+        <GuessIndicator
+          previousMatch={prevFirstName}
+          currentMatch={curFirstName}
+        />
+        {curFirstName && curFirstName[0] === '?' && (
+          <Tooltip>
+            The number of question marks corresponds to the number of characters
+            in the darts player to find&apos;s <Bold>first name</Bold>{' '}
+            (including hyphens).
+          </Tooltip>
+        )}
+      </p>
+      <p
+        className={cn(
+          'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center',
+          curLastName && curLastName[0] !== '?'
+            ? 'bg-good-guess text-good-guess-foreground'
+            : 'bg-muted-foreground text-muted',
+          !curLastName && 'min-w-32'
+        )}
+      >
+        {curLastName ? curLastName : ''}
+        <GuessIndicator
+          previousMatch={prevLastName}
+          currentMatch={curLastName}
+        />
+        {curLastName && curLastName[0] === '?' && (
+          <Tooltip>
+            The number of question marks corresponds to the number of characters
+            in the darts player to find&apos;s <Bold>last name</Bold> (including
+            spaces and hyphens).
+          </Tooltip>
+        )}
+      </p>
+    </motion.div>
+  );
+}
+
+type PlayerToFindDifficultyProps = {
+  playerDifficulty: PlayerDifficultyField;
+};
+
+function PlayerToFindDifficulty({
+  playerDifficulty,
+}: PlayerToFindDifficultyProps) {
+  return (
+    <motion.div
+      className={cn(
+        'flex justify-center items-center gap-2 rounded-md py-1 px-2',
+        getDifficultyColour(playerDifficulty)
+      )}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: cardTopDuration }}
+    >
+      <Gauge size={24} />
+      <span>{playerDifficulty.toUpperCase()}</span>
+      {playerDifficulty !== '???' && (
+        <Tooltip>
+          How difficult the darts player is to find in the developer&apos;s
+          opinion.
+        </Tooltip>
+      )}
+    </motion.div>
+  );
 }

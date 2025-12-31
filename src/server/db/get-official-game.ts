@@ -5,7 +5,7 @@ import type {
   ErrorObject,
   GuessWithPlayer,
 } from '@/lib/types';
-import { comparePlayers, obfuscateHint, validateScheduleId } from '@/lib/utils';
+import { comparePlayers, obfuscate, validateScheduleId } from '@/lib/utils';
 import { findOfficialGame } from '@/server/db/find-official-game';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 import { getScheduledPlayer } from '@/server/db/get-scheduled-player';
@@ -57,14 +57,17 @@ export const getOfficialGame = async (scheduleId?: string) => {
     gameId: existingGame?.id,
     mode: 'official',
     guesses: [],
-    playerToFindMatches: {},
+    playerToFindMatches: {
+      firstName: obfuscate('name', scheduledPlayer.playerToFind.firstName),
+      lastName: obfuscate('name', scheduledPlayer.playerToFind.lastName),
+    },
     hints: scheduledPlayer.playerToFind.hints.slice(
       0,
       existingGame?.hintsRevealed || 0
     ),
     obfuscatedHints: scheduledPlayer.playerToFind.hints
       .slice(existingGame?.hintsRevealed || 0)
-      .map((hint) => obfuscateHint(hint.hint)),
+      .map((hint) => obfuscate('hint', hint.hint)),
     availableHints: scheduledPlayer.playerToFind.hints.length,
     playerDifficulty: scheduledPlayer.playerToFind.difficulty,
     winnersCount,

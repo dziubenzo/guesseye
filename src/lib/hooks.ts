@@ -18,6 +18,11 @@ export const useUpdateProgressBar = () => {
       for (const pair of array) {
         const value = pair[1];
 
+        // Do not count obfuscated firstName and lastName fields
+        if (typeof value === 'string' && value[0] === '?') {
+          continue;
+        }
+        
         if (
           (typeof value !== 'object' && value !== undefined) ||
           (typeof value === 'object' && value?.type === 'match')
