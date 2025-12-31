@@ -127,11 +127,19 @@ export default async function About() {
             will be updated to this new closest value.
           </p>
           <p>
-            The game also features a <Bold>hint system</Bold>. You can reveal
-            hints about darts players to get you on the right track if you are
-            stuck or out of ideas. There are just a handful of hints available
-            at the moment, but my intention is to continue adding them in my
-            spare time.
+            You might also find <Bold>first and last name fields</Bold> helpful.
+            Question marks are not just a placeholder. Their number is the same
+            as the number of characters in the darts player to find&apos;s
+            first/last name, meaning that the first name of Gary is represented
+            with <Bold>four questions marks</Bold>, while the last name of
+            Anderson with <Bold>eight question marks</Bold>.
+          </p>
+          <p>
+            Last but not least, the game features a <Bold>hint system</Bold>.
+            You can reveal hints about darts players to get you on the right
+            track if you are stuck or out of ideas. There are just a handful of
+            hints available at the moment, but my intention is to continue
+            adding them in my spare time.
             {!session && ' Logged-in users can also suggest new hints.'}
           </p>
         </section>
