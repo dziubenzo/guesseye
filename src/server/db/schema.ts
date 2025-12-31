@@ -454,10 +454,9 @@ export const game = pgTable(
     userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
     guestIp: text('guest_ip'),
     guestUserAgent: text('guest_user_agent'),
-    scheduledPlayerId: integer('scheduled_player_id').references(
-      () => schedule.id,
-      { onDelete: 'restrict' }
-    ),
+    scheduleId: integer('schedule_id').references(() => schedule.id, {
+      onDelete: 'restrict',
+    }),
     randomPlayerId: integer('random_player_id').references(() => player.id, {
       onDelete: 'restrict',
     }),
@@ -476,7 +475,7 @@ export const game = pgTable(
   ({
     userId,
     guestIp,
-    scheduledPlayerId,
+    scheduleId,
     randomPlayerId,
     hintsRevealed,
     mode,
@@ -489,11 +488,11 @@ export const game = pgTable(
     ),
     check(
       'is_either_scheduled_or_random_player',
-      sql`(${scheduledPlayerId} IS NULL) <> (${randomPlayerId} IS NULL)`
+      sql`(${scheduleId} IS NULL) <> (${randomPlayerId} IS NULL)`
     ),
     check('is_non_negative_hints_revealed', sql`${hintsRevealed} >= 0`),
     index('game_user_id_idx').on(userId),
-    index('game_schedule_id_idx').on(scheduledPlayerId),
+    index('game_schedule_id_idx').on(scheduleId),
     index('game_player_id_idx').on(randomPlayerId),
     index('game_mode_idx').on(mode),
     index('game_status_idx').on(status),
@@ -509,7 +508,7 @@ export const gameRelations = relations(game, ({ one, many }) => ({
   }),
   scheduledPlayer: one(schedule, {
     relationName: 'scheduled_player',
-    fields: [game.scheduledPlayerId],
+    fields: [game.scheduleId],
     references: [schedule.id],
   }),
   randomPlayer: one(player, {
@@ -530,12 +529,12 @@ export const guess = pgTable(
     playerId: integer('player_id')
       .notNull()
       .references(() => player.id, { onDelete: 'restrict' }),
-    time: timestamp('time', { mode: 'date' }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
   },
-  ({ gameId, playerId, time }) => [
+  ({ gameId, playerId, createdAt }) => [
     index('guess_game_id_idx').on(gameId),
     index('guess_player_id_idx').on(playerId),
-    index('guess_time_idx').on(time),
+    index('guess_created_at_idx').on(createdAt),
   ]
 );
 

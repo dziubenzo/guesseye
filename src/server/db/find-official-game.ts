@@ -21,13 +21,13 @@ export const findOfficialGame = async (scheduledPlayer: ScheduleWithPlayer) => {
   const existingGame: OfficialGame | undefined = await db.query.game.findFirst({
     where: and(
       eq(game.userId, session.user.id),
-      eq(game.scheduledPlayerId, scheduledPlayer.id),
+      eq(game.scheduleId, scheduledPlayer.id),
       eq(game.mode, 'official')
     ),
     with: {
       guesses: {
         with: { player: true },
-        orderBy: desc(guess.time),
+        orderBy: desc(guess.createdAt),
       },
     },
   });

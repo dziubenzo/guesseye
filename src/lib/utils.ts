@@ -923,7 +923,7 @@ export function findFirstAndLatestOfficialWin(
 ) {
   if (game.mode === 'official' && game.status === 'won') {
     const winningGuess = game.guesses[game.guesses.length - 1].player;
-    const winningTime = game.guesses[game.guesses.length - 1].time;
+    const winningTime = game.guesses[game.guesses.length - 1].createdAt;
     const firstName = winningGuess.firstName;
     const lastName = winningGuess.lastName;
 
@@ -1006,37 +1006,41 @@ export function findFirstAndLatestOfficialGuess(
     if (
       stats.players.firstOfficialGuess === undefined ||
       (stats.players.firstOfficialGuessTime &&
-        guess.time.getTime() < stats.players.firstOfficialGuessTime.getTime())
+        guess.createdAt.getTime() <
+          stats.players.firstOfficialGuessTime.getTime())
     ) {
       stats.players.firstOfficialGuess = firstName + ' ' + lastName;
-      stats.players.firstOfficialGuessTime = guess.time;
+      stats.players.firstOfficialGuessTime = guess.createdAt;
     }
 
     if (
       stats.players.latestOfficialGuess === undefined ||
       (stats.players.latestOfficialGuessTime &&
-        guess.time.getTime() > stats.players.latestOfficialGuessTime.getTime())
+        guess.createdAt.getTime() >
+          stats.players.latestOfficialGuessTime.getTime())
     ) {
       stats.players.latestOfficialGuess = firstName + ' ' + lastName;
-      stats.players.latestOfficialGuessTime = guess.time;
+      stats.players.latestOfficialGuessTime = guess.createdAt;
     }
   } else if (game.mode === 'random') {
     if (
       stats.players.firstRandomGuess === undefined ||
       (stats.players.firstRandomGuessTime &&
-        guess.time.getTime() < stats.players.firstRandomGuessTime.getTime())
+        guess.createdAt.getTime() <
+          stats.players.firstRandomGuessTime.getTime())
     ) {
       stats.players.firstRandomGuess = firstName + ' ' + lastName;
-      stats.players.firstRandomGuessTime = guess.time;
+      stats.players.firstRandomGuessTime = guess.createdAt;
     }
 
     if (
       stats.players.latestRandomGuess === undefined ||
       (stats.players.latestRandomGuessTime &&
-        guess.time.getTime() > stats.players.latestRandomGuessTime.getTime())
+        guess.createdAt.getTime() >
+          stats.players.latestRandomGuessTime.getTime())
     ) {
       stats.players.latestRandomGuess = firstName + ' ' + lastName;
-      stats.players.latestRandomGuessTime = guess.time;
+      stats.players.latestRandomGuessTime = guess.createdAt;
     }
   }
 
@@ -1068,7 +1072,7 @@ export function countGuessesByDay(
 ) {
   if (!guessesByDay) return;
 
-  const day = guess.time.toISOString().split('T')[0];
+  const day = guess.createdAt.toISOString().split('T')[0];
 
   if (guessesByDay[day] === undefined) {
     guessesByDay[day] = 1;
@@ -1313,19 +1317,19 @@ export function findLatestGuesses(
     if (
       stats.players.latestOfficialGuess === undefined ||
       (stats.players.latestOfficialGuessTime &&
-        guess.time.getTime() > stats.players.latestOfficialGuessTime.getTime())
+        guess.createdAt.getTime() > stats.players.latestOfficialGuessTime.getTime())
     ) {
       stats.players.latestOfficialGuess = firstName + ' ' + lastName;
       stats.players.latestOfficialGuessName = game.user
         ? game.user.name
         : 'User';
-      stats.players.latestOfficialGuessTime = guess.time;
+      stats.players.latestOfficialGuessTime = guess.createdAt;
     }
   } else if (game.mode === 'random') {
     if (
       stats.players.latestRandomGuess === undefined ||
       (stats.players.latestRandomGuessTime &&
-        guess.time.getTime() > stats.players.latestRandomGuessTime.getTime())
+        guess.createdAt.getTime() > stats.players.latestRandomGuessTime.getTime())
     ) {
       stats.players.latestRandomGuess = firstName + ' ' + lastName;
       if (game.userId) {
@@ -1335,7 +1339,7 @@ export function findLatestGuesses(
       } else {
         stats.players.latestRandomGuessName = 'Guest';
       }
-      stats.players.latestRandomGuessTime = guess.time;
+      stats.players.latestRandomGuessTime = guess.createdAt;
     }
   }
 

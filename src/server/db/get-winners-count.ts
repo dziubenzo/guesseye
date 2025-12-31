@@ -8,7 +8,7 @@ import { and, eq } from 'drizzle-orm';
 export const getWinnersCount = async (scheduledPlayer: ScheduleWithPlayer) => {
   const winnersCount = await db.$count(
     game,
-    and(eq(game.scheduledPlayerId, scheduledPlayer.id), eq(game.status, 'won'))
+    and(eq(game.scheduleId, scheduledPlayer.id), eq(game.status, 'won'))
   );
 
   return winnersCount;

@@ -42,7 +42,7 @@ export const findRandomGame = async () => {
       },
       guesses: {
         with: { player: true },
-        orderBy: desc(guess.time),
+        orderBy: desc(guess.createdAt),
       },
     },
   });
