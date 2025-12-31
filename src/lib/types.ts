@@ -6,10 +6,12 @@ export type Player = InferSelectModel<typeof player>;
 
 export type PlayersMap = Map<string, Player>;
 
+export type PlayerWithHints = Player & { hints: GameHint[] };
+
 export type Schedule = InferSelectModel<typeof schedule>;
 
 export type ScheduleWithPlayer = Schedule & {
-  playerToFind: Player & { hints: GameHint[] };
+  playerToFind: PlayerWithHints;
 };
 
 export type Game = InferSelectModel<typeof game>;
@@ -39,7 +41,7 @@ export type OfficialGame = Game & {
 };
 
 export type RandomGame = OfficialGame & {
-  randomPlayer: (Player & { hints: GameHint[] }) | null;
+  randomPlayer: PlayerWithHints | null;
 };
 
 export type UserStatsGame = Game & {

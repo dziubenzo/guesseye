@@ -23,6 +23,7 @@ import type {
   PlayerFullName,
   PlayerSuggestHint,
   PlayerToFindMatches,
+  PlayerWithHints,
   RangedMatchKeys,
   Schedule,
   SpecialRangedMatchKeys,
@@ -31,7 +32,6 @@ import type {
   UserStatsGame,
 } from '@/lib/types';
 import { player } from '@/server/db/schema';
-import assert, { AssertionError } from 'assert';
 import { clsx, type ClassValue } from 'clsx';
 import {
   differenceInYears,
@@ -80,31 +80,21 @@ export function normaliseToString(name: string) {
 
 export function checkIfGuessCorrect(
   guessedPlayer: Player,
-  playerToFind: Player
+  playerToFind: PlayerWithHints
 ) {
-  let isGuessCorrect = true;
-
-  // Convert Date objects cached as strings back to Date objects
-  // Otherwise the check below fails, but it should not
-  guessedPlayer.createdAt = new Date(guessedPlayer.createdAt);
-  guessedPlayer.updatedAt = new Date(guessedPlayer.updatedAt);
-
-  try {
-    assert.deepStrictEqual(guessedPlayer, playerToFind);
-  } catch (error) {
-    if (error instanceof AssertionError) {
-      isGuessCorrect = false;
-    }
-  }
+  const isGuessCorrect =
+    guessedPlayer.id === playerToFind.id &&
+    guessedPlayer.firstName === playerToFind.firstName &&
+    guessedPlayer.lastName === playerToFind.lastName;
 
   return isGuessCorrect;
 }
 
 export function fillAllMatches(
-  playerToFind: Player,
+  playerToFind: PlayerWithHints,
   currentMatches: PlayerToFindMatches
 ) {
-  let key: keyof Player;
+  let key: keyof PlayerWithHints;
 
   for (key in playerToFind) {
     switch (key) {
@@ -113,6 +103,7 @@ export function fillAllMatches(
       case 'createdAt':
       case 'updatedAt':
       case 'difficulty':
+      case 'hints':
         break;
       // Match cases
       case 'firstName':
@@ -221,7 +212,7 @@ export const bestResultUKOpenMap = buildBestResultMap(
 
 export function comparePlayers(
   guessedPlayer: Player,
-  playerToFind: Player,
+  playerToFind: PlayerWithHints,
   currentMatches: PlayerToFindMatches
 ) {
   const comparisonResults = {} as ComparisonResults;
@@ -2049,30 +2040,35 @@ function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
-export function obfuscateHint(hint: string) {
-  const allowedChars = new Set([' ', '.', '?', '!', ',', ':', ';', '(', ')']);
+export function obfuscate(type: 'hint' | 'name', string: string) {
   let result = '';
 
-  for (const char of hint) {
-    if (allowedChars.has(char)) {
-      result += char;
-      continue;
+  if (type === 'name') {
+    result = string.replaceAll(/./g, '?');
+  } else {
+    const allowedChars = new Set([' ', '.', '?', '!', ',', ':', ';', '(', ')']);
+
+    for (const char of string) {
+      if (allowedChars.has(char)) {
+        result += char;
+        continue;
+      }
+
+      let randomChar = 35; // #, makes TS happy
+
+      // Number
+      if (!Number.isNaN(Number(parseInt(char)))) {
+        randomChar = getRandomIntInclusive(48, 57);
+        // Lowercase / other
+      } else if (char === char.toLowerCase()) {
+        randomChar = getRandomIntInclusive(97, 122);
+        // Uppercase
+      } else if (char === char.toUpperCase()) {
+        randomChar = getRandomIntInclusive(65, 90);
+      }
+
+      result += String.fromCharCode(randomChar);
     }
-
-    let randomChar = 35; // #, makes TS happy
-
-    // Number
-    if (!Number.isNaN(Number(parseInt(char)))) {
-      randomChar = getRandomIntInclusive(48, 57);
-      // Lowercase / other
-    } else if (char === char.toLowerCase()) {
-      randomChar = getRandomIntInclusive(97, 122);
-      // Uppercase
-    } else if (char === char.toUpperCase()) {
-      randomChar = getRandomIntInclusive(65, 90);
-    }
-
-    result += String.fromCharCode(randomChar);
   }
 
   return result;

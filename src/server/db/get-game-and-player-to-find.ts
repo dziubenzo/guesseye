@@ -5,7 +5,7 @@ import type {
   Game,
   GameMode,
   OfficialGame,
-  Player,
+  PlayerWithHints,
   RandomGame,
 } from '@/lib/types';
 import { createOfficialGame } from '@/server/db/create-official-game';
@@ -19,7 +19,7 @@ export const getGameAndPlayerToFind = async (
   scheduleId?: number
 ) => {
   let game: OfficialGame | RandomGame | Game | ErrorObject;
-  let playerToFind: Player;
+  let playerToFind: PlayerWithHints;
 
   if (mode === 'official') {
     const scheduledPlayer = await getScheduledPlayer(
