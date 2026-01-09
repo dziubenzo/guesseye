@@ -104,8 +104,8 @@ export default function UpdateButtons() {
       {updateRankingsResult?.type === 'error' && (
         <Message type="error">
           <div className="flex flex-col">
-            {updateRankingsResult.message.split('. ').map((sentence) => {
-              return <p key={crypto.randomUUID()}>{sentence}.</p>;
+            {updateRankingsResult.message.split('.').map((sentence) => {
+              return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
             })}
           </div>
         </Message>
@@ -113,8 +113,8 @@ export default function UpdateButtons() {
       {updateRankingsResult?.type === 'success' && (
         <Message type="success">
           <div className="flex flex-col">
-            {updateRankingsResult.message.split('. ').map((sentence) => {
-              return <p key={crypto.randomUUID()}>{sentence}.</p>;
+            {updateRankingsResult.message.split('.').map((sentence) => {
+              return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
             })}
           </div>
         </Message>
@@ -132,8 +132,8 @@ export default function UpdateButtons() {
         {updateAllRankingsResult?.type === 'error' && (
           <Message type="error">
             <div className="flex flex-col">
-              {updateAllRankingsResult.message.split('. ').map((sentence) => {
-                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              {updateAllRankingsResult.message.split('.').map((sentence) => {
+                return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
               })}
             </div>
           </Message>
@@ -141,8 +141,8 @@ export default function UpdateButtons() {
         {updateAllRankingsResult?.type === 'success' && (
           <Message type="success">
             <div className="flex flex-col">
-              {updateAllRankingsResult.message.split('. ').map((sentence) => {
-                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              {updateAllRankingsResult.message.split('.').map((sentence) => {
+                return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
               })}
             </div>
           </Message>
@@ -160,8 +160,8 @@ export default function UpdateButtons() {
         {updateTCHResult?.type === 'error' && (
           <Message type="error">
             <div className="flex flex-col">
-              {updateTCHResult.message.split('. ').map((sentence) => {
-                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              {updateTCHResult.message.split('.').map((sentence) => {
+                return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
               })}
             </div>
           </Message>
@@ -169,8 +169,8 @@ export default function UpdateButtons() {
         {updateTCHResult?.type === 'success' && (
           <Message type="success">
             <div className="flex flex-col">
-              {updateTCHResult.message.split('. ').map((sentence) => {
-                return <p key={crypto.randomUUID()}>{sentence}.</p>;
+              {updateTCHResult.message.split('.').map((sentence) => {
+                return sentence && <p key={crypto.randomUUID()}>{sentence}.</p>;
               })}
             </div>
           </Message>

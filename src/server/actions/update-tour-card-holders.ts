@@ -95,12 +95,12 @@ export default async function updateTourCardHolders() {
 
   const missingPlayersString =
     missingPlayers.length > 0
-      ? `Missing TC Holders: ${missingPlayers.join(', ')}. `
+      ? `Missing Tour Card Holders: ${missingPlayers.join(', ')}.`
       : '';
 
   result = {
     type: 'success',
-    message: `${updateCount} players updated successfully. ${missingPlayersString}`,
+    message: `Tour Card Holders updated successfully [${updateCount}/128].${missingPlayersString}`,
   };
 
   return result;

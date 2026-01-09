@@ -40,8 +40,7 @@ export default async function updateAllRankings() {
       2: PDC Women - ${womenPDC.message}
       3: WDF Men - ${menWDF.message}
       4: WDF Women - ${womenWDF.message}
-      5: Elo - ${elo.message}
-    `,
+      5: Elo - ${elo.message}`,
     };
     return result;
   }
@@ -58,8 +57,7 @@ export default async function updateAllRankings() {
     3: WDF Men - ${menWDF.message}
     4: WDF Women - ${womenWDF.message}
     5: Elo - ${elo.message}
-    Relevant cache revalidated successfully
-    `,
+    Relevant cache revalidated successfully.`,
   };
 
   return result;
