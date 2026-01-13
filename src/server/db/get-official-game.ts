@@ -7,10 +7,10 @@ import type {
 } from '@/lib/types';
 import { comparePlayers, obfuscate, validateScheduleId } from '@/lib/utils';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
+import { getScheduleData } from '@/server/db/get-schedule-data';
 import { getWinnersCount } from '@/server/db/get-winners-count';
 import { handleGameGivenUp } from '@/server/db/handle-game-given-up';
 import { handleGameWon } from '@/server/db/handle-game-won';
-import { getScheduleData } from './get-schedule-data';
 
 export const getOfficialGame = async (scheduleId?: string) => {
   const validationResult = validateScheduleId(scheduleId);

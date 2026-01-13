@@ -2,8 +2,8 @@
 
 import type {
   ErrorObject,
+  RankedPlayer,
   UpdateRankingsType,
-  UpdatedRanking,
 } from '@/lib/types';
 import { getPDCOrEloRankings, getWDFRankings } from '@/server/utils';
 
@@ -30,42 +30,42 @@ const urlElo = 'https://www.dartsrec.com/power-rankings';
 const rankingsSelectorElo = 'tr td:first-child div span';
 const fullNamesSelectorElo = 'tr td:first-child div a';
 
-export default async function getUpdatedRankings(type: UpdateRankingsType) {
-  let updatedRankings: UpdatedRanking[] | ErrorObject;
+export default async function getRankedPlayers(type: UpdateRankingsType) {
+  let rankedPlayers: RankedPlayer[] | ErrorObject;
 
   if (type === 'menPDC') {
-    updatedRankings = await getPDCOrEloRankings(
+    rankedPlayers = await getPDCOrEloRankings(
       urlMenPDC,
       rankingsSelectorMenPDC,
       fullNamesSelectorMenPDC
     );
   } else if (type === 'womenPDC') {
-    updatedRankings = await getPDCOrEloRankings(
+    rankedPlayers = await getPDCOrEloRankings(
       urlWomenPDC,
       rankingsSelectorWomenPDC,
       fullNamesSelectorWomenPDC
     );
   } else if (type === 'menWDF') {
-    updatedRankings = await getWDFRankings(
+    rankedPlayers = await getWDFRankings(
       urlMenWDF,
       rankingsSelectorMenWDF,
       fullNamesSelectorMenWDF,
       500
     );
   } else if (type === 'womenWDF') {
-    updatedRankings = await getWDFRankings(
+    rankedPlayers = await getWDFRankings(
       urlWomenWDF,
       rankingsSelectorWomenWDF,
       fullNamesSelectorWomenWDF,
       500
     );
   } else {
-    updatedRankings = await getPDCOrEloRankings(
+    rankedPlayers = await getPDCOrEloRankings(
       urlElo,
       rankingsSelectorElo,
       fullNamesSelectorElo
     );
   }
 
-  return updatedRankings;
+  return rankedPlayers;
 }

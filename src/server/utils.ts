@@ -4,9 +4,9 @@ import { auth } from '@/lib/auth';
 import { MISSING_PLAYERS_MAX_RANKING } from '@/lib/constants';
 import type {
   ErrorObject,
+  RankedPlayer,
   TourCardHolder,
   UpdateRankingsType,
-  UpdatedRanking,
 } from '@/lib/types';
 import {
   getPlayerCondition,
@@ -16,6 +16,7 @@ import {
 } from '@/lib/utils';
 import { browser } from '@/server/browser';
 import { db } from '@/server/db';
+import { playersMap, playersNormalisedMap } from '@/server/db/get-players-map';
 import { lower, player as playerSchema, user } from '@/server/db/schema';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { headers } from 'next/headers';
@@ -71,17 +72,17 @@ export async function getPDCOrEloRankings(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRanking[] = [];
+  const rankedPlayers: RankedPlayer[] = [];
 
-  // Get current rankings from the selector
-  const rankings = await page.$$eval(rankingsSelector, (rankingTds) => {
-    return rankingTds.map((rankingTd) => rankingTd.textContent);
-  });
-
-  // Get full names from the selector
-  const fullNames = await page.$$eval(fullNamesSelector, (fullNameTds) => {
-    return fullNameTds.map((fullNameTd) => fullNameTd.textContent);
-  });
+  // Get current rankings and full names from the selector
+  const [rankings, fullNames] = await Promise.all([
+    page.$$eval(rankingsSelector, (rankingTds) => {
+      return rankingTds.map((rankingTd) => rankingTd.textContent);
+    }),
+    page.$$eval(fullNamesSelector, (fullNameTds) => {
+      return fullNameTds.map((fullNameTd) => fullNameTd.textContent);
+    }),
+  ]);
 
   if (rankings.length !== fullNames.length) {
     const error: ErrorObject = { error: 'Array lengths do not match.' };
@@ -114,14 +115,14 @@ export async function getPDCOrEloRankings(
     const firstName = fullName.split(' ')[0];
     const lastName = fullName.split(' ').slice(1).join(' ');
 
-    updatedRankings.push({
+    rankedPlayers.push({
       ranking: rankingNumber,
       firstName,
       lastName,
     });
   }
 
-  return updatedRankings;
+  return rankedPlayers;
 }
 
 // Get WDF Order of Merits
@@ -137,29 +138,29 @@ export async function getWDFRankings(
 
   await page.setViewport({ width: 1080, height: 1024 });
 
-  const updatedRankings: UpdatedRanking[] = [];
+  const rankedPlayers: RankedPlayer[] = [];
 
-  // Get current rankings from the selector, applying the limit
-  const rankings = await page.$$eval(
-    rankingsSelector,
-    (rankingSpans, limit) => {
-      return rankingSpans
-        .slice(0, limit)
-        .map((rankingSpan) => rankingSpan.textContent);
-    },
-    limit
-  );
-
-  // Get full names from the selector, applying the limit
-  const fullNames = await page.$$eval(
-    fullNamesSelector,
-    (fullNameSpans, limit) => {
-      return fullNameSpans
-        .slice(0, limit)
-        .map((fullNameSpan) => fullNameSpan.textContent);
-    },
-    limit
-  );
+  // Get current rankings and full names from the selector, applying the limit
+  const [rankings, fullNames] = await Promise.all([
+    page.$$eval(
+      rankingsSelector,
+      (rankingSpans, limit) => {
+        return rankingSpans
+          .slice(0, limit)
+          .map((rankingSpan) => rankingSpan.textContent);
+      },
+      limit
+    ),
+    page.$$eval(
+      fullNamesSelector,
+      (fullNameSpans, limit) => {
+        return fullNameSpans
+          .slice(0, limit)
+          .map((fullNameSpan) => fullNameSpan.textContent);
+      },
+      limit
+    ),
+  ]);
 
   if (rankings.length !== fullNames.length) {
     const error: ErrorObject = { error: 'Array lengths do not match.' };
@@ -195,27 +196,21 @@ export async function getWDFRankings(
     const firstName = fullName.split(' ')[0];
     const lastName = fullName.split(' ').slice(1).join(' ');
 
-    updatedRankings.push({
+    rankedPlayers.push({
       ranking: rankingNumber,
       firstName,
       lastName,
     });
   }
 
-  return updatedRankings;
+  return rankedPlayers;
 }
 
 export async function updateDBRankings(
   type: UpdateRankingsType,
-  updatedRankings: UpdatedRanking[]
+  rankedPlayers: RankedPlayer[]
 ) {
   const playerCondition = getPlayerCondition(type);
-
-  // Get darts players
-  const players = await db.query.player.findMany({
-    where: playerCondition,
-    columns: { firstName: true, lastName: true },
-  });
 
   const rankingType = getRankingType(type);
 
@@ -228,28 +223,18 @@ export async function updateDBRankings(
   let updateCount = 0;
   const missingPlayers: string[] = [];
 
-  // Update the ranking of a darts player if their first name and last name match the scraped data
-  for (const updatedRanking of updatedRankings) {
-    let playerFound = false;
+  for (const rankedPlayer of rankedPlayers) {
+    const normalisedFullName =
+      normaliseToString(rankedPlayer.firstName) +
+      ' ' +
+      normaliseToString(rankedPlayer.lastName);
 
-    for (const player of players) {
-      const playerFirstName = normaliseToString(player.firstName);
-      const playerLastName = normaliseToString(player.lastName);
-      const updatedPlayerFirstName = normaliseToString(
-        updatedRanking.firstName
-      );
-      const updatedPlayerLastName = normaliseToString(updatedRanking.lastName);
-
-      if (
-        playerFirstName !== updatedPlayerFirstName ||
-        playerLastName !== updatedPlayerLastName
-      ) {
-        continue;
-      }
-
+    // Update the ranking of a darts player if they are in the players map (DB)
+    if (playersNormalisedMap.has(normalisedFullName)) {
+      const player = playersNormalisedMap.get(normalisedFullName)!;
       await db
         .update(playerSchema)
-        .set({ [rankingType]: updatedRanking.ranking })
+        .set({ [rankingType]: rankedPlayer.ranking })
         .where(
           and(
             eq(playerSchema.firstName, player.firstName),
@@ -257,16 +242,11 @@ export async function updateDBRankings(
           )
         );
       updateCount++;
-      playerFound = true;
-      break;
-    }
-
-    // Identify players who are not in the DB
-    // Return only players ranked up to and including MISSING_PLAYERS_MAX_RANKING for both WDF rankings and the PDC Women ranking
-    // Return all players for PDC Men and Elo rankings
-    if (!playerFound) {
-      const fullName = updatedRanking.firstName + ' ' + updatedRanking.lastName;
-      const ranking = updatedRanking.ranking;
+    } else {
+      // Identify players who are not in the DB
+      // Return only missing players ranked up to and including MISSING_PLAYERS_MAX_RANKING for both WDF rankings and the PDC Women ranking
+      // Return all missing players for PDC Men and Elo rankings
+      const ranking = rankedPlayer.ranking;
 
       if (
         ((type === 'womenPDC' || type === 'menWDF' || type === 'womenWDF') &&
@@ -274,28 +254,36 @@ export async function updateDBRankings(
         type === 'menPDC' ||
         type === 'elo'
       ) {
-        missingPlayers.push(fullName + ` (${ranking})`);
+        const fullName = rankedPlayer.firstName + ' ' + rankedPlayer.lastName;
+        missingPlayers.push(`${fullName} (${ranking})`);
       }
     }
   }
 
-  return { updateCount, playersDB: players.length, missingPlayers };
+  return { updateCount, playersDB: playersMap.size, missingPlayers };
 }
 
 // Get current Tour Card Holders
 export async function getTourCardHolders() {
   const page = await browser.newPage();
 
-  await page.goto('https://pdpa.co.uk/event-entry/tour-cards/');
+  const currentYear = new Date().getFullYear();
+
+  await page.goto(
+    `https://en.wikipedia.org/wiki/List_of_players_with_a_${currentYear}_PDC_Tour_Card`
+  );
 
   await page.setViewport({ width: 1080, height: 1024 });
 
   const tourCardHolders: TourCardHolder[] = [];
 
   // Get full names
-  const fullNames = await page.$$eval('tr td:nth-child(3)', (fullNameSpans) => {
-    return fullNameSpans.map((fullNameSpan) => fullNameSpan.textContent);
-  });
+  const fullNames = await page.$$eval(
+    'tr td:nth-child(3) a',
+    (fullNameSpans) => {
+      return fullNameSpans.map((fullNameSpan) => fullNameSpan.textContent);
+    }
+  );
 
   // Make sure there are exactly 128 TC holders
   if (fullNames.length !== 128) {

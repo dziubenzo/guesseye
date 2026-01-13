@@ -3,6 +3,7 @@
 import type { UpdateAction } from '@/lib/types';
 import { normaliseToString } from '@/lib/utils';
 import { db } from '@/server/db';
+import { playersNormalisedMap } from '@/server/db/get-players-map';
 import { player as playerSchema } from '@/server/db/schema';
 import { checkForAdmin, getTourCardHolders } from '@/server/utils';
 import { and, eq } from 'drizzle-orm';
@@ -31,14 +32,6 @@ export default async function updateTourCardHolders() {
     return result;
   }
 
-  // Get all darts players
-  const players = await db.query.player.findMany({
-    columns: {
-      firstName: true,
-      lastName: true,
-    },
-  });
-
   // Set tour card value to false for all darts players who currently have the tour card value of true
   await db
     .update(playerSchema)
@@ -48,25 +41,15 @@ export default async function updateTourCardHolders() {
   let updateCount = 0;
   const missingPlayers: string[] = [];
 
-  // Update the tour card value to true player's first name and last name match the scraped data
   for (const tourCardHolder of tourCardHolders) {
-    let playerFound = false;
+    const normalisedFullName =
+      normaliseToString(tourCardHolder.firstName) +
+      ' ' +
+      normaliseToString(tourCardHolder.lastName);
 
-    for (const player of players) {
-      const playerFirstName = normaliseToString(player.firstName);
-      const playerLastName = normaliseToString(player.lastName);
-      const tourCardHolderFirstName = normaliseToString(
-        tourCardHolder.firstName
-      );
-      const tourCardHolderLastName = normaliseToString(tourCardHolder.lastName);
-
-      if (
-        playerFirstName !== tourCardHolderFirstName ||
-        playerLastName !== tourCardHolderLastName
-      ) {
-        continue;
-      }
-
+    // Update the tour card value to true if the TC holder is in the players map (DB)
+    if (playersNormalisedMap.has(normalisedFullName)) {
+      const player = playersNormalisedMap.get(normalisedFullName)!;
       await db
         .update(playerSchema)
         .set({ tourCard: true })
@@ -77,15 +60,10 @@ export default async function updateTourCardHolders() {
           )
         );
       updateCount++;
-      playerFound = true;
-      break;
-    }
-
-    // Identify Tour Card Holders who are not in the DB
-    if (!playerFound) {
-      missingPlayers.push(
-        tourCardHolder.firstName + ' ' + tourCardHolder.lastName
-      );
+    } else {
+      // Identify Tour Card Holders who are not in the DB
+      const fullName = tourCardHolder.firstName + ' ' + tourCardHolder.lastName;
+      missingPlayers.push(fullName);
     }
   }
 

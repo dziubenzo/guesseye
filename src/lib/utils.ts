@@ -1317,7 +1317,8 @@ export function findLatestGuesses(
     if (
       stats.players.latestOfficialGuess === undefined ||
       (stats.players.latestOfficialGuessTime &&
-        guess.createdAt.getTime() > stats.players.latestOfficialGuessTime.getTime())
+        guess.createdAt.getTime() >
+          stats.players.latestOfficialGuessTime.getTime())
     ) {
       stats.players.latestOfficialGuess = firstName + ' ' + lastName;
       stats.players.latestOfficialGuessName = game.user
@@ -1329,7 +1330,8 @@ export function findLatestGuesses(
     if (
       stats.players.latestRandomGuess === undefined ||
       (stats.players.latestRandomGuessTime &&
-        guess.createdAt.getTime() > stats.players.latestRandomGuessTime.getTime())
+        guess.createdAt.getTime() >
+          stats.players.latestRandomGuessTime.getTime())
     ) {
       stats.players.latestRandomGuess = firstName + ' ' + lastName;
       if (game.userId) {

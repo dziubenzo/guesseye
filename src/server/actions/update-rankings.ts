@@ -2,7 +2,7 @@
 
 import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
 import { getUpdateMessage } from '@/lib/utils';
-import getUpdatedRankings from '@/server/scripts/get-updated-rankings';
+import getRankedPlayers from '@/server/scripts/get-updated-rankings';
 import { checkForAdmin, updateDBRankings } from '@/server/utils';
 import { revalidateTag } from 'next/cache';
 
@@ -19,19 +19,19 @@ export default async function updateRankings(type: UpdateRankingsType) {
     return result;
   }
 
-  const updatedRankings = await getUpdatedRankings(type);
+  const rankedPlayers = await getRankedPlayers(type);
 
-  if ('error' in updatedRankings) {
+  if ('error' in rankedPlayers) {
     result = {
       type: 'error',
-      message: updatedRankings.error,
+      message: rankedPlayers.error,
     };
     return result;
   }
 
   const { updateCount, playersDB, missingPlayers } = await updateDBRankings(
     type,
-    updatedRankings
+    rankedPlayers
   );
 
   // Clear the players and last database update cache

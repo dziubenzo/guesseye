@@ -456,7 +456,7 @@ export type DatabaseStats = {
   [key in DatabaseStatsType]: DatabaseStatsResult[];
 };
 
-export type UpdatedRanking = {
+export type RankedPlayer = {
   firstName: string;
   lastName: string;
   ranking: number;
@@ -469,7 +469,7 @@ export type UpdateRankingsType =
   | 'womenWDF'
   | 'elo';
 
-export type TourCardHolder = Omit<UpdatedRanking, 'ranking'>;
+export type TourCardHolder = Omit<RankedPlayer, 'ranking'>;
 
 export type PlayerAdmin = Pick<
   Player,
