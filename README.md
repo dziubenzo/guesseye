@@ -11,7 +11,7 @@
 
 ## About
 
-A browser game where your objective is to guess the right darts player, featuring two game modes, database and game stats, and a leaderboard.
+A browser game where your objective is to guess the right darts player, featuring two game modes, database and game stats, a hints system, and a leaderboard.
 
 For a detailed explanation of the game, see the [About](https://www.guesseye.com/about) page.
 
@@ -19,9 +19,10 @@ For a detailed explanation of the game, see the [About](https://www.guesseye.com
 
 - Two game modes: official and random
 - 650+ darts players from 40+ countries to choose from and counting
+- Hints system
 - User and global game stats
 - Charts related to darts players in the database
-- Leaderboard based on official and random mode wins and give ups
+- Leaderboard based on official and random mode wins and give ups as well as hints revealed
 - Official mode history
 
 ### Tech Stack
