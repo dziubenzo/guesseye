@@ -32,6 +32,9 @@ export const metadata: Metadata = {
     'Michael van Gerwen',
     'Krzysztof Ratajski',
   ],
+  verification: {
+    google: '5F1B6KRTQpigy4fdQZ8W0J0ag31xKfyc6YtOoTU827U',
+  },
 };
 
 export default function RootLayout({
