@@ -106,9 +106,9 @@ export default function PlayerSchedulerForm({
               >
                 <SelectTrigger
                   value={field.value}
-                  className="cursor-pointer w-full sm:w-[300px]"
+                  className="cursor-pointer w-full sm:w-[350px]"
                 >
-                  <SelectValue placeholder="Darts Player (Occurrences) - Difficulty" />
+                  <SelectValue placeholder="Darts Player (Occurrences) (Difficulty, Hints)" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -132,8 +132,11 @@ export default function PlayerSchedulerForm({
                             className="cursor-pointer"
                           >
                             {player.firstName + ' ' + player.lastName} (
-                            {player.officialModeCount}) -{' '}
-                            {player.difficulty.toUpperCase()}
+                            {player.officialModeCount}) (
+                            {player.difficulty.toUpperCase()},{' '}
+                            {player.approvedHintsCount}{' '}
+                            {player.approvedHintsCount === 1 ? 'hint' : 'hints'}
+                            )
                           </SelectItem>
                         </Fragment>
                       );
@@ -161,8 +164,11 @@ export default function PlayerSchedulerForm({
                             className="cursor-pointer"
                           >
                             {player.firstName + ' ' + player.lastName} (
-                            {player.officialModeCount}) -{' '}
-                            {player.difficulty.toUpperCase()}
+                            {player.officialModeCount}) (
+                            {player.difficulty.toUpperCase()},{' '}
+                            {player.approvedHintsCount}{' '}
+                            {player.approvedHintsCount === 1 ? 'hint' : 'hints'}
+                            )
                           </SelectItem>
                         </Fragment>
                       );

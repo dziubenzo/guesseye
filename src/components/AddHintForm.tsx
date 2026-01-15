@@ -84,7 +84,7 @@ export default function AddHintForm({ players, location }: AddHintProps) {
               >
                 <SelectTrigger
                   value={field.value}
-                  className="cursor-pointer w-full sm:w-[300px]"
+                  className="cursor-pointer w-full sm:w-[350px]"
                 >
                   <SelectValue
                     placeholder={
