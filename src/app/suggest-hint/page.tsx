@@ -18,7 +18,7 @@ export default async function Leaderboard() {
     headers: await headers(),
   });
 
-  const [players, hintCount] = await Promise.all([
+  const [players, { totalHintCount, playerHintCount }] = await Promise.all([
     getPlayersSuggestHint(),
     getHintCount(),
   ]);
@@ -38,9 +38,13 @@ export default async function Leaderboard() {
             <p>
               There are{' '}
               <ColouredWord colour="green" className="text-base sm:text-lg">
-                {hintCount}
+                {totalHintCount}
               </ColouredWord>{' '}
-              hints for darts players available at the moment.
+              hints for{' '}
+              <ColouredWord colour="green" className="text-base sm:text-lg">
+                {playerHintCount}
+              </ColouredWord>{' '}
+              darts players available at the moment.
             </p>
             <p>
               You are welcome to contribute to the game by suggesting a hint.
@@ -73,8 +77,8 @@ export default async function Leaderboard() {
             </li>
           </ul>
           <p>
-            Once a hint is reviewed and accepted, your <Bold>name</Bold> will
-            be shown together with the hint when it is revealed by anyone.
+            Once a hint is reviewed and accepted, your <Bold>name</Bold> will be
+            shown together with the hint when it is revealed by anyone.
           </p>
           <p>Any contributions will be appreciated.</p>
           <h2 className="font-semibold text-2xl text-card-foreground">

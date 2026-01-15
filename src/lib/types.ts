@@ -511,3 +511,8 @@ export type SuggestedHint = Hint & {
   addedBy: User['name'] | null;
   approvedHintsCount: number;
 };
+
+export type HintCounts = {
+  totalHintCount: number,
+  playerHintCount: number,
+}
