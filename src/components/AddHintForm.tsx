@@ -80,6 +80,7 @@ export default function AddHintForm({ players, location }: AddHintProps) {
                 key={selectKey}
                 name="playerId"
                 onValueChange={(value) => field.onChange(parseInt(value))}
+                disabled={isPending}
                 required
               >
                 <SelectTrigger
@@ -141,7 +142,12 @@ export default function AddHintForm({ players, location }: AddHintProps) {
               <Label htmlFor="hint-textarea" className="cursor-pointer">
                 Hint:
               </Label>
-              <Textarea id="hint-textarea" minLength={8} {...field} />
+              <Textarea
+                id="hint-textarea"
+                minLength={8}
+                disabled={isPending}
+                {...field}
+              />
             </FormItem>
           )}
         />
