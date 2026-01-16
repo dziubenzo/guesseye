@@ -57,7 +57,8 @@ export const getScheduleData = async (scheduleId?: Schedule['id']) => {
       },
     });
 
-  if (!scheduleData) {
+  // Make sure any scheduled darts players for the future cannot be returned
+  if (!scheduleData || scheduleData.startDate > new Date()) {
     const error: ErrorObject = {
       error: scheduleId ? 'Invalid game.' : 'No scheduled darts player.',
     };
