@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 type RevealHintFormProps = {
   hint: string;
   hintNo: number;
-  gameId: number;
+  gameId?: number;
 };
 
 export default function RevealHintForm({

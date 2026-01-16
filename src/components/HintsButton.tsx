@@ -28,7 +28,7 @@ export default function HintsButton({
 }: HintsButtonType) {
   const { hints, obfuscatedHints } = useGameStore();
 
-  if (availableHints === 0 || !gameId) return null;
+  if (availableHints === 0) return null;
 
   return (
     <div className="sm:absolute sm:top-4 sm:left-0">
@@ -38,6 +38,7 @@ export default function HintsButton({
             <Button
               variant="outline"
               className="cursor-pointer text-sm px-2 py-1 h-full"
+              disabled={!gameId}
             >
               Hints ({hints.length}/{availableHints})
             </Button>
