@@ -34,7 +34,7 @@ export const user = pgTable(
     role: roleEnum('role').default('user').notNull(),
     allowVeryHard: boolean('allow_very_hard').default(false).notNull(),
   },
-  ({ name }) => [index('user_name_idx').on(name)]
+  ({ name }) => [index('user_name_idx').on(name)],
 );
 
 export const session = pgTable(
@@ -53,7 +53,7 @@ export const session = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
   },
-  (table) => [index('session_user_id_idx').on(table.userId)]
+  (table) => [index('session_user_id_idx').on(table.userId)],
 );
 
 export const account = pgTable(
@@ -77,7 +77,7 @@ export const account = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index('account_user_id_idx').on(table.userId)]
+  (table) => [index('account_user_id_idx').on(table.userId)],
 );
 
 export const verification = pgTable(
@@ -93,7 +93,7 @@ export const verification = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index('verification_identifier_idx').on(table.identifier)]
+  (table) => [index('verification_identifier_idx').on(table.identifier)],
 );
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -180,6 +180,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'SilverTrim',
   'Hard Luck Darts',
   'DMC',
+  'Exclamation',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
@@ -365,38 +366,38 @@ export const player = pgTable(
   }) => [
     check(
       'is_year_playing_since',
-      sql`${playingSince} >= 1900 AND ${playingSince} < 2100`
+      sql`${playingSince} >= 1900 AND ${playingSince} < 2100`,
     ),
     check('is_non_negative_nine_darters_pdc', sql`${nineDartersPDC} >= 0`),
     check(
       'is_year_best_pdc_result',
-      sql`${yearOfBestResultPDC} >= 1900 AND ${yearOfBestResultPDC} < 2100`
+      sql`${yearOfBestResultPDC} >= 1900 AND ${yearOfBestResultPDC} < 2100`,
     ),
     check(
       'is_year_best_wdf_result',
-      sql`${yearOfBestResultWDF} >= 1900 AND ${yearOfBestResultWDF} < 2100`
+      sql`${yearOfBestResultWDF} >= 1900 AND ${yearOfBestResultWDF} < 2100`,
     ),
     check(
       'is_year_best_uk_open_result',
-      sql`${yearOfBestResultUKOpen} >= 1900 AND ${yearOfBestResultUKOpen} < 2100`
+      sql`${yearOfBestResultUKOpen} >= 1900 AND ${yearOfBestResultUKOpen} < 2100`,
     ),
     check(
       'is_proper_ranking_elo',
-      sql`${rankingElo} >= 1 AND ${rankingElo} <= 750`
+      sql`${rankingElo} >= 1 AND ${rankingElo} <= 750`,
     ),
     check(
       'is_proper_ranking_pdc',
-      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 500`
+      sql`${rankingPDC} >= 1 AND ${rankingPDC} <= 500`,
     ),
     check(
       'is_proper_ranking_wdf',
-      sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`
+      sql`${rankingWDF} >= 1 AND ${rankingWDF} <= 2500`,
     ),
     unique('no_duplicate_players').on(firstName, lastName),
     index('player_first_name_idx').on(firstName),
     index('player_difficulty_idx').on(difficulty),
     index('player_gender_idx').on(gender),
-  ]
+  ],
 );
 
 export const playerRelations = relations(player, ({ many }) => ({
@@ -421,14 +422,14 @@ export const schedule = pgTable(
       .notNull()
       .unique()
       .generatedAlwaysAs(
-        (): SQL => sql`${schedule.startDate} + interval '1' day`
+        (): SQL => sql`${schedule.startDate} + interval '1' day`,
       ),
   },
   ({ playerToFindId, startDate, endDate }) => [
     index('schedule_player_id_idx').on(playerToFindId),
     index('schedule_start_date_idx').on(startDate),
     index('schedule_end_date_idx').on(endDate),
-  ]
+  ],
 );
 
 export const scheduleRelations = relations(schedule, ({ one, many }) => ({
@@ -484,11 +485,11 @@ export const game = pgTable(
   }) => [
     check(
       'is_either_guest_or_user',
-      sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`
+      sql`(${userId} IS NULL) <> (${guestIp} IS NULL)`,
     ),
     check(
       'is_either_scheduled_or_random_player',
-      sql`(${scheduleId} IS NULL) <> (${randomPlayerId} IS NULL)`
+      sql`(${scheduleId} IS NULL) <> (${randomPlayerId} IS NULL)`,
     ),
     check('is_non_negative_hints_revealed', sql`${hintsRevealed} >= 0`),
     index('game_user_id_idx').on(userId),
@@ -497,7 +498,7 @@ export const game = pgTable(
     index('game_mode_idx').on(mode),
     index('game_status_idx').on(status),
     index('game_start_date_idx').on(startDate),
-  ]
+  ],
 );
 
 export const gameRelations = relations(game, ({ one, many }) => ({
@@ -535,7 +536,7 @@ export const guess = pgTable(
     index('guess_game_id_idx').on(gameId),
     index('guess_player_id_idx').on(playerId),
     index('guess_created_at_idx').on(createdAt),
-  ]
+  ],
 );
 
 export const guessRelations = relations(guess, ({ one }) => ({
@@ -572,7 +573,7 @@ export const hint = pgTable(
     index('hint_user_id_idx').on(userId),
     index('hint_is_approved_idx').on(isApproved),
     index('hint_created_at_idx').on(createdAt),
-  ]
+  ],
 );
 
 export const hintRelations = relations(hint, ({ one }) => ({
