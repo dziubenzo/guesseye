@@ -35,7 +35,7 @@ export default function BirthMonthChart({ data }: BirthMonthChartProps) {
           dataKey="value"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
           tickFormatter={(value) =>

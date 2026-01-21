@@ -36,7 +36,7 @@ export default function BestResultUKOpenYearChart({
           dataKey="value"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={-25}
           width={100}

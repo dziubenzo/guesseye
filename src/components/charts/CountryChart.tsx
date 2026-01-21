@@ -26,7 +26,7 @@ export default function CountryChart({ data }: CountryChartProps) {
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 5, right: 40, bottom: 5, left: 0 }}
+        margin={{ top: 5, right: 55, bottom: 5, left: 0 }}
         layout="vertical"
       >
         <XAxis type="number" hide />
@@ -34,10 +34,10 @@ export default function CountryChart({ data }: CountryChartProps) {
           dataKey="value"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
-          width={125}
+          width={120}
           tickFormatter={(value) => value}
         />
         <ChartTooltip

@@ -42,7 +42,7 @@ export default function RandomPlayersChart({ data }: RandomPlayersChartProps) {
           dataKey="fullName"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
           width={140}

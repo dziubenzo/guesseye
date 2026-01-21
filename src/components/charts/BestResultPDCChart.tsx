@@ -34,7 +34,7 @@ export default function BestResultPDCChart({ data }: BestResultPDCChartProps) {
           dataKey="value"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
           width={100}

@@ -34,10 +34,10 @@ export default function DartsBrandChart({ data }: DartsBrandChartProps) {
           dataKey="value"
           type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
-          width={125}
+          width={120}
           tickFormatter={(value) => value}
         />
         <ChartTooltip
