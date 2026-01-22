@@ -1,15 +1,15 @@
 'use client';
 
-import GameDetailsModal from '@/components/GameDetailsModal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import type { CompletedGame, Player } from '@/lib/types';
+import type { CompletedGameTable, Player } from '@/lib/types';
 import { cn, getDifficultyColour } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
+import Link from 'next/link';
 
-export const columns: ColumnDef<CompletedGame>[] = [
+export const columns: ColumnDef<CompletedGameTable>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -46,15 +46,11 @@ export const columns: ColumnDef<CompletedGame>[] = [
     accessorKey: 'dartsPlayer',
     header: 'Darts Player',
     cell: ({ row }) => {
-      const fullName =
-        row.original.playerToFind.firstName +
-        ' ' +
-        row.original.playerToFind.lastName;
-      return fullName;
+      return row.original.playerToFindName;
     },
   },
   {
-    accessorKey: 'playerToFind.difficulty',
+    accessorKey: 'playerToFindDifficulty',
     header: ({ column }) => {
       return (
         <Button
@@ -69,8 +65,8 @@ export const columns: ColumnDef<CompletedGame>[] = [
     },
     cell: ({ cell }) => {
       const playerDifficulty =
-        cell.getValue<CompletedGame['playerToFind']['difficulty']>();
-        
+        cell.getValue<CompletedGameTable['playerToFindDifficulty']>();
+
       if (playerDifficulty === 'easy') {
         return (
           <Badge className={cn('w-[80px]', getDifficultyColour('easy'))}>
@@ -105,8 +101,8 @@ export const columns: ColumnDef<CompletedGame>[] = [
       sortingMap.set('hard', 3);
       sortingMap.set('very hard', 4);
 
-      const rowAValue = sortingMap.get(rowA.original.playerToFind.difficulty)!;
-      const rowBValue = sortingMap.get(rowB.original.playerToFind.difficulty)!;
+      const rowAValue = sortingMap.get(rowA.original.playerToFindDifficulty)!;
+      const rowBValue = sortingMap.get(rowB.original.playerToFindDifficulty)!;
 
       if (rowAValue < rowBValue) {
         return -1;
@@ -118,24 +114,42 @@ export const columns: ColumnDef<CompletedGame>[] = [
     },
   },
   {
-    accessorKey: 'startDate',
-    header: 'Start',
-    cell: ({ cell }) => {
-      const startDate = cell.getValue<CompletedGame['startDate']>();
-
+    accessorKey: 'mode',
+    header: ({ column }) => {
       return (
-        <div>
-          <p>{format(startDate, 'dd/MM/y')}</p>
-          <p className="text-xs">{format(startDate, 'HH:mm')}</p>
-        </div>
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="cursor-pointer p-0 has-[>svg]:px-0 has-[>svg]:pr-0"
+        >
+          Mode
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
       );
+    },
+    cell: ({ cell }) => {
+      const mode = cell.getValue<CompletedGameTable['mode']>();
+
+      if (mode === 'official') {
+        return (
+          <Badge className="w-[80px] bg-lime-400 text-secondary-foreground dark:text-secondary">
+            Official
+          </Badge>
+        );
+      } else {
+        return (
+          <Badge className="w-[80px] bg-violet-300 text-secondary-foreground dark:text-secondary">
+            Random
+          </Badge>
+        );
+      }
     },
   },
   {
     accessorKey: 'endDate',
     header: 'End',
     cell: ({ cell }) => {
-      const endDate = cell.getValue<CompletedGame['endDate']>();
+      const endDate = cell.getValue<CompletedGameTable['endDate']>();
 
       if (!endDate) return;
 
@@ -148,7 +162,7 @@ export const columns: ColumnDef<CompletedGame>[] = [
     },
   },
   {
-    accessorKey: 'guesses',
+    accessorKey: 'guessesCount',
     header: ({ column }) => {
       return (
         <Button
@@ -162,7 +176,7 @@ export const columns: ColumnDef<CompletedGame>[] = [
       );
     },
     cell: ({ cell }) => {
-      const guesses = cell.getValue<CompletedGame['guesses']>().length;
+      const guesses = cell.getValue<CompletedGameTable['guessesCount']>();
 
       return (
         <div>
@@ -173,8 +187,8 @@ export const columns: ColumnDef<CompletedGame>[] = [
       );
     },
     sortingFn: (rowA, rowB) => {
-      const rowAValue = rowA.original.guesses.length;
-      const rowBValue = rowB.original.guesses.length;
+      const rowAValue = rowA.original.guessesCount;
+      const rowBValue = rowB.original.guessesCount;
 
       // Revert logic to show games with most winners on top on the first click
       if (rowAValue < rowBValue) {
@@ -190,7 +204,7 @@ export const columns: ColumnDef<CompletedGame>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: ({ cell }) => {
-      const gameStatus = cell.getValue<CompletedGame['status']>();
+      const gameStatus = cell.getValue<CompletedGameTable['status']>();
 
       if (gameStatus === 'won') {
         return (
@@ -212,10 +226,13 @@ export const columns: ColumnDef<CompletedGame>[] = [
     header: 'Details',
     cell: ({ row }) => {
       return (
-        <GameDetailsModal
-          playerToFind={row.original.playerToFind}
-          guesses={row.original.guesses}
-        />
+        <Button
+          className="cursor-pointer w-full bg-amber-400 hover:bg-amber-300 text-secondary-foreground dark:text-secondary"
+          variant={'secondary'}
+          asChild
+        >
+          <Link href={`/games/${row.original.gameId}`}>Details</Link>
+        </Button>
       );
     },
   },
