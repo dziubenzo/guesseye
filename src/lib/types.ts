@@ -182,6 +182,17 @@ export type NoRandomGame = Pick<
   playerDifficulty: PlayerDifficultyField;
 };
 
+export type CompletedGame = {
+  gameNo: number;
+  startDate: Game['startDate'];
+  endDate: Game['endDate'];
+  mode: Game['mode'];
+  status: Game['status'];
+  hintsRevealed: Game['hintsRevealed'];
+  playerToFind: Player;
+  guesses: GuessWithPlayer[];
+};
+
 export type PlayerDifficultyField = Player['difficulty'] | '???';
 
 export type GameMode = 'official' | 'random';
@@ -513,6 +524,6 @@ export type SuggestedHint = Hint & {
 };
 
 export type HintCounts = {
-  totalHintCount: number,
-  playerHintCount: number,
-}
+  totalHintCount: number;
+  playerHintCount: number;
+};
