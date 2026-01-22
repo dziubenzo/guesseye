@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = { title: 'Official Games History' };
 
-export default async function History() {
+export default async function OfficialGamesHistory() {
   const history = await getOfficialGamesHistory();
 
   if ('error' in history) {

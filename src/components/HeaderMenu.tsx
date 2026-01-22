@@ -22,6 +22,7 @@ import {
   DatabaseZap,
   Dices,
   GalleryHorizontalEnd,
+  History,
   LogOut,
   Presentation,
   Settings,
@@ -111,6 +112,19 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                           <div className="font-medium">Random Game</div>
                           <div className="text-muted-foreground">
                             Play or resume a random game.
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </NavigationMenuLink>
+                  <NavigationMenuLink asChild>
+                    <Link href="/games">
+                      <div className="flex gap-4 items-center">
+                        <History className="min-w-4 max-w-4" />
+                        <div>
+                          <div className="font-medium">Game History</div>
+                          <div className="text-muted-foreground">
+                            Take a look at all of your completed games.
                           </div>
                         </div>
                       </div>

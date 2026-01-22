@@ -21,7 +21,11 @@ import {
 import { useState } from 'react';
 
 type DataTableProps<TData, TValue> = {
-  type: 'officialGames' | 'officialGamesHistory' | 'leaderboard';
+  type:
+    | 'officialGames'
+    | 'officialGamesHistory'
+    | 'leaderboard'
+    | 'gameHistory';
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 };
@@ -123,7 +127,7 @@ export default function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No previous official games to display.
+                  No data to display.
                 </TableCell>
               </TableRow>
             )}
