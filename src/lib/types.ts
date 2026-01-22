@@ -187,10 +187,21 @@ export type CompletedGameTable = {
   gameNo: number;
   playerToFindName: string;
   playerToFindDifficulty: Player['difficulty'];
-  endDate: Game['endDate'];
+  endDate: Date;
   mode: Game['mode'];
   status: 'won' | 'givenUp';
   guessesCount: number;
+};
+
+export type CompletedGameDetails = {
+  username: string;
+  startDate: Game['startDate'];
+  endDate: Date;
+  mode: Game['mode'];
+  status: CompletedGameTable['status'];
+  hintsRevealed: Game['hintsRevealed'];
+  playerToFind: Player;
+  guesses: GuessWithPlayer[];
 };
 
 export type PlayerDifficultyField = Player['difficulty'] | '???';

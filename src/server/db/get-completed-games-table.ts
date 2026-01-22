@@ -29,7 +29,7 @@ export const getCompletedGamesTable = unstable_cache(
         completedGames[i].randomPlayer ||
         completedGames[i].scheduledPlayer?.playerToFind;
 
-      // Both if checks shouldn't even happen
+      // Both if checks shouldn't ever happen
       if (!playerToFind) {
         const error: ErrorObject = {
           error: `No darts player to find for completed game with id ${completedGames[i].id}.`,
@@ -38,8 +38,9 @@ export const getCompletedGamesTable = unstable_cache(
       }
 
       const completedGameStatus = completedGames[i].status;
+      const completedGameTime = completedGames[i].endDate;
 
-      if (completedGameStatus === 'inProgress') {
+      if (completedGameStatus === 'inProgress' || !completedGameTime) {
         const error: ErrorObject = {
           error: `Game with id ${completedGames[i].id} is in progress.`,
         };
@@ -52,7 +53,7 @@ export const getCompletedGamesTable = unstable_cache(
         playerToFindName: playerToFind.firstName + ' ' + playerToFind.lastName,
         playerToFindDifficulty: playerToFind.difficulty,
         mode: completedGames[i].mode,
-        endDate: completedGames[i].endDate,
+        endDate: completedGameTime,
         guessesCount: completedGames[i].guesses.length,
         status: completedGameStatus,
       };

@@ -151,8 +151,6 @@ export const columns: ColumnDef<CompletedGameTable>[] = [
     cell: ({ cell }) => {
       const endDate = cell.getValue<CompletedGameTable['endDate']>();
 
-      if (!endDate) return;
-
       return (
         <div>
           <p>{format(endDate, 'dd/MM/y')}</p>
