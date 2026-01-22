@@ -216,7 +216,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
         cell.getValue<OfficialGamesHistory['fastestWinner']>();
       const fastestWinnerDuration = row.original.fastestWinnerDuration;
 
-      if (!fastestWinner || !fastestWinnerDuration) return;
+      if (!fastestWinner || fastestWinnerDuration === undefined) return;
 
       return (
         <div>
