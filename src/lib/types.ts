@@ -182,15 +182,15 @@ export type NoRandomGame = Pick<
   playerDifficulty: PlayerDifficultyField;
 };
 
-export type CompletedGame = {
+export type CompletedGameTable = {
+  gameId: Game['id'];
   gameNo: number;
-  startDate: Game['startDate'];
+  playerToFindName: string;
+  playerToFindDifficulty: Player['difficulty'];
   endDate: Game['endDate'];
   mode: Game['mode'];
-  status: Game['status'];
-  hintsRevealed: Game['hintsRevealed'];
-  playerToFind: Player;
-  guesses: GuessWithPlayer[];
+  status: 'won' | 'givenUp';
+  guessesCount: number;
 };
 
 export type PlayerDifficultyField = Player['difficulty'] | '???';
