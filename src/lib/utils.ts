@@ -212,7 +212,7 @@ export const bestResultUKOpenMap = buildBestResultMap(
 
 export function comparePlayers(
   guessedPlayer: Player,
-  playerToFind: PlayerWithHints,
+  playerToFind: PlayerWithHints | Player,
   currentMatches: PlayerToFindMatches
 ) {
   const comparisonResults = {} as ComparisonResults;

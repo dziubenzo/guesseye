@@ -1,5 +1,6 @@
 import ErrorPage from '@/components/ErrorPage';
 import GameDetail from '@/components/GameDetail';
+import GameDetailsPlayers from '@/components/GameDetailsPlayers';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
@@ -63,13 +64,13 @@ export default async function CompletedGame({
   return (
     <div className="flex flex-col grow-1">
       <Card className="grow-1 gap-3">
-        <CardContent className="flex flex-col gap-3 text-sm/6 sm:text-base/6">
-          <div className="flex justify-center sm:justify-end sticky top-2">
+        <CardContent className="flex flex-col gap-8 text-sm/6 sm:text-base/6 px-2 sm:px-6">
+          <div className="flex justify-center sm:justify-end sticky top-2 z-1">
             <Button className="cursor-pointer" variant="default" asChild>
               <Link href="/games">Back to Game History</Link>
             </Button>
           </div>
-          <div className="grid text-center sm:grid-cols-2 sm:text-start gap-2">
+          <div className="grid text-center sm:grid-cols-2 gap-2">
             <GameDetail title="Game No.">{gameId}</GameDetail>
             <GameDetail title="Completed By">{username}</GameDetail>
             <GameDetail title="Game Mode">{capitalise(mode)}</GameDetail>
@@ -89,11 +90,10 @@ export default async function CompletedGame({
             <GameDetail title="Completed At">
               {format(endDate, 'HH:mm')} ({format(endDate, 'dd MMM y')})
             </GameDetail>
-            <GameDetail title="Guesses Made">
-              {guesses.length} {guesses.length === 1 ? 'guess' : 'guesses'}
-            </GameDetail>
+            <GameDetail title="Guesses Made">{guesses.length}</GameDetail>
             <GameDetail title="Hints Revealed">{hintsRevealed}</GameDetail>
           </div>
+          <GameDetailsPlayers playerToFind={playerToFind} guesses={guesses} />
         </CardContent>
       </Card>
     </div>

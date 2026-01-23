@@ -47,7 +47,7 @@ type PlayerCardProps =
       type: 'guess';
       player: Player;
       comparisonResults: ComparisonResults;
-      guessNumber: number;
+      guessNumber?: number;
     }
   | {
       type: 'playerToFind';
@@ -81,7 +81,7 @@ export default function PlayerCard(props: PlayerCardProps) {
     const { previousMatches, currentMatches } = props;
 
     return (
-      <Card className="bg-secondary w-full">
+      <Card className="bg-transparent w-full">
         <CardHeader className="gap-0">
           <CardTitle className="flex flex-col justify-center sm:justify-between items-center gap-3 sm:flex-row">
             <PlayerToFindName
@@ -631,15 +631,19 @@ export default function PlayerCard(props: PlayerCardProps) {
     const { player, comparisonResults, guessNumber } = props;
 
     return (
-      <Card className="bg-secondary w-full">
+      <Card className="bg-transparent w-full">
         <CardHeader className="gap-0">
           <CardTitle className="flex justify-between items-center gap-2 truncate text-lg">
             <span className="font-mono truncate">
               {player.firstName + ' ' + player.lastName}
             </span>
-            <span className="bg-secondary-foreground text-secondary px-3 rounded-md self-center">
-              #{guessNumber}
-            </span>
+            {guessNumber === undefined ? (
+              <PlayerToFindDifficulty playerDifficulty={player.difficulty} />
+            ) : (
+              <span className="bg-secondary-foreground text-secondary px-3 rounded-md self-center">
+                #{guessNumber}
+              </span>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>

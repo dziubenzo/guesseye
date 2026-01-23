@@ -3,7 +3,7 @@
 import type { CompletedGameDetails, ErrorObject } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, guess } from '@/server/db/schema';
-import { and, asc, eq, ne } from 'drizzle-orm';
+import { and, desc, eq, ne } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 
 export const getCompletedGameDetails = unstable_cache(
@@ -15,7 +15,7 @@ export const getCompletedGameDetails = unstable_cache(
           with: {
             player: true,
           },
-          orderBy: asc(guess.id),
+          orderBy: desc(guess.id),
         },
         scheduledPlayer: {
           with: { playerToFind: true },
