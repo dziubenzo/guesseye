@@ -1,9 +1,9 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
+import PlayerDifficultyBadge from '@/components/PlayerDifficultyBadge';
 import { Button } from '@/components/ui/button';
 import type { OfficialGamesHistory } from '@/lib/types';
-import { cn, formatGameDuration, getDifficultyColour } from '@/lib/utils';
+import { formatGameDuration } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
@@ -59,31 +59,7 @@ export const columns: ColumnDef<OfficialGamesHistory>[] = [
       const playerDifficulty =
         cell.getValue<OfficialGamesHistory['playerDifficulty']>();
 
-      if (playerDifficulty === 'easy') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('easy'))}>
-            Easy
-          </Badge>
-        );
-      } else if (playerDifficulty === 'medium') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('medium'))}>
-            Medium
-          </Badge>
-        );
-      } else if (playerDifficulty === 'hard') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('hard'))}>
-            Hard
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('very hard'))}>
-            Very Hard
-          </Badge>
-        );
-      }
+      return <PlayerDifficultyBadge difficulty={playerDifficulty} />;
     },
     // Sort difficulty column by actual difficulty instead of alphabetically
     sortingFn: (rowA, rowB) => {

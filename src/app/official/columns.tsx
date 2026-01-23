@@ -1,9 +1,9 @@
 'use client';
 
+import PlayerDifficultyBadge from '@/components/PlayerDifficultyBadge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { GameInfo, OfficialGames } from '@/lib/types';
-import { cn, getDifficultyColour } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
@@ -72,31 +72,7 @@ export const columns: ColumnDef<OfficialGames>[] = [
       const playerDifficulty =
         cell.getValue<OfficialGames['playerDifficulty']>();
 
-      if (playerDifficulty === 'easy') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('easy'))}>
-            Easy
-          </Badge>
-        );
-      } else if (playerDifficulty === 'medium') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('medium'))}>
-            Medium
-          </Badge>
-        );
-      } else if (playerDifficulty === 'hard') {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('hard'))}>
-            Hard
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge className={cn('w-[80px]', getDifficultyColour('very hard'))}>
-            Very Hard
-          </Badge>
-        );
-      }
+      return <PlayerDifficultyBadge difficulty={playerDifficulty} />;
     },
     // Sort difficulty column by actual difficulty instead of alphabetically
     sortingFn: (rowA, rowB) => {
