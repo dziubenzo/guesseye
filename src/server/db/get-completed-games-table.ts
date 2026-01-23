@@ -63,6 +63,6 @@ export const getCompletedGamesTable = unstable_cache(
 
     return games;
   },
-  undefined,
+  ['completedGamesTable'],
   { tags: ['completedGamesTable'] }
 );
