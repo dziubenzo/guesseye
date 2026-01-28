@@ -23,7 +23,11 @@ export const endGame = async (
     })
     .where(eq(gameTable.id, game.id));
 
-  revalidateTag('completedGamesTable');
+  if (game.userId) {
+    revalidateTag(`completedGames:${game.userId}`);
+  }
+
+  revalidateTag(`completedGameDetails:${game.id}`);
 
   return;
 };

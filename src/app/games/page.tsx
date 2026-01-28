@@ -3,7 +3,7 @@ import DataTable from '@/app/official/data-table';
 import ErrorPage from '@/components/ErrorPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
-import { getCompletedGamesTable } from '@/server/db/get-completed-games-table';
+import { getCompletedGames } from '@/server/db/get-completed-games';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -19,8 +19,8 @@ export default async function GameHistory() {
     return notFound();
   }
 
-  const games = await getCompletedGamesTable(session.user.id);
-
+  const games = await getCompletedGames(session.user.id);
+  
   if ('error' in games) {
     return <ErrorPage errorMessage={games.error} />;
   }
