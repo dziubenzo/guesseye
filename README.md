@@ -23,6 +23,7 @@ For a detailed explanation of the game, see the [About](https://www.guesseye.com
 - User and global game stats
 - Charts related to darts players in the database
 - Leaderboard based on official and random mode wins and give ups as well as hints revealed
+- Game history
 - Official mode history
 
 ### Tech Stack

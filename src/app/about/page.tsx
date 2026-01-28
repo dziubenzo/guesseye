@@ -204,6 +204,11 @@ export default async function About() {
                     and in fewest tries;
                   </li>
                   <li>
+                    access to your <Bold>game history</Bold>, where you can
+                    check all of your completed games: your guesses, hints
+                    revealed, and, of course, the darts player to find;
+                  </li>
+                  <li>
                     access to both your and global <Bold>game stats</Bold>,
                     showing, for example, most frequent guesses, games by day,
                     or darts players that others found/give up on in the random
