@@ -1910,8 +1910,8 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Patrick Klingelhöfer';
     case 'Kai-Fan Leung':
       return 'Kai Fan Leung';
-    case 'Rob Owen':
-      return 'Robert Owen';
+    case 'Robert Owen':
+      return 'Rob Owen';
     case 'Joanne Locke':
       return 'Jo Locke';
     case 'Cameron Crabtree':
@@ -1977,6 +1977,10 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Andreas Toft-Jorgensen':
     case 'Andreas Toft Jorgensen':
       return 'Andreas Toft Jørgensen';
+    case 'Monique Lessmeister':
+      return 'Monique Leßmeister';
+    case 'Yves Cottenge':
+      return 'Yves Cottenjé';
     // dartsrankings.com spelling, must be a typo
     case 'Motomo Sakai':
       return 'Motomu Sakai';
