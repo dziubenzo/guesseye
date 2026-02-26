@@ -182,6 +182,7 @@ export const dartsBrandEnum = pgEnum('darts_brand', [
   'DMC',
   'Exclamation',
   'Sangreal',
+  'Unstoppable Darts',
 ]);
 export const dartsBrandEnumValues = dartsBrandEnum.enumValues;
 
