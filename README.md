@@ -18,8 +18,8 @@ For a detailed explanation of the game, see the [About](https://www.guesseye.com
 ## Features
 
 - Two game modes: official and random
-- 650+ darts players from 40+ countries to choose from and counting
-- Hints system
+- 700+ darts players from 40+ countries to choose from and counting
+- Hints system with 750+ hints for 350+ darts players and counting
 - User and global game stats
 - Charts related to darts players in the database
 - Leaderboard based on official and random mode wins and give ups as well as hints revealed
