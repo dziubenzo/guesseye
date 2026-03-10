@@ -92,6 +92,7 @@ export default async function CurrentGame() {
   }
 
   const {
+    gameId,
     guesses,
     playerToFindMatches,
     mode,
@@ -105,7 +106,7 @@ export default async function CurrentGame() {
     <div className="flex flex-col gap-4">
       <TopBar>
         <div className="flex gap-2">
-          <HintsButton availableHints={availableHints} />
+          <HintsButton availableHints={availableHints} gameId={gameId} />
           <GiveUpButton />
         </div>
         <GuessForm names={names} />
