@@ -8,23 +8,30 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useGameStore } from '@/lib/game-store';
+import { useRevalidateCompletedGames } from '@/lib/hooks';
+import type { Game, User } from '@/lib/types';
 import { Award } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
-export default function GameOverModal() {
+type GameOverModalProps = {
+  gameId?: Game['id'];
+  userId?: User['id'];
+};
+
+export default function GameOverModal({ gameId, userId }: GameOverModalProps) {
   const { gameOver, guesses, playerToFind, resetState } = useGameStore();
   const router = useRouter();
   const pathname = usePathname();
 
   function navigateAfterGameOver() {
+    resetState();
     if (pathname.includes('official')) {
       router.push('/official');
-    } else {
-      resetState();
-      router.refresh();
     }
   }
+
+  useRevalidateCompletedGames(gameOver, gameId, userId);
 
   if (gameOver && playerToFind) {
     return (

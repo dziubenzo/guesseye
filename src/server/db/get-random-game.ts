@@ -78,6 +78,5 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
     });
   });
 
-
   return gameDetails;
 };

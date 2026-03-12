@@ -60,7 +60,7 @@ export default async function CurrentGame() {
           <TopBar>
             <div className="flex gap-2">
               <HintsButton availableHints={availableHints} gameId={gameId} />
-              <GiveUpButton />
+              <GiveUpButton gameId={gameId} userId={session.user.id} />
             </div>
             <GuessForm names={names} />
           </TopBar>
@@ -79,7 +79,7 @@ export default async function CurrentGame() {
             playerDifficulty={playerDifficulty}
           />
           <GameOverConfetti />
-          <GameOverModal />
+          <GameOverModal gameId={gameId} userId={session.user.id} />
         </div>
       );
     }
@@ -107,7 +107,7 @@ export default async function CurrentGame() {
       <TopBar>
         <div className="flex gap-2">
           <HintsButton availableHints={availableHints} gameId={gameId} />
-          <GiveUpButton />
+          <GiveUpButton gameId={gameId} />
         </div>
         <GuessForm names={names} />
       </TopBar>
@@ -122,7 +122,7 @@ export default async function CurrentGame() {
         playerDifficulty={playerDifficulty}
       />
       <GameOverConfetti />
-      <GameOverModal />
+      <GameOverModal gameId={gameId} />
     </div>
   );
 }

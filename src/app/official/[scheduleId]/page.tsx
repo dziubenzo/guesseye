@@ -9,9 +9,11 @@ import ModeIndicator from '@/components/ModeIndicator';
 import PlayerToFindCard from '@/components/PlayerToFindCard';
 import PlayerToFindInfo from '@/components/PlayerToFindInfo';
 import TopBar from '@/components/TopBar';
+import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 export const metadata: Metadata = { title: 'Official Game' };
@@ -23,7 +25,17 @@ type PreviousOfficialGameProps = {
 export default async function PreviousOfficialGame({
   params,
 }: PreviousOfficialGameProps) {
-  const { scheduleId } = await params;
+  const [session, { scheduleId }] = await Promise.all([
+    auth.api.getSession({
+      headers: await headers(),
+    }),
+    params,
+  ]);
+
+  if (!session) {
+    return notFound();
+  }
+
   const [game, names] = await Promise.all([
     getOfficialGame(scheduleId),
     getPlayerFullNames(),
@@ -55,7 +67,11 @@ export default async function PreviousOfficialGame({
         <TopBar>
           <div className="flex gap-2">
             <HintsButton availableHints={availableHints} gameId={gameId} />
-            <GiveUpButton scheduleId={scheduleId} />
+            <GiveUpButton
+              scheduleId={scheduleId}
+              gameId={gameId}
+              userId={session.user.id}
+            />
           </div>
           <GuessForm names={names} scheduleId={scheduleId} />
         </TopBar>
@@ -71,7 +87,7 @@ export default async function PreviousOfficialGame({
           playerDifficulty={playerDifficulty}
         />
         <GameOverConfetti />
-        <GameOverModal />
+        <GameOverModal gameId={gameId} userId={session.user.id} />
       </div>
     );
   }

@@ -4,7 +4,6 @@ import type { ErrorObject, Game, OfficialGame, RandomGame } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game as gameTable } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
-import { revalidateTag } from 'next/cache';
 
 export const endGame = async (
   type: 'win' | 'giveUp',
@@ -22,12 +21,6 @@ export const endGame = async (
       endDate: new Date(),
     })
     .where(eq(gameTable.id, game.id));
-
-  if (game.userId) {
-    revalidateTag(`completedGames:${game.userId}`);
-  }
-
-  revalidateTag(`completedGameDetails:${game.id}`);
 
   return;
 };

@@ -14,8 +14,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useGameStore } from '@/lib/game-store';
+import type { Game, User } from '@/lib/types';
 import { giveUpSchema, type GiveUpSchemaType } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
+import revalidateCompletedGames from '@/server/revalidators/revalidate-completed-games';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
@@ -25,9 +27,15 @@ import { useForm } from 'react-hook-form';
 
 type GiveUpButtonProps = {
   scheduleId?: string;
+  gameId?: Game['id'];
+  userId?: User['id'];
 };
 
-export default function GiveUpButton({ scheduleId }: GiveUpButtonProps) {
+export default function GiveUpButton({
+  scheduleId,
+  gameId,
+  userId,
+}: GiveUpButtonProps) {
   const { resetState, mode } = useGameStore();
 
   const giveUpForm = useForm({
@@ -64,12 +72,12 @@ export default function GiveUpButton({ scheduleId }: GiveUpButtonProps) {
 
   function handleButtonClick() {
     resetState();
+    revalidateCompletedGames(gameId, userId);
     if (pathname.includes('official')) {
       router.push('/official');
     } else {
       setOpen(false);
       setPlayerToFind('');
-      router.refresh();
     }
     return;
   }

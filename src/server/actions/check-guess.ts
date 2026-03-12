@@ -14,7 +14,6 @@ import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
 import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
 import { playersMap } from '@/server/db/get-players-map';
-import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -112,8 +111,6 @@ export const checkGuess = actionClient
           playerDifficulty: playerToFind.difficulty,
         },
       };
-
-      revalidateGameCache(mode, scheduleId);
 
       return data;
     }

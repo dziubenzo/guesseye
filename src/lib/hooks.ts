@@ -1,6 +1,7 @@
 import { ALL_MATCHES } from '@/lib/constants';
 import { useGameStore } from '@/lib/game-store';
-import type { Schedule } from '@/lib/types';
+import type { Game, Schedule, User } from '@/lib/types';
+import revalidateCompletedGames from '@/server/revalidators/revalidate-completed-games';
 import { formatDistanceStrict } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -22,7 +23,7 @@ export const useUpdateProgressBar = () => {
         if (typeof value === 'string' && value[0] === '?') {
           continue;
         }
-        
+
         if (
           (typeof value !== 'object' && value !== undefined) ||
           (typeof value === 'object' && value?.type === 'match')
@@ -79,4 +80,21 @@ export const useUpdateTimeLeft = (
   }, [nextPlayerStartDate]);
 
   return { timeLeft, timeInSeconds };
+};
+
+// Revalidate completed games on GameOverModal component dismount
+export const useRevalidateCompletedGames = (
+  gameOver: boolean,
+  gameId?: Game['id'],
+  userId?: User['id']
+) => {
+  useEffect(() => {
+    if (gameOver) {
+      return () => {
+        revalidateCompletedGames(gameId, userId);
+      };
+    } else {
+      return () => {};
+    }
+  }, [gameOver, gameId, userId]);
 };
