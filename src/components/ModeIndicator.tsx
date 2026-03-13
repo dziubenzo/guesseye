@@ -2,16 +2,18 @@
 
 import Bold from '@/components/Bold';
 import Tooltip from '@/components/Tooltip';
-import { useGameStore } from '@/lib/game-store';
+import type { GameMode } from '@/lib/types';
 import Link from 'next/link';
 
 type ModeIndicatorProps = {
+  mode: GameMode;
   allowVeryHard?: boolean;
 };
 
-export default function ModeIndicator({ allowVeryHard }: ModeIndicatorProps) {
-  const { mode } = useGameStore();
-
+export default function ModeIndicator({
+  mode,
+  allowVeryHard,
+}: ModeIndicatorProps) {
   return (
     <span className="place-self-center sm:place-self-end text-lg opacity-75 p-2 flex gap-1">
       {mode === 'official' ? 'Official Mode' : 'Random Mode'}

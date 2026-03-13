@@ -20,9 +20,7 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
   // Do not create a random game automatically for guests
   if (options?.isGuest && !existingGame) {
     const noGame: NoRandomGame = {
-      status: 'noGame',
       gameId: undefined,
-      mode: 'random',
       guesses: [],
       playerToFindMatches: {},
       hints: [],
@@ -50,9 +48,7 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
   }
 
   const gameDetails: ExistingRandomGame = {
-    status: 'inProgress',
     gameId: game.id,
-    mode: 'random',
     guesses: [],
     playerToFindMatches: {
       firstName: obfuscate('name', game.randomPlayer.firstName),

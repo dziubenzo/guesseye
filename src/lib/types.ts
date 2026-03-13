@@ -145,7 +145,6 @@ export type PlayerToFindRangedMatch<T> = {
 export type AnyOfficialGame = {
   gameId?: Game['id'];
   status: 'inProgress';
-  mode: 'official';
   guesses: Guess[];
   hints: GameHint[];
   obfuscatedHints: string[];
@@ -158,7 +157,6 @@ export type AnyOfficialGame = {
 
 export type ExistingRandomGame = Pick<
   AnyOfficialGame,
-  | 'status'
   | 'gameId'
   | 'guesses'
   | 'playerToFindMatches'
@@ -166,19 +164,17 @@ export type ExistingRandomGame = Pick<
   | 'obfuscatedHints'
   | 'availableHints'
   | 'playerDifficulty'
-> & { mode: 'random' };
+>;
 
 export type NoRandomGame = Pick<
   ExistingRandomGame,
   | 'gameId'
-  | 'mode'
   | 'guesses'
   | 'playerToFindMatches'
   | 'hints'
   | 'obfuscatedHints'
   | 'availableHints'
 > & {
-  status: 'noGame';
   playerDifficulty: PlayerDifficultyField;
 };
 

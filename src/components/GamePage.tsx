@@ -61,9 +61,9 @@ export default function GamePage({
         <TopBar>
           <div className="flex gap-2">
             <HintsButton availableHints={availableHints} gameId={gameId} />
-            <GiveUpButton gameId={gameId} userId={userId} />
+            <GiveUpButton mode="random" gameId={gameId} userId={userId} />
           </div>
-          <GuessForm names={names} />
+          <GuessForm mode="random" names={names} />
         </TopBar>
         <ModeIndicator mode="random" allowVeryHard={allowVeryHard} />
         <PlayerToFindCard />
@@ -72,7 +72,6 @@ export default function GamePage({
           initialObfuscatedHints={obfuscatedHints}
           initialHints={hints}
           playerToFindMatches={playerToFindMatches}
-          mode={gameMode}
           playerDifficulty={playerDifficulty}
         />
         <GameOverConfetti />
@@ -98,12 +97,13 @@ export default function GamePage({
           <div className="flex gap-2">
             <HintsButton availableHints={availableHints} gameId={gameId} />
             <GiveUpButton
+              mode="official"
               scheduleId={scheduleId}
               gameId={gameId}
               userId={userId}
             />
           </div>
-          <GuessForm names={names} scheduleId={scheduleId} />
+          <GuessForm mode="official" names={names} scheduleId={scheduleId} />
         </TopBar>
         <ModeIndicator mode="official" />
         <PlayerToFindInfo
@@ -118,7 +118,6 @@ export default function GamePage({
           initialHints={hints}
           initialObfuscatedHints={obfuscatedHints}
           playerToFindMatches={playerToFindMatches}
-          mode={gameMode}
           playerDifficulty={playerDifficulty}
         />
         <GameOverConfetti />

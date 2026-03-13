@@ -12,7 +12,6 @@ import {
 import { useGameStore } from '@/lib/game-store';
 import type {
   GameHint,
-  GameMode,
   Guess,
   PlayerDifficultyField,
   PlayerToFindMatches,
@@ -24,7 +23,6 @@ type GuessesProps = {
   initialHints: GameHint[];
   initialObfuscatedHints: string[];
   playerToFindMatches: PlayerToFindMatches;
-  mode: GameMode;
   playerDifficulty: PlayerDifficultyField;
 };
 
@@ -33,7 +31,6 @@ export default function Guesses({
   initialHints,
   initialObfuscatedHints,
   playerToFindMatches,
-  mode,
   playerDifficulty,
 }: GuessesProps) {
   const {
@@ -43,14 +40,12 @@ export default function Guesses({
     setInitialObfuscatedHints,
     updatePreviousMatches,
     updateCurrentMatches,
-    updateMode,
     updateDifficulty,
   } = useGameStore();
   const [api, setApi] = useState<CarouselApi>();
 
   // Set initial state when a game is fetched and a random game is won/given up
   useEffect(() => {
-    updateMode(mode);
     updateDifficulty(playerDifficulty);
     setInitialGuesses(initialGuesses);
     setInitialHints(initialHints);
@@ -58,7 +53,6 @@ export default function Guesses({
     updatePreviousMatches(playerToFindMatches);
     updateCurrentMatches(playerToFindMatches);
   }, [
-    mode,
     playerDifficulty,
     initialGuesses,
     initialObfuscatedHints,
@@ -93,7 +87,7 @@ export default function Guesses({
               className="flex justify-center items-center"
             >
               <PlayerCard
-                type={'guess'}
+                type="guess"
                 player={guess.guessedPlayer}
                 comparisonResults={guess.comparisonResults}
                 guessNumber={guesses.length - index}

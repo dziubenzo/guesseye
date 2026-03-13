@@ -25,7 +25,7 @@ export default function PlayerToFindCard() {
         <span>{ALL_MATCHES}</span>
       </div>
       <PlayerCard
-        type={'playerToFind'}
+        type="playerToFind"
         previousMatches={previousMatches}
         currentMatches={currentMatches}
       />

@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useGameStore } from '@/lib/game-store';
-import type { Game, User } from '@/lib/types';
+import type { Game, GameMode, User } from '@/lib/types';
 import { giveUpSchema, type GiveUpSchemaType } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
 import revalidateCompletedGames from '@/server/revalidators/revalidate-completed-games';
@@ -26,17 +26,19 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type GiveUpButtonProps = {
+  mode: GameMode;
   scheduleId?: string;
   gameId?: Game['id'];
   userId?: User['id'];
 };
 
 export default function GiveUpButton({
+  mode,
   scheduleId,
   gameId,
   userId,
 }: GiveUpButtonProps) {
-  const { resetState, mode } = useGameStore();
+  const { resetState } = useGameStore();
 
   const giveUpForm = useForm({
     resolver: zodResolver(giveUpSchema),

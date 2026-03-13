@@ -1,6 +1,5 @@
 import type {
   GameHint,
-  GameMode,
   Guess,
   Player,
   PlayerDifficultyField,
@@ -16,7 +15,6 @@ type GameStore = {
   previousMatches: PlayerToFindMatches;
   currentMatches: PlayerToFindMatches;
   gameOver: boolean;
-  mode: GameMode;
   playerDifficulty: PlayerDifficultyField;
   finishGame: (playerToFind: Player) => void;
   setInitialGuesses: (initialGuesses: Guess[]) => void;
@@ -30,7 +28,6 @@ type GameStore = {
   updatePreviousMatches: (lastMatches: PlayerToFindMatches) => void;
   updateCurrentMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
-  updateMode: (mode: GameMode) => void;
   updateDifficulty: (playerDifficulty: PlayerDifficultyField) => void;
 };
 
@@ -43,7 +40,6 @@ type InitialState = Pick<
   | 'previousMatches'
   | 'currentMatches'
   | 'gameOver'
-  | 'mode'
   | 'playerDifficulty'
 >;
 
@@ -55,7 +51,6 @@ const initialState: InitialState = {
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  mode: 'random',
   playerDifficulty: '???',
 };
 
@@ -67,7 +62,6 @@ export const useGameStore = create<GameStore>()((set) => ({
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  mode: 'random',
   playerDifficulty: '???',
   finishGame: (playerToFind) =>
     set(() => ({
@@ -105,9 +99,6 @@ export const useGameStore = create<GameStore>()((set) => ({
     })),
   resetState: () => {
     set(initialState);
-  },
-  updateMode: (mode) => {
-    set(() => ({ mode }));
   },
   updateDifficulty: (playerDifficulty) => {
     set(() => ({ playerDifficulty }));

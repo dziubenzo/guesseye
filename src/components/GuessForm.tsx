@@ -5,7 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/lib/game-store';
-import type { PlayerFullName, PlayerToFindMatches } from '@/lib/types';
+import type {
+  GameMode,
+  PlayerFullName,
+  PlayerToFindMatches,
+} from '@/lib/types';
 import { evaluateMatches } from '@/lib/utils';
 import { guessSchema, GuessSchemaType } from '@/lib/zod/check-guess';
 import { checkGuess } from '@/server/actions/check-guess';
@@ -17,11 +21,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type GuessFormProps = {
+  mode: GameMode;
   names: PlayerFullName[];
   scheduleId?: string;
 };
 
-export default function GuessForm({ names, scheduleId }: GuessFormProps) {
+export default function GuessForm({ mode, names, scheduleId }: GuessFormProps) {
   const {
     finishGame,
     updateGuesses,
@@ -32,7 +37,6 @@ export default function GuessForm({ names, scheduleId }: GuessFormProps) {
     guesses,
     gameOver,
     currentMatches,
-    mode,
   } = useGameStore();
 
   const playerForm = useForm({
