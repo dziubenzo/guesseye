@@ -84,6 +84,8 @@ export default function GiveUpButton({
     return;
   }
 
+  if (!gameId) return null;
+
   return (
     <div className="sm:absolute sm:top-4 sm:right-0">
       <AlertDialog open={open} onOpenChange={setOpen}>
@@ -98,9 +100,7 @@ export default function GiveUpButton({
         {playerToFind ? (
           <AlertDialogContent
             className="flex flex-col gap-0"
-            onEscapeKeyDown={(event) => {
-              event.preventDefault();
-            }}
+            onEscapeKeyDown={handleButtonClick}
           >
             <AlertDialogHeader>
               <AlertDialogTitle>Game Given Up</AlertDialogTitle>
