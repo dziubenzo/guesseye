@@ -121,6 +121,8 @@ export default function GuessForm({ mode, names, scheduleId }: GuessFormProps) {
     }
 
     const guess = result.guess;
+    
+    playerForm.setValue('guess', guess);
 
     execute({ ...values, currentMatches, mode, guess });
   }
