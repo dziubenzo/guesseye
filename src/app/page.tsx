@@ -1,16 +1,7 @@
 import ErrorPage from '@/components/ErrorPage';
 import GameGivenUp from '@/components/GameGivenUp';
-import GameOverConfetti from '@/components/GameOverConfetti';
-import GameOverModal from '@/components/GameOverModal';
+import GamePage from '@/components/GamePage';
 import GameWon from '@/components/GameWon';
-import GiveUpButton from '@/components/GiveUpButton';
-import Guesses from '@/components/Guesses';
-import GuessForm from '@/components/GuessForm';
-import HintsButton from '@/components/HintsButton';
-import ModeIndicator from '@/components/ModeIndicator';
-import PlayerToFindCard from '@/components/PlayerToFindCard';
-import PlayerToFindInfo from '@/components/PlayerToFindInfo';
-import TopBar from '@/components/TopBar';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
@@ -21,10 +12,12 @@ import { headers } from 'next/headers';
 export const metadata: Metadata = { title: 'GuessEye' };
 
 export default async function CurrentGame() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const names = await getPlayerFullNames();
+  const [session, names] = await Promise.all([
+    auth.api.getSession({
+      headers: await headers(),
+    }),
+    getPlayerFullNames(),
+  ]);
 
   if (session) {
     const game = await getOfficialGame();
@@ -41,88 +34,21 @@ export default async function CurrentGame() {
       return <GameGivenUp previousGame={game} />;
     }
 
-    if (game) {
-      const {
-        gameId,
-        guesses,
-        playerToFindMatches,
-        winnersCount,
-        nextPlayerStartDate,
-        mode,
-        playerDifficulty,
-        hints,
-        obfuscatedHints,
-        availableHints,
-      } = game;
-
-      return (
-        <div className="flex flex-col gap-4">
-          <TopBar>
-            <div className="flex gap-2">
-              <HintsButton availableHints={availableHints} gameId={gameId} />
-              <GiveUpButton gameId={gameId} userId={session.user.id} />
-            </div>
-            <GuessForm names={names} />
-          </TopBar>
-          <ModeIndicator />
-          <PlayerToFindInfo
-            winnersCount={winnersCount}
-            nextPlayerStartDate={nextPlayerStartDate}
-          />
-          <PlayerToFindCard />
-          <Guesses
-            initialGuesses={guesses}
-            initialHints={hints}
-            initialObfuscatedHints={obfuscatedHints}
-            playerToFindMatches={playerToFindMatches}
-            mode={mode}
-            playerDifficulty={playerDifficulty}
-          />
-          <GameOverConfetti />
-          <GameOverModal gameId={gameId} userId={session.user.id} />
-        </div>
-      );
-    }
-  }
-
-  const game = await getRandomGame({ isGuest: true });
-
-  if ('error' in game) {
-    return <ErrorPage errorMessage={game.error} />;
-  }
-
-  const {
-    gameId,
-    guesses,
-    playerToFindMatches,
-    mode,
-    playerDifficulty,
-    hints,
-    obfuscatedHints,
-    availableHints,
-  } = game;
-
-  return (
-    <div className="flex flex-col gap-4">
-      <TopBar>
-        <div className="flex gap-2">
-          <HintsButton availableHints={availableHints} gameId={gameId} />
-          <GiveUpButton gameId={gameId} />
-        </div>
-        <GuessForm names={names} />
-      </TopBar>
-      <ModeIndicator />
-      <PlayerToFindCard />
-      <Guesses
-        initialGuesses={guesses}
-        initialHints={hints}
-        initialObfuscatedHints={obfuscatedHints}
-        playerToFindMatches={playerToFindMatches}
-        mode={mode}
-        playerDifficulty={playerDifficulty}
+    return (
+      <GamePage
+        gameMode="official"
+        game={game}
+        names={names}
+        userId={session.user.id}
       />
-      <GameOverConfetti />
-      <GameOverModal gameId={gameId} />
-    </div>
-  );
+    );
+  } else {
+    const game = await getRandomGame({ isGuest: true });
+
+    if ('error' in game) {
+      return <ErrorPage errorMessage={game.error} />;
+    }
+
+    return <GamePage gameMode="random" game={game} names={names} />;
+  }
 }

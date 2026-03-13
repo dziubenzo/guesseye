@@ -1,14 +1,5 @@
 import ErrorPage from '@/components/ErrorPage';
-import GameOverConfetti from '@/components/GameOverConfetti';
-import GameOverModal from '@/components/GameOverModal';
-import GiveUpButton from '@/components/GiveUpButton';
-import Guesses from '@/components/Guesses';
-import GuessForm from '@/components/GuessForm';
-import HintsButton from '@/components/HintsButton';
-import ModeIndicator from '@/components/ModeIndicator';
-import PlayerToFindCard from '@/components/PlayerToFindCard';
-import PlayerToFindInfo from '@/components/PlayerToFindInfo';
-import TopBar from '@/components/TopBar';
+import GamePage from '@/components/GamePage';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
@@ -49,48 +40,13 @@ export default async function PreviousOfficialGame({
     return notFound();
   }
 
-  if (game) {
-    const {
-      gameId,
-      guesses,
-      playerToFindMatches,
-      winnersCount,
-      mode,
-      playerDifficulty,
-      hints,
-      obfuscatedHints,
-      availableHints,
-    } = game;
-
-    return (
-      <div className="flex flex-col gap-4">
-        <TopBar>
-          <div className="flex gap-2">
-            <HintsButton availableHints={availableHints} gameId={gameId} />
-            <GiveUpButton
-              scheduleId={scheduleId}
-              gameId={gameId}
-              userId={session.user.id}
-            />
-          </div>
-          <GuessForm names={names} scheduleId={scheduleId} />
-        </TopBar>
-        <ModeIndicator />
-        <PlayerToFindInfo winnersCount={winnersCount} />
-        <PlayerToFindCard />
-        <Guesses
-          initialGuesses={guesses}
-          initialHints={hints}
-          initialObfuscatedHints={obfuscatedHints}
-          playerToFindMatches={playerToFindMatches}
-          mode={mode}
-          playerDifficulty={playerDifficulty}
-        />
-        <GameOverConfetti />
-        <GameOverModal gameId={gameId} userId={session.user.id} />
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <GamePage
+      gameMode="official"
+      game={game}
+      names={names}
+      scheduleId={scheduleId}
+      userId={session.user.id}
+    />
+  );
 }
