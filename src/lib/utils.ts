@@ -1983,6 +1983,9 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Yves Cottenjé';
     case 'Matt Dicken':
       return 'Matthew Dicken';
+    case 'Robert Ellis':
+    case 'Robbie Ellis':
+      return 'Robert Ellis-Brown';
     // dartsrankings.com spelling, must be a typo
     case 'Motomo Sakai':
       return 'Motomu Sakai';
