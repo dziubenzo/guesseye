@@ -138,9 +138,9 @@ export default async function About() {
             Last but not least, the game features a <Bold>hint system</Bold>.
             You can reveal hints about darts players to get you on the right
             track if you are stuck or out of ideas. To reveal them, you first
-            need to <Bold>make at least one guess</Bold> in a game. There are
-            still many darts players who do not have any hints at the moment,
-            but my intention is to continue adding them in my spare time.
+            need to <Bold>make at least one guess</Bold> in a game, except for
+            the random mode for logged-in users, where a game is created
+            automatically for you, thus making hints available immediately.
             {!session && ' Logged-in users can also suggest new hints.'}
           </p>
         </section>
