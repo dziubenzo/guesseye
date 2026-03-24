@@ -1986,6 +1986,18 @@ export function handleDifferentSpellings(fullName: string) {
     case 'Robert Ellis':
     case 'Robbie Ellis':
       return 'Robert Ellis-Brown';
+    case 'Sadiq Mohamed':
+      return 'Sadiq Dasmal';
+    case 'Hasan Bucheeri':
+      return 'Hassan Bucheeri';
+    case 'Mikuru Suzuki':
+      return 'Mikuru Muramatsu';
+    case 'Arthur Valle':
+      return 'Artur Valle';
+    case 'John Norman Jnr':
+    case 'John Norman Jr.':
+    case 'John Norman Jr':
+      return 'John Norman';
     // dartsrankings.com spelling, must be a typo
     case 'Motomo Sakai':
       return 'Motomu Sakai';
