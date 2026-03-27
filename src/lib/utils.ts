@@ -1998,6 +1998,23 @@ export function handleDifferentSpellings(fullName: string) {
     case 'John Norman Jr.':
     case 'John Norman Jr':
       return 'John Norman';
+    case 'Huang Xue Jie':
+      return 'Xuejie Huang';
+    case 'Wei-Hong Li':
+    case 'Wei Hong Li':
+      return 'Weihong Li';
+    case 'An-Sheng Lu':
+      return 'An Sheng Lu';
+    case 'Alex-B Jensen':
+      return 'Alex Jensen';
+    case 'Henrik Larsen-Primdal':
+      return 'Henrik Primdal';
+    case 'Claus Bendix Nielsen':
+      return 'Claus Nielsen';
+    case 'Manolo Vilerio':
+      return 'Manuel Vilerio';
+    case 'Ho-Yin Shek':
+      return 'Ho Yin Shek';
     // dartsrankings.com spelling, must be a typo
     case 'Motomo Sakai':
       return 'Motomu Sakai';
