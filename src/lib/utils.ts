@@ -2015,6 +2015,46 @@ export function handleDifferentSpellings(fullName: string) {
       return 'Manuel Vilerio';
     case 'Ho-Yin Shek':
       return 'Ho Yin Shek';
+    case 'Ho-Tung Ching':
+    case 'Ho Tung Ching':
+      return 'Ching Ho Tung';
+    case 'Halgrímur Egilsson':
+      return 'Hallgrímur Egilsson';
+    case 'Petur Rudrik Gudmundsson':
+      return 'Pétur Rúðrik Guðmundsson';
+    case 'Mohan Kumar-Goel':
+    case 'Mohan Goel':
+      return 'Mohan Kumar Goel';
+    case 'Massimo Dalla-Rosa':
+      return 'Massimo Dalla Rosa';
+    case 'Dmitriy Zhukov':
+      return 'Dmitrijs Žukovs';
+    case 'Lee Choon Peng':
+      return 'Choon-Peng Lee';
+    case 'Amin Abdul-Ghani':
+      return 'Abdul-Ghani Amin';
+    case 'Kesava Roa':
+      return 'Kesava Rao';
+    case 'Mohd-Nasir Bin Jantan':
+      return 'Mohd Nasir Bin Jantan';
+    case 'Siikhwang Wong':
+    case 'Siik Hwang(Robbie) Wong':
+    case 'Siik Hwang (Robbie) Wong':
+      return 'Siik Hwang Wong';
+    case 'Jenn-Ming Tan':
+      return 'Jenn Ming Tan';
+    case 'Håkon-Bjørge Helling':
+      return 'Håkon Bjørge Helling';
+    case 'Phuay-Wei Tan':
+      return 'Phuay Wei Tan';
+    case 'Osmann Kijamet':
+      return 'Osman Kijamet';
+    case 'Ricardo Fernández-Carballo':
+      return 'Ricardo Fernández Carballo';
+    case 'Philippe Ruckstuhl':
+      return 'Philipp Ruckstuhl';
+    case 'Ilya Pekaruk':
+      return 'Ilia Pekaruk';
     // dartsrankings.com spelling, must be a typo
     case 'Motomo Sakai':
       return 'Motomu Sakai';
