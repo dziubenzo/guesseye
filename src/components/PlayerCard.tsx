@@ -970,7 +970,7 @@ function PlayerToFindName({
 }: PlayerToFindNameProps) {
   return (
     <motion.div
-      className="flex items-center gap-3 font-mono font-medium"
+      className="flex items-center gap-3 font-mono-backup font-medium"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: cardTopDuration }}

@@ -4,7 +4,7 @@ import ThemeProvider from '@/components/ThemeProvider';
 import '@/globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Noto_Sans_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 const geistSans = Geist({
@@ -12,8 +12,15 @@ const geistSans = Geist({
   subsets: ['latin'],
 });
 
+// This font suddenly stopped displaying multiple question marks properly, it stacks them weirdly
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin'],
+});
+
+// This font is used for displaying multiple question marks until the one above is fixed
+const notoSansMono = Noto_Sans_Mono({
+  variable: '--font-noto-sans-mono',
   subsets: ['latin'],
 });
 
@@ -45,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center justify-center min-h-lvh bg-secondary selection:bg-primary selection:text-primary-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSansMono.variable} antialiased flex flex-col items-center justify-center min-h-lvh bg-secondary selection:bg-primary selection:text-primary-foreground`}
       >
         <ThemeProvider
           attribute="class"
