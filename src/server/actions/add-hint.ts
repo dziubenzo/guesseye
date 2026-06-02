@@ -36,14 +36,14 @@ export const addHint = actionClient
         message: `Hint successfully added for`,
       };
       revalidatePath('/admin');
-      revalidateTag('hintsCounts');
-      revalidateTag('hintCount');
+      revalidateTag('hintsCounts', 'max');
+      revalidateTag('hintCount', 'max');
     } else {
       result = {
         type: 'success',
         message: `Hint successfully submitted for review for`,
       };
-      revalidateTag('suggestedHints');
+      revalidateTag('suggestedHints', 'max');
     }
 
     return result;

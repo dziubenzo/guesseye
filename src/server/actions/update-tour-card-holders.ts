@@ -68,8 +68,8 @@ export default async function updateTourCardHolders() {
   }
 
   // Clear the players and last database update cache
-  revalidateTag('players');
-  revalidateTag('lastDatabaseUpdate');
+  revalidateTag('players', 'max');
+  revalidateTag('lastDatabaseUpdate', 'max');
 
   const missingPlayersString =
     missingPlayers.length > 0

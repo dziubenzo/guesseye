@@ -35,8 +35,8 @@ export default async function updateRankings(type: UpdateRankingsType) {
   );
 
   // Clear the players and last database update cache
-  revalidateTag('players');
-  revalidateTag('lastDatabaseUpdate');
+  revalidateTag('players', 'max');
+  revalidateTag('lastDatabaseUpdate', 'max');
 
   const updateMessage = getUpdateMessage(type);
 

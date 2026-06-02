@@ -42,8 +42,8 @@ export const manageHint = actionClient
     }
 
     revalidatePath('/admin');
-    revalidateTag('hintsCounts');
-    revalidateTag('hintCount');
+    revalidateTag('hintsCounts', 'max');
+    revalidateTag('hintCount', 'max');
 
     return result;
   });

@@ -18,7 +18,7 @@ export default async function revalidatePlayerCache() {
   ];
 
   for (const cache of cacheTypes) {
-    revalidateTag(cache);
+    revalidateTag(cache, 'max');
   }
 
   return {

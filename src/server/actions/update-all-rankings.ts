@@ -46,8 +46,8 @@ export default async function updateAllRankings() {
   }
 
   // Clear the players and last database update cache
-  revalidateTag('players');
-  revalidateTag('lastDatabaseUpdate');
+  revalidateTag('players', 'max');
+  revalidateTag('lastDatabaseUpdate', 'max');
 
   result = {
     type: 'success',

@@ -11,10 +11,10 @@ export default async function revalidateCompletedGames(
     return;
   } else {
     if (userId) {
-      revalidateTag(`completedGames:${userId}`);
+      revalidateTag(`completedGames:${userId}`, 'max');
     }
 
-    revalidateTag(`completedGameDetails:${gameId}`);
+    revalidateTag(`completedGameDetails:${gameId}`, 'max');
   }
 
   return;
