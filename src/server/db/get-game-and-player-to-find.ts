@@ -12,7 +12,6 @@ import { createOfficialGame } from '@/server/db/create-official-game';
 import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 import { getScheduleData } from '@/server/db/get-schedule-data';
-import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
 
 export const getGameAndPlayerToFind = async (
   mode: GameMode,
@@ -20,6 +19,7 @@ export const getGameAndPlayerToFind = async (
 ) => {
   let game: OfficialGame | RandomGame | Game | ErrorObject;
   let playerToFind: PlayerWithHints;
+  let isFirstGuess = false;
 
   if (mode === 'official') {
     const scheduleData = await getScheduleData(scheduleId);
@@ -32,9 +32,8 @@ export const getGameAndPlayerToFind = async (
     const existingGame =
       scheduleData.games.length === 1 ? scheduleData.games[0] : undefined;
 
-    // Refetch the game object on the game page once a game is created
     if (!existingGame) {
-      revalidateGameCache(mode, scheduleId);
+      isFirstGuess = true;
     }
 
     game = existingGame ? existingGame : await createOfficialGame(scheduleData);
@@ -43,9 +42,8 @@ export const getGameAndPlayerToFind = async (
   } else {
     const existingGame = await findRandomGame();
 
-    // Refetch the game object on the game page once a game is created
     if (!existingGame) {
-      revalidateGameCache(mode, scheduleId);
+      isFirstGuess = true;
     }
 
     game = existingGame ? existingGame : await createRandomGame();
@@ -58,5 +56,5 @@ export const getGameAndPlayerToFind = async (
     }
   }
 
-  return { game, playerToFind };
+  return { game, playerToFind, isFirstGuess };
 };

@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 export default async function revalidateGameCache(
   mode: GameMode,
-  scheduleId: number | undefined
+  scheduleId?: number
 ) {
   if (mode === 'official') {
     if (scheduleId) {

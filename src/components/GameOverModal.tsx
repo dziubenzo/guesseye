@@ -28,6 +28,8 @@ export default function GameOverModal({ gameId, userId }: GameOverModalProps) {
     resetState();
     if (pathname.includes('official')) {
       router.push('/official');
+    } else {
+      router.refresh();
     }
   }
 
