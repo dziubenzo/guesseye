@@ -66,13 +66,12 @@ export default function GamePage({
           <GuessForm mode="random" names={names} />
         </TopBar>
         <ModeIndicator mode="random" allowVeryHard={allowVeryHard} />
-        <PlayerToFindCard />
+        <PlayerToFindCard playerDifficulty={playerDifficulty} />
         <Guesses
           initialGuesses={guesses}
           initialObfuscatedHints={obfuscatedHints}
           initialHints={hints}
           playerToFindMatches={playerToFindMatches}
-          playerDifficulty={playerDifficulty}
         />
         <GameOverConfetti />
         <GameOverModal gameId={gameId} userId={userId} />
@@ -112,13 +111,12 @@ export default function GamePage({
             pathname === '/' ? nextPlayerStartDate : undefined
           }
         />
-        <PlayerToFindCard />
+        <PlayerToFindCard playerDifficulty={playerDifficulty} />
         <Guesses
           initialGuesses={guesses}
           initialHints={hints}
           initialObfuscatedHints={obfuscatedHints}
           playerToFindMatches={playerToFindMatches}
-          playerDifficulty={playerDifficulty}
         />
         <GameOverConfetti />
         <GameOverModal gameId={gameId} userId={userId} />

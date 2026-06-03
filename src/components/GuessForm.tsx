@@ -33,7 +33,6 @@ export default function GuessForm({ mode, names, scheduleId }: GuessFormProps) {
     updatePreviousMatches,
     updateCurrentMatches,
     resetState,
-    updateDifficulty,
     guesses,
     gameOver,
     currentMatches,
@@ -89,7 +88,6 @@ export default function GuessForm({ mode, names, scheduleId }: GuessFormProps) {
       if (data?.type === 'success') {
         playerForm.resetField('guess');
         setNewMatches(data.success.newMatches);
-        updateDifficulty(data.success.playerDifficulty);
         if (data.success.type === 'correctGuess') {
           updateGuesses(
             data.success.playerToFind,

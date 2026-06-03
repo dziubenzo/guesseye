@@ -225,7 +225,6 @@ type CheckGuessSuccess = {
       }
   ) & {
     newMatches: PlayerToFindMatches;
-    playerDifficulty: Player['difficulty'];
   };
 };
 

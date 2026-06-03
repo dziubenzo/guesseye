@@ -88,7 +88,6 @@ export const checkGuess = actionClient
             playerToFind,
             comparisonResults: matchingComparisonResults,
             newMatches: currentMatches,
-            playerDifficulty: playerToFind.difficulty,
           },
         };
 
@@ -114,7 +113,6 @@ export const checkGuess = actionClient
           guessedPlayer,
           comparisonResults,
           newMatches: currentMatches,
-          playerDifficulty: playerToFind.difficulty,
         },
       };
 

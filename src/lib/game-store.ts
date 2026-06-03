@@ -1,10 +1,4 @@
-import type {
-  GameHint,
-  Guess,
-  Player,
-  PlayerDifficultyField,
-  PlayerToFindMatches,
-} from '@/lib/types';
+import type { GameHint, Guess, Player, PlayerToFindMatches } from '@/lib/types';
 import { create } from 'zustand';
 
 type GameStore = {
@@ -15,7 +9,6 @@ type GameStore = {
   previousMatches: PlayerToFindMatches;
   currentMatches: PlayerToFindMatches;
   gameOver: boolean;
-  playerDifficulty: PlayerDifficultyField;
   finishGame: (playerToFind: Player) => void;
   setInitialGuesses: (initialGuesses: Guess[]) => void;
   setInitialHints: (initialHints: GameHint[]) => void;
@@ -28,7 +21,6 @@ type GameStore = {
   updatePreviousMatches: (lastMatches: PlayerToFindMatches) => void;
   updateCurrentMatches: (newMatches: PlayerToFindMatches) => void;
   resetState: () => void;
-  updateDifficulty: (playerDifficulty: PlayerDifficultyField) => void;
 };
 
 type InitialState = Pick<
@@ -40,7 +32,6 @@ type InitialState = Pick<
   | 'previousMatches'
   | 'currentMatches'
   | 'gameOver'
-  | 'playerDifficulty'
 >;
 
 const initialState: InitialState = {
@@ -51,7 +42,6 @@ const initialState: InitialState = {
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  playerDifficulty: '???',
 };
 
 export const useGameStore = create<GameStore>()((set) => ({
@@ -62,7 +52,6 @@ export const useGameStore = create<GameStore>()((set) => ({
   previousMatches: {},
   currentMatches: {},
   gameOver: false,
-  playerDifficulty: '???',
   finishGame: (playerToFind) =>
     set(() => ({
       playerToFind,
@@ -99,8 +88,5 @@ export const useGameStore = create<GameStore>()((set) => ({
     })),
   resetState: () => {
     set(initialState);
-  },
-  updateDifficulty: (playerDifficulty) => {
-    set(() => ({ playerDifficulty }));
   },
 }));

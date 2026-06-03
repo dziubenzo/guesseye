@@ -3,7 +3,6 @@
 import PlayerCard from '@/components/PlayerCard';
 import TimeLeftTooltip from '@/components/TimeLeftTooltip';
 import WhileYouWaitInfo from '@/components/WhileYouWaitInfo';
-import { useGameStore } from '@/lib/game-store';
 import { useUpdateTimeLeft } from '@/lib/hooks';
 import {
   gameWonGivenUpChildVariant,
@@ -12,7 +11,6 @@ import {
 import type { GameGivenUp as GameGivenUpType } from '@/lib/types';
 import { HeartCrack } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useEffect } from 'react';
 
 type GameGivenUpProps = {
   previousGame: GameGivenUpType;
@@ -27,11 +25,6 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
     previousPlayerDifficulty,
   } = previousGame;
   const { timeLeft } = useUpdateTimeLeft(nextPlayerStartDate);
-  const { updateDifficulty } = useGameStore();
-
-  useEffect(() => {
-    updateDifficulty(previousPlayerDifficulty);
-  }, [previousPlayerDifficulty]);
 
   return (
     <motion.div
@@ -54,6 +47,7 @@ export default function GameGivenUp({ previousGame }: GameGivenUpProps) {
         type="playerToFind"
         previousMatches={previousPlayer}
         currentMatches={previousPlayer}
+        playerDifficulty={previousPlayerDifficulty}
       />
       {attempts > 0 ? (
         <>

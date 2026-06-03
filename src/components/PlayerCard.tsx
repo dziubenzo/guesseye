@@ -12,7 +12,6 @@ import {
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useGameStore } from '@/lib/game-store';
 import { cardTopDuration, fieldsContainerVariant } from '@/lib/motion-variants';
 import type {
   ComparisonResults,
@@ -53,11 +52,11 @@ type PlayerCardProps =
       type: 'playerToFind';
       previousMatches: PlayerToFindMatches;
       currentMatches: PlayerToFindMatches;
+      playerDifficulty: PlayerDifficultyField;
     };
 
 export default function PlayerCard(props: PlayerCardProps) {
   const { type } = props;
-  const { playerDifficulty } = useGameStore();
 
   function formatPlayerToFindField<T>(
     field: PlayerToFindRangedMatch<T> | undefined,
@@ -78,7 +77,7 @@ export default function PlayerCard(props: PlayerCardProps) {
   }
 
   if (type === 'playerToFind') {
-    const { previousMatches, currentMatches } = props;
+    const { previousMatches, currentMatches, playerDifficulty } = props;
 
     return (
       <Card className="bg-transparent w-full">
