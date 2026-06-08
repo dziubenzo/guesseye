@@ -1,7 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type { ErrorObject, LeaderboardUser } from '@/lib/types';
+import type { LeaderboardUser } from '@/lib/types';
 import {
   countGames,
   findFastestWin,
@@ -9,18 +8,8 @@ import {
   sortLeaderboardUsers,
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
-import { headers } from 'next/headers';
 
-export const getLeaderboard = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
+export const getLeaderboard = async (userId: string) => {
   // Get all users with their games and guesses
   const users = await db.query.user.findMany({
     columns: { id: true, name: true },
@@ -35,7 +24,7 @@ export const getLeaderboard = async () => {
     .map((user) => {
       const leaderboardUser: LeaderboardUser = {
         username: user.name,
-        isCurrentUser: user.id === session.user.id ? true : false,
+        isCurrentUser: user.id === userId ? true : false,
         officialModeWins: 0,
         officialModeGiveUps: 0,
         randomModeWins: 0,

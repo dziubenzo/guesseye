@@ -1,18 +1,26 @@
 import { columns } from '@/app/leaderboard/columns';
 import DataTable from '@/app/official/data-table';
+import TableSkeleton from '@/components/skeletons/TableSkeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import { getLeaderboard } from '@/server/db/get-leaderboard';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Leaderboard' };
 
 export default async function Leaderboard() {
-  const leaderboard = await getLeaderboard();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if ('error' in leaderboard) {
+  if (!session) {
     return notFound();
   }
+
+  const leaderboardPromise = getLeaderboard(session.user.id);
 
   return (
     <div className="flex flex-col grow-1">
@@ -32,11 +40,13 @@ export default async function Leaderboard() {
             <li>Give ups in official mode (ascending);</li>
             <li>Give ups in random mode (ascending).</li>
           </ul>
-          <DataTable
-            type={'leaderboard'}
-            columns={columns}
-            data={leaderboard}
-          />
+          <Suspense fallback={<TableSkeleton rows={8}/>}>
+            <DataTable
+              type="leaderboard"
+              columns={columns}
+              dataPromise={leaderboardPromise}
+            />
+          </Suspense>
         </CardContent>
       </Card>
     </div>
