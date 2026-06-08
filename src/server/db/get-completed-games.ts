@@ -1,6 +1,6 @@
 'use server';
 
-import type { CompletedGameTable, ErrorObject } from '@/lib/types';
+import type { CompletedGameTable } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game } from '@/server/db/schema';
 import { and, desc, eq, ne } from 'drizzle-orm';
@@ -32,20 +32,18 @@ export const getCompletedGames = async (userId: string) => {
 
         // Both if checks shouldn't ever happen
         if (!playerToFind) {
-          const error: ErrorObject = {
-            error: `No darts player to find for completed game with the id of ${completedGames[i].id}.`,
-          };
-          return error;
+          throw new Error(
+            `No darts player to find for completed game with the id of ${completedGames[i].id}.`
+          );
         }
 
         const completedGameStatus = completedGames[i].status;
         const completedGameTime = completedGames[i].endDate;
 
         if (completedGameStatus === 'inProgress' || !completedGameTime) {
-          const error: ErrorObject = {
-            error: `Game with the id of ${completedGames[i].id} is in progress.`,
-          };
-          return error;
+          throw new Error(
+            `Game with the id of ${completedGames[i].id} is in progress.`
+          );
         }
 
         const game: CompletedGameTable = {
