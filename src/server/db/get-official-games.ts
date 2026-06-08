@@ -1,29 +1,18 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type { ErrorObject, OfficialGames } from '@/lib/types';
+import type { OfficialGames } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, schedule } from '@/server/db/schema';
 import { desc, eq, lt } from 'drizzle-orm';
-import { headers } from 'next/headers';
 
-export const getOfficialGames = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
+export const getOfficialGames = async (userId: string) => {
   // Get all previous scheduled players up to the current one together with all official games played by the user
   const scheduleRows = await db.query.schedule.findMany({
     where: lt(schedule.startDate, new Date()),
     with: {
       playerToFind: true,
       games: {
-        where: eq(game.userId, session.user.id),
+        where: eq(game.userId, userId),
       },
     },
     orderBy: desc(schedule.startDate),

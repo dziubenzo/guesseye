@@ -1,19 +1,27 @@
 import { columns } from '@/app/official/columns';
 import DataTable from '@/app/official/data-table';
 import Bold from '@/components/Bold';
+import TableSkeleton from '@/components/skeletons/TableSkeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { auth } from '@/lib/auth';
 import { getOfficialGames } from '@/server/db/get-official-games';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Official Games' };
 
 export default async function OfficialGames() {
-  const officialGames = await getOfficialGames();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-  if ('error' in officialGames) {
+  if (!session) {
     return notFound();
   }
+
+  const officialGamesPromise = getOfficialGames(session.user.id);
 
   return (
     <div className="flex flex-col grow-1">
@@ -29,11 +37,13 @@ export default async function OfficialGames() {
               either <Bold>start playing</Bold> or <Bold>resume</Bold> them.
             </p>
           </div>
-          <DataTable
-            type="officialGames"
-            columns={columns}
-            data={officialGames}
-          />
+          <Suspense fallback={<TableSkeleton />}>
+            <DataTable
+              type="officialGames"
+              columns={columns}
+              dataPromise={officialGamesPromise}
+            />
+          </Suspense>
         </CardContent>
       </Card>
     </div>
