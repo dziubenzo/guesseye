@@ -18,7 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useState } from 'react';
+import { use, useState } from 'react';
 
 type DataTableProps<TData, TValue> = {
   type:
@@ -27,14 +27,16 @@ type DataTableProps<TData, TValue> = {
     | 'leaderboard'
     | 'gameHistory';
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  dataPromise: Promise<TData[]>;
 };
 
 export default function DataTable<TData, TValue>({
   type,
   columns,
-  data,
+  dataPromise,
 }: DataTableProps<TData, TValue>) {
+  const data = use(dataPromise);
+
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'id', desc: false },
   ]);
