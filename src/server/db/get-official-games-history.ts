@@ -1,7 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type { ErrorObject, OfficialGamesHistory } from '@/lib/types';
+import type { OfficialGamesHistory } from '@/lib/types';
 import {
   findFastestWinner,
   findFirstWinner,
@@ -10,18 +9,8 @@ import {
 import { db } from '@/server/db/index';
 import { schedule } from '@/server/db/schema';
 import { desc, lt } from 'drizzle-orm';
-import { headers } from 'next/headers';
 
 export const getOfficialGamesHistory = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
   // Get all previous scheduled players up to the current one along with games with guesses and user
   const scheduleRows = await db.query.schedule.findMany({
     where: lt(schedule.startDate, new Date()),
