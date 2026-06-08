@@ -6,12 +6,15 @@ import RandomPlayersChart from '@/components/charts/RandomPlayersChart';
 import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { GlobalStats } from '@/lib/types';
+import { use } from 'react';
 
 type GlobalStatsProps = {
-  stats: GlobalStats;
+  statsPromise: Promise<GlobalStats>;
 };
 
-export default async function GlobalStats({ stats }: GlobalStatsProps) {
+export default function GlobalStats({ statsPromise }: GlobalStatsProps) {
+  const stats = use(statsPromise);
+
   const {
     fewestGuesses,
     mostGuesses,

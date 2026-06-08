@@ -1,7 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type { ErrorObject, GamesByDayObject, UserStats } from '@/lib/types';
+import type { GamesByDayObject, UserStats } from '@/lib/types';
 import {
   calculateOtherStatsUser,
   countGamesByDay,
@@ -22,18 +21,8 @@ import { getHintsCountsByPlayer } from '@/server/db/get-hints-counts-by-player';
 import { db } from '@/server/db/index';
 import { game, guess, schedule } from '@/server/db/schema';
 import { asc, eq, lt } from 'drizzle-orm';
-import { headers } from 'next/headers';
 
-export const getUserStats = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
+export const getUserStats = async (userId: string) => {
   // Get all games played by logged-in user (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name as well as the first and last name of the random player if it exists
   // Get the count of official games up to now
   // Get counts of all approved hints by darts player
@@ -61,15 +50,15 @@ export const getUserStats = async () => {
         },
       },
       orderBy: asc(game.startDate),
-      where: eq(game.userId, session.user.id),
+      where: eq(game.userId, userId),
     }),
     db.$count(schedule, lt(schedule.startDate, new Date())),
     getHintsCountsByPlayer(),
   ]);
 
+  // This shouldn't ever happen
   if (scheduledPlayersCount === 0) {
-    const error: ErrorObject = { error: 'No official games scheduled.' };
-    return error;
+    throw new Error('No official games scheduled.');
   }
 
   const stats: UserStats = {

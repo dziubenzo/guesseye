@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { CircleHelp } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-export default function GameStatsSkeleton() {
+export default function StatsSkeleton() {
   return (
     <div>
       <div className="flex flex-col gap-4 md:gap-8 mt-4 md:mt-8">

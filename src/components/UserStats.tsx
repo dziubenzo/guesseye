@@ -7,12 +7,15 @@ import Stat from '@/components/Stat';
 import { Separator } from '@/components/ui/separator';
 import type { UserStats } from '@/lib/types';
 import { formatGameDuration } from '@/lib/utils';
+import { use } from 'react';
 
 type UserStatsProps = {
-  stats: UserStats;
+  statsPromise: Promise<UserStats>;
 };
 
-export default async function UserStats({ stats }: UserStatsProps) {
+export default function UserStats({ statsPromise }: UserStatsProps) {
+  const stats = use(statsPromise);
+
   const {
     fewestGuesses,
     mostGuesses,

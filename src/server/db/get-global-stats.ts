@@ -1,7 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type { ErrorObject, GamesByDayObject, GlobalStats } from '@/lib/types';
+import type { GamesByDayObject, GlobalStats } from '@/lib/types';
 import {
   calculateOtherStatsGlobal,
   countGamesByDay,
@@ -20,18 +19,8 @@ import { getHintsCountsByPlayer } from '@/server/db/get-hints-counts-by-player';
 import { db } from '@/server/db/index';
 import { game, guess } from '@/server/db/schema';
 import { asc } from 'drizzle-orm';
-import { headers } from 'next/headers';
 
 export const getGlobalStats = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
   // Get all games (ordered by start date in the ascending order) and guesses (ordered by id in the ascending order) with the guessed player name as well as the first and last name of the random player if it exists
   // Get counts of all approved hints by darts player
   const [games, hintsCounts] = await Promise.all([
