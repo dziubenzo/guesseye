@@ -14,7 +14,7 @@ export default function Error({ error }: ErrorProps) {
       <div className="flex gap-2 justify-center items-center">
         <p className="text-5xl">Error</p>
       </div>
-      <p>{error.message}</p>
+      <p className='text-center'>{error.message}</p>
       <Image
         className="rounded-md shadow-md"
         src="/error.gif"

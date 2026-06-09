@@ -25,7 +25,7 @@ export default function GeneralPieChart({
       config={config}
       className="min-h-[230px] sm:min-h-[350px] w-full"
     >
-      <PieChart>
+      <PieChart width={350} height={350}>
         <ChartTooltip content={<ChartTooltipContent className="w-[150px]" />} />
         <Pie
           data={data}
