@@ -1,11 +1,6 @@
 'use server';
 
-import { auth } from '@/lib/auth';
-import type {
-  DatabaseStats,
-  DatabaseStatsObject,
-  ErrorObject,
-} from '@/lib/types';
+import type { DatabaseStats, DatabaseStatsObject } from '@/lib/types';
 import {
   countPlayersBy,
   sortPlayerStats,
@@ -13,18 +8,8 @@ import {
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
 import { unstable_cache } from 'next/cache';
-import { headers } from 'next/headers';
 
 export const getDatabaseStats = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    const error: ErrorObject = { error: 'Please log in first.' };
-    return error;
-  }
-
   const stats = await getCachedDatabaseStats();
 
   return stats;
@@ -37,11 +22,9 @@ const getCachedDatabaseStats = unstable_cache(
       columns: { id: false, createdAt: false, updatedAt: false },
     });
 
+    // This shouldn't ever happen
     if (players.length === 0) {
-      const error: ErrorObject = {
-        error: 'No darts players in the database.',
-      };
-      return error;
+      throw new Error('No darts players in the database.');
     }
 
     const playerObject: DatabaseStatsObject = {

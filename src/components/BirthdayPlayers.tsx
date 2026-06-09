@@ -1,12 +1,19 @@
 import { CardTitle } from '@/components/ui/card';
-import { getBirthdayPlayers } from '@/server/db/get-birthday-players';
+import type { BirthdayPlayer } from '@/lib/types';
+import { use } from 'react';
 
-export default async function BirthdayPlayers() {
-  const birthdayPlayers = await getBirthdayPlayers();
+type BirthdayPlayersProps = {
+  birthdayPlayersPromise: Promise<BirthdayPlayer[]>;
+};
+
+export default function BirthdayPlayers({
+  birthdayPlayersPromise,
+}: BirthdayPlayersProps) {
+  const birthdayPlayers = use(birthdayPlayersPromise);
 
   return (
     <div className="flex flex-col gap-2 text-start">
-      <CardTitle className="text-2xl mb-1">Birthday Darts Players</CardTitle>
+      <CardTitle className="text-2xl">Birthday Darts Players</CardTitle>
       <div className="flex flex-col gap-2 text-sm sm:text-base">
         {birthdayPlayers.length === 0 ? (
           <p>
