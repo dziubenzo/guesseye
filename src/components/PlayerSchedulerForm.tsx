@@ -13,7 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import type { GroupedPlayersAdmin, PlayerAdmin } from '@/lib/types';
+import { Separator } from '@/components/ui/separator';
+import type {
+  ErrorObject,
+  GroupedPlayersAdmin,
+  PlayerAdmin,
+  Schedule,
+} from '@/lib/types';
 import { getFullName } from '@/lib/utils';
 import {
   schedulePlayerSchema,
@@ -21,19 +27,22 @@ import {
 } from '@/lib/zod/schedule-player';
 import { schedulePlayer } from '@/server/actions/schedule-player';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
 import { useAction } from 'next-safe-action/hooks';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, use, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type PlayerSchedulerFormProps = {
-  players: PlayerAdmin[];
+  playersPromise: Promise<PlayerAdmin[]>;
   startDate: Date;
 };
 
 export default function PlayerSchedulerForm({
-  players,
+  playersPromise,
   startDate,
 }: PlayerSchedulerFormProps) {
+  const players = use(playersPromise);
+
   const schedulePlayerForm = useForm({
     resolver: zodResolver(schedulePlayerSchema),
     defaultValues: { startDate },
@@ -88,111 +97,147 @@ export default function PlayerSchedulerForm({
   }
 
   return (
-    <Form {...schedulePlayerForm}>
-      <form
-        onSubmit={schedulePlayerForm.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
-      >
-        <FormField
-          control={schedulePlayerForm.control}
-          name="playerId"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-4">
-              <Select
-                key={selectKey}
-                name="playerId"
-                onValueChange={(value) => field.onChange(parseInt(value))}
-                required
-              >
-                <SelectTrigger
-                  value={field.value}
-                  className="cursor-pointer w-full sm:w-[350px]"
+    <>
+      <p>
+        Schedule player for{' '}
+        <span className="font-medium">{format(startDate, 'dd MMMM y')}</span>
+      </p>
+      <Form {...schedulePlayerForm}>
+        <form
+          onSubmit={schedulePlayerForm.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <FormField
+            control={schedulePlayerForm.control}
+            name="playerId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col gap-4">
+                <Select
+                  key={selectKey}
+                  name="playerId"
+                  onValueChange={(value) => field.onChange(parseInt(value))}
+                  required
                 >
-                  <SelectValue placeholder="Darts Player (Occurrences) (Difficulty, Hints)" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel className="text-base text-blue-500">
-                      MEN
-                    </SelectLabel>
-                    {playersByGender.male.map((player, index) => {
-                      const prevDifficulty =
-                        playersByGender.male[index > 0 ? index - 1 : index]
-                          .difficulty;
-                      return (
-                        <Fragment key={player.id + 'schedulerForm'}>
-                          {(index === 0 ||
-                            player.difficulty !== prevDifficulty) && (
-                            <SelectLabel className="text-base">
-                              {player.difficulty.toUpperCase()}
-                            </SelectLabel>
-                          )}
-                          <SelectItem
-                            value={player.id.toString()}
-                            className="cursor-pointer"
-                          >
-                            {player.firstName + ' ' + player.lastName} (
-                            {player.officialModeCount}) (
-                            {player.difficulty.toUpperCase()},{' '}
-                            {player.approvedHintsCount}{' '}
-                            {player.approvedHintsCount === 1 ? 'hint' : 'hints'}
-                            )
-                          </SelectItem>
-                        </Fragment>
-                      );
-                    })}
-                  </SelectGroup>
-                  <SelectSeparator />
-                  <SelectGroup>
-                    <SelectLabel className="text-base text-pink-400">
-                      WOMEN
-                    </SelectLabel>
-                    {playersByGender.female.map((player, index) => {
-                      const prevDifficulty =
-                        playersByGender.female[index > 0 ? index - 1 : index]
-                          .difficulty;
-                      return (
-                        <Fragment key={player.id}>
-                          {(index === 0 ||
-                            player.difficulty !== prevDifficulty) && (
-                            <SelectLabel className="text-base">
-                              {player.difficulty.toUpperCase()}
-                            </SelectLabel>
-                          )}
-                          <SelectItem
-                            value={player.id.toString()}
-                            className="cursor-pointer"
-                          >
-                            {player.firstName + ' ' + player.lastName} (
-                            {player.officialModeCount}) (
-                            {player.difficulty.toUpperCase()},{' '}
-                            {player.approvedHintsCount}{' '}
-                            {player.approvedHintsCount === 1 ? 'hint' : 'hints'}
-                            )
-                          </SelectItem>
-                        </Fragment>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormItem>
+                  <SelectTrigger
+                    value={field.value}
+                    className="cursor-pointer w-full sm:w-[350px]"
+                  >
+                    <SelectValue placeholder="Darts Player (Occurrences) (Difficulty, Hints)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel className="text-base text-blue-500">
+                        MEN
+                      </SelectLabel>
+                      {playersByGender.male.map((player, index) => {
+                        const prevDifficulty =
+                          playersByGender.male[index > 0 ? index - 1 : index]
+                            .difficulty;
+                        return (
+                          <Fragment key={player.id + 'schedulerForm'}>
+                            {(index === 0 ||
+                              player.difficulty !== prevDifficulty) && (
+                              <SelectLabel className="text-base">
+                                {player.difficulty.toUpperCase()}
+                              </SelectLabel>
+                            )}
+                            <SelectItem
+                              value={player.id.toString()}
+                              className="cursor-pointer"
+                            >
+                              {player.firstName + ' ' + player.lastName} (
+                              {player.officialModeCount}) (
+                              {player.difficulty.toUpperCase()},{' '}
+                              {player.approvedHintsCount}{' '}
+                              {player.approvedHintsCount === 1
+                                ? 'hint'
+                                : 'hints'}
+                              )
+                            </SelectItem>
+                          </Fragment>
+                        );
+                      })}
+                    </SelectGroup>
+                    <SelectSeparator />
+                    <SelectGroup>
+                      <SelectLabel className="text-base text-pink-400">
+                        WOMEN
+                      </SelectLabel>
+                      {playersByGender.female.map((player, index) => {
+                        const prevDifficulty =
+                          playersByGender.female[index > 0 ? index - 1 : index]
+                            .difficulty;
+                        return (
+                          <Fragment key={player.id}>
+                            {(index === 0 ||
+                              player.difficulty !== prevDifficulty) && (
+                              <SelectLabel className="text-base">
+                                {player.difficulty.toUpperCase()}
+                              </SelectLabel>
+                            )}
+                            <SelectItem
+                              value={player.id.toString()}
+                              className="cursor-pointer"
+                            >
+                              {player.firstName + ' ' + player.lastName} (
+                              {player.officialModeCount}) (
+                              {player.difficulty.toUpperCase()},{' '}
+                              {player.approvedHintsCount}{' '}
+                              {player.approvedHintsCount === 1
+                                ? 'hint'
+                                : 'hints'}
+                              )
+                            </SelectItem>
+                          </Fragment>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+          <Button type="submit" disabled={isPending} className="cursor-pointer">
+            Schedule Player
+          </Button>
+          {error && (
+            <Message type="error">
+              <p>{error}</p>
+            </Message>
           )}
-        />
-        <Button type="submit" disabled={isPending} className="cursor-pointer">
-          Schedule Player
-        </Button>
-        {error && (
-          <Message type="error">
-            <p>{error}</p>
-          </Message>
-        )}
-        {success && (
-          <Message type="success" autoDismissible>
-            <p>{success}</p>
-          </Message>
-        )}
-      </form>
-    </Form>
+          {success && (
+            <Message type="success" autoDismissible>
+              <p>{success}</p>
+            </Message>
+          )}
+        </form>
+      </Form>
+    </>
+  );
+}
+
+type PlayerSchedulerFormWrapperProps = {
+  playersPromise: Promise<PlayerAdmin[]>;
+  lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
+};
+
+export function PlayerSchedulerFormWrapper({
+  playersPromise,
+  lastScheduledPlayerPromise,
+}: PlayerSchedulerFormWrapperProps) {
+  const lastScheduledPlayer = use(lastScheduledPlayerPromise);
+
+  if ('error' in lastScheduledPlayer) {
+    return null;
+  }
+
+  return (
+    <>
+      <Separator />
+      <PlayerSchedulerForm
+        playersPromise={playersPromise}
+        startDate={lastScheduledPlayer.endDate}
+      />
+    </>
   );
 }

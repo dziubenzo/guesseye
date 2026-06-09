@@ -1,11 +1,16 @@
 import ManageHintForm from '@/components/ManageHintForm';
 import type { SuggestedHint } from '@/lib/types';
+import { use } from 'react';
 
 type SuggestedHintsProps = {
-  hints: SuggestedHint[];
+  suggestedHintsPromise: Promise<SuggestedHint[]>;
 };
 
-export default function SuggestedHints({ hints }: SuggestedHintsProps) {
+export default function SuggestedHints({
+  suggestedHintsPromise,
+}: SuggestedHintsProps) {
+  const hints = use(suggestedHintsPromise);
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-xl font-medium">Suggested Hints ({hints.length})</h1>

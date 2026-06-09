@@ -1,5 +1,6 @@
 import AddHint from '@/components/AddHint';
 import PlayerScheduler from '@/components/PlayerScheduler';
+import SuggestedHintsSkeleton from '@/components/skeletons/SuggestedHintsSkeleton';
 import SuggestedHints from '@/components/SuggestedHints';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -11,6 +12,7 @@ import { getSuggestedHints } from '@/server/db/get-suggested-hints';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Admin Page' };
 
@@ -23,11 +25,9 @@ export default async function Admin() {
     return notFound();
   }
 
-  const [players, lastScheduledPlayer, suggestedHints] = await Promise.all([
-    getPlayersAdmin(),
-    getLastScheduledPlayer(),
-    getSuggestedHints(),
-  ]);
+  const playersPromise = getPlayersAdmin();
+  const lastScheduledPlayerPromise = getLastScheduledPlayer();
+  const suggestedHintsPromise = getSuggestedHints();
 
   return (
     <div className="flex flex-col grow-1 justify-center">
@@ -39,13 +39,15 @@ export default async function Admin() {
           <UpdateButtons />
           <Separator />
           <PlayerScheduler
-            players={players}
-            lastScheduledPlayer={lastScheduledPlayer}
+            playersPromise={playersPromise}
+            lastScheduledPlayerPromise={lastScheduledPlayerPromise}
           />
           <Separator />
-          <AddHint players={players} />
+          <AddHint playersPromise={playersPromise} />
           <Separator />
-          <SuggestedHints hints={suggestedHints} />
+          <Suspense fallback={<SuggestedHintsSkeleton />}>
+            <SuggestedHints suggestedHintsPromise={suggestedHintsPromise} />
+          </Suspense>
         </CardContent>
       </Card>
     </div>

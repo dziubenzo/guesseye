@@ -6,9 +6,10 @@ import { schedule } from '@/server/db/schema';
 import { desc } from 'drizzle-orm';
 
 export const getLastScheduledPlayer = async () => {
-  const lastScheduledPlayer = await db.query.schedule.findFirst({
-    orderBy: desc(schedule.startDate),
-  });
+  const lastScheduledPlayer: Schedule | undefined =
+    await db.query.schedule.findFirst({
+      orderBy: desc(schedule.startDate),
+    });
 
   let error: ErrorObject;
 
@@ -22,5 +23,5 @@ export const getLastScheduledPlayer = async () => {
     return error;
   }
 
-  return lastScheduledPlayer as Schedule;
+  return lastScheduledPlayer;
 };
