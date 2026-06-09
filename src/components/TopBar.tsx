@@ -13,3 +13,11 @@ export default function TopBar({ children }: TopBarProps) {
     </div>
   );
 }
+
+type TopBarButtonsProps = {
+  children: ReactNode;
+};
+
+export function TopBarButtons({ children }: TopBarButtonsProps) {
+  return <div className="flex gap-2">{children}</div>;
+}

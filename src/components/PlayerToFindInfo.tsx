@@ -3,6 +3,7 @@
 import TimeLeftTooltip from '@/components/TimeLeftTooltip';
 import { useUpdateTimeLeft } from '@/lib/hooks';
 import type { Schedule } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 type PlayerToFindInfoProps = {
   winnersCount: number;
@@ -15,7 +16,10 @@ export default function PlayerToFindInfo({
 }: PlayerToFindInfoProps) {
   return (
     <div
-      className={`flex ${nextPlayerStartDate ? 'justify-between' : 'justify-end'} p-2`}
+      className={cn(
+        'flex p-2',
+        nextPlayerStartDate ? 'justify-between' : 'justify-end'
+      )}
     >
       <div className="flex flex-col items-center p-2 rounded-md">
         <p>Guessed by</p>
