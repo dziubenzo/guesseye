@@ -3,29 +3,31 @@ import Bold from '@/components/Bold';
 import ColouredWord from '@/components/ColouredWord';
 import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
+import AddHintFormSkeleton from '@/components/skeletons/AddHintFormSkeleton';
+import SuggestHintTopSkeleton from '@/components/skeletons/SuggestHintTopSkeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { auth } from '@/lib/auth';
+import type { HintCounts } from '@/lib/types';
 import { getHintCount } from '@/server/db/get-hint-count';
 import { getPlayersSuggestHint } from '@/server/db/get-players-suggest-hint';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense, use } from 'react';
 
 export const metadata: Metadata = { title: 'Suggest Hint' };
 
-export default async function Leaderboard() {
+export default async function SuggestHint() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const [players, { totalHintCount, playerHintCount }] = await Promise.all([
-    getPlayersSuggestHint(),
-    getHintCount(),
-  ]);
-
   if (!session) {
     return notFound();
   }
+
+  const playersPromise = getPlayersSuggestHint();
+  const hintsCountsPromise = getHintCount();
 
   return (
     <div className="flex flex-col grow-1">
@@ -34,22 +36,9 @@ export default async function Leaderboard() {
           <CardTitle className="text-2xl">Suggest Hint</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 text-sm/6 sm:text-base/6">
-          <div>
-            <p>
-              There are{' '}
-              <ColouredWord colour="green" className="text-base sm:text-lg">
-                {totalHintCount}
-              </ColouredWord>{' '}
-              hints for{' '}
-              <ColouredWord colour="green" className="text-base sm:text-lg">
-                {playerHintCount}
-              </ColouredWord>{' '}
-              darts players available at the moment.
-            </p>
-            <p>
-              You are welcome to contribute to the game by suggesting a hint.
-            </p>
-          </div>
+          <Suspense fallback={<SuggestHintTopSkeleton />}>
+            <SuggestHintTop hintsCountsPromise={hintsCountsPromise} />
+          </Suspense>
           <h2 className="font-semibold text-2xl text-card-foreground">
             What makes a good hint?
           </h2>
@@ -84,9 +73,39 @@ export default async function Leaderboard() {
           <h2 className="font-semibold text-2xl text-card-foreground">
             Suggest Hint Form
           </h2>
-          <AddHintForm players={players} location="suggestHintPage" />
+          <Suspense fallback={<AddHintFormSkeleton />}>
+            <AddHintForm
+              playersPromise={playersPromise}
+              location="suggestHintPage"
+            />
+          </Suspense>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+type SuggestHintTopProps = {
+  hintsCountsPromise: Promise<HintCounts>;
+};
+
+function SuggestHintTop({ hintsCountsPromise }: SuggestHintTopProps) {
+  const { totalHintCount, playerHintCount } = use(hintsCountsPromise);
+
+  return (
+    <div>
+      <p>
+        There are{' '}
+        <ColouredWord colour="green" className="text-base sm:text-lg">
+          {totalHintCount}
+        </ColouredWord>{' '}
+        hints for{' '}
+        <ColouredWord colour="green" className="text-base sm:text-lg">
+          {playerHintCount}
+        </ColouredWord>{' '}
+        darts players available at the moment.
+      </p>
+      <p>You are welcome to contribute to the game by suggesting a hint.</p>
     </div>
   );
 }

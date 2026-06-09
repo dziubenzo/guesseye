@@ -20,14 +20,28 @@ import { addHintSchema, type AddHintSchemaType } from '@/lib/zod/add-hint';
 import { addHint } from '@/server/actions/add-hint';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
-import { Fragment, useState } from 'react';
+import { Fragment, use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type AddHintProps =
-  | { players: PlayerSuggestHint[]; location: 'suggestHintPage' }
-  | { players: PlayerAdmin[]; location: 'adminPage' };
+  | {
+      playersPromise: Promise<PlayerSuggestHint[]>;
+      location: 'suggestHintPage';
+    }
+  | { playersPromise: Promise<PlayerAdmin[]>; location: 'adminPage' };
 
-export default function AddHintForm({ players, location }: AddHintProps) {
+export default function AddHintForm({
+  playersPromise,
+  location,
+}: AddHintProps) {
+  let players: PlayerSuggestHint[] | PlayerAdmin[];
+
+  if (location === 'suggestHintPage') {
+    players = use(playersPromise);
+  } else {
+    players = use(playersPromise);
+  }
+
   const addHintForm = useForm({
     resolver: zodResolver(addHintSchema),
     defaultValues: {
