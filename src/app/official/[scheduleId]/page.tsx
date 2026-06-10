@@ -1,11 +1,12 @@
-import ErrorPage from '@/components/ErrorPage';
 import GamePage from '@/components/GamePage';
+import { GamePageSkeleton } from '@/components/skeletons/GamePageSkeletons';
 import { auth } from '@/lib/auth';
 import { getOfficialGame } from '@/server/db/get-official-game';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Official Game' };
 
@@ -27,26 +28,18 @@ export default async function PreviousOfficialGame({
     return notFound();
   }
 
-  const [game, names] = await Promise.all([
-    getOfficialGame(scheduleId),
-    getPlayerFullNames(),
-  ]);
-
-  if ('error' in game) {
-    return <ErrorPage errorMessage={game.error} />;
-  }
-
-  if (game.status === 'won' || game.status === 'givenUp') {
-    return notFound();
-  }
+  const gamePromise = getOfficialGame(scheduleId);
+  const namesPromise = getPlayerFullNames();
 
   return (
-    <GamePage
-      gameMode="official"
-      game={game}
-      names={names}
-      scheduleId={scheduleId}
-      userId={session.user.id}
-    />
+    <Suspense fallback={<GamePageSkeleton isOfficialGame />}>
+      <GamePage
+        gameMode="official"
+        gamePromise={gamePromise}
+        namesPromise={namesPromise}
+        scheduleId={scheduleId}
+        userId={session.user.id}
+      />
+    </Suspense>
   );
 }
