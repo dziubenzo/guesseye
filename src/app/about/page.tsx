@@ -3,16 +3,19 @@ import ColouredWord from '@/components/ColouredWord';
 import ExternalLink from '@/components/ExternalLink';
 import Italic from '@/components/Italic';
 import Logo from '@/components/Logo';
+import WhySignUpSkeleton from '@/components/skeletons/WhySignUpSkeleton';
 import { Card, CardContent } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
+import { Skeleton } from '@/components/ui/skeleton';
+import { auth, type Session } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
+import { Suspense, use } from 'react';
 
 export const metadata: Metadata = { title: 'About' };
 
 export default async function About() {
-  const session = await auth.api.getSession({
+  const sessionPromise = auth.api.getSession({
     headers: await headers(),
   });
 
@@ -127,12 +130,12 @@ export default async function About() {
             will be updated to this new closest value.
           </p>
           <p>
-            You might also find <Bold>first and last name fields</Bold> helpful.
-            Question marks are not just a placeholder. Their number is the same
-            as the number of characters in the darts player to find&apos;s
-            first/last name, meaning that the first name of Gary is represented
-            with <Bold>four questions marks</Bold>, while the last name of
-            Anderson with <Bold>eight question marks</Bold>.
+            You might also find <Bold>first and last name fields </Bold>{' '}
+            helpful. Question marks are not just a placeholder. Their number is
+            the same as the number of characters in the darts player to
+            find&apos;s first/last name, meaning that the first name of Gary is
+            represented with <Bold>four questions marks</Bold>, while the last
+            name of Anderson with <Bold>eight question marks</Bold>.
           </p>
           <p>
             Last but not least, the game features a <Bold>hint system</Bold>.
@@ -141,8 +144,10 @@ export default async function About() {
             need to <Bold>make at least one guess</Bold> in a game, except for
             the random mode for logged-in users, where a game is created
             automatically for you, thus making hints available immediately.
-            {!session && ' Logged-in users can also suggest new hints.'}
           </p>
+          <Suspense fallback={<Skeleton className="w-64 sm:w-78 h-6" />}>
+            <ExtraGameMechanicsParagraph sessionPromise={sessionPromise} />
+          </Suspense>
         </section>
         <section className="flex flex-col gap-4">
           <h2 className="text-2xl font-semibold">Game Modes</h2>
@@ -161,75 +166,95 @@ export default async function About() {
               right darts player or give up on your game.
             </li>
           </ul>
-          {!session && (
-            <>
-              <p>
-                As you are not logged in, the only game mode available to you is
-                the <Bold>random mode</Bold>, and it&apos;s a bit easier
-                compared to the random mode for logged-in users. Also, your
-                ongoing game might disappear when you update your browser or it
-                auto-updates.
-              </p>
-              <section className="flex flex-col gap-4">
-                <h2 className="text-2xl font-semibold">
-                  Why Should I Sign Up?
-                </h2>
-                <p>
-                  If you find <Logo /> fun, you might consider signing up for
-                  extra and completely free features. They include:
-                </p>
-                <ul className="list-disc list-inside">
-                  <li>
-                    playing the current official mode game, as well as{' '}
-                    <Bold>
-                      all previous official mode games whenever you want
-                    </Bold>
-                    ;
-                  </li>
-                  <li>
-                    playing random mode games where you can additionally
-                    encounter darts players of hard difficulty, with the
-                    possibility of enabling darts players of very hard
-                    difficulty for a <Italic>real</Italic> challenge;
-                  </li>
-                  <li>
-                    competing on the <Bold>leaderboard</Bold> where users are
-                    ranked based on their official and random mode wins and give
-                    ups as well as hints revealed;
-                  </li>
-                  <li>
-                    discovering the <Bold>official mode history</Bold>, which
-                    shows how many users found the right darts player in all
-                    previous official mode games, who did it first, the fastest,
-                    and in fewest tries;
-                  </li>
-                  <li>
-                    access to your <Bold>game history</Bold>, where you can
-                    check all of your completed games: your guesses, hints
-                    revealed, and, of course, the darts player to find;
-                  </li>
-                  <li>
-                    access to both your and global <Bold>game stats</Bold>,
-                    showing, for example, most frequent guesses, games by day,
-                    or darts players that others found/give up on in the random
-                    mode;
-                  </li>
-                  <li>
-                    suggesting <Bold>new hints</Bold> for darts players;
-                  </li>
-                  <li>
-                    access to various charts related to{' '}
-                    <Bold>all darts players featured in the database</Bold>,
-                    where you can, for example, learn which darts brand is used
-                    the most among the best in the sport or how many left-handed
-                    darts players play or played top-level darts.
-                  </li>
-                </ul>
-              </section>
-            </>
-          )}
         </section>
+        <Suspense fallback={<WhySignUpSkeleton />}>
+          <WhySignUp sessionPromise={sessionPromise} />
+        </Suspense>
       </CardContent>
     </Card>
+  );
+}
+
+type ExtraGameMechanicsParagraphProps = {
+  sessionPromise: Promise<Session | null>;
+};
+
+function ExtraGameMechanicsParagraph({
+  sessionPromise,
+}: ExtraGameMechanicsParagraphProps) {
+  const session = use(sessionPromise);
+
+  if (session) return null;
+
+  return <p>Logged-in users can also suggest new hints.</p>;
+}
+
+type WhySignUpProps = {
+  sessionPromise: Promise<Session | null>;
+};
+
+function WhySignUp({ sessionPromise }: WhySignUpProps) {
+  const session = use(sessionPromise);
+
+  if (session) return null;
+
+  return (
+    <>
+      <p>
+        As you are not logged in, the only game mode available to you is the{' '}
+        <Bold>random mode</Bold>, and it&apos;s a bit easier compared to the
+        random mode for logged-in users. Also, your ongoing game might disappear
+        when you update your browser or it auto-updates.
+      </p>
+      <section className="flex flex-col gap-4">
+        <h2 className="text-2xl font-semibold">Why Should I Sign Up?</h2>
+        <p>
+          If you find <Logo /> fun, you might consider signing up for extra and
+          completely free features. They include:
+        </p>
+        <ul className="list-disc list-inside">
+          <li>
+            playing the current official mode game, as well as{' '}
+            <Bold>all previous official mode games whenever you want</Bold>;
+          </li>
+          <li>
+            playing random mode games where you can additionally encounter darts
+            players of hard difficulty, with the possibility of enabling darts
+            players of very hard difficulty for a <Italic>real</Italic>{' '}
+            challenge;
+          </li>
+          <li>
+            competing on the <Bold>leaderboard</Bold> where users are ranked
+            based on their official and random mode wins and give ups as well as
+            hints revealed;
+          </li>
+          <li>
+            discovering the <Bold>official mode history</Bold>, which shows how
+            many users found the right darts player in all previous official
+            mode games, who did it first, the fastest, and in fewest tries;
+          </li>
+          <li>
+            access to your <Bold>game history</Bold>, where you can check all of
+            your completed games: your guesses, hints revealed, and, of course,
+            the darts player to find;
+          </li>
+          <li>
+            access to both your and global <Bold>game stats</Bold>, showing, for
+            example, most frequent guesses, games by day, or darts players that
+            others found/give up on in the random mode;
+          </li>
+          <li>
+            suggesting <Bold>new hints</Bold> for darts players;
+          </li>
+          <li>
+            access to various charts related to{' '}
+            <Bold>all darts players featured in the database</Bold>, where you
+            can, for example, learn which darts brand is used the most among the
+            best in the sport or how many left-handed darts players play or
+            played top-level darts.
+          </li>
+        </ul>
+      </section>
+    </>
   );
 }

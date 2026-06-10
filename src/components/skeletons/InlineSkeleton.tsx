@@ -11,6 +11,7 @@ export default function InlineSkeleton({
 }: InlineSkeletonProps) {
   return (
     <span
+      data-slot="skeleton"
       className={cn(
         'p-1 animate-pulse rounded-md bg-muted-foreground text-muted-foreground select-none',
         className
