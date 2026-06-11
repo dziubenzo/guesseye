@@ -1,5 +1,5 @@
 import GamePage from '@/components/GamePage';
-import { GamePageSkeleton } from '@/components/skeletons/GamePageSkeletons';
+import GamePageSkeleton from '@/components/skeletons/GamePageSkeletons';
 import { auth } from '@/lib/auth';
 import { getPlayerFullNames } from '@/server/db/get-player-full-names';
 import { getRandomGame } from '@/server/db/get-random-game';
