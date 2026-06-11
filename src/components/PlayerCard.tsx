@@ -637,7 +637,10 @@ export default function PlayerCard(props: PlayerCardProps) {
               {player.firstName + ' ' + player.lastName}
             </span>
             {guessNumber === undefined ? (
-              <PlayerToFindDifficulty playerDifficulty={player.difficulty} />
+              <PlayerToFindDifficulty
+                playerDifficulty={player.difficulty}
+                shouldAnimate={false}
+              />
             ) : (
               <span className="bg-secondary-foreground text-secondary px-3 rounded-md self-center">
                 #{guessNumber}
@@ -1024,29 +1027,48 @@ function PlayerToFindName({
 
 type PlayerToFindDifficultyProps = {
   playerDifficulty: PlayerDifficultyField;
+  shouldAnimate?: boolean;
 };
 
 function PlayerToFindDifficulty({
   playerDifficulty,
+  shouldAnimate = true,
 }: PlayerToFindDifficultyProps) {
+  const className = cn(
+    'flex justify-center items-center gap-2 rounded-md py-1 px-2',
+    getDifficultyColour(playerDifficulty)
+  );
+
+  if (shouldAnimate) {
+    return (
+      <motion.div
+        className={className}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: cardTopDuration }}
+      >
+        <Gauge size={24} />
+        <span>{playerDifficulty.toUpperCase()}</span>
+        {playerDifficulty !== '???' && (
+          <Tooltip>
+            How difficult the darts player is to find in the developer&apos;s
+            opinion.
+          </Tooltip>
+        )}
+      </motion.div>
+    );
+  }
+
   return (
-    <motion.div
-      className={cn(
-        'flex justify-center items-center gap-2 rounded-md py-1 px-2',
-        getDifficultyColour(playerDifficulty)
-      )}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: cardTopDuration }}
-    >
+    <div className={className}>
       <Gauge size={24} />
       <span>{playerDifficulty.toUpperCase()}</span>
       {playerDifficulty !== '???' && (
         <Tooltip>
-          How difficult the darts player is to find in the developer&apos;s
+          How difficult the darts player was to find in the developer&apos;s
           opinion.
         </Tooltip>
       )}
-    </motion.div>
+    </div>
   );
 }
