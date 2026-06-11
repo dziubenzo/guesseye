@@ -35,7 +35,7 @@ type GamePageSkeletonProps = {
   isOfficialGame?: boolean;
 };
 
-export function GamePageSkeleton({
+export default function GamePageSkeleton({
   isOfficialGame = false,
 }: GamePageSkeletonProps) {
   return (
@@ -51,13 +51,12 @@ export function GamePageSkeleton({
       {isOfficialGame && <PlayerToFindInfoSkeleton />}
       <GamePageMiddle>
         <ProgressBarSkeleton />
-        <PlayerCardSkeleton />
+        <PlayerCardSkeleton type="gamePages" />
       </GamePageMiddle>
     </GamePageWrapper>
   );
 }
-
-export function ModeIndicatorSkeleton() {
+function ModeIndicatorSkeleton() {
   return (
     <InlineSkeleton
       className="place-self-center sm:place-self-end text-lg p-2"
@@ -65,24 +64,21 @@ export function ModeIndicatorSkeleton() {
     />
   );
 }
-
-export function GiveUpButtonSkeleton() {
+function GiveUpButtonSkeleton() {
   return (
     <div className="sm:absolute sm:top-4 sm:right-0">
       <Skeleton className="w-16 h-7.5 sm:h-7 px-2 py-1" />
     </div>
   );
 }
-
-export function HintsButtonSkeleton() {
+function HintsButtonSkeleton() {
   return (
     <div className="sm:absolute sm:top-4 sm:left-0">
       <Skeleton className="w-21 h-7.5 sm:h-7 px-2 py-1" />
     </div>
   );
 }
-
-export function GuessFormSkeleton() {
+function GuessFormSkeleton() {
   return (
     <div className="flex gap-2 sm:gap-3 sm:justify-center sm:w-full">
       <div className="hidden sm:block sm:w-24" />
@@ -91,8 +87,7 @@ export function GuessFormSkeleton() {
     </div>
   );
 }
-
-export function ProgressBarSkeleton() {
+function ProgressBarSkeleton() {
   return (
     <div className="flex justify-center items-center gap-2">
       <InlineSkeleton className="p-0" fill={0} />
@@ -104,8 +99,7 @@ export function ProgressBarSkeleton() {
     </div>
   );
 }
-
-export function PlayerToFindInfoSkeleton() {
+function PlayerToFindInfoSkeleton() {
   const pathname = usePathname();
 
   return (
@@ -129,21 +123,37 @@ export function PlayerToFindInfoSkeleton() {
   );
 }
 
-export function PlayerCardSkeleton() {
+type PlayerCardSkeletonProps = {
+  type: 'gamePages' | 'completedGame';
+};
+
+export function PlayerCardSkeleton({ type }: PlayerCardSkeletonProps) {
   return (
     <Card className="bg-transparent w-full">
       <CardHeader className="gap-0">
-        <CardTitle className="flex flex-col justify-center sm:justify-between items-center gap-3 sm:flex-row">
-          <div className="flex items-center gap-3">
-            <Skeleton className="p-2 min-h-[32px] flex gap-1 items-center min-w-16" />
-            <Skeleton className="p-2 min-h-[32px] flex gap-1 items-center min-w-32" />
-          </div>
-          <Skeleton className="w-28 min-h-[32px] " />
-        </CardTitle>
+        {type === 'gamePages' ? (
+          <CardTitle className="flex flex-col justify-center sm:justify-between items-center gap-3 sm:flex-row">
+            <div className="flex items-center gap-3">
+              <Skeleton className="p-2 min-h-[32px] flex gap-1 items-center min-w-16" />
+              <Skeleton className="p-2 min-h-[32px] flex gap-1 items-center min-w-32" />
+            </div>
+            <Skeleton className="w-28 min-h-[32px] " />
+          </CardTitle>
+        ) : (
+          <CardTitle className="flex justify-between items-center gap-2 truncate text-lg">
+            <Skeleton className="w-40 sm:w-48 min-h-[28px]" />
+            <Skeleton className="w-28 min-h-[36px] " />
+          </CardTitle>
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center">
+          <div
+            className={cn(
+              'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center',
+              type === 'gamePages' ? 'lg:gap-8' : 'lg:gap-6 xl:gap-8'
+            )}
+          >
             <Field>
               <FieldName>
                 <VenusAndMars size={18} />
@@ -162,11 +172,13 @@ export function PlayerCardSkeleton() {
               <FieldName>
                 <Map size={18} />
                 Country
-                <Tooltip>
-                  The country that a darts player represents. For example,
-                  Jeffrey de Graaf represents Sweden, but he was born in the
-                  Netherlands.
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    The country that a darts player represents. For example,
+                    Jeffrey de Graaf represents Sweden, but he was born in the
+                    Netherlands.
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -174,25 +186,27 @@ export function PlayerCardSkeleton() {
               <FieldName>
                 <Star size={18} />
                 Status
-                <Tooltip>
-                  A darts player can be:
-                  <ul>
-                    <br />
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">active</span> (playing in
-                      PDC/WDF/WSD/Modus or local/national events);
-                    </li>
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">retired</span> (no longer
-                      taking part in events apart from exhibitions, the example
-                      being Phil Taylor or Keith Deller); or
-                    </li>
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">deceased</span> (no longer
-                      with us, but deserved to be included in the database).
-                    </li>
-                  </ul>
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    A darts player can be:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">active</span> (playing in
+                        PDC/WDF/WSD/Modus or local/national events);
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">retired</span> (no longer
+                        taking part in events apart from exhibitions, the
+                        example being Phil Taylor or Keith Deller); or
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">deceased</span> (no longer
+                        with us, but deserved to be included in the database).
+                      </li>
+                    </ul>
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -200,30 +214,39 @@ export function PlayerCardSkeleton() {
               <FieldName className="sm:text-sm md:text-xs lg:text-sm">
                 <History size={18} />
                 Playing Since
-                <Tooltip>
-                  It is the year when a darts player started playing darts
-                  rather than when they became good enough to compete in larger
-                  events.
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    It is the year when a darts player started playing darts
+                    rather than when they became good enough to compete in
+                    larger events.
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
           </div>
           <Separator />
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center">
+          <div
+            className={cn(
+              'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center',
+              type === 'gamePages' ? 'lg:gap-8' : 'lg:gap-6 xl:gap-8'
+            )}
+          >
             <Field>
               <FieldName>
                 <TrendingUp size={18} />
                 Elo Ranking
-                <Tooltip>
-                  Put in simple terms, the Elo ranking of a darts player
-                  developed by{' '}
-                  <ExternalLink href="https://www.dartsrec.com/power-rankings">
-                    DartsRec
-                  </ExternalLink>{' '}
-                  reflects their current skill level. It may differ considerably
-                  from their PDC or WDF ranking.
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    Put in simple terms, the Elo ranking of a darts player
+                    developed by{' '}
+                    <ExternalLink href="https://www.dartsrec.com/power-rankings">
+                      DartsRec
+                    </ExternalLink>{' '}
+                    reflects their current skill level. It may differ
+                    considerably from their PDC or WDF ranking.
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -257,27 +280,34 @@ export function PlayerCardSkeleton() {
             </Field>
           </div>
           <Separator />
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center">
+          <div
+            className={cn(
+              'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center',
+              type === 'gamePages' ? 'lg:gap-8' : 'lg:gap-6 xl:gap-8'
+            )}
+          >
             <Field className="col-span-2 md:col-span-1 sm:col-span-2 sm:col-start-2">
               <FieldName className="md:text-xs lg:text-sm">
                 <Calendar1 size={18} />
                 PDC Ranking
-                <Tooltip>
-                  It refers to:
-                  <ul>
-                    <br />
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">PDC World Rankings</span>{' '}
-                      for male darts players, and;
-                    </li>
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">
-                        PDC Women&apos;s Series Rankings
-                      </span>{' '}
-                      for female darts players.
-                    </li>
-                  </ul>
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    It refers to:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">PDC World Rankings</span>{' '}
+                        for male darts players, and;
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          PDC Women&apos;s Series Rankings
+                        </span>{' '}
+                        for female darts players.
+                      </li>
+                    </ul>
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -285,10 +315,12 @@ export function PlayerCardSkeleton() {
               <FieldName>
                 <Trophy size={18} />
                 Best UK Open Result
-                <Tooltip>
-                  If a darts player achieved their best result more than once,
-                  the year is the latest one.
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    If a darts player achieved their best result more than once,
+                    the year is the latest one.
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -296,48 +328,59 @@ export function PlayerCardSkeleton() {
               <FieldName className="sm:text-xs lg:text-sm">
                 <Trophy size={18} />
                 Best PDC World Championship Result
-                <Tooltip>
-                  If a darts player achieved their best result more than once,
-                  the year is the latest one.{' '}
-                  <p>
-                    Also, this field does{' '}
-                    <span className="font-medium">not</span> include the best
-                    PDC World Youth Championship result.
-                  </p>
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    If a darts player achieved their best result more than once,
+                    the year is the latest one.{' '}
+                    <p>
+                      Also, this field does{' '}
+                      <span className="font-medium">not</span> include the best
+                      PDC World Youth Championship result.
+                    </p>
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
           </div>
           <Separator />
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center">
+          <div
+            className={cn(
+              'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center',
+              type === 'gamePages' ? 'lg:gap-8' : 'lg:gap-6 xl:gap-8'
+            )}
+          >
             <Field className="col-span-2 sm:col-span-1">
               <FieldName className="md:text-xs lg:text-sm">
                 <Calendar1 size={18} />
                 WDF Ranking
-                <Tooltip>
-                  It refers to:
-                  <ul>
-                    <br />
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">WDF Main Ranking Open</span>{' '}
-                      for male darts players, and;
-                    </li>
-                    <li className="list-disc list-inside">
-                      <span className="font-medium">
-                        WDF Main Ranking Women
-                      </span>{' '}
-                      for female darts players.
-                    </li>
-                    <br />
-                  </ul>
-                  Due to a large number of darts players in the WDF main
-                  rankings, this field is updated only for{' '}
-                  <span className="font-medium">
-                    the first 500 darts players
-                  </span>{' '}
-                  in the ranking.
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    It refers to:
+                    <ul>
+                      <br />
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          WDF Main Ranking Open
+                        </span>{' '}
+                        for male darts players, and;
+                      </li>
+                      <li className="list-disc list-inside">
+                        <span className="font-medium">
+                          WDF Main Ranking Women
+                        </span>{' '}
+                        for female darts players.
+                      </li>
+                      <br />
+                    </ul>
+                    Due to a large number of darts players in the WDF main
+                    rankings, this field is updated only for{' '}
+                    <span className="font-medium">
+                      the first 500 darts players
+                    </span>{' '}
+                    in the ranking.
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>
@@ -359,16 +402,18 @@ export function PlayerCardSkeleton() {
               <FieldName className="text-xs sm:text-sm md:text-[0.65rem] lg:text-sm">
                 <Trophy size={18} />
                 Best BDO/WDF World Championship Result
-                <Tooltip>
-                  If a darts player achieved their best result more than once,
-                  the year is the latest one.{' '}
-                  <p>
-                    Also, this field does{' '}
-                    <span className="font-medium">not</span> include either the
-                    best BDO/WDF World Youth Championship result or the best
-                    News of the World Darts Championship result.
-                  </p>
-                </Tooltip>
+                {type === 'gamePages' && (
+                  <Tooltip>
+                    If a darts player achieved their best result more than once,
+                    the year is the latest one.{' '}
+                    <p>
+                      Also, this field does{' '}
+                      <span className="font-medium">not</span> include either
+                      the best BDO/WDF World Youth Championship result or the
+                      best News of the World Darts Championship result.
+                    </p>
+                  </Tooltip>
+                )}
               </FieldName>
               <Skeleton className="flex justify-center items-center p-2 rounded-md w-full min-h-[40px]" />
             </Field>

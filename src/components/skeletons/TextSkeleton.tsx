@@ -1,11 +1,12 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import type { ComponentProps } from 'react';
 
 export default function TextSkeleton({
   className,
   children,
   ...props
-}: React.ComponentProps<'div'>) {
+}: ComponentProps<'div'>) {
   return (
     <Skeleton
       className={cn(
