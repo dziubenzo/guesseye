@@ -8,11 +8,14 @@ import {
   sortLeaderboardUsers,
 } from '@/lib/utils';
 import { db } from '@/server/db/index';
+import { user } from '@/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const getLeaderboard = async (userId: string) => {
   // Get all users with their games and guesses
   const users = await db.query.user.findMany({
     columns: { id: true, name: true },
+    where: eq(user.emailVerified, true),
     with: {
       games: {
         with: { guesses: true },
