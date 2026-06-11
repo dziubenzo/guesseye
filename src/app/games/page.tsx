@@ -20,7 +20,7 @@ export default async function GameHistory() {
     return notFound();
   }
 
-  const gamesPromise = getCompletedGames(session.user.id);
+  const completedGamesPromise = getCompletedGames(session.user.id);
 
   return (
     <div className="flex flex-col grow-1">
@@ -38,7 +38,7 @@ export default async function GameHistory() {
             <DataTable
               type="gameHistory"
               columns={columns}
-              dataPromise={gamesPromise}
+              dataPromise={completedGamesPromise}
             />
           </Suspense>
         </CardContent>

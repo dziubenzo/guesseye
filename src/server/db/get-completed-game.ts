@@ -1,13 +1,13 @@
 'use server';
 
-import type { CompletedGameDetails, ErrorObject } from '@/lib/types';
+import type { CompletedGame, ErrorObject } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, guess } from '@/server/db/schema';
 import { and, desc, eq, ne } from 'drizzle-orm';
 import { unstable_cache } from 'next/cache';
 
-export const getCompletedGameDetails = async (gameId: string) => {
-  const completedGameDetailsCache = unstable_cache(
+export const getCompletedGame = async (gameId: string) => {
+  const completedGameCache = unstable_cache(
     async () => {
       const completedGame = await db.query.game.findFirst({
         with: {
@@ -58,7 +58,7 @@ export const getCompletedGameDetails = async (gameId: string) => {
         return error;
       }
 
-      const gameDetails: CompletedGameDetails = {
+      const completedGameDetails: CompletedGame = {
         username: completedGame.user?.name ? completedGame.user.name : 'Guest',
         startDate: completedGame.startDate,
         endDate: completedGameTime,
@@ -69,13 +69,13 @@ export const getCompletedGameDetails = async (gameId: string) => {
         guesses: completedGame.guesses,
       };
 
-      return gameDetails;
+      return completedGameDetails;
     },
-    [`completedGameDetails:${gameId}`],
-    { tags: [`completedGameDetails:${gameId}`] }
+    [`completedGame:${gameId}`],
+    { tags: [`completedGame:${gameId}`] }
   );
 
-  const completedGame = await completedGameDetailsCache();
+  const completedGame = await completedGameCache();
 
   return completedGame;
 };

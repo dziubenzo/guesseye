@@ -8,7 +8,7 @@ export default async function revalidateCompletedGames(
   userId?: Game['userId']
 ) {
   if (gameId) {
-    revalidateTag(`completedGameDetails:${gameId}`, 'max');
+    revalidateTag(`completedGame:${gameId}`, 'max');
   }
 
   if (userId) {

@@ -189,7 +189,7 @@ export type CompletedGameTable = {
   guessesCount: number;
 };
 
-export type CompletedGameDetails = {
+export type CompletedGame = {
   username: string;
   startDate: Game['startDate'];
   endDate: Date;
