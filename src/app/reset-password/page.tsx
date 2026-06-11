@@ -1,8 +1,13 @@
 import ResetPasswordForm from '@/components/ResetPasswordForm';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Reset Password' };
 
-export default function ResetPassword() {
-  return <ResetPasswordForm />;
+export default async function ResetPassword() {
+  return (
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
+  );
 }

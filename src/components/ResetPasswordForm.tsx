@@ -33,6 +33,7 @@ import { useForm } from 'react-hook-form';
 export default function ResetPasswordForm() {
   const { data } = useSession();
   const searchParams = useSearchParams();
+
   const resetPasswordForm = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -53,7 +54,7 @@ export default function ResetPasswordForm() {
         return;
       }
       if (data?.success) {
-        setSuccess('Password updated successfully!');
+        setSuccess('Password updated successfully! You can now log in.');
         return;
       }
     },
@@ -71,7 +72,7 @@ export default function ResetPasswordForm() {
   if (!data && searchParams.has('token')) {
     return (
       <div className="flex flex-col grow-1 justify-center items-center">
-        <Card className="w-max lg:w-[50%]">
+        <Card className="w-full sm:w-[50%]">
           <CardHeader>
             <CardTitle className="text-xl">Reset Password</CardTitle>
             <CardDescription>
