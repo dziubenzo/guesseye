@@ -1,9 +1,10 @@
+import TitleUpdater from '@/components/TitleUpdater';
 import { Button } from '@/components/ui/button';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const metadata: Metadata = { title: '404 | GuessEye' };
+export const metadata: Metadata = { title: '404' };
 
 export default function NotFound() {
   return (
@@ -23,6 +24,7 @@ export default function NotFound() {
       <Button variant={'link'} asChild>
         <Link href="/">Back to Home page</Link>
       </Button>
+      <TitleUpdater />
     </div>
   );
 }
