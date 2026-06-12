@@ -49,15 +49,16 @@ export default function GameOverModal({ gameId, userId }: GameOverModalProps) {
               You&apos;ve won the game!
             </DialogDescription>
           </DialogHeader>
-          <Image
-            className="rounded-md shadow-md"
-            src="/dancing_dimi.gif"
-            alt="A dancing Dimitri Van den Bergh on the stage"
-            priority={true}
-            width={500}
-            height={500}
-            unoptimized
-          />
+          <div className="relative w-full h-auto aspect-video">
+            <Image
+              className="rounded-md shadow-md"
+              src="/dancing_dimi.gif"
+              alt="Dimitri Van den Bergh dancing on the stage"
+              priority
+              fill
+              unoptimized
+            />
+          </div>
           <div className="flex flex-col justify-center items-center gap-2">
             <p>
               It took you{' '}
