@@ -1,5 +1,6 @@
 'use client';
 
+import AuthModal from '@/components/AuthModal';
 import Logo from '@/components/Logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -11,8 +12,10 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
+import type { Session } from '@/lib/auth';
 import { signOut } from '@/lib/auth-client';
 import { useGameStore } from '@/lib/game-store';
+import { Dialog, DialogTrigger } from '@radix-ui/react-dialog';
 import {
   ArrowBigLeft,
   ArrowBigUp,
@@ -32,6 +35,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { use } from 'react';
 
 const CUSTOM_TRIGGER_CLASS =
   'bg-primary text-primary-foreground data-[state=open]:bg-primary/90 data-[state=open]:text-primary-foreground data-[state=open]:hover:bg-primary/90 data-[state=open]:hover:text-primary-foreground data-[state=closed]:hover:bg-primary/90 data-[state=closed]:hover:text-primary-foreground data-[state=closed]:bg-primary data-[state=closed]:text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground focus-visible:bg-primary focus:bg-primary focus-visible:text-primary-foreground focus:text-primary-foreground data-[state=open]:focus:bg-primary min-w-full w-full sm:min-h-10 sm:h-10';
@@ -39,11 +43,10 @@ const CUSTOM_TRIGGER_CLASS =
 const CUSTOM_MENU_CLASS = 'grid w-[280px] sm:w-[420px] gap-2 sm:gap-4';
 
 type HeaderMenuProps = {
-  username: string;
-  role: string;
+  sessionPromise: Promise<Session | null>;
 };
 
-export default function HeaderMenu({ username, role }: HeaderMenuProps) {
+export default function HeaderMenu({ sessionPromise }: HeaderMenuProps) {
   const router = useRouter();
   const { resetState } = useGameStore();
 
@@ -57,6 +60,25 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
         },
       },
     });
+  }
+
+  const session = use(sessionPromise);
+
+  if (!session) {
+    return (
+      <header className="flex justify-between text-center">
+        <Logo location="headerGuest" />
+        <div className="flex gap-2 w-full justify-between sm:w-auto sm:justify-start">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="cursor-pointer">Log In/Sign Up</Button>
+            </DialogTrigger>
+            <AuthModal />
+          </Dialog>
+          <ThemeToggle type="header" />
+        </div>
+      </header>
+    );
   }
 
   return (
@@ -229,7 +251,8 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
               <ul className={CUSTOM_MENU_CLASS}>
                 <li className="p-2">
                   <p className="text-sm text-center">
-                    Hi, <span className="font-medium">{username}</span>!
+                    Hi, <span className="font-medium">{session.user.name}</span>
+                    !
                   </p>
                   <div className="sm:hidden">
                     <ThemeToggle type="menu" />
@@ -262,7 +285,7 @@ export default function HeaderMenu({ username, role }: HeaderMenuProps) {
                       </div>
                     </Link>
                   </NavigationMenuLink>
-                  {role === 'admin' && (
+                  {session.user.role === 'admin' && (
                     <NavigationMenuLink asChild>
                       <Link href="/admin">
                         <div className="flex gap-4 items-center">
