@@ -1,10 +1,6 @@
 'use server';
 
-import type {
-  AnyOfficialGame,
-  ErrorObject,
-  GuessWithPlayer,
-} from '@/lib/types';
+import type { AnyOfficialGame, GuessWithPlayer } from '@/lib/types';
 import { comparePlayers, obfuscate, validateScheduleId } from '@/lib/utils';
 import { getNextScheduledPlayer } from '@/server/db/get-next-scheduled-player';
 import { getScheduleData } from '@/server/db/get-schedule-data';
@@ -16,8 +12,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   const validationResult = validateScheduleId(scheduleId);
 
   if ('error' in validationResult) {
-    const error: ErrorObject = { error: validationResult.error };
-    return error;
+    throw new Error(validationResult.error);
   }
 
   const validScheduleId = validationResult.validScheduleId;
@@ -27,8 +22,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   const scheduleData = await getScheduleData(validScheduleId);
 
   if ('error' in scheduleData) {
-    const error: ErrorObject = { error: scheduleData.error };
-    return error;
+    throw new Error(scheduleData.error);
   }
 
   const existingGame =
@@ -42,8 +36,7 @@ export const getOfficialGame = async (scheduleId?: string) => {
   ]);
 
   if ('error' in nextScheduledPlayer) {
-    const error: ErrorObject = { error: nextScheduledPlayer.error };
-    return error;
+    throw new Error(nextScheduledPlayer.error);
   }
 
   const gameDetails: AnyOfficialGame = {

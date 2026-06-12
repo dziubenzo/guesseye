@@ -1,6 +1,6 @@
 'use server';
 
-import type { CompletedGame, ErrorObject } from '@/lib/types';
+import type { CompletedGame } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game, guess } from '@/server/db/schema';
 import { and, desc, eq, ne } from 'drizzle-orm';
@@ -30,10 +30,7 @@ export const getCompletedGame = async (gameId: string) => {
       });
 
       if (!completedGame) {
-        const error: ErrorObject = {
-          error: `No completed game found for game id ${gameId}.`,
-        };
-        return error;
+        throw new Error(`No completed game found for game id ${gameId}.`);
       }
 
       const playerToFind =
@@ -42,20 +39,18 @@ export const getCompletedGame = async (gameId: string) => {
 
       // Both if checks shouldn't ever happen
       if (!playerToFind) {
-        const error: ErrorObject = {
-          error: `No darts player to find for completed game with the id of ${completedGame.id}.`,
-        };
-        return error;
+        throw new Error(
+          `No darts player to find for completed game with the id of ${completedGame.id}.`
+        );
       }
 
       const completedGameStatus = completedGame.status;
       const completedGameTime = completedGame.endDate;
 
       if (completedGameStatus === 'inProgress' || !completedGameTime) {
-        const error: ErrorObject = {
-          error: `Game with the id of ${completedGame.id} is in progress.`,
-        };
-        return error;
+        throw new Error(
+          `Game with the id of ${completedGame.id} is in progress.`
+        );
       }
 
       const completedGameDetails: CompletedGame = {

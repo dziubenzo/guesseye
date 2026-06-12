@@ -1,7 +1,6 @@
 'use server';
 
 import type {
-  ErrorObject,
   GameWon,
   OfficialGame,
   ScheduleWithPlayerAndGame,
@@ -17,8 +16,7 @@ export const handleGameWon = async (
   );
 
   if ('error' in nextScheduledPlayer) {
-    const error: ErrorObject = { error: nextScheduledPlayer.error };
-    return error;
+    throw new Error(nextScheduledPlayer.error);
   }
 
   const { guesses } = previousGame;

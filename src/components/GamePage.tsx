@@ -1,6 +1,5 @@
 'use client';
 
-import ErrorPage from '@/components/ErrorPage';
 import GameGivenUp from '@/components/GameGivenUp';
 import GameOverConfetti from '@/components/GameOverConfetti';
 import GameOverModal from '@/components/GameOverModal';
@@ -50,16 +49,12 @@ export default function GamePage({
   userId,
 }: GamePageProps) {
   const names = use(namesPromise);
-  
+
   const pathname = usePathname();
   const { previousMatches, currentMatches } = useGameStore();
 
   if (gameMode === 'random') {
     const game = use(gamePromise);
-
-    if ('error' in game) {
-      return <ErrorPage errorMessage={game.error} />;
-    }
 
     const {
       gameId,
@@ -102,10 +97,6 @@ export default function GamePage({
     );
   } else {
     const game = use(gamePromise);
-
-    if ('error' in game) {
-      return <ErrorPage errorMessage={game.error} />;
-    }
 
     // Previous official games
     if (game.status !== 'inProgress' && pathname !== '/') {

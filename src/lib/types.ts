@@ -267,13 +267,9 @@ export type GameGivenUp = {
   attempts: number;
 };
 
-export type OfficialGameState =
-  | AnyOfficialGame
-  | GameWon
-  | GameGivenUp
-  | ErrorObject;
+export type OfficialGameState = AnyOfficialGame | GameWon | GameGivenUp;
 
-export type RandomGameState = ExistingRandomGame | NoRandomGame | ErrorObject;
+export type RandomGameState = ExistingRandomGame | NoRandomGame;
 
 export type OfficialGames = {
   gameNo: number;

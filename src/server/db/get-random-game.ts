@@ -1,7 +1,6 @@
 'use server';
 
 import type {
-  ErrorObject,
   ExistingRandomGame,
   GuessWithPlayer,
   NoRandomGame,
@@ -35,16 +34,12 @@ export const getRandomGame = async (options?: GetRandomGameOptions) => {
   const game = existingGame ? existingGame : await createRandomGame();
 
   if ('error' in game) {
-    const error: ErrorObject = { error: game.error };
-    return error;
+    throw new Error(game.error);
   }
 
   // This cannot happen, but the randomPlayerId field in game table can be null by design, so the check is necessary
   if (game.randomPlayer === null) {
-    const error: ErrorObject = {
-      error: 'No player to find found in random game.',
-    };
-    return error;
+    throw new Error('No player to find found in random game.');
   }
 
   const gameDetails: ExistingRandomGame = {

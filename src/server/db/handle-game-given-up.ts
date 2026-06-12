@@ -1,7 +1,6 @@
 'use server';
 
 import type {
-  ErrorObject,
   GameGivenUp,
   OfficialGame,
   PlayerToFindMatches,
@@ -19,14 +18,13 @@ export const handleGameGivenUp = async (
   );
 
   if ('error' in nextScheduledPlayer) {
-    const error: ErrorObject = { error: nextScheduledPlayer.error };
-    return error;
+    throw new Error(nextScheduledPlayer.error);
   }
 
   const { guesses } = previousGame;
   const attempts = guesses.length;
   const previousPlayer: PlayerToFindMatches = {};
-  
+
   fillAllMatches(scheduleData.playerToFind, previousPlayer);
 
   const gameGivenUp: GameGivenUp = {

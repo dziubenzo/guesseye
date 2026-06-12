@@ -1,6 +1,5 @@
 'use client';
 
-import ErrorPage from '@/components/ErrorPage';
 import GameDetail from '@/components/GameDetail';
 import PlayerCard from '@/components/PlayerCard';
 import PlayerDifficultyBadge from '@/components/PlayerDifficultyBadge';
@@ -11,12 +10,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import type {
-  CompletedGame,
-  ErrorObject,
-  GuessWithPlayer,
-  Player,
-} from '@/lib/types';
+import type { CompletedGame, GuessWithPlayer, Player } from '@/lib/types';
 import { capitalise, cn, comparePlayers } from '@/lib/utils';
 import { format } from 'date-fns';
 import Link from 'next/link';
@@ -24,7 +18,7 @@ import { use, type ComponentProps } from 'react';
 
 type CompletedGameProps = {
   gameId: string;
-  completedGamePromise: Promise<ErrorObject | CompletedGame>;
+  completedGamePromise: Promise<CompletedGame>;
 };
 
 export default function CompletedGame({
@@ -32,10 +26,6 @@ export default function CompletedGame({
   completedGamePromise,
 }: CompletedGameProps) {
   const completedGame = use(completedGamePromise);
-
-  if ('error' in completedGame) {
-    return <ErrorPage errorMessage={completedGame.error} />;
-  }
 
   const {
     endDate,
