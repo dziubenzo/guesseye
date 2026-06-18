@@ -1,27 +1,47 @@
-'use server';
-
-import type { PlayerSuggestHint } from '@/lib/types';
+import type { PlayerGroupedByHints } from '@/lib/types';
 import { db } from '@/server/db/index';
-import { player } from '@/server/db/schema';
-import { sql } from 'drizzle-orm';
-import { unstable_cache } from 'next/cache';
+import { hint, player } from '@/server/db/schema';
+import { and, eq, sql } from 'drizzle-orm';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getPlayersSuggestHint = unstable_cache(
-  async () => {
-    const players: PlayerSuggestHint[] = await db.query.player.findMany({
-      columns: {
-        id: true,
-        firstName: true,
-        lastName: true,
-      },
-      extras: {
-        difficulty: sql<null>`NULL`.as('difficulty'),
-      },
-      orderBy: player.firstName,
+export const getPlayersSuggestHint = async () => {
+  'use cache';
+  cacheLife('max');
+  cacheTag('playersSuggestHint');
+
+  // Query API v1 does not support aggregation
+  const players = await db
+    .select({
+      id: player.id,
+      fullName:
+        sql<string>`concat(${player.firstName}, ' ', ${player.lastName})`.as(
+          'full_name'
+        ),
+      approvedHintsCount: db.$count(
+        hint,
+        and(eq(hint.playerId, player.id), eq(hint.isApproved, true))
+      ),
+    })
+    .from(player)
+    .orderBy(player.firstName);
+
+  const groupedByHints = Object.groupBy(players, ({ approvedHintsCount }) =>
+    approvedHintsCount === 1 ? '1 hint' : `${approvedHintsCount} hints`
+  );
+
+  const playersByHints: PlayerGroupedByHints[] = [];
+
+  for (const hintsGroup in groupedByHints) {
+    playersByHints.push({
+      value: hintsGroup as keyof typeof groupedByHints,
+      items: groupedByHints[hintsGroup as keyof typeof groupedByHints]!.map(
+        (player) => ({
+          id: player.id,
+          fullName: player.fullName,
+        })
+      ),
     });
+  }
 
-    return players;
-  },
-  ['playersSuggestHint'],
-  { tags: ['playersSuggestHint'] }
-);
+  return playersByHints;
+};

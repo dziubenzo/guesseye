@@ -6,7 +6,7 @@ import { addHintSchema } from '@/lib/zod/add-hint';
 import { db } from '@/server/db';
 import { hint as hintSchema } from '@/server/db/schema';
 import { getUserOrGuest } from '@/server/utils';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 export const addHint = actionClient
   .schema(addHintSchema)
@@ -36,14 +36,15 @@ export const addHint = actionClient
         message: `Hint successfully added for`,
       };
       revalidatePath('/admin');
-      revalidateTag('hintsCounts', 'max');
-      revalidateTag('hintCount', 'max');
+      updateTag('hintsCounts');
+      updateTag('hintCount');
+      updateTag('playersSuggestHint');
     } else {
       result = {
         type: 'success',
         message: `Hint successfully submitted for review for`,
       };
-      revalidateTag('suggestedHints', 'max');
+      updateTag('suggestedHints');
     }
 
     return result;

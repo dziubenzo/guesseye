@@ -2,45 +2,42 @@
 
 import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
+import {
+  Combobox,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+} from '@/components/ui/combobox';
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import type { PlayerAdmin, PlayerSuggestHint } from '@/lib/types';
+import type { PlayerGroupedByHints, PlayerSuggestHint } from '@/lib/types';
 import { getFullName } from '@/lib/utils';
 import { addHintSchema, type AddHintSchemaType } from '@/lib/zod/add-hint';
 import { addHint } from '@/server/actions/add-hint';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAction } from 'next-safe-action/hooks';
-import { Fragment, use, useState } from 'react';
+import { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type AddHintProps =
   | {
-      playersPromise: Promise<PlayerSuggestHint[]>;
+      playersPromise: Promise<PlayerGroupedByHints[]>;
       location: 'suggestHintPage';
     }
-  | { playersPromise: Promise<PlayerAdmin[]>; location: 'adminPage' };
+  | { playersPromise: Promise<PlayerGroupedByHints[]>; location: 'adminPage' };
 
 export default function AddHintForm({
   playersPromise,
   location,
 }: AddHintProps) {
-  let players: PlayerSuggestHint[] | PlayerAdmin[];
-
-  if (location === 'suggestHintPage') {
-    players = use(playersPromise);
-  } else {
-    players = use(playersPromise);
-  }
+  const players = use(playersPromise);
 
   const addHintForm = useForm({
     resolver: zodResolver(addHintSchema),
@@ -52,8 +49,6 @@ export default function AddHintForm({
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  // Make sure Select shows the placeholder text back after submission
-  const [selectKey, setSelectKey] = useState(new Date().toString());
 
   const { execute, isPending } = useAction(addHint, {
     onSuccess({ data }) {
@@ -64,10 +59,8 @@ export default function AddHintForm({
       if (data?.type === 'success') {
         const submittedPlayerId = addHintForm.getValues('playerId');
         const fullName = getFullName(submittedPlayerId, players);
-        setSuccess(`${data.message} ${fullName}.`);
-        addHintForm.resetField('playerId');
         addHintForm.resetField('hint');
-        setSelectKey(new Date().toString());
+        setSuccess(`${data.message} ${fullName}.`);
         return;
       }
     },
@@ -90,61 +83,48 @@ export default function AddHintForm({
           name="playerId"
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2">
-              <Select
-                key={selectKey}
+              <Combobox
                 name="playerId"
-                onValueChange={(value) => field.onChange(parseInt(value))}
-                disabled={isPending}
+                items={players}
+                itemToStringLabel={(player: PlayerSuggestHint) =>
+                  player.fullName
+                }
+                onValueChange={(player) => {
+                  if (!player) {
+                    field.onChange(undefined);
+                    return;
+                  }
+                  field.onChange(player.id);
+                }}
                 required
+                highlightItemOnHover
+                autoHighlight
               >
-                <SelectTrigger
-                  value={field.value}
+                <ComboboxInput
                   className="cursor-pointer w-full sm:w-[350px]"
-                >
-                  <SelectValue
-                    placeholder={
-                      location === 'adminPage'
-                        ? 'Darts Player (Hints)'
-                        : 'Darts Player'
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {players.map((player, index) => {
-                      const prevDifficulty =
-                        players[index > 0 ? index - 1 : index].difficulty;
-                      return location === 'adminPage' ? (
-                        <Fragment key={player.id + 'hintForm'}>
-                          {(index === 0 ||
-                            player.difficulty !== prevDifficulty) && (
-                            <SelectLabel className="text-base">
-                              {player.difficulty!.toUpperCase()}
-                            </SelectLabel>
+                  placeholder="Select a darts player..."
+                  disabled={isPending}
+                  showClear
+                />
+                <ComboboxContent>
+                  <ComboboxEmpty>No darts players found.</ComboboxEmpty>
+                  <ComboboxList>
+                    {(group: PlayerGroupedByHints, index) => (
+                      <ComboboxGroup key={group.value} items={group.items}>
+                        <ComboboxLabel>{group.value}</ComboboxLabel>
+                        <ComboboxCollection>
+                          {(player: PlayerSuggestHint) => (
+                            <ComboboxItem key={player.id} value={player}>
+                              {player.fullName}
+                            </ComboboxItem>
                           )}
-                          <SelectItem
-                            value={player.id.toString()}
-                            className="cursor-pointer"
-                          >
-                            {player.firstName + ' ' + player.lastName}{' '}
-                            {'approvedHintsCount' in player
-                              ? `(${player.approvedHintsCount})`
-                              : null}
-                          </SelectItem>
-                        </Fragment>
-                      ) : (
-                        <SelectItem
-                          key={player.id + 'hintForm'}
-                          value={player.id.toString()}
-                          className="cursor-pointer"
-                        >
-                          {player.firstName + ' ' + player.lastName}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                        </ComboboxCollection>
+                        {index < players.length - 1 && <ComboboxSeparator />}
+                      </ComboboxGroup>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             </FormItem>
           )}
         />

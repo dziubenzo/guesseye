@@ -18,10 +18,9 @@ import type {
   MatchKeys,
   OfficialGamesHistory,
   Player,
-  PlayerAdmin,
   PlayerDifficultyField,
   PlayerFullName,
-  PlayerSuggestHint,
+  PlayerGroupedByHints,
   PlayerToFindMatches,
   PlayerWithHints,
   RangedMatchKeys,
@@ -2108,13 +2107,22 @@ export function getUpdateMessage(type: UpdateRankingsType) {
 
 export function getFullName(
   submittedPlayerId: number,
-  players: PlayerSuggestHint[] | PlayerAdmin[]
+  players: PlayerGroupedByHints[]
 ) {
-  const [submittedPlayer] = players.filter(
-    (player) => player.id === submittedPlayerId
-  );
+  let fullName = '';
 
-  return submittedPlayer.firstName + ' ' + submittedPlayer.lastName;
+  for (const playerGroup of players) {
+    const [submittedPlayer] = playerGroup.items.filter(
+      (player) => player.id === submittedPlayerId
+    );
+
+    if (submittedPlayer) {
+      fullName = submittedPlayer.fullName;
+      return fullName;
+    }
+  }
+
+  return fullName;
 }
 
 function getRandomIntInclusive(min: number, max: number) {
