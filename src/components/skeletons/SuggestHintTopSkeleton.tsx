@@ -5,8 +5,9 @@ export default function SuggestHintTopSkeleton() {
     <div>
       <p>
         There are <InlineSkeleton className="text-base sm:text-lg" fill={999} />{' '}
-        hints for <InlineSkeleton className="text-base sm:text-lg" fill={999} />{' '}
-        darts players available at the moment.
+        approved hints for{' '}
+        <InlineSkeleton className="text-base sm:text-lg" fill={999} /> darts
+        players available at the moment.
       </p>
       <p>You are welcome to contribute to the game by suggesting a hint.</p>
     </div>
