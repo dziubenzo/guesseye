@@ -10,4 +10,5 @@ export const {
   requestPasswordReset,
   useSession,
   deleteUser,
+  updateUser,
 } = createAuthClient({ plugins: [inferAdditionalFields<typeof auth>()] });

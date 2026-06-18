@@ -1,12 +1,8 @@
-'use server';
-
-import { auth } from '@/lib/auth';
+import { updateUser } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import type { UpdateAction } from '@/lib/types';
 import { updateNameSchema } from '@/lib/zod/update-name';
 import { isNameTaken } from '@/server/utils';
-import { revalidatePath } from 'next/cache';
-import { headers } from 'next/headers';
 
 export const updateName = actionClient
   .schema(updateNameSchema)
@@ -23,19 +19,16 @@ export const updateName = actionClient
       return result;
     }
 
-    const { status } = await auth.api.updateUser({
-      body: {
-        name: newName,
-      },
-      headers: await headers(),
+    // This also refreshes the cookie cache
+    const updateResult = await updateUser({
+      name: newName,
     });
 
-    if (status) {
+    if (updateResult.data?.status) {
       result = {
         type: 'success',
         message: 'Name updated successfully!',
       };
-      revalidatePath('/settings');
     } else {
       result = {
         type: 'error',
