@@ -52,9 +52,19 @@ export async function getSession() {
   return session;
 }
 
+export async function getSessionFromDatabase() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+    query: { disableCookieCache: true },
+  });
+
+  return session;
+}
+
 export async function checkForAdmin() {
   const session = await auth.api.getSession({
     headers: await headers(),
+    query: { disableCookieCache: true },
   });
 
   return session?.user.role === 'admin';

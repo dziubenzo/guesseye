@@ -7,7 +7,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 export const getHintCounts = async () => {
   'use cache';
   cacheLife('max');
-  cacheTag('hintCount');
+  cacheTag('hintCountsSuggestHint');
 
   const [counts]: HintCounts[] = await db
     .select({

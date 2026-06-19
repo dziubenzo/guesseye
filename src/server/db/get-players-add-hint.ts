@@ -1,13 +1,15 @@
-import type { PlayerGroupedByHints } from '@/lib/types';
+'use server';
+
+import type { PlayerGroupedByHintsAdmin } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { hint, player } from '@/server/db/schema';
 import { and, eq, sql } from 'drizzle-orm';
 import { cacheLife, cacheTag } from 'next/cache';
 
-export const getPlayersSuggestHint = async () => {
+export const getPlayersAddHint = async () => {
   'use cache';
   cacheLife('max');
-  cacheTag('playersSuggestHint');
+  cacheTag('playersAddHint');
 
   const approvedHintsCountQuery = db.$count(
     hint,
@@ -22,6 +24,7 @@ export const getPlayersSuggestHint = async () => {
         sql<string>`concat(${player.firstName}, ' ', ${player.lastName})`.as(
           'full_name'
         ),
+      difficulty: player.difficulty,
       approvedHintsCount: approvedHintsCountQuery,
     })
     .from(player)
@@ -31,7 +34,7 @@ export const getPlayersSuggestHint = async () => {
     approvedHintsCount === 1 ? '1 hint' : `${approvedHintsCount} hints`
   );
 
-  const playersByHints: PlayerGroupedByHints[] = [];
+  const playersByHints: PlayerGroupedByHintsAdmin[] = [];
 
   let key: keyof typeof groupedByHints;
 
@@ -41,6 +44,7 @@ export const getPlayersSuggestHint = async () => {
       items: groupedByHints[key]!.map((player) => ({
         id: player.id,
         fullName: player.fullName,
+        difficulty: player.difficulty,
       })),
     });
   }

@@ -1,24 +1,25 @@
 'use server';
 
 import type { UpdateAction } from '@/lib/types';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export default async function revalidatePlayerCache() {
   const cacheTypes: string[] = [
     'players',
-    'playersAdmin',
+    'playersAddHint',
+    'playersSchedulePlayer',
     'lastDatabaseUpdate',
     'playerCount',
     'databaseStats',
     'fullNames',
     'suggestedHints',
-    'hintsCounts',
+    'hintCountsStats',
     'playersSuggestHint',
-    'hintCount',
+    'hintCountsSuggestHint',
   ];
 
   for (const cache of cacheTypes) {
-    revalidateTag(cache, 'max');
+    updateTag(cache);
   }
 
   return {

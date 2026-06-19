@@ -1,10 +1,10 @@
 import AddHintForm from '@/components/AddHintForm';
 import AddHintFormSkeleton from '@/components/skeletons/AddHintFormSkeleton';
-import type { PlayerAdmin } from '@/lib/types';
+import type { PlayerGroupedByHintsAdmin } from '@/lib/types';
 import { Suspense } from 'react';
 
 type AddHintProps = {
-  playersPromise: Promise<PlayerAdmin[]>;
+  playersPromise: Promise<PlayerGroupedByHintsAdmin[]>;
 };
 
 export default async function AddHint({ playersPromise }: AddHintProps) {

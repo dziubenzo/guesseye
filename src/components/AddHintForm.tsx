@@ -17,7 +17,12 @@ import {
 import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import type { PlayerGroupedByHints, PlayerSuggestHint } from '@/lib/types';
+import type {
+  PlayerAddHint,
+  PlayerGroupedByHints,
+  PlayerGroupedByHintsAdmin,
+  PlayerSuggestHint,
+} from '@/lib/types';
 import { getFullName } from '@/lib/utils';
 import { addHintSchema, type AddHintSchemaType } from '@/lib/zod/add-hint';
 import { addHint } from '@/server/actions/add-hint';
@@ -26,19 +31,20 @@ import { useAction } from 'next-safe-action/hooks';
 import { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-type AddHintProps =
+type AddHintFormProps =
   | {
       playersPromise: Promise<PlayerGroupedByHints[]>;
       location: 'suggestHintPage';
     }
-  | { playersPromise: Promise<PlayerGroupedByHints[]>; location: 'adminPage' };
+  | {
+      playersPromise: Promise<PlayerGroupedByHintsAdmin[]>;
+      location: 'adminPage';
+    };
 
 export default function AddHintForm({
   playersPromise,
   location,
-}: AddHintProps) {
-  const players = use(playersPromise);
-
+}: AddHintFormProps) {
   const addHintForm = useForm({
     resolver: zodResolver(addHintSchema),
     defaultValues: {
@@ -49,6 +55,8 @@ export default function AddHintForm({
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const players = use(playersPromise);
 
   const { execute, isPending } = useAction(addHint, {
     onSuccess({ data }) {
@@ -81,52 +89,124 @@ export default function AddHintForm({
         <FormField
           control={addHintForm.control}
           name="playerId"
-          render={({ field }) => (
-            <FormItem className="flex flex-col gap-2">
-              <Combobox
-                name="playerId"
-                items={players}
-                itemToStringLabel={(player: PlayerSuggestHint) =>
-                  player.fullName
-                }
-                onValueChange={(player) => {
-                  if (!player) {
-                    field.onChange(undefined);
-                    return;
-                  }
-                  field.onChange(player.id);
-                }}
-                required
-                highlightItemOnHover
-                autoHighlight
-              >
-                <ComboboxInput
-                  className="cursor-pointer w-full sm:w-[350px]"
-                  placeholder="Select a darts player..."
-                  disabled={isPending}
-                  showClear
-                />
-                <ComboboxContent>
-                  <ComboboxEmpty>No darts players found.</ComboboxEmpty>
-                  <ComboboxList>
-                    {(group: PlayerGroupedByHints, index) => (
-                      <ComboboxGroup key={group.value} items={group.items}>
-                        <ComboboxLabel>{group.value}</ComboboxLabel>
-                        <ComboboxCollection>
-                          {(player: PlayerSuggestHint) => (
-                            <ComboboxItem key={player.id} value={player}>
-                              {player.fullName}
-                            </ComboboxItem>
-                          )}
-                        </ComboboxCollection>
-                        {index < players.length - 1 && <ComboboxSeparator />}
-                      </ComboboxGroup>
-                    )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
-            </FormItem>
-          )}
+          render={({ field }) => {
+            if (location === 'suggestHintPage') {
+              const players = use(playersPromise);
+
+              return (
+                <FormItem className="flex flex-col gap-2">
+                  <Combobox
+                    name="playerId"
+                    items={players}
+                    itemToStringLabel={(player: PlayerSuggestHint) =>
+                      player.fullName
+                    }
+                    onValueChange={(player) => {
+                      if (!player) {
+                        field.onChange(undefined);
+                        return;
+                      }
+                      field.onChange(player.id);
+                    }}
+                    required
+                    highlightItemOnHover
+                    autoHighlight
+                  >
+                    <ComboboxInput
+                      className="cursor-pointer w-full sm:w-[350px]"
+                      placeholder="Select a darts player..."
+                      disabled={isPending}
+                      showClear
+                    />
+                    <ComboboxContent>
+                      <ComboboxEmpty>No darts players found.</ComboboxEmpty>
+                      <ComboboxList>
+                        {(group: PlayerGroupedByHints, index) => (
+                          <ComboboxGroup key={group.value} items={group.items}>
+                            <ComboboxLabel className="text-sm">
+                              {group.value.toUpperCase()}
+                            </ComboboxLabel>
+                            <ComboboxCollection>
+                              {(player: PlayerSuggestHint) => (
+                                <ComboboxItem
+                                  className="cursor-pointer"
+                                  key={player.id}
+                                  value={player}
+                                >
+                                  {player.fullName}
+                                </ComboboxItem>
+                              )}
+                            </ComboboxCollection>
+                            {index < players.length - 1 && (
+                              <ComboboxSeparator />
+                            )}
+                          </ComboboxGroup>
+                        )}
+                      </ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
+                </FormItem>
+              );
+            } else {
+              const players = use(playersPromise);
+
+              return (
+                <FormItem className="flex flex-col gap-2">
+                  <Combobox
+                    name="playerId"
+                    items={players}
+                    itemToStringLabel={(player: PlayerAddHint) =>
+                      `${player.fullName} (${player.difficulty.toUpperCase()})`
+                    }
+                    onValueChange={(player) => {
+                      if (!player) {
+                        field.onChange(undefined);
+                        return;
+                      }
+                      field.onChange(player.id);
+                    }}
+                    required
+                    highlightItemOnHover
+                    autoHighlight
+                  >
+                    <ComboboxInput
+                      className="cursor-pointer w-full sm:w-[350px]"
+                      placeholder="Darts Player (Difficulty)"
+                      disabled={isPending}
+                      showClear
+                    />
+                    <ComboboxContent>
+                      <ComboboxEmpty>No darts players found.</ComboboxEmpty>
+                      <ComboboxList>
+                        {(group: PlayerGroupedByHintsAdmin, index) => (
+                          <ComboboxGroup key={group.value} items={group.items}>
+                            <ComboboxLabel className="text-sm">
+                              {group.value.toUpperCase()}
+                            </ComboboxLabel>
+                            <ComboboxCollection>
+                              {(player: PlayerAddHint) => (
+                                <ComboboxItem
+                                  className="cursor-pointer"
+                                  key={player.id}
+                                  value={player}
+                                >
+                                  {player.fullName} (
+                                  {player.difficulty.toUpperCase()})
+                                </ComboboxItem>
+                              )}
+                            </ComboboxCollection>
+                            {index < players.length - 1 && (
+                              <ComboboxSeparator />
+                            )}
+                          </ComboboxGroup>
+                        )}
+                      </ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
+                </FormItem>
+              );
+            }
+          }}
         />
         <FormField
           control={addHintForm.control}

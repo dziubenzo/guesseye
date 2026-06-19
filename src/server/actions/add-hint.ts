@@ -36,8 +36,8 @@ export const addHint = actionClient
         message: `Hint successfully added for`,
       };
       revalidatePath('/admin');
-      updateTag('hintsCounts');
-      updateTag('hintCount');
+      updateTag('hintCountsStats');
+      updateTag('hintCountsSuggestHint');
       updateTag('playersSuggestHint');
     } else {
       result = {

@@ -7,7 +7,7 @@ import { db } from '@/server/db';
 import { hint as hintSchema } from '@/server/db/schema';
 import { checkForAdmin } from '@/server/utils';
 import { eq } from 'drizzle-orm';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 export const manageHint = actionClient
   .schema(manageHintSchema)
@@ -33,6 +33,8 @@ export const manageHint = actionClient
         type: 'success',
         message: 'Hint approved successfully.',
       };
+      updateTag('hintCountsStats');
+      updateTag('hintCountsSuggestHint');
     } else {
       await db.delete(hintSchema).where(eq(hintSchema.id, hintId));
       result = {
@@ -42,8 +44,6 @@ export const manageHint = actionClient
     }
 
     revalidatePath('/admin');
-    revalidateTag('hintsCounts', 'max');
-    revalidateTag('hintCount', 'max');
 
     return result;
   });

@@ -1,54 +1,20 @@
-import AddHint from '@/components/AddHint';
-import PlayerScheduler from '@/components/PlayerScheduler';
-import SuggestedHintsSkeleton from '@/components/skeletons/SuggestedHintsSkeleton';
-import SuggestedHints from '@/components/SuggestedHints';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import UpdateButtons from '@/components/UpdateButtons';
-import { auth } from '@/lib/auth';
-import { getLastScheduledPlayer } from '@/server/db/get-last-scheduled-player';
-import { getPlayersAdmin } from '@/server/db/get-players-admin';
-import { getSuggestedHints } from '@/server/db/get-suggested-hints';
+import Admin from '@/components/Admin';
+import { Card } from '@/components/ui/card';
+import { getSession } from '@/server/utils';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = { title: 'Admin Page' };
 
-export default async function Admin() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session || session.user.role === 'user') {
-    return notFound();
-  }
-
-  const playersPromise = getPlayersAdmin();
-  const lastScheduledPlayerPromise = getLastScheduledPlayer();
-  const suggestedHintsPromise = getSuggestedHints();
+export default async function AdminPage() {
+  const sessionPromise = getSession();
 
   return (
-    <div className="flex flex-col grow-1 justify-center">
+    <div className="flex flex-col grow-1">
       <Card className="grow-1">
-        <CardHeader>
-          <CardTitle className="text-2xl">Admin Page</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 grow-1">
-          <UpdateButtons />
-          <Separator />
-          <PlayerScheduler
-            playersPromise={playersPromise}
-            lastScheduledPlayerPromise={lastScheduledPlayerPromise}
-          />
-          <Separator />
-          <AddHint playersPromise={playersPromise} />
-          <Separator />
-          <Suspense fallback={<SuggestedHintsSkeleton />}>
-            <SuggestedHints suggestedHintsPromise={suggestedHintsPromise} />
-          </Suspense>
-        </CardContent>
+        <Suspense>
+          <Admin sessionPromise={sessionPromise} />
+        </Suspense>
       </Card>
     </div>
   );

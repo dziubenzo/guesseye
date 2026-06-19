@@ -39,11 +39,12 @@ export const getPlayersSchedulePlayer = async () => {
 
   const playersByDifficulty: PlayerGroupedByDifficulty[] = [];
 
-  for (const hintsGroup in groupedByDifficulty) {
+  let key: keyof typeof groupedByDifficulty;
+
+  for (key in groupedByDifficulty) {
     playersByDifficulty.push({
-      value: hintsGroup as keyof typeof groupedByDifficulty,
-      items:
-        groupedByDifficulty[hintsGroup as keyof typeof groupedByDifficulty]!,
+      value: key,
+      items: groupedByDifficulty[key]!,
     });
   }
 
