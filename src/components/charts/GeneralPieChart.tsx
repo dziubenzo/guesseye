@@ -25,7 +25,7 @@ export default function GeneralPieChart({
       config={config}
       className="min-h-[230px] sm:min-h-[350px] w-full"
     >
-      <PieChart width={350} height={350}>
+      <PieChart>
         <ChartTooltip content={<ChartTooltipContent className="w-[150px]" />} />
         <Pie
           data={data}
@@ -34,7 +34,7 @@ export default function GeneralPieChart({
           label={(value: DatabaseStatsResult) => value.percentage + '%'}
           fontSize={14}
         >
-          {data.map((entry, index) => (
+          {data.map((_, index) => (
             <Cell
               key={`cell-${index}`}
               fill={colours[index % colours.length]}

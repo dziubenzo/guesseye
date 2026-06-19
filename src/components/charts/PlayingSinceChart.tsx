@@ -7,7 +7,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import type { DatabaseStats } from '@/lib/types';
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts';
+import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
   count: {
@@ -22,17 +22,19 @@ type PlayingSinceChartProps = {
 
 export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+    <ChartContainer config={chartConfig} className="min-h-[1300px] w-full">
       <BarChart
         accessibilityLayer
         data={data}
-        margin={{ top: 25, right: 5, bottom: 25, left: 5 }}
+        margin={{ top: 5, right: 55, bottom: 5, left: 5 }}
+        layout="vertical"
       >
-        <CartesianGrid vertical={false} />
-        <XAxis
+        <XAxis type="number" hide />
+        <YAxis
           dataKey="value"
+          type="category"
           tickLine={false}
-          tickMargin={10}
+          tickMargin={5}
           axisLine={false}
           minTickGap={0}
           tickFormatter={(value) => value}
@@ -48,15 +50,15 @@ export default function PlayingSinceChart({ data }: PlayingSinceChartProps) {
         <Bar dataKey="count" fill="var(--color-count)" radius={4}>
           <LabelList
             dataKey="count"
-            position="top"
-            offset={9}
-            className="fill-foreground hidden sm:text-base sm:block"
+            position="right"
+            offset={4}
+            className="fill-foreground text-sm sm:hidden"
           />
           <LabelList
             dataKey="count"
-            position="top"
-            offset={3}
-            className="fill-foreground text-[0.5rem] sm:hidden"
+            position="right"
+            offset={6}
+            className="fill-foreground hidden sm:text-sm sm:block"
           />
         </Bar>
       </BarChart>
