@@ -20,7 +20,9 @@ import type {
   Player,
   PlayerDifficultyField,
   PlayerFullName,
+  PlayerGroupedByDifficulty,
   PlayerGroupedByHints,
+  PlayerGroupedByHintsAdmin,
   PlayerToFindMatches,
   PlayerWithHints,
   RangedMatchKeys,
@@ -2107,7 +2109,10 @@ export function getUpdateMessage(type: UpdateRankingsType) {
 
 export function getFullName(
   submittedPlayerId: number,
-  players: PlayerGroupedByHints[]
+  players:
+    | PlayerGroupedByHints[]
+    | PlayerGroupedByHintsAdmin[]
+    | PlayerGroupedByDifficulty[]
 ) {
   let fullName = '';
 

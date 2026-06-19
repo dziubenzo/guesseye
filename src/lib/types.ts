@@ -492,23 +492,32 @@ export type UpdateRankingsType =
 
 export type TourCardHolder = Omit<RankedPlayer, 'ranking'>;
 
-export type PlayerAdmin = Pick<Player, 'id' | 'gender' | 'difficulty'> & {
+export type PlayerSchedulePlayer = Pick<Player, 'id' | 'difficulty'> & {
   fullName: string;
   officialModeCount: number;
   approvedHintsCount: number;
 };
 
-export type GroupedPlayersAdmin = {
-  male: PlayerAdmin[];
-  female: PlayerAdmin[];
-};
+export type PlayerSuggestHint = Pick<PlayerSchedulePlayer, 'id' | 'fullName'>;
 
-export type PlayerSuggestHint = Pick<PlayerAdmin, 'id' | 'fullName'>;
+export type PlayerAddHint = Pick<
+  PlayerSchedulePlayer,
+  'id' | 'fullName' | 'difficulty'
+>;
 
 // Keys "value" and "items" MUST be named that way for Combobox with groups to work
+export type PlayerGroupedByDifficulty = {
+  value: Player['difficulty'];
+  items: PlayerSchedulePlayer[];
+};
+
 export type PlayerGroupedByHints = {
   value: '1 hint' | `${number} hints`;
   items: PlayerSuggestHint[];
+};
+
+export type PlayerGroupedByHintsAdmin = Pick<PlayerGroupedByHints, 'value'> & {
+  items: PlayerAddHint[];
 };
 
 export type BirthdayPlayer = {

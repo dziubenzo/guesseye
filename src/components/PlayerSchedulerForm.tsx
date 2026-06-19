@@ -2,22 +2,24 @@
 
 import Message from '@/components/Message';
 import { Button } from '@/components/ui/button';
-import { Form, FormField, FormItem } from '@/components/ui/form';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Combobox,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+} from '@/components/ui/combobox';
+import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import type {
   ErrorObject,
-  GroupedPlayersAdmin,
-  PlayerAdmin,
+  PlayerGroupedByDifficulty,
+  PlayerSchedulePlayer,
   Schedule,
 } from '@/lib/types';
 import { getFullName } from '@/lib/utils';
@@ -29,11 +31,11 @@ import { schedulePlayer } from '@/server/actions/schedule-player';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useAction } from 'next-safe-action/hooks';
-import { Fragment, use, useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type PlayerSchedulerFormProps = {
-  playersPromise: Promise<PlayerAdmin[]>;
+  playersPromise: Promise<PlayerGroupedByDifficulty[]>;
   startDate: Date;
 };
 
@@ -46,21 +48,13 @@ export default function PlayerSchedulerForm({
   const schedulePlayerForm = useForm({
     resolver: zodResolver(schedulePlayerSchema),
     defaultValues: { startDate },
+    reValidateMode: "onSubmit"
   });
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  // Make sure Select shows the placeholder text back after submission
+  // Make sure Combobox shows the placeholder text back after submission
   const [selectKey, setSelectKey] = useState(new Date().toString());
-
-  // Group darts players by gender
-  const playersByGender = useMemo(
-    () =>
-      Object.groupBy(players, ({ gender }) => gender) as GroupedPlayersAdmin,
-    [players]
-  );
-
-  const hookErrors = schedulePlayerForm.formState.errors;
 
   const { execute, isPending } = useAction(schedulePlayer, {
     onSuccess({ data }) {
@@ -78,6 +72,8 @@ export default function PlayerSchedulerForm({
       }
     },
   });
+
+  const hookErrors = schedulePlayerForm.formState.errors;
 
   // Make sure React Hook Form errors are caught by my error state
   useEffect(() => {
@@ -108,92 +104,67 @@ export default function PlayerSchedulerForm({
           className="flex flex-col gap-4"
         >
           <FormField
+            key={selectKey}
             control={schedulePlayerForm.control}
             name="playerId"
             render={({ field }) => (
-              <FormItem className="flex flex-col gap-4">
-                <Select
-                  key={selectKey}
+              <FormItem className="flex flex-col gap-2">
+                <Combobox
                   name="playerId"
-                  onValueChange={(value) => field.onChange(parseInt(value))}
+                  items={players}
+                  itemToStringLabel={(player: PlayerSchedulePlayer) =>
+                    `${player.fullName} (${player.officialModeCount}) (${player.difficulty.toUpperCase()}, ${player.approvedHintsCount} ${
+                      player.approvedHintsCount === 1 ? 'hint' : 'hints'
+                    })`
+                  }
+                  onValueChange={(player) => {
+                    if (!player) {
+                      field.onChange(undefined);
+                      return;
+                    }
+                    field.onChange(player.id);
+                  }}
                   required
+                  highlightItemOnHover
+                  autoHighlight
                 >
-                  <SelectTrigger
-                    value={field.value}
+                  <ComboboxInput
                     className="cursor-pointer w-full sm:w-[350px]"
-                  >
-                    <SelectValue placeholder="Darts Player (Occurrences) (Difficulty, Hints)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel className="text-base text-blue-500">
-                        MEN
-                      </SelectLabel>
-                      {playersByGender.male.map((player, index) => {
-                        const prevDifficulty =
-                          playersByGender.male[index > 0 ? index - 1 : index]
-                            .difficulty;
-                        return (
-                          <Fragment key={player.id + 'schedulerForm'}>
-                            {(index === 0 ||
-                              player.difficulty !== prevDifficulty) && (
-                              <SelectLabel className="text-base">
-                                {player.difficulty.toUpperCase()}
-                              </SelectLabel>
+                    placeholder="Darts Player (Occurrences) (Difficulty, Hints)"
+                    disabled={isPending}
+                    showClear
+                  />
+                  <ComboboxContent>
+                    <ComboboxEmpty>No darts players found.</ComboboxEmpty>
+                    <ComboboxList>
+                      {(group: PlayerGroupedByDifficulty, index) => (
+                        <ComboboxGroup key={group.value} items={group.items}>
+                          <ComboboxLabel className="text-sm">
+                            {group.value.toUpperCase()}
+                          </ComboboxLabel>
+                          <ComboboxCollection>
+                            {(player: PlayerSchedulePlayer) => (
+                              <ComboboxItem
+                                className="cursor-pointer"
+                                key={player.id}
+                                value={player}
+                              >
+                                {player.fullName} ({player.officialModeCount}) (
+                                {player.difficulty.toUpperCase()},{' '}
+                                {player.approvedHintsCount}{' '}
+                                {player.approvedHintsCount === 1
+                                  ? 'hint'
+                                  : 'hints'}
+                                )
+                              </ComboboxItem>
                             )}
-                            <SelectItem
-                              value={player.id.toString()}
-                              className="cursor-pointer"
-                            >
-                              {player.firstName + ' ' + player.lastName} (
-                              {player.officialModeCount}) (
-                              {player.difficulty.toUpperCase()},{' '}
-                              {player.approvedHintsCount}{' '}
-                              {player.approvedHintsCount === 1
-                                ? 'hint'
-                                : 'hints'}
-                              )
-                            </SelectItem>
-                          </Fragment>
-                        );
-                      })}
-                    </SelectGroup>
-                    <SelectSeparator />
-                    <SelectGroup>
-                      <SelectLabel className="text-base text-pink-400">
-                        WOMEN
-                      </SelectLabel>
-                      {playersByGender.female.map((player, index) => {
-                        const prevDifficulty =
-                          playersByGender.female[index > 0 ? index - 1 : index]
-                            .difficulty;
-                        return (
-                          <Fragment key={player.id}>
-                            {(index === 0 ||
-                              player.difficulty !== prevDifficulty) && (
-                              <SelectLabel className="text-base">
-                                {player.difficulty.toUpperCase()}
-                              </SelectLabel>
-                            )}
-                            <SelectItem
-                              value={player.id.toString()}
-                              className="cursor-pointer"
-                            >
-                              {player.firstName + ' ' + player.lastName} (
-                              {player.officialModeCount}) (
-                              {player.difficulty.toUpperCase()},{' '}
-                              {player.approvedHintsCount}{' '}
-                              {player.approvedHintsCount === 1
-                                ? 'hint'
-                                : 'hints'}
-                              )
-                            </SelectItem>
-                          </Fragment>
-                        );
-                      })}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                          </ComboboxCollection>
+                          {index < players.length - 1 && <ComboboxSeparator />}
+                        </ComboboxGroup>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
               </FormItem>
             )}
           />
@@ -217,7 +188,7 @@ export default function PlayerSchedulerForm({
 }
 
 type PlayerSchedulerFormWrapperProps = {
-  playersPromise: Promise<PlayerAdmin[]>;
+  playersPromise: Promise<PlayerGroupedByDifficulty[]>;
   lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
 };
 

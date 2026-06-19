@@ -1,11 +1,15 @@
 import { PlayerSchedulerFormWrapper } from '@/components/PlayerSchedulerForm';
 import PlayerSchedulerTop from '@/components/PlayerSchedulerTop';
 import PlayerSchedulerSkeleton from '@/components/skeletons/PlayerSchedulerSkeleton';
-import type { ErrorObject, PlayerAdmin, Schedule } from '@/lib/types';
+import type {
+  ErrorObject,
+  PlayerGroupedByDifficulty,
+  Schedule,
+} from '@/lib/types';
 import { Suspense } from 'react';
 
 type PlayerSchedulerProps = {
-  playersPromise: Promise<PlayerAdmin[]>;
+  playersPromise: Promise<PlayerGroupedByDifficulty[]>;
   lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
 };
 
