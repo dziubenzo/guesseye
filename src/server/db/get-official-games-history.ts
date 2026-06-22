@@ -23,7 +23,7 @@ export const getOfficialGamesHistory = async () => {
     orderBy: desc(schedule.startDate),
   });
 
-  const data = scheduleRows.map((scheduledPlayer, index) => {
+  const history = scheduleRows.map((scheduledPlayer, index) => {
     const history: OfficialGamesHistory = {
       gameNo: scheduleRows.length - index,
       startDate: scheduledPlayer.startDate,
@@ -52,5 +52,5 @@ export const getOfficialGamesHistory = async () => {
     return history;
   });
 
-  return data;
+  return history;
 };
