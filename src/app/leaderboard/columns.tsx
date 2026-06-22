@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import type { LeaderboardUser } from '@/lib/types';
-import { formatGameDuration } from '@/lib/utils';
+import { cn, formatGameDuration } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 
@@ -47,9 +47,7 @@ export const columns: ColumnDef<LeaderboardUser>[] = [
 
       return (
         <div>
-          <p className={`${isCurrentUser ? 'font-medium' : undefined}`}>
-            {username}
-          </p>
+          <p className={cn(isCurrentUser && 'font-medium')}>{username}</p>
         </div>
       );
     },
