@@ -73,13 +73,13 @@ export default function GiveUpButton({
     execute({ ...values, mode });
   }
 
-  function handleButtonClick() {
+  async function handleButtonClick() {
     resetState();
-    revalidateCompletedGames(gameId, userId);
+    await revalidateCompletedGames(gameId, userId);
     if (pathname.includes('official')) {
       router.push('/official');
     } else {
-      revalidateGameCache(mode);
+      await revalidateGameCache(mode);
       setOpen(false);
       setPlayerToFind('');
     }

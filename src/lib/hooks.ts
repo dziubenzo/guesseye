@@ -90,8 +90,8 @@ export const useRevalidateCompletedGames = (
 ) => {
   useEffect(() => {
     if (gameOver) {
-      return () => {
-        revalidateCompletedGames(gameId, userId);
+      return async () => {
+        await revalidateCompletedGames(gameId, userId);
       };
     } else {
       return () => {};
