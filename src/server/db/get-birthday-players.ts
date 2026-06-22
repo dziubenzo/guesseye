@@ -4,8 +4,13 @@ import type { BirthdayPlayer } from '@/lib/types';
 import { getAge } from '@/lib/utils';
 import { getPlayers } from '@/server/db/get-players';
 import { isToday, setYear } from 'date-fns';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export const getBirthdayPlayers = async () => {
+  'use cache';
+  cacheLife('days');
+  cacheTag('birthdayPlayers');
+
   const players = await getPlayers();
 
   const birthdayPlayers: BirthdayPlayer[] = [];
@@ -25,5 +30,7 @@ export const getBirthdayPlayers = async () => {
     }
   });
 
-  return birthdayPlayers;
+  const birthdayPlayersSorted = birthdayPlayers.sort((a, b) => a.age - b.age);
+
+  return birthdayPlayersSorted;
 };
