@@ -3,7 +3,7 @@
 import type { UpdateAction } from '@/lib/types';
 import { updateTag } from 'next/cache';
 
-export default async function revalidatePlayerCache() {
+export default async function revalidateAllCache() {
   const cacheTypes: string[] = [
     'players',
     'playersAddHint',
@@ -17,6 +17,7 @@ export default async function revalidatePlayerCache() {
     'hintCountsStats',
     'playersSuggestHint',
     'hintCountsSuggestHint',
+    'leaderboard',
   ];
 
   for (const cache of cacheTypes) {

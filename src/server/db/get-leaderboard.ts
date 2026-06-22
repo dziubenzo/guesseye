@@ -10,8 +10,13 @@ import {
 import { db } from '@/server/db/index';
 import { user } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getLeaderboard = async (userId: string) => {
+export const getLeaderboard = async () => {
+  'use cache';
+  cacheLife('max');
+  cacheTag('leaderboard');
+
   // Get all users with their games and guesses
   const users = await db.query.user.findMany({
     columns: { id: true, name: true },
@@ -27,7 +32,7 @@ export const getLeaderboard = async (userId: string) => {
     .map((user) => {
       const leaderboardUser: LeaderboardUser = {
         username: user.name,
-        isCurrentUser: user.id === userId ? true : false,
+        isCurrentUser: false,
         officialModeWins: 0,
         officialModeGiveUps: 0,
         randomModeWins: 0,

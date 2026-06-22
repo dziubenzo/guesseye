@@ -6,7 +6,7 @@ import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
 import updateAllRankings from '@/server/actions/update-all-rankings';
 import updateRankings from '@/server/actions/update-rankings';
 import updateTourCardHolders from '@/server/actions/update-tour-card-holders';
-import revalidatePlayerCache from '@/server/revalidators/revalidate-player-cache';
+import revalidateAllCache from '@/server/revalidators/revalidate-all-cache';
 import { useState } from 'react';
 
 export default function UpdateButtons() {
@@ -56,7 +56,7 @@ export default function UpdateButtons() {
   async function handleRevalidateCacheClick() {
     clearMessages();
     setIsDisabled(true);
-    const result = await revalidatePlayerCache();
+    const result = await revalidateAllCache();
     setRevalidateCacheResult(result);
     setIsDisabled(false);
   }

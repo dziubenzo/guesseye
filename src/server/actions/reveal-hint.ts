@@ -5,6 +5,7 @@ import type { RevealHintAction } from '@/lib/types';
 import { revealHintSchema } from '@/lib/zod/reveal-hint';
 import { db } from '@/server/db';
 import { game, hint } from '@/server/db/schema';
+import revalidateLeaderboardCache from '@/server/revalidators/revalidate-leaderboard-cache';
 import { getUserOrGuest } from '@/server/utils';
 import { and, eq } from 'drizzle-orm';
 
@@ -75,6 +76,8 @@ export const revealHint = actionClient
       type: 'success',
       revealedHint,
     };
+
+    await revalidateLeaderboardCache();
 
     return result;
   });
