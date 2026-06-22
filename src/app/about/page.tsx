@@ -6,18 +6,16 @@ import Logo from '@/components/Logo';
 import WhySignUpSkeleton from '@/components/skeletons/WhySignUpSkeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { auth, type Session } from '@/lib/auth';
+import { type Session } from '@/lib/auth';
+import { getSession } from '@/server/utils';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import Link from 'next/link';
 import { Suspense, use } from 'react';
 
 export const metadata: Metadata = { title: 'About' };
 
 export default async function About() {
-  const sessionPromise = auth.api.getSession({
-    headers: await headers(),
-  });
+  const sessionPromise = getSession();
 
   return (
     <Card>
