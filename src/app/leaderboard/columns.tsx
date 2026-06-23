@@ -160,7 +160,7 @@ export const columns: ColumnDef<LeaderboardUser>[] = [
     cell: ({ cell }) => {
       const fastestWin = cell.getValue<LeaderboardUser['fastestWin']>();
 
-      if (!fastestWin) return;
+      if (fastestWin === undefined) return;
 
       return (
         <div>
