@@ -16,7 +16,7 @@ import {
 } from '@/lib/utils';
 import { browser } from '@/server/browser';
 import { db } from '@/server/db';
-import { playersMap, playersNormalisedMap } from '@/server/db/get-players-map';
+import { getPlayers } from '@/server/db/get-players';
 import { lower, player as playerSchema, user } from '@/server/db/schema';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { headers } from 'next/headers';
@@ -241,6 +241,8 @@ export async function updateDBRankings(
   let updateCount = 0;
   const missingPlayers: string[] = [];
 
+  const { playerMap } = await getPlayers();
+
   for (const rankedPlayer of rankedPlayers) {
     const normalisedFullName =
       normaliseToString(rankedPlayer.firstName) +
@@ -248,8 +250,8 @@ export async function updateDBRankings(
       normaliseToString(rankedPlayer.lastName);
 
     // Update the ranking of a darts player if they are in the players map (DB)
-    if (playersNormalisedMap.has(normalisedFullName)) {
-      const player = playersNormalisedMap.get(normalisedFullName)!;
+    if (playerMap.has(normalisedFullName)) {
+      const player = playerMap.get(normalisedFullName)!;
       await db
         .update(playerSchema)
         .set({ [rankingType]: rankedPlayer.ranking })
@@ -278,7 +280,7 @@ export async function updateDBRankings(
     }
   }
 
-  return { updateCount, playersDB: playersMap.size, missingPlayers };
+  return { updateCount, playersDB: playerMap.size / 2, missingPlayers };
 }
 
 // Get current Tour Card Holders

@@ -13,7 +13,7 @@ import { guessSchema } from '@/lib/zod/check-guess';
 import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
 import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
-import { playersMap } from '@/server/db/get-players-map';
+import { getPlayers } from '@/server/db/get-players';
 import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
 
 export const checkGuess = actionClient
@@ -32,7 +32,9 @@ export const checkGuess = actionClient
 
       const validScheduleId = validationResult.validScheduleId;
 
-      const guessedPlayer = playersMap.get(guess);
+      const { playerMap } = await getPlayers();
+
+      const guessedPlayer = playerMap.get(guess);
 
       if (!guessedPlayer) {
         const error: CheckGuessAction = {

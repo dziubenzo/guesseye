@@ -3,11 +3,11 @@
 import type { UpdateAction } from '@/lib/types';
 import { normaliseToString } from '@/lib/utils';
 import { db } from '@/server/db';
-import { playersNormalisedMap } from '@/server/db/get-players-map';
+import { getPlayers } from '@/server/db/get-players';
 import { player as playerSchema } from '@/server/db/schema';
 import { checkForAdmin, getTourCardHolders } from '@/server/utils';
 import { and, eq } from 'drizzle-orm';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export default async function updateTourCardHolders() {
   let result: UpdateAction;
@@ -32,6 +32,8 @@ export default async function updateTourCardHolders() {
     return result;
   }
 
+  const { playerMap } = await getPlayers();
+
   // Set tour card value to false for all darts players who currently have the tour card value of true
   await db
     .update(playerSchema)
@@ -47,9 +49,9 @@ export default async function updateTourCardHolders() {
       ' ' +
       normaliseToString(tourCardHolder.lastName);
 
-    // Update the tour card value to true if the TC holder is in the players map (DB)
-    if (playersNormalisedMap.has(normalisedFullName)) {
-      const player = playersNormalisedMap.get(normalisedFullName)!;
+    // Update the tour card value to true if the TC holder is in the player map (DB)
+    if (playerMap.has(normalisedFullName)) {
+      const player = playerMap.get(normalisedFullName)!;
       await db
         .update(playerSchema)
         .set({ tourCard: true })
@@ -68,8 +70,8 @@ export default async function updateTourCardHolders() {
   }
 
   // Clear the players and last database update cache
-  revalidateTag('players', 'max');
-  revalidateTag('lastDatabaseUpdate', 'max');
+  updateTag('players');
+  updateTag('lastDatabaseUpdate');
 
   const missingPlayersString =
     missingPlayers.length > 0

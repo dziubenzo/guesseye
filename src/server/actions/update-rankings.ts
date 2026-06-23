@@ -4,7 +4,7 @@ import type { UpdateAction, UpdateRankingsType } from '@/lib/types';
 import { getUpdateMessage } from '@/lib/utils';
 import getRankedPlayers from '@/server/scripts/get-updated-rankings';
 import { checkForAdmin, updateDBRankings } from '@/server/utils';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export default async function updateRankings(type: UpdateRankingsType) {
   let result: UpdateAction;
@@ -35,8 +35,8 @@ export default async function updateRankings(type: UpdateRankingsType) {
   );
 
   // Clear the players and last database update cache
-  revalidateTag('players', 'max');
-  revalidateTag('lastDatabaseUpdate', 'max');
+  updateTag('players');
+  updateTag('lastDatabaseUpdate');
 
   const updateMessage = getUpdateMessage(type);
 

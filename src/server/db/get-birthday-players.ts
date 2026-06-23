@@ -11,7 +11,7 @@ export const getBirthdayPlayers = async () => {
   cacheLife('days');
   cacheTag('birthdayPlayers');
 
-  const players = await getPlayers();
+  const { players } = await getPlayers();
 
   const birthdayPlayers: BirthdayPlayer[] = [];
 
