@@ -3,7 +3,7 @@
 import type { UpdateAction } from '@/lib/types';
 import updateRankings from '@/server/actions/update-rankings';
 import { checkForAdmin } from '@/server/utils';
-import { revalidateTag } from 'next/cache';
+import { updateTag } from 'next/cache';
 
 export default async function updateAllRankings() {
   let result: UpdateAction;
@@ -46,8 +46,8 @@ export default async function updateAllRankings() {
   }
 
   // Clear the players and last database update cache
-  revalidateTag('players', 'max');
-  revalidateTag('lastDatabaseUpdate', 'max');
+  updateTag('players');
+  updateTag('lastDatabaseUpdate');
 
   result = {
     type: 'success',

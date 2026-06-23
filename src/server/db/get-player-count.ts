@@ -2,12 +2,14 @@
 
 import { db } from '@/server/db/index';
 import { player } from '@/server/db/schema';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 
-export const getPlayerCount = unstable_cache(
-  async () => {
-    return await db.$count(player);
-  },
-  ['playerCount'],
-  { tags: ['playerCount'] }
-);
+export const getPlayerCount = async () => {
+  'use cache';
+  cacheLife('max');
+  cacheTag('playerCount');
+
+  const playerCount = await db.$count(player);
+
+  return playerCount;
+};
