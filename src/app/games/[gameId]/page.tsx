@@ -1,14 +1,11 @@
-import CompletedGame from '@/components/CompletedGame';
+import CompletedGameAccessLayer from '@/components/CompletedGameAccessLayer';
 import CompletedGameSkeleton from '@/components/skeletons/CompletedGameSkeletons';
 import { Card, CardContent } from '@/components/ui/card';
-import { auth } from '@/lib/auth';
 import { db } from '@/server/db';
-import { getCompletedGame } from '@/server/db/get-completed-game';
 import { game } from '@/server/db/schema';
+import { getSession } from '@/server/utils';
 import { ne } from 'drizzle-orm';
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
 import { Suspense, type ComponentProps } from 'react';
 
 export const metadata: Metadata = { title: 'Completed Game' };
@@ -26,30 +23,21 @@ export async function generateStaticParams() {
   });
 }
 
+type CompletedGamePageProps = {
+  params: Promise<{ gameId: string }>;
+};
+
 export default async function CompletedGamePage({
   params,
-}: {
-  params: Promise<{ gameId: string }>;
-}) {
-  const [session, { gameId }] = await Promise.all([
-    auth.api.getSession({
-      headers: await headers(),
-    }),
-    params,
-  ]);
-
-  if (!session) {
-    return notFound();
-  }
-
-  const completedGamePromise = getCompletedGame(gameId);
+}: CompletedGamePageProps) {
+  const sessionPromise = getSession();
 
   return (
     <CompletedGameWrapper>
       <Suspense fallback={<CompletedGameSkeleton />}>
-        <CompletedGame
-          gameId={gameId}
-          completedGamePromise={completedGamePromise}
+        <CompletedGameAccessLayer
+          sessionPromise={sessionPromise}
+          paramsPromise={params}
         />
       </Suspense>
     </CompletedGameWrapper>

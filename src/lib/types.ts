@@ -4,7 +4,7 @@ import type { InferSelectModel } from 'drizzle-orm';
 
 export type Player = InferSelectModel<typeof player>;
 
-export type PlayersMap = Map<string, Player>;
+export type PlayerMap = Map<string, Player>;
 
 export type PlayerWithHints = Player & { hints: GameHint[] };
 
