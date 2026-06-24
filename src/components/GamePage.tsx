@@ -67,7 +67,7 @@ export default function GamePage({
     } = game;
 
     return (
-      <GamePageWrapper>
+      <GamePageWrapper key={gameId}>
         <TopBar>
           <TopBarButtons>
             <HintsButton availableHints={availableHints} gameId={gameId} />
@@ -125,7 +125,7 @@ export default function GamePage({
     } = game;
 
     return (
-      <GamePageWrapper>
+      <GamePageWrapper key={gameId}>
         <TopBar>
           <TopBarButtons>
             <HintsButton availableHints={availableHints} gameId={gameId} />

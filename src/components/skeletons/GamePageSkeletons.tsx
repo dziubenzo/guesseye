@@ -29,6 +29,7 @@ import {
   Weight,
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { Suspense } from 'react';
 import { PiNumberCircleNine } from 'react-icons/pi';
 
 type GamePageSkeletonProps = {
@@ -48,7 +49,11 @@ export default function GamePageSkeleton({
         <GuessFormSkeleton />
       </TopBar>
       <ModeIndicatorSkeleton />
-      {isOfficialGame && <PlayerToFindInfoSkeleton />}
+      {isOfficialGame && (
+        <Suspense>
+          <PlayerToFindInfoSkeleton />
+        </Suspense>
+      )}
       <GamePageMiddle>
         <ProgressBarSkeleton />
         <PlayerCardSkeleton type="gamePages" />

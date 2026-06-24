@@ -19,7 +19,7 @@ export default function RandomGame({ sessionPromise }: RandomGameProps) {
 
   const gamePromise = getRandomGame();
   const namesPromise = getPlayerFullNames();
-  
+
   return (
     <Suspense fallback={<GamePageSkeleton />}>
       <GamePage
