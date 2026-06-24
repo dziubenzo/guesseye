@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useGameStore } from '@/lib/game-store';
-import { useRevalidateCompletedGames } from '@/lib/hooks';
+import { useRevalidateCache } from '@/lib/hooks';
 import type { Game, User } from '@/lib/types';
 import { Award } from 'lucide-react';
 import Image from 'next/image';
@@ -33,7 +33,7 @@ export default function GameOverModal({ gameId, userId }: GameOverModalProps) {
     }
   }
 
-  useRevalidateCompletedGames(gameOver, gameId, userId);
+  useRevalidateCache(gameId, userId);
 
   if (gameOver && playerToFind) {
     return (

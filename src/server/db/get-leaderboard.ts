@@ -14,7 +14,7 @@ import { cacheLife, cacheTag } from 'next/cache';
 
 export const getLeaderboard = async () => {
   'use cache';
-  cacheLife('max');
+  cacheLife('days');
   cacheTag('leaderboard');
 
   // Get all users with their games and guesses

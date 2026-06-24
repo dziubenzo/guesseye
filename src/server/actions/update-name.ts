@@ -2,7 +2,7 @@ import { updateUser } from '@/lib/auth-client';
 import { actionClient } from '@/lib/safe-action-client';
 import type { UpdateAction } from '@/lib/types';
 import { updateNameSchema } from '@/lib/zod/update-name';
-import revalidateLeaderboardCache from '@/server/revalidators/revalidate-leaderboard-cache';
+import revalidateLeaderboard from '@/server/revalidators/revalidate-leaderboard';
 import { isNameTaken } from '@/server/utils';
 
 export const updateName = actionClient
@@ -30,7 +30,7 @@ export const updateName = actionClient
         type: 'success',
         message: 'Name updated successfully!',
       };
-      await revalidateLeaderboardCache();
+      await revalidateLeaderboard();
     } else {
       result = {
         type: 'error',

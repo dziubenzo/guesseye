@@ -3,7 +3,6 @@
 import type { ErrorObject, Game, OfficialGame, RandomGame } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { game as gameTable } from '@/server/db/schema';
-import revalidateLeaderboardCache from '@/server/revalidators/revalidate-leaderboard-cache';
 import { eq } from 'drizzle-orm';
 
 export const endGame = async (
@@ -22,8 +21,6 @@ export const endGame = async (
       endDate: new Date(),
     })
     .where(eq(gameTable.id, game.id));
-
-  await revalidateLeaderboardCache();
 
   return;
 };

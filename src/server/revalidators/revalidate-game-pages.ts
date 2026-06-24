@@ -3,7 +3,7 @@
 import type { GameMode } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
 
-export default async function revalidateGameCache(
+export default async function revalidateGamePages(
   mode: GameMode,
   scheduleId?: number
 ) {

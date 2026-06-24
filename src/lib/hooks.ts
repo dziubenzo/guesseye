@@ -2,6 +2,7 @@ import { ALL_MATCHES } from '@/lib/constants';
 import { useGameStore } from '@/lib/game-store';
 import type { Game, Schedule, User } from '@/lib/types';
 import revalidateCompletedGames from '@/server/revalidators/revalidate-completed-games';
+import revalidateLeaderboard from '@/server/revalidators/revalidate-leaderboard';
 import { formatDistanceStrict } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -82,16 +83,18 @@ export const useUpdateTimeLeft = (
   return { timeLeft, timeInSeconds };
 };
 
-// Revalidate completed games on GameOverModal component dismount
-export const useRevalidateCompletedGames = (
-  gameOver: boolean,
+// Revalidate completed games and leaderboard on GameOverModal component dismount
+export const useRevalidateCache = (
   gameId?: Game['id'],
   userId?: User['id']
 ) => {
+  const { gameOver } = useGameStore();
+
   useEffect(() => {
     if (gameOver) {
       return async () => {
-        await revalidateCompletedGames(gameId, userId);
+        revalidateCompletedGames(gameId, userId);
+        revalidateLeaderboard();
       };
     } else {
       return () => {};

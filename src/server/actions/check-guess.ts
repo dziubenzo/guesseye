@@ -14,7 +14,7 @@ import { createGuess } from '@/server/db/create-guess';
 import { endGame } from '@/server/db/end-game';
 import { getGameAndPlayerToFind } from '@/server/db/get-game-and-player-to-find';
 import { getPlayers } from '@/server/db/get-players';
-import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
+import revalidateGamePages from '@/server/revalidators/revalidate-game-pages';
 
 export const checkGuess = actionClient
   .schema(guessSchema)
@@ -105,7 +105,7 @@ export const checkGuess = actionClient
 
       // Refetch the game object on the game page if the first guess is incorrect
       if (isFirstGuess) {
-        revalidateGameCache(mode, validScheduleId);
+        revalidateGamePages(mode, validScheduleId);
       }
 
       const data: CheckGuessAction = {

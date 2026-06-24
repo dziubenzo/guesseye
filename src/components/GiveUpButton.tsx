@@ -18,7 +18,8 @@ import type { Game, GameMode, User } from '@/lib/types';
 import { giveUpSchema, type GiveUpSchemaType } from '@/lib/zod/give-up';
 import { giveUp } from '@/server/actions/give-up';
 import revalidateCompletedGames from '@/server/revalidators/revalidate-completed-games';
-import revalidateGameCache from '@/server/revalidators/revalidate-game-cache';
+import revalidateGamePages from '@/server/revalidators/revalidate-game-pages';
+import revalidateLeaderboard from '@/server/revalidators/revalidate-leaderboard';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
@@ -73,13 +74,14 @@ export default function GiveUpButton({
     execute({ ...values, mode });
   }
 
-  async function handleButtonClick() {
+  function handleButtonClick() {
     resetState();
-    await revalidateCompletedGames(gameId, userId);
+    revalidateCompletedGames(gameId, userId);
+    revalidateLeaderboard();
     if (pathname.includes('official')) {
       router.push('/official');
     } else {
-      await revalidateGameCache(mode);
+      revalidateGamePages(mode);
       setOpen(false);
       setPlayerToFind('');
     }
