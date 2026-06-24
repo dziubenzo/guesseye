@@ -9,15 +9,10 @@ import { comparePlayers, obfuscate } from '@/lib/utils';
 import { createRandomGame } from '@/server/db/create-random-game';
 import { findRandomGame } from '@/server/db/find-random-game';
 
-type GetRandomGameOptions = {
-  isGuest: boolean;
-};
-
-export const getRandomGame = async (options?: GetRandomGameOptions) => {
+export const getRandomGame = async () => {
   const existingGame = await findRandomGame();
 
-  // Do not create a random game automatically for guests
-  if (options?.isGuest && !existingGame) {
+  if (!existingGame) {
     const noGame: NoRandomGame = {
       gameId: undefined,
       guesses: [],

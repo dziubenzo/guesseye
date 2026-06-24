@@ -28,7 +28,7 @@ export default function CurrentGame({ sessionPromise }: CurrentGameProps) {
       </Suspense>
     );
   } else {
-    const gamePromise = getRandomGame({ isGuest: true });
+    const gamePromise = getRandomGame();
 
     return (
       <Suspense fallback={<GamePageSkeleton />}>
