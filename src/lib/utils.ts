@@ -783,7 +783,7 @@ export function findFastestWin(game: GameWithGuesses, stat?: number) {
     currentGameEndTime - currentGameStartTime
   );
 
-  if (!stat) {
+  if (stat === undefined) {
     return currentGameDuration;
   }
 
@@ -803,7 +803,7 @@ export function findSlowestWin(game: GameWithGuesses, stat?: number) {
     currentGameEndTime - currentGameStartTime
   );
 
-  if (!stat) {
+  if (stat === undefined) {
     return currentGameDuration;
   }
 
