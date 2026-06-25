@@ -176,7 +176,18 @@ export const columns: ColumnDef<CompletedGameTable>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="cursor-pointer p-0 has-[>svg]:px-0 has-[>svg]:pr-0"
+        >
+          Status
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ cell }) => {
       const gameStatus = cell.getValue<CompletedGameTable['status']>();
 
@@ -192,6 +203,23 @@ export const columns: ColumnDef<CompletedGameTable>[] = [
             Given Up
           </Badge>
         );
+      }
+    },
+    // Sort status column with wins on top on the first click
+    sortingFn: (rowA, rowB) => {
+      const sortingMap = new Map<CompletedGameTable['status'], number>();
+      sortingMap.set('won', 1);
+      sortingMap.set('givenUp', 2);
+
+      const rowAValue = sortingMap.get(rowA.original.status)!;
+      const rowBValue = sortingMap.get(rowB.original.status)!;
+
+      if (rowAValue < rowBValue) {
+        return -1;
+      } else if (rowAValue > rowBValue) {
+        return 1;
+      } else {
+        return 0;
       }
     },
   },

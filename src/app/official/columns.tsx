@@ -124,7 +124,18 @@ export const columns: ColumnDef<OfficialGames>[] = [
   },
   {
     accessorKey: 'gameInfo.status',
-    header: 'Status',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          className="cursor-pointer p-0 has-[>svg]:px-0 has-[>svg]:pr-0"
+        >
+          Status
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ cell }) => {
       const gameStatus = cell.getValue<GameInfo['status']>();
 
@@ -152,6 +163,24 @@ export const columns: ColumnDef<OfficialGames>[] = [
             Not Played
           </Badge>
         );
+      }
+    },
+    sortingFn: (rowA, rowB) => {
+      const sortingMap = new Map<GameInfo['status'], number>();
+      sortingMap.set('inProgress', 1);
+      sortingMap.set('notPlayed', 2);
+      sortingMap.set('givenUp', 3);
+      sortingMap.set('won', 4);
+
+      const rowAValue = sortingMap.get(rowA.original.gameInfo.status)!;
+      const rowBValue = sortingMap.get(rowB.original.gameInfo.status)!;
+
+      if (rowAValue < rowBValue) {
+        return -1;
+      } else if (rowAValue > rowBValue) {
+        return 1;
+      } else {
+        return 0;
       }
     },
   },
