@@ -1,13 +1,19 @@
 'use server';
 
-import type { ErrorObject, Schedule } from '@/lib/types';
+import type { ErrorObject, LastScheduledPlayer } from '@/lib/types';
 import { db } from '@/server/db/index';
 import { schedule } from '@/server/db/schema';
 import { desc } from 'drizzle-orm';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export const getLastScheduledPlayer = async () => {
-  const lastScheduledPlayer: Schedule | undefined =
+  'use cache';
+  cacheLife('max');
+  cacheTag('lastScheduledPlayer');
+
+  const lastScheduledPlayer: LastScheduledPlayer | undefined =
     await db.query.schedule.findFirst({
+      columns: { startDate: true, endDate: true },
       orderBy: desc(schedule.startDate),
     });
 

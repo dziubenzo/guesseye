@@ -18,6 +18,7 @@ export default async function revalidateAllCache() {
     'playersSuggestHint',
     'hintCountsSuggestHint',
     'leaderboard',
+    'lastScheduledPlayer',
   ];
 
   for (const cache of cacheTypes) {
