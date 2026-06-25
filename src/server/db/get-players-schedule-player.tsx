@@ -15,6 +15,7 @@ export const getPlayersSchedulePlayer = async () => {
   const players = await db
     .select({
       id: player.id,
+      dateOfBirth: player.dateOfBirth,
       fullName:
         sql<string>`concat(${player.firstName}, ' ', ${player.lastName})`.as(
           'full_name'

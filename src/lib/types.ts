@@ -245,6 +245,8 @@ export type UpdateAction = {
   message: string;
 };
 
+export type LastScheduledPlayer = Pick<Schedule, 'startDate' | 'endDate'>;
+
 export type NextScheduledPlayer = {
   startDate: Schedule['startDate'];
   playerToFind: { difficulty: Player['difficulty'] };
@@ -492,7 +494,10 @@ export type UpdateRankingsType =
 
 export type TourCardHolder = Omit<RankedPlayer, 'ranking'>;
 
-export type PlayerSchedulePlayer = Pick<Player, 'id' | 'difficulty'> & {
+export type PlayerSchedulePlayer = Pick<
+  Player,
+  'id' | 'dateOfBirth' | 'difficulty'
+> & {
   fullName: string;
   officialModeCount: number;
   approvedHintsCount: number;

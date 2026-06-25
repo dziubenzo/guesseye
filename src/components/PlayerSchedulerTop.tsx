@@ -1,10 +1,10 @@
 import Message from '@/components/Message';
-import type { ErrorObject, Schedule } from '@/lib/types';
+import type { ErrorObject, LastScheduledPlayer } from '@/lib/types';
 import { format, formatDistanceToNowStrict } from 'date-fns';
 import { use } from 'react';
 
 type PlayerSchedulerProps = {
-  lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
+  lastScheduledPlayerPromise: Promise<ErrorObject | LastScheduledPlayer>;
 };
 
 export default function PlayerSchedulerTop({

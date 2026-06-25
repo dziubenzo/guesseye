@@ -35,6 +35,7 @@ export const manageHint = actionClient
       };
       updateTag('hintCountsStats');
       updateTag('hintCountsSuggestHint');
+      updateTag('playersSuggestHint');
     } else {
       await db.delete(hintSchema).where(eq(hintSchema.id, hintId));
       result = {

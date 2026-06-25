@@ -18,11 +18,11 @@ import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import type {
   ErrorObject,
+  LastScheduledPlayer,
   PlayerGroupedByDifficulty,
   PlayerSchedulePlayer,
-  Schedule,
 } from '@/lib/types';
-import { getFullName } from '@/lib/utils';
+import { getFullName, hasBirthdayOn } from '@/lib/utils';
 import {
   schedulePlayerSchema,
   type SchedulePlayerSchemaType,
@@ -48,7 +48,7 @@ export default function PlayerSchedulerForm({
   const schedulePlayerForm = useForm({
     resolver: zodResolver(schedulePlayerSchema),
     defaultValues: { startDate },
-    reValidateMode: "onSubmit"
+    reValidateMode: 'onSubmit',
   });
 
   const [error, setError] = useState('');
@@ -156,6 +156,9 @@ export default function PlayerSchedulerForm({
                                   ? 'hint'
                                   : 'hints'}
                                 )
+                                {hasBirthdayOn(startDate, player.dateOfBirth)
+                                  ? ' 🎂'
+                                  : null}
                               </ComboboxItem>
                             )}
                           </ComboboxCollection>
@@ -189,7 +192,7 @@ export default function PlayerSchedulerForm({
 
 type PlayerSchedulerFormWrapperProps = {
   playersPromise: Promise<PlayerGroupedByDifficulty[]>;
-  lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
+  lastScheduledPlayerPromise: Promise<ErrorObject | LastScheduledPlayer>;
 };
 
 export function PlayerSchedulerFormWrapper({

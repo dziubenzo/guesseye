@@ -3,14 +3,14 @@ import PlayerSchedulerTop from '@/components/PlayerSchedulerTop';
 import PlayerSchedulerSkeleton from '@/components/skeletons/PlayerSchedulerSkeleton';
 import type {
   ErrorObject,
+  LastScheduledPlayer,
   PlayerGroupedByDifficulty,
-  Schedule,
 } from '@/lib/types';
 import { Suspense } from 'react';
 
 type PlayerSchedulerProps = {
   playersPromise: Promise<PlayerGroupedByDifficulty[]>;
-  lastScheduledPlayerPromise: Promise<ErrorObject | Schedule>;
+  lastScheduledPlayerPromise: Promise<ErrorObject | LastScheduledPlayer>;
 };
 
 export default function PlayerScheduler({

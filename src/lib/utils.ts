@@ -39,8 +39,10 @@ import {
   getDate,
   getDay,
   getMonth,
+  isSameDay,
   millisecondsToMinutes,
   millisecondsToSeconds,
+  setYear,
 } from 'date-fns';
 import { eq, getTableColumns } from 'drizzle-orm';
 import type { FuseResult } from 'fuse.js';
@@ -2169,4 +2171,18 @@ export function obfuscate(type: 'hint' | 'name', string: string) {
   }
 
   return result;
+}
+
+export function hasBirthdayOn(
+  nextOfficialGameDate: Date,
+  dateOfBirth: Player['dateOfBirth']
+) {
+  if (!dateOfBirth) return false;
+
+  const currentYearDate = setYear(
+    dateOfBirth,
+    nextOfficialGameDate.getFullYear()
+  );
+
+  return isSameDay(nextOfficialGameDate, currentYearDate);
 }
