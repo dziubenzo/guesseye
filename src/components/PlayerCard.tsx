@@ -12,7 +12,11 @@ import {
 import Tooltip from '@/components/Tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { cardTopDuration, fieldsContainerVariant } from '@/lib/motion-variants';
+import {
+  cardTopDuration,
+  fieldsContainerVariant,
+  fieldVariant,
+} from '@/lib/motion-variants';
 import type {
   ComparisonResults,
   Player,
@@ -89,14 +93,17 @@ export default function PlayerCard(props: PlayerCardProps) {
               prevLastName={previousMatches.lastName}
               curLastName={currentMatches.lastName}
             />
-            <PlayerToFindDifficulty playerDifficulty={playerDifficulty} />
+            <PlayerToFindDifficulty
+              playerDifficulty={playerDifficulty}
+              shouldAnimate={playerDifficulty === '???' ? true : false}
+            />
           </CardTitle>
         </CardHeader>
         <CardContent>
           <motion.div
             className="flex flex-col gap-4"
-            initial="hidden"
-            animate="visible"
+            initial={playerDifficulty === '???' ? 'hidden' : undefined}
+            animate={playerDifficulty === '???' ? 'visible' : undefined}
             variants={fieldsContainerVariant}
           >
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 lg:gap-8 items-center justify-center text-center">
@@ -970,23 +977,41 @@ function PlayerToFindName({
   prevLastName,
   curLastName,
 }: PlayerToFindNameProps) {
+  // No game
+  if (!curFirstName && !curLastName) {
+    return (
+      <motion.div
+        className="flex items-center gap-3 font-mono-backup font-medium"
+        initial="hidden"
+        animate="visible"
+        transition={{ duration: cardTopDuration }}
+        variants={fieldVariant}
+      >
+        <p
+          className={cn(
+            'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center min-w-16 bg-muted-foreground text-muted'
+          )}
+        ></p>
+        <p
+          className={cn(
+            'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center min-w-32 bg-muted-foreground text-muted'
+          )}
+        ></p>
+      </motion.div>
+    );
+  }
+
   return (
-    <motion.div
-      className="flex items-center gap-3 font-mono-backup font-medium"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: cardTopDuration }}
-    >
+    <div className="flex items-center gap-3 font-mono-backup font-medium">
       <p
         className={cn(
           'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center',
           curFirstName && curFirstName[0] !== '?'
             ? 'bg-good-guess text-good-guess-foreground'
-            : 'bg-muted-foreground text-muted',
-          !curFirstName && 'min-w-16'
+            : 'bg-muted-foreground text-muted'
         )}
       >
-        {curFirstName ? curFirstName : ''}
+        {curFirstName}
         <GuessIndicator
           previousMatch={prevFirstName}
           currentMatch={curFirstName}
@@ -1004,11 +1029,10 @@ function PlayerToFindName({
           'p-2 rounded-md text-center min-h-[32px] relative flex gap-1 items-center',
           curLastName && curLastName[0] !== '?'
             ? 'bg-good-guess text-good-guess-foreground'
-            : 'bg-muted-foreground text-muted',
-          !curLastName && 'min-w-32'
+            : 'bg-muted-foreground text-muted'
         )}
       >
-        {curLastName ? curLastName : ''}
+        {curLastName}
         <GuessIndicator
           previousMatch={prevLastName}
           currentMatch={curLastName}
@@ -1021,7 +1045,7 @@ function PlayerToFindName({
           </Tooltip>
         )}
       </p>
-    </motion.div>
+    </div>
   );
 }
 
@@ -1043,9 +1067,10 @@ function PlayerToFindDifficulty({
     return (
       <motion.div
         className={className}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial="hidden"
+        animate="visible"
         transition={{ duration: cardTopDuration }}
+        variants={fieldVariant}
       >
         <Gauge size={24} />
         <span>{playerDifficulty.toUpperCase()}</span>
