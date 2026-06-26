@@ -48,7 +48,7 @@ export const getLeaderboard = async () => {
           countGames(game, leaderboardUser);
           leaderboardUser.hintsRevealed += game.hintsRevealed;
 
-          if (game.mode === 'official' && game.status === 'won') {
+          if (game.status === 'won') {
             leaderboardUser.fastestWin = findFastestWin(
               game,
               leaderboardUser.fastestWin
